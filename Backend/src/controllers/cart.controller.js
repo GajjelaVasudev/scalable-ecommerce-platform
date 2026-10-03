@@ -1,18 +1,17 @@
 const productModel = require('../models/product.model');
 const cartModel = require('../models/cart.model');
+const Inventory = require('../models/inventory.model');
 
 async function addToCart(req, res) {
-    const { product: productId, quantity } = req.body;
+    const { product: productId, quantity, variant = 'default' } = req.body;
     const userId = req.user.id;
 
-    // Validate quantity
     if (!quantity || quantity < 1) {
         return res.status(400).json({
             message: 'Quantity must be at least 1'
         });
     }
 
-    // Find product
     const product = await productModel.findById(productId);
 
     if (!product) {
@@ -21,15 +20,35 @@ async function addToCart(req, res) {
         });
     }
 
-    // Check product availability
     if (product.status !== 'active') {
         return res.status(400).json({
             message: 'Product is not available'
         });
     }
 
-    // Find or create cart
-    let cart = await cartModel.findOne({ user: userId });
+    const inventory = await Inventory.findOne({
+        product: productId
+    });
+
+    if (!inventory) {
+        return res.status(404).json({
+            message: 'Inventory not found'
+        });
+    }
+
+    const selectedVariant = inventory.variants.find(
+        item => item.name === variant
+    );
+
+    if (!selectedVariant) {
+        return res.status(404).json({
+            message: 'Variant not found'
+        });
+    }
+
+    let cart = await cartModel.findOne({
+        user: userId
+    });
 
     if (!cart) {
         cart = new cartModel({
@@ -38,15 +57,14 @@ async function addToCart(req, res) {
         });
     }
 
-    // Check if product already exists in cart
     const item = cart.items.find(
-        item => item.product.toString() === productId
+        item =>
+            item.product.toString() === productId &&
+            item.variant === variant
     );
 
     if (item) {
-        //if item is already in cart 
-        // Check total quantity against stock
-        if (item.quantity + quantity > product.stock) {
+        if (item.quantity + quantity > selectedVariant.availableStock) {
             return res.status(400).json({
                 message: 'Requested quantity exceeds available stock'
             });
@@ -55,9 +73,7 @@ async function addToCart(req, res) {
         item.quantity += quantity;
         item.price = product.price;
     } else {
-        //if item not in cart already
-        // Check quantity against stock
-        if (quantity > product.stock) {
+        if (quantity > selectedVariant.availableStock) {
             return res.status(400).json({
                 message: 'Requested quantity exceeds available stock'
             });
@@ -65,6 +81,7 @@ async function addToCart(req, res) {
 
         cart.items.push({
             product: product._id,
+            variant,
             quantity,
             price: product.price
         });
@@ -78,14 +95,20 @@ async function addToCart(req, res) {
     });
 }
 
-async function getCart(req, res){
+async function getCart(req, res) {
     const userId = req.user.id;
-    const cart = await cartModel.findOne({ user: userId }).populate('items.product');
+
+    const cart = await cartModel
+        .findOne({ user: userId })
+        .populate('items.product');
+
     if (!cart) {
         return res.status(200).json({
-            message: 'Cart is empty'
+            message: 'Cart is empty',
+            cart: { items: [] }
         });
     }
+
     return res.status(200).json({
         message: 'Cart fetched successfully',
         cart
@@ -94,9 +117,12 @@ async function getCart(req, res){
 
 async function removeFromCart(req, res) {
     const { productId } = req.params;
+    const { variant = 'default' } = req.body;
     const userId = req.user.id;
 
-    const cart = await cartModel.findOne({ user: userId });
+    const cart = await cartModel.findOne({
+        user: userId
+    });
 
     if (!cart) {
         return res.status(404).json({
@@ -105,7 +131,9 @@ async function removeFromCart(req, res) {
     }
 
     const item = cart.items.find(
-        item => item.product.toString() === productId
+        item =>
+            item.product.toString() === productId &&
+            item.variant === variant
     );
 
     if (!item) {
@@ -115,7 +143,11 @@ async function removeFromCart(req, res) {
     }
 
     cart.items = cart.items.filter(
-        item => item.product.toString() !== productId
+        item =>
+            !(
+                item.product.toString() === productId &&
+                item.variant === variant
+            )
     );
 
     await cart.save();
@@ -128,7 +160,7 @@ async function removeFromCart(req, res) {
 
 async function updateCartItem(req, res) {
     const { productId } = req.params;
-    const { quantity } = req.body;
+    const { quantity, variant = 'default' } = req.body;
     const userId = req.user.id;
 
     if (!quantity || quantity < 1) {
@@ -137,7 +169,9 @@ async function updateCartItem(req, res) {
         });
     }
 
-    const cart = await cartModel.findOne({ user: userId });
+    const cart = await cartModel.findOne({
+        user: userId
+    });
 
     if (!cart) {
         return res.status(404).json({
@@ -146,7 +180,9 @@ async function updateCartItem(req, res) {
     }
 
     const item = cart.items.find(
-        item => item.product.toString() === productId
+        item =>
+            item.product.toString() === productId &&
+            item.variant === variant
     );
 
     if (!item) {
@@ -169,7 +205,27 @@ async function updateCartItem(req, res) {
         });
     }
 
-    if (quantity > product.stock) {
+    const inventory = await Inventory.findOne({
+        product: productId
+    });
+
+    if (!inventory) {
+        return res.status(404).json({
+            message: 'Inventory not found'
+        });
+    }
+
+    const selectedVariant = inventory.variants.find(
+        item => item.name === variant
+    );
+
+    if (!selectedVariant) {
+        return res.status(404).json({
+            message: 'Variant not found'
+        });
+    }
+
+    if (quantity > selectedVariant.availableStock) {
         return res.status(400).json({
             message: 'Requested quantity exceeds available stock'
         });
@@ -186,24 +242,33 @@ async function updateCartItem(req, res) {
     });
 }
 
-async function clearCart(req, res){
+async function clearCart(req, res) {
     const userId = req.user.id;
-    const cart = await cartModel.findOne({ user: userId });
+
+    const cart = await cartModel.findOne({
+        user: userId
+    });
+
     if (!cart) {
         return res.status(404).json({
             message: 'Cart not found'
         });
     }
+
     cart.items = [];
+
     await cart.save();
+
     return res.status(200).json({
         message: 'Cart cleared successfully',
         cart
     });
 }
 
-
-
-
-
-module.exports = { addToCart, getCart, removeFromCart, updateCartItem, clearCart };
+module.exports = {
+    addToCart,
+    getCart,
+    removeFromCart,
+    updateCartItem,
+    clearCart
+};

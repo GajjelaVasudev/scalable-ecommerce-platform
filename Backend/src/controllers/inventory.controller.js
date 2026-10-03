@@ -245,4 +245,47 @@ async function releaseStock(req, res) {
     });
 }
 
-module.exports = {createInventory, getInventory, updateInventory, reserveStock, releaseStock};
+async function confirmStock(req, res) {
+    const { productId } = req.params;
+    const { variantName, quantity } = req.body;
+
+    if (!variantName || !quantity || quantity < 1) {
+        return res.status(400).json({
+            message: 'Variant name and valid quantity are required'
+        });
+    }
+
+    const updatedInventory = await Inventory.findOneAndUpdate(
+        {
+            product: productId,
+            variants: {
+                $elemMatch: {
+                    name: variantName,
+                    reservedStock: { $gte: quantity }
+                }
+            }
+        },
+        {
+            $inc: {
+                'variants.$.totalStock': -quantity,
+                'variants.$.reservedStock': -quantity
+            }
+        },
+        {
+            new: true
+        }
+    );
+
+    if (!updatedInventory) {
+        return res.status(400).json({
+            message: 'Insufficient reserved stock'
+        });
+    }
+
+    return res.status(200).json({
+        message: 'Stock confirmed successfully',
+        inventory: updatedInventory
+    });
+}
+
+module.exports = {createInventory, getInventory, updateInventory, reserveStock, releaseStock, confirmStock};
