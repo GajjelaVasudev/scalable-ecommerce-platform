@@ -2,80 +2,78 @@ const mongoose = require('mongoose');
 const Order = require('../models/order.model');
 const Cart = require('../models/cart.model');
 const Product = require('../models/product.model');
+const Inventory = require('../models/inventory.model');
 
-async function createOrder(req, res){
+async function createOrder(req, res) {
     const userId = req.user.id;
 
     const session = await mongoose.startSession();
     session.startTransaction();
-    //in every operation dont return in between of transaction abort transaction and end it before u return
-    try{
-     
-        //get cart items
-        const cart = await Cart.findOne({user: userId})
-                               .populate('items.product', 'name price stock status')
-                               .session(session);
 
-        if(!cart || cart.items.length === 0){
+    try {
+
+        // Get cart items
+        const cart = await Cart.findOne({ user: userId })
+            .populate('items.product', 'name price status')
+            .session(session);
+
+        if (!cart || cart.items.length === 0) {
             await session.abortTransaction();
             await session.endSession();
-            return res.status(400).json({message: 'Cart is empty'});
-        }
 
-        //check products if available and also its status
-        for(const item of cart.items){
-            const product = await Product.findById(item.product._id).session(session);
-            if(!product){
-                await session.abortTransaction();
-                await session.endSession();
-                return res.status(404).json({message: 'Product not found'});
-            }
-            if(product.stock < item.quantity){
-                await session.abortTransaction();
-                await session.endSession();
-                return res.status(400).json({message: 'Product is out of stock'});
-            }
-            //also check if product is active
-            if(product.status !== 'active'){
-                await session.abortTransaction();
-                await session.endSession();
-                return res.status(400).json({message: 'Product is not active'});
-            }
-        }
-
-        //calculate total using product not carts total amount 
-        let totalAmount = 0;
-        const orderItems = [];
-        for(const item of cart.items){
-            totalAmount += item.product.price * item.quantity;
-            orderItems.push({
-                product: item.product._id,
-                name: item.product.name,
-                quantity: item.quantity,
-                price: item.product.price
+            return res.status(400).json({
+                message: 'Cart is empty'
             });
         }
 
-        //create order
-        const [order] = await Order.create([
-            {
-                user: userId,
-                items: orderItems,
-                totalAmount,
-                shippingAddress: req.body.shippingAddress,
-                paymentStatus: 'unpaid'
-            }
-        ], {session});
+        // Check products and calculate total
+        let totalAmount = 0;
+        const orderItems = [];
 
-        //update stock
-        for(const item of cart.items){
-            const updatedProduct = await Product.findOneAndUpdate(
+        for (const item of cart.items) {
+
+            const product = await Product.findById(item.product._id)
+                .session(session);
+
+            if (!product) {
+                throw new Error('Product not found');
+            }
+
+            if (product.status !== 'active') {
+                throw new Error('Product is not active');
+            }
+
+            totalAmount += product.price * item.quantity;
+
+            orderItems.push({
+                product: product._id,
+                name: product.name,
+                variant: item.variant,
+                quantity: item.quantity,
+                price: product.price
+            });
+        }
+
+        // Reserve inventory
+        for (const item of cart.items) {
+
+            const updatedInventory = await Inventory.findOneAndUpdate(
                 {
-                    _id: item.product._id,
-                    stock: { $gte: item.quantity }
+                    product: item.product._id,
+                    variants: {
+                        $elemMatch: {
+                            name: item.variant,
+                            availableStock: {
+                                $gte: item.quantity
+                            }
+                        }
+                    }
                 },
                 {
-                    $inc: { stock: -item.quantity }
+                    $inc: {
+                        'variants.$.availableStock': -item.quantity,
+                        'variants.$.reservedStock': item.quantity
+                    }
                 },
                 {
                     session,
@@ -83,28 +81,48 @@ async function createOrder(req, res){
                 }
             );
 
-            if (!updatedProduct) {
-                throw new Error('Insufficient stock');
-            }   
+            if (!updatedInventory) {
+                throw new Error(
+                    `Insufficient stock for ${item.variant} variant`
+                );
+            }
         }
 
-        //clear cart
-        await Cart.findByIdAndUpdate(cart._id, {items: []})
-                  .session(session);
+        // Create order
+        const [order] = await Order.create([
+            {
+                user: userId,
+                items: orderItems,
+                totalAmount,
+                shippingAddress: req.body.shippingAddress,
+                paymentStatus: 'pending'
+            }
+        ], { session });
+
+        // Clear cart
+        await Cart.findByIdAndUpdate(
+            cart._id,
+            { items: [] },
+            { session }
+        );
 
         await session.commitTransaction();
-        session.endSession();
+        await session.endSession();
 
-        return res.status(201).json({message: 'Order created successfully', order});
+        return res.status(201).json({
+            message: 'Order created successfully',
+            order
+        });
 
-    }
-    catch(error){
+    } catch (error) {
+
         await session.abortTransaction();
         await session.endSession();
-        return res.status(500).json({message: 'Failed to create order'});
+
+        return res.status(500).json({
+            message: error.message || 'Failed to create order'
+        });
     }
-
-
 }
 
-module.exports = {createOrder};
+module.exports = { createOrder };
