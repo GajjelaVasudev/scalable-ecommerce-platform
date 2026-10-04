@@ -3,6 +3,7 @@ const Order = require('../models/order.model');
 const Cart = require('../models/cart.model');
 const Product = require('../models/product.model');
 const Inventory = require('../models/inventory.model');
+const Reservation = require('../models/reservation.model');
 
 async function createOrder(req, res) {
     const userId = req.user.id;
@@ -54,7 +55,21 @@ async function createOrder(req, res) {
             });
         }
 
-        // Reserve inventory
+        // Create order first
+        // We need the order ID for reservation documents
+        const [order] = await Order.create([
+            {
+                user: userId,
+                items: orderItems,
+                totalAmount,
+                shippingAddress: req.body.shippingAddress,
+                paymentStatus: 'pending'
+            }
+        ], { session });
+
+        // Reserve inventory and create reservations
+        const reservations = [];
+
         for (const item of cart.items) {
 
             const updatedInventory = await Inventory.findOneAndUpdate(
@@ -86,18 +101,19 @@ async function createOrder(req, res) {
                     `Insufficient stock for ${item.variant} variant`
                 );
             }
+
+            reservations.push({
+                order: order._id,
+                product: item.product._id,
+                variant: item.variant,
+                quantity: item.quantity,
+                status: 'reserved',
+                expiresAt: new Date(Date.now() + 15 * 60 * 1000)
+            });
         }
 
-        // Create order
-        const [order] = await Order.create([
-            {
-                user: userId,
-                items: orderItems,
-                totalAmount,
-                shippingAddress: req.body.shippingAddress,
-                paymentStatus: 'pending'
-            }
-        ], { session });
+        // Create reservation records
+        await Reservation.create(reservations, { session });
 
         // Clear cart
         await Cart.findByIdAndUpdate(
@@ -106,6 +122,7 @@ async function createOrder(req, res) {
             { session }
         );
 
+        // Commit transaction
         await session.commitTransaction();
         await session.endSession();
 
