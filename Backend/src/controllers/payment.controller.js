@@ -33,19 +33,29 @@ async function createPayment(req, res) {
             });
         }
 
-        // Prevent payment for already paid order
+        // Order already paid
         if (order.paymentStatus === 'paid') {
             return res.status(400).json({
                 message: 'Order is already paid'
             });
         }
 
-        // Check existing payment
+        // Find existing payment
         let payment = await Payment.findOne({
             order: orderId
         });
 
-        // Return existing payment
+        // Already paid/refunded payment cannot be retried
+        if (
+            payment &&
+            ['paid', 'refunded'].includes(payment.status)
+        ) {
+            return res.status(400).json({
+                message: 'Payment cannot be retried'
+            });
+        }
+
+        // Existing active payment
         if (payment && payment.status === 'created') {
             return res.status(200).json({
                 message: 'Payment already created',
@@ -53,23 +63,37 @@ async function createPayment(req, res) {
             });
         }
 
-        // Create Razorpay order
+        // Create new Razorpay order
         const razorpayOrder = await createRazorpayOrder({
             amount: order.totalAmount,
             currency: 'INR',
             receipt: order._id.toString()
         });
 
-        // Create payment record
-        payment = await Payment.create({
-            order: order._id,
-            user: userId,
-            amount: order.totalAmount,
-            currency: 'INR',
-            provider: 'razorpay',
-            providerOrderId: razorpayOrder.id,
-            status: 'created'
-        });
+        // Create payment if it doesn't exist
+        if (!payment) {
+
+            payment = await Payment.create({
+                order: order._id,
+                user: userId,
+                amount: order.totalAmount,
+                currency: 'INR',
+                provider: 'razorpay',
+                providerOrderId: razorpayOrder.id,
+                status: 'created'
+            });
+
+        } else {
+
+            // Retry failed payment
+            payment.providerOrderId = razorpayOrder.id;
+            payment.providerPaymentId = null;
+            payment.status = 'created';
+            payment.failureReason = null;
+            payment.paidAt = null;
+
+            await payment.save();
+        }
 
         return res.status(201).json({
             message: 'Payment created successfully',
@@ -93,10 +117,15 @@ async function createPayment(req, res) {
 
     } catch (error) {
 
-        console.error('Create payment error:', error);
+        console.error(
+            'Create payment error:',
+            error
+        );
 
         return res.status(500).json({
-            message: error.message || 'Failed to create payment'
+            message:
+                error.message ||
+                'Failed to create payment'
         });
     }
 }
@@ -108,9 +137,9 @@ async function createPayment(req, res) {
 
 async function handleWebhook(req, res) {
 
-    const signature = req.headers['x-razorpay-signature'];
+    const signature =
+        req.headers['x-razorpay-signature'];
 
-    // Check signature exists
     if (!signature) {
         return res.status(400).json({
             message: 'Missing Razorpay signature'
@@ -119,19 +148,22 @@ async function handleWebhook(req, res) {
 
     try {
 
-        // Generate expected signature
-        const expectedSignature = crypto
-            .createHmac(
-                'sha256',
-                process.env.RAZORPAY_WEBHOOK_SECRET
-            )
-            .update(req.body)
-            .digest('hex');
+        // ==================================================
+        // VERIFY WEBHOOK SIGNATURE
+        // ==================================================
 
-        // Prevent timingSafeEqual from throwing
-        // when lengths are different
+        const expectedSignature =
+            crypto
+                .createHmac(
+                    'sha256',
+                    process.env.RAZORPAY_WEBHOOK_SECRET
+                )
+                .update(req.body)
+                .digest('hex');
+
         if (
-            expectedSignature.length !== signature.length ||
+            expectedSignature.length !==
+                signature.length ||
             !crypto.timingSafeEqual(
                 Buffer.from(expectedSignature),
                 Buffer.from(signature)
@@ -142,13 +174,16 @@ async function handleWebhook(req, res) {
             });
         }
 
-        // Convert raw body into JSON
+        // Parse raw body
         const event = JSON.parse(
             req.body.toString()
         );
 
-        // We only process successful captured payments
-        if (event.event !== 'payment.captured') {
+        // We only handle these two events
+        if (
+            event.event !== 'payment.captured' &&
+            event.event !== 'payment.failed'
+        ) {
             return res.status(200).json({
                 message: 'Event ignored'
             });
@@ -157,16 +192,22 @@ async function handleWebhook(req, res) {
         const razorpayPayment =
             event.payload.payment.entity;
 
-        const session = await mongoose.startSession();
+        const session =
+            await mongoose.startSession();
 
         session.startTransaction();
 
         try {
 
-            // Find our payment using Razorpay order ID
-            const payment = await Payment.findOne({
-                providerOrderId: razorpayPayment.order_id
-            }).session(session);
+            // ==================================================
+            // FIND PAYMENT
+            // ==================================================
+
+            const payment =
+                await Payment.findOne({
+                    providerOrderId:
+                        razorpayPayment.order_id
+                }).session(session);
 
             if (!payment) {
                 throw new Error(
@@ -174,145 +215,254 @@ async function handleWebhook(req, res) {
                 );
             }
 
+
             // ==================================================
-            // IDEMPOTENCY CHECK
+            // PAYMENT CAPTURED
             // ==================================================
 
-            if (payment.status === 'paid') {
+            if (event.event === 'payment.captured') {
 
-                await session.abortTransaction();
-                await session.endSession();
+                // Idempotency
+                if (payment.status === 'paid') {
 
-                return res.status(200).json({
-                    message: 'Payment already processed'
+                    await session.abortTransaction();
+                    await session.endSession();
+
+                    return res.status(200).json({
+                        message:
+                            'Payment already processed'
+                    });
+                }
+
+                // Update payment
+                payment.providerPaymentId =
+                    razorpayPayment.id;
+
+                payment.status = 'paid';
+
+                payment.paidAt = new Date();
+
+                payment.failureReason = null;
+
+                await payment.save({
+                    session
                 });
-            }
-
-            // ==================================================
-            // UPDATE PAYMENT
-            // ==================================================
-
-            payment.providerPaymentId =
-                razorpayPayment.id;
-
-            payment.status = 'paid';
-
-            payment.paidAt = new Date();
-
-            await payment.save({
-                session
-            });
 
 
-            // ==================================================
-            // FIND ORDER
-            // ==================================================
+                // Find order
+                const order =
+                    await Order.findById(
+                        payment.order
+                    ).session(session);
 
-            const order = await Order.findById(
-                payment.order
-            ).session(session);
-
-            if (!order) {
-                throw new Error(
-                    'Order not found'
-                );
-            }
-
-
-            // ==================================================
-            // MARK ORDER AS PAID
-            // ==================================================
-
-            order.paymentStatus = 'paid';
-
-            await order.save({
-                session
-            });
-
-
-            // ==================================================
-            // FIND ACTIVE RESERVATIONS
-            // ==================================================
-
-            const reservations =
-                await Reservation.find({
-                    order: order._id,
-                    status: 'reserved'
-                }).session(session);
-
-            if (reservations.length === 0) {
-                throw new Error(
-                    'No active reservations found for this order'
-                );
-            }
-
-
-            // ==================================================
-            // CONFIRM EACH RESERVATION
-            // ==================================================
-
-            for (const reservation of reservations) {
-
-                const updatedInventory =
-                    await Inventory.findOneAndUpdate(
-                        {
-                            product: reservation.product,
-
-                            variants: {
-                                $elemMatch: {
-                                    name: reservation.variant,
-
-                                    reservedStock: {
-                                        $gte: reservation.quantity
-                                    }
-                                }
-                            }
-                        },
-
-                        {
-                            $inc: {
-
-                                // Physical stock decreases
-                                'variants.$.totalStock':
-                                    -reservation.quantity,
-
-                                // Reservation disappears
-                                'variants.$.reservedStock':
-                                    -reservation.quantity
-                            }
-                        },
-
-                        {
-                            session,
-                            new: true
-                        }
-                    );
-
-                if (!updatedInventory) {
+                if (!order) {
                     throw new Error(
-                        `Unable to confirm stock for ${reservation.variant}`
+                        'Order not found'
                     );
                 }
 
-                // Mark reservation confirmed
-                reservation.status = 'confirmed';
 
-                await reservation.save({
+                // Mark order paid
+                order.paymentStatus = 'paid';
+
+                await order.save({
                     session
                 });
+
+
+                // Find active reservations
+                const reservations =
+                    await Reservation.find({
+                        order: order._id,
+                        status: 'reserved'
+                    }).session(session);
+
+                if (reservations.length === 0) {
+                    throw new Error(
+                        'No active reservations found for this order'
+                    );
+                }
+
+
+                // Confirm reservations
+                for (const reservation of reservations) {
+
+                    const updatedInventory =
+                        await Inventory.findOneAndUpdate(
+                            {
+                                product:
+                                    reservation.product,
+
+                                variants: {
+                                    $elemMatch: {
+                                        name:
+                                            reservation.variant,
+
+                                        reservedStock: {
+                                            $gte:
+                                                reservation.quantity
+                                        }
+                                    }
+                                }
+                            },
+
+                            {
+                                $inc: {
+                                    'variants.$.totalStock':
+                                        -reservation.quantity,
+
+                                    'variants.$.reservedStock':
+                                        -reservation.quantity
+                                }
+                            },
+
+                            {
+                                session,
+                                new: true
+                            }
+                        );
+
+                    if (!updatedInventory) {
+                        throw new Error(
+                            `Unable to confirm stock for ${reservation.variant}`
+                        );
+                    }
+
+                    reservation.status =
+                        'confirmed';
+
+                    await reservation.save({
+                        session
+                    });
+                }
             }
 
 
             // ==================================================
-            // COMMIT EVERYTHING
+            // PAYMENT FAILED
+            // ==================================================
+
+            if (event.event === 'payment.failed') {
+
+                // Ignore duplicate failure webhook
+                if (payment.status === 'failed') {
+
+                    await session.abortTransaction();
+                    await session.endSession();
+
+                    return res.status(200).json({
+                        message:
+                            'Payment failure already processed'
+                    });
+                }
+
+                // Update payment
+                payment.providerPaymentId =
+                    razorpayPayment.id || null;
+
+                payment.status = 'failed';
+
+                payment.failureReason =
+                    razorpayPayment.error_description ||
+                    'Payment failed';
+
+                await payment.save({
+                    session
+                });
+
+
+                // Find order
+                const order =
+                    await Order.findById(
+                        payment.order
+                    ).session(session);
+
+                if (!order) {
+                    throw new Error(
+                        'Order not found'
+                    );
+                }
+
+                // Keep order unpaid so payment can be retried
+                order.paymentStatus = 'unpaid';
+
+                await order.save({
+                    session
+                });
+
+
+                // Find active reservations
+                const reservations =
+                    await Reservation.find({
+                        order: order._id,
+                        status: 'reserved'
+                    }).session(session);
+
+
+                // Release inventory
+                for (const reservation of reservations) {
+
+                    const updatedInventory =
+                        await Inventory.findOneAndUpdate(
+                            {
+                                product:
+                                    reservation.product,
+
+                                variants: {
+                                    $elemMatch: {
+                                        name:
+                                            reservation.variant,
+
+                                        reservedStock: {
+                                            $gte:
+                                                reservation.quantity
+                                        }
+                                    }
+                                }
+                            },
+
+                            {
+                                $inc: {
+                                    'variants.$.availableStock':
+                                        reservation.quantity,
+
+                                    'variants.$.reservedStock':
+                                        -reservation.quantity
+                                }
+                            },
+
+                            {
+                                session,
+                                new: true
+                            }
+                        );
+
+                    if (!updatedInventory) {
+                        throw new Error(
+                            `Unable to release stock for ${reservation.variant}`
+                        );
+                    }
+
+                    reservation.status =
+                        'released';
+
+                    await reservation.save({
+                        session
+                    });
+                }
+            }
+
+
+            // ==================================================
+            // COMMIT
             // ==================================================
 
             await session.commitTransaction();
-
             await session.endSession();
 
             return res.status(200).json({
-                message: 'Payment processed successfully'
+                message:
+                    'Webhook processed successfully'
             });
 
         } catch (error) {
@@ -331,7 +481,8 @@ async function handleWebhook(req, res) {
         );
 
         return res.status(500).json({
-            message: 'Webhook processing failed'
+            message:
+                'Webhook processing failed'
         });
     }
 }
