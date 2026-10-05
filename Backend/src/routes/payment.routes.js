@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const authMiddleware = require('../middleware/auth.middleware');
-const authorize = require('../middleware/role.middleware');
+const authMiddleware = require('../middlewares/auth.middleware');
+const authorize = require('../middlewares/authorize.middleware');
 
 const {
-    createPayment
+    createPayment,
+    handleWebhook
 } = require('../controllers/payment.controller');
 
 router.post('/:orderId', authMiddleware, authorize('buyer'), createPayment);
