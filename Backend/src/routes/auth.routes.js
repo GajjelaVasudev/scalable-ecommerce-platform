@@ -10,7 +10,7 @@ const {
 const {
     loginLimiter,
     registerLimiter
-} = require('../middleware/rateLimit.middleware');
+} = require('../middlewares/rateLimit.middleware');
 
 const router = express.Router();
 

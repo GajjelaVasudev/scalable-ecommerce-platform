@@ -6,13 +6,27 @@ const authorize = require('../middlewares/authorize.middleware');
 
 const {
     createPayment,
-    handleWebhook
+    handleWebhook,
+    listPaymentIssues,
+    resolvePaymentIssue
 } = require('../controllers/payment.controller');
 
-router.post('/:orderId', authMiddleware, authorize('buyer'), createPayment);
-router.post(
-    '/webhook',
-    handleWebhook
+// Admin reconciliation endpoints must be declared before parameterized routes.
+router.get(
+    '/reconciliation',
+    authMiddleware,
+    authorize('admin'),
+    listPaymentIssues
 );
+
+router.patch(
+    '/reconciliation/:issueId/resolve',
+    authMiddleware,
+    authorize('admin'),
+    resolvePaymentIssue
+);
+
+router.post('/webhook', handleWebhook);
+router.post('/:orderId', authMiddleware, authorize('buyer'), createPayment);
 
 module.exports = router;
