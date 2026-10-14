@@ -1,29 +1,44 @@
 const mongoose = require('mongoose');
 
-//create inventory model
+const variantSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    totalStock: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+    reservedStock: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    availableStock: {
+        type: Number,
+        required: true,
+        min: 0
+    }
+}, { _id: false });
+
 const inventorySchema = new mongoose.Schema({
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product'
+        ref: 'Product',
+        required: true
     },
-    variants: [
-        {
-            totalstock: {
-                type: Number,
-                required: true
-            },
-            reservedStock: {
-                type: Number,
-                default: 0
-            },
-            availableStock: {
-                type: Number,
-                default: 0
-            }
+    variants: {
+        type: [variantSchema],
+        validate: {
+            validator: variants => Array.isArray(variants) && variants.length > 0,
+            message: 'At least one inventory variant is required'
         }
-    ]
-    
-});
+    }
+}, { timestamps: true });
+
+inventorySchema.index({ product: 1 }, { unique: true });
 
 const Inventory = mongoose.model('Inventory', inventorySchema);
 

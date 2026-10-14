@@ -4,7 +4,7 @@ const { RedisStore } = require('rate-limit-redis');
 const { redisClient } = require('../config/redis');
 
 const loginLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
+    windowMs: 15 * 60 * 1000,
     limit: 5,
     standardHeaders: true,
     legacyHeaders: false,
@@ -16,14 +16,14 @@ const loginLimiter = rateLimit({
     }),
 
     handler: (req, res) => {
-        return res.status(429).json({
+        res.status(429).json({
             message: 'Too many login attempts. Please try again later.'
         });
     }
 });
 
 const registerLimiter = rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
+    windowMs: 60 * 60 * 1000,
     limit: 10,
     standardHeaders: true,
     legacyHeaders: false,
@@ -34,7 +34,7 @@ const registerLimiter = rateLimit({
     }),
 
     handler: (req, res) => {
-        return res.status(429).json({
+        res.status(429).json({
             message: 'Too many registration attempts. Please try again later.'
         });
     }

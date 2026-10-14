@@ -1,73 +1,104 @@
+const mongoose = require('mongoose');
+
 const Reservation = require('../models/reservation.model');
 const Inventory = require('../models/inventory.model');
 const Order = require('../models/order.model');
 
+let expiryJobRunning = false;
+
 async function expireReservations() {
-    const now = new Date();
+    if (expiryJobRunning) return;
 
-    const reservations = await Reservation.find({
-        status: 'reserved',
-        expiresAt: { $lte: now }
-    });
+    expiryJobRunning = true;
 
-    for (const reservation of reservations) {
+    try {
+        const candidates = await Reservation.find({
+            status: 'reserved',
+            expiresAt: { $lte: new Date() }
+        }).select('_id');
 
-        try {
+        for (const candidate of candidates) {
+            const session = await mongoose.startSession();
 
-            const updatedInventory =
-                await Inventory.findOneAndUpdate(
-                    {
-                        product: reservation.product,
+            try {
+                await session.withTransaction(async () => {
+                    const reservation = await Reservation.findOneAndUpdate(
+                        {
+                            _id: candidate._id,
+                            status: 'reserved',
+                            expiresAt: { $lte: new Date() }
+                        },
+                        { $set: { status: 'expired' } },
+                        { new: true, session }
+                    );
 
-                        variants: {
-                            $elemMatch: {
-                                name: reservation.variant,
+                    if (!reservation) return;
 
-                                reservedStock: {
-                                    $gte: reservation.quantity
+                    const order = await Order.findById(reservation.order)
+                        .session(session);
+
+                    if (!order) {
+                        throw new Error('Order not found');
+                    }
+
+                    // The payment webhook and expiry job are transactionally
+                    // competing for this reservation. Never release stock for
+                    // an order that has already been paid.
+                    if (order.paymentStatus === 'paid') {
+                        throw new Error(
+                            `Paid order ${order._id} still has a reserved item; manual reconciliation required`
+                        );
+                    }
+
+                    const updatedInventory = await Inventory.findOneAndUpdate(
+                        {
+                            product: reservation.product,
+                            variants: {
+                                $elemMatch: {
+                                    name: reservation.variant,
+                                    reservedStock: { $gte: reservation.quantity }
                                 }
                             }
-                        }
-                    },
-                    {
-                        $inc: {
-                            'variants.$.availableStock':
-                                reservation.quantity,
+                        },
+                        {
+                            $inc: {
+                                'variants.$.availableStock': reservation.quantity,
+                                'variants.$.reservedStock': -reservation.quantity
+                            }
+                        },
+                        { new: true, session }
+                    );
 
-                            'variants.$.reservedStock':
-                                -reservation.quantity
-                        }
-                    },
-                    {
-                        new: true
+                    if (!updatedInventory) {
+                        throw new Error(
+                            `Unable to release stock for reservation ${reservation._id}`
+                        );
                     }
+
+                    const remainingReservations = await Reservation.exists({
+                        order: reservation.order,
+                        status: 'reserved'
+                    }).session(session);
+
+                    if (!remainingReservations && order.paymentStatus !== 'paid') {
+                        order.paymentStatus = 'unpaid';
+                        await order.save({ session });
+                    }
+                });
+            } catch (error) {
+                console.error(
+                    `Failed to expire reservation ${candidate._id}:`,
+                    error.message
                 );
-
-            if (!updatedInventory) {
-                continue;
+            } finally {
+                await session.endSession();
             }
-
-            reservation.status = 'expired';
-
-            await reservation.save();
-
-            await Order.findByIdAndUpdate(
-                reservation.order,
-                {
-                    paymentStatus: 'unpaid'
-                }
-            );
-
-        } catch (error) {
-
-            console.error(
-                `Failed to expire reservation ${reservation._id}:`,
-                error.message
-            );
         }
+    } catch (error) {
+        console.error('Reservation expiry job failed:', error.message);
+    } finally {
+        expiryJobRunning = false;
     }
 }
 
-module.exports = {
-    expireReservations
-};
+module.exports = { expireReservations };
