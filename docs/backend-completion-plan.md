@@ -19,11 +19,11 @@ This document outlines the systematic completion, hardening, testing, and verifi
   - [x] Prevent deletion of categories that are in active use by products
   - [x] Audit and harden Redis caching with graceful degradation when Redis is offline
 
-- [ ] **Phase 3: Cart, Orders, and Checkout Concurrency**
-  - [ ] Strictly recalculate prices from active database records during checkout
-  - [ ] Validate shipping address fields and cart availability
-  - [ ] Implement missing order management endpoints (list orders, order details, cancel order, update status)
-  - [ ] Release inventory reservations when orders are cancelled or expired
+- [x] **Phase 3: Cart, Orders, and Checkout Concurrency**
+  - [x] Strictly recalculate prices from active database records during checkout
+  - [x] Validate shipping address fields and cart availability
+  - [x] Implement missing order management endpoints (list orders, order details, cancel order, update status)
+  - [x] Release inventory reservations when orders are cancelled or expired
 
 - [ ] **Phase 4: Inventory, Reservations, and Concurrency**
   - [ ] Establish `Inventory` as the authoritative inventory source across all operations
