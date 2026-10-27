@@ -43,13 +43,13 @@ This document outlines the systematic completion, hardening, testing, and verifi
   - [x] Graceful shutdown handlers for HTTP server, MongoDB, Redis, and timers
   - [x] Resilient Redis connection lifecycle and failure tolerance
 
-- [ ] **Phase 7: Automated Unit and Integration Tests**
-  - [ ] Auth & Authorization tests
-  - [ ] Product & Category tests
-  - [ ] Cart & Order tests
-  - [ ] Inventory contention & reservation tests
-  - [ ] Payment & Webhook verification tests
-  - [ ] Health & readiness endpoint tests
+- [x] **Phase 7: Automated Unit and Integration Tests**
+  - [x] Auth & Authorization tests
+  - [x] Product & Category tests
+  - [x] Cart & Order tests
+  - [x] Inventory contention & reservation tests
+  - [x] Payment & Webhook verification tests
+  - [x] Health & readiness endpoint tests
 
 - [ ] **Phase 8: Docker, Documentation & Environment Readiness**
   - [ ] Reproducible `docker-compose.yml` for local MongoDB & Redis
