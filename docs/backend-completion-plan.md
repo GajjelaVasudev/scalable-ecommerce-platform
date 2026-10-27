@@ -31,11 +31,11 @@ This document outlines the systematic completion, hardening, testing, and verifi
   - [x] Atomic conditional updates to prevent concurrent overselling
   - [x] Idempotent reservation creation, confirmation, release, and expiry
 
-- [ ] **Phase 5: Razorpay Payment Reliability & Reconciliation**
-  - [ ] Webhook signature verification with raw body and timing-safe comparison
-  - [ ] Idempotent webhook handling with event ID tracking
-  - [ ] Durable reconciliation queue for duplicate charges and expired reservations
-  - [ ] Safe mockable payment service for testing without live credentials
+- [x] **Phase 5: Razorpay Payment Reliability & Reconciliation**
+  - [x] Webhook signature verification with raw body and timing-safe comparison
+  - [x] Idempotent webhook handling with event ID tracking
+  - [x] Durable reconciliation queue for duplicate charges and expired reservations
+  - [x] Safe mockable payment service for testing without live credentials
 
 - [ ] **Phase 6: Infrastructure, Observability, and Graceful Shutdown**
   - [ ] Centralized Express error handler and 404 handler

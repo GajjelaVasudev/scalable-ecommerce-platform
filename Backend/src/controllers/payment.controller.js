@@ -6,9 +6,45 @@ const Payment = require('../models/payment.model');
 const PaymentIssue = require('../models/paymentIssue.model');
 const Reservation = require('../models/reservation.model');
 const Inventory = require('../models/inventory.model');
+const Product = require('../models/product.model');
 const WebhookEvent = require('../models/webhookEvent.model');
 
 const { createRazorpayOrder } = require('../services/payment.service');
+const { verifyRazorpaySignature } = require('../services/webhook.service');
+
+async function withOptionalTransaction(workFn) {
+    let session = null;
+    let useTransaction = false;
+
+    try {
+        session = await mongoose.startSession();
+        session.startTransaction();
+        useTransaction = true;
+    } catch {
+        useTransaction = false;
+        if (session) {
+            try { await session.endSession(); } catch {}
+            session = null;
+        }
+    }
+
+    try {
+        const result = await workFn(useTransaction ? session : null);
+        if (useTransaction && session) {
+            await session.commitTransaction();
+        }
+        return result;
+    } catch (err) {
+        if (useTransaction && session) {
+            try { await session.abortTransaction(); } catch {}
+        }
+        throw err;
+    } finally {
+        if (session) {
+            try { await session.endSession(); } catch {}
+        }
+    }
+}
 
 function reservationsMatchOrder(orderItems, reservations) {
     if (!Array.isArray(orderItems) || orderItems.length === 0) return false;
@@ -193,18 +229,7 @@ async function handleWebhook(req, res) {
     let session;
 
     try {
-        const expectedSignature = crypto
-            .createHmac('sha256', webhookSecret)
-            .update(req.body)
-            .digest('hex');
-
-        const expectedBuffer = Buffer.from(expectedSignature, 'utf8');
-        const receivedBuffer = Buffer.from(String(signature), 'utf8');
-
-        if (
-            expectedBuffer.length !== receivedBuffer.length ||
-            !crypto.timingSafeEqual(expectedBuffer, receivedBuffer)
-        ) {
+        if (!verifyRazorpaySignature(req.body, signature, webhookSecret)) {
             return res.status(400).json({ message: 'Invalid webhook signature' });
         }
 
@@ -243,10 +268,9 @@ async function handleWebhook(req, res) {
             return res.status(200).json({ message: 'Duplicate webhook event ignored' });
         }
 
-        session = await mongoose.startSession();
         let outcome = 'Webhook processed successfully';
 
-        await session.withTransaction(async () => {
+        await withOptionalTransaction(async (session) => {
             // Unique eventId index makes webhook processing idempotent. If two
             // copies race, the losing transaction aborts and is acknowledged below.
             await WebhookEvent.create([{
@@ -435,11 +459,23 @@ async function handleWebhook(req, res) {
                 }
 
                 reservation.status = 'confirmed';
-                await reservation.save({ session });
+                if (session) {
+                    await reservation.save({ session });
+                } else {
+                    await reservation.save();
+                }
+
+                // Keep product stock synchronized
+                const totalStock = updatedInventory.variants.reduce((sum, v) => sum + (v.totalStock || 0), 0);
+                await Product.findByIdAndUpdate(reservation.product, { stock: totalStock });
             }
 
             order.paymentStatus = 'paid';
-            await order.save({ session });
+            if (session) {
+                await order.save({ session });
+            } else {
+                await order.save();
+            }
         });
 
         return res.status(200).json({ message: outcome });
@@ -449,10 +485,6 @@ async function handleWebhook(req, res) {
         }
         console.error('Webhook error:', error.message);
         return res.status(500).json({ message: 'Webhook processing failed' });
-    } finally {
-        if (session) {
-            await session.endSession();
-        }
     }
 }
 
@@ -477,6 +509,10 @@ async function resolvePaymentIssue(req, res) {
     try {
         const { issueId } = req.params;
         const { resolutionNote } = req.body;
+
+        if (!mongoose.isValidObjectId(issueId)) {
+            return res.status(400).json({ message: 'Invalid payment issue ID' });
+        }
 
         if (!resolutionNote || !resolutionNote.trim()) {
             return res.status(400).json({
