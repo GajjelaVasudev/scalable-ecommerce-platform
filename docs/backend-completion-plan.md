@@ -25,11 +25,11 @@ This document outlines the systematic completion, hardening, testing, and verifi
   - [x] Implement missing order management endpoints (list orders, order details, cancel order, update status)
   - [x] Release inventory reservations when orders are cancelled or expired
 
-- [ ] **Phase 4: Inventory, Reservations, and Concurrency**
-  - [ ] Establish `Inventory` as the authoritative inventory source across all operations
-  - [ ] Enforce seller ownership on inventory modifications
-  - [ ] Atomic conditional updates to prevent concurrent overselling
-  - [ ] Idempotent reservation creation, confirmation, release, and expiry
+- [x] **Phase 4: Inventory, Reservations, and Concurrency**
+  - [x] Establish `Inventory` as the authoritative inventory source across all operations
+  - [x] Enforce seller ownership on inventory modifications
+  - [x] Atomic conditional updates to prevent concurrent overselling
+  - [x] Idempotent reservation creation, confirmation, release, and expiry
 
 - [ ] **Phase 5: Razorpay Payment Reliability & Reconciliation**
   - [ ] Webhook signature verification with raw body and timing-safe comparison
