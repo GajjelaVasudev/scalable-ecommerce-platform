@@ -12,12 +12,12 @@ This document outlines the systematic completion, hardening, testing, and verifi
   - [x] Protect auth rate-limiting against Redis failures
   - [x] Add strict input validation against NoSQL injection
 
-- [ ] **Phase 2: Products, Categories, Sellers, and Redis Caching**
-  - [ ] Allow admin to update/delete any product while restricting sellers to their own products
-  - [ ] Automatically create and link inventory variants when products are created
-  - [ ] Validate category existence during product creation/updates
-  - [ ] Prevent deletion of categories that are in active use by products
-  - [ ] Audit and harden Redis caching with graceful degradation when Redis is offline
+- [x] **Phase 2: Products, Categories, Sellers, and Redis Caching**
+  - [x] Allow admin to update/delete any product while restricting sellers to their own products
+  - [x] Automatically create and link inventory variants when products are created
+  - [x] Validate category existence during product creation/updates
+  - [x] Prevent deletion of categories that are in active use by products
+  - [x] Audit and harden Redis caching with graceful degradation when Redis is offline
 
 - [ ] **Phase 3: Cart, Orders, and Checkout Concurrency**
   - [ ] Strictly recalculate prices from active database records during checkout
