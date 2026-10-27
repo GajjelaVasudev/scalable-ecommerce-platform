@@ -6,6 +6,40 @@ const Order = require('../models/order.model');
 
 let expiryJobRunning = false;
 
+async function withOptionalTransaction(workFn) {
+    let session = null;
+    let useTransaction = false;
+
+    try {
+        session = await mongoose.startSession();
+        session.startTransaction();
+        useTransaction = true;
+    } catch {
+        useTransaction = false;
+        if (session) {
+            try { await session.endSession(); } catch {}
+            session = null;
+        }
+    }
+
+    try {
+        const result = await workFn(useTransaction ? session : null);
+        if (useTransaction && session) {
+            await session.commitTransaction();
+        }
+        return result;
+    } catch (err) {
+        if (useTransaction && session) {
+            try { await session.abortTransaction(); } catch {}
+        }
+        throw err;
+    } finally {
+        if (session) {
+            try { await session.endSession(); } catch {}
+        }
+    }
+}
+
 async function expireReservations() {
     if (expiryJobRunning) return;
 
@@ -18,10 +52,11 @@ async function expireReservations() {
         }).select('_id');
 
         for (const candidate of candidates) {
-            const session = await mongoose.startSession();
-
             try {
-                await session.withTransaction(async () => {
+                await withOptionalTransaction(async (session) => {
+                    const reservationFindOptions = { new: true };
+                    if (session) reservationFindOptions.session = session;
+
                     const reservation = await Reservation.findOneAndUpdate(
                         {
                             _id: candidate._id,
@@ -29,13 +64,14 @@ async function expireReservations() {
                             expiresAt: { $lte: new Date() }
                         },
                         { $set: { status: 'expired' } },
-                        { new: true, session }
+                        reservationFindOptions
                     );
 
                     if (!reservation) return;
 
-                    const order = await Order.findById(reservation.order)
-                        .session(session);
+                    const orderQuery = Order.findById(reservation.order);
+                    if (session) orderQuery.session(session);
+                    const order = await orderQuery;
 
                     if (!order) {
                         throw new Error('Order not found');
@@ -50,23 +86,28 @@ async function expireReservations() {
                         );
                     }
 
+                    const invFilter = {
+                        product: reservation.product,
+                        variants: {
+                            $elemMatch: {
+                                name: reservation.variant,
+                                reservedStock: { $gte: reservation.quantity }
+                            }
+                        }
+                    };
+                    const invUpdate = {
+                        $inc: {
+                            'variants.$.availableStock': reservation.quantity,
+                            'variants.$.reservedStock': -reservation.quantity
+                        }
+                    };
+                    const invOptions = { new: true };
+                    if (session) invOptions.session = session;
+
                     const updatedInventory = await Inventory.findOneAndUpdate(
-                        {
-                            product: reservation.product,
-                            variants: {
-                                $elemMatch: {
-                                    name: reservation.variant,
-                                    reservedStock: { $gte: reservation.quantity }
-                                }
-                            }
-                        },
-                        {
-                            $inc: {
-                                'variants.$.availableStock': reservation.quantity,
-                                'variants.$.reservedStock': -reservation.quantity
-                            }
-                        },
-                        { new: true, session }
+                        invFilter,
+                        invUpdate,
+                        invOptions
                     );
 
                     if (!updatedInventory) {
@@ -75,14 +116,20 @@ async function expireReservations() {
                         );
                     }
 
-                    const remainingReservations = await Reservation.exists({
+                    const remainingReservationsQuery = Reservation.exists({
                         order: reservation.order,
                         status: 'reserved'
-                    }).session(session);
+                    });
+                    if (session) remainingReservationsQuery.session(session);
+                    const remainingReservations = await remainingReservationsQuery;
 
                     if (!remainingReservations && order.paymentStatus !== 'paid') {
                         order.paymentStatus = 'unpaid';
-                        await order.save({ session });
+                        if (session) {
+                            await order.save({ session });
+                        } else {
+                            await order.save();
+                        }
                     }
                 });
             } catch (error) {
@@ -90,8 +137,6 @@ async function expireReservations() {
                     `Failed to expire reservation ${candidate._id}:`,
                     error.message
                 );
-            } finally {
-                await session.endSession();
             }
         }
     } catch (error) {
