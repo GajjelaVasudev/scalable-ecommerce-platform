@@ -1,6 +1,10 @@
 
 const mongoose = require('mongoose');
 const productModel = require('../models/product.model');
+const Category = require('../models/category.model');
+const Inventory = require('../models/inventory.model');
+const Reservation = require('../models/reservation.model');
+const Order = require('../models/order.model');
 
 const {
     getCachedProductList,
@@ -82,6 +86,13 @@ async function createProduct(req, res) {
             });
         }
 
+        const categoryExists = await Category.findById(category);
+        if (!categoryExists) {
+            return res.status(400).json({
+                message: 'Category not found'
+            });
+        }
+
         const product = await productModel.create({
             name: name.trim(),
             description: description.trim(),
@@ -91,6 +102,25 @@ async function createProduct(req, res) {
             image: image.trim(),
             seller: req.user.id
         });
+
+        // Automatically create and link inventory with default variant
+        await Inventory.findOneAndUpdate(
+            { product: product._id },
+            {
+                $setOnInsert: {
+                    product: product._id,
+                    variants: [
+                        {
+                            name: 'default',
+                            totalStock: Number(stock),
+                            availableStock: Number(stock),
+                            reservedStock: 0
+                        }
+                    ]
+                }
+            },
+            { upsert: true, new: true }
+        );
 
         await safelyInvalidateProductLists();
 
@@ -288,7 +318,10 @@ async function updateProduct(req, res) {
             });
         }
 
-        if (req.user.id !== product.seller.toString()) {
+        const isOwner = req.user.id === product.seller.toString();
+        const isAdmin = req.user.role === 'admin';
+
+        if (!isOwner && !isAdmin) {
             return res.status(403).json({
                 message: 'Forbidden'
             });
@@ -338,13 +371,19 @@ async function updateProduct(req, res) {
             });
         }
 
-        if (
-            updates.category !== undefined &&
-            !mongoose.isValidObjectId(updates.category)
-        ) {
-            return res.status(400).json({
-                message: 'Invalid category ID'
-            });
+        if (updates.category !== undefined) {
+            if (!mongoose.isValidObjectId(updates.category)) {
+                return res.status(400).json({
+                    message: 'Invalid category ID'
+                });
+            }
+
+            const categoryExists = await Category.findById(updates.category);
+            if (!categoryExists) {
+                return res.status(400).json({
+                    message: 'Category not found'
+                });
+            }
         }
 
         for (const field of ['name', 'description', 'image']) {
@@ -381,6 +420,20 @@ async function updateProduct(req, res) {
                 runValidators: true
             }
         );
+
+        // Keep inventory default variant in sync with product stock
+        if (updates.stock !== undefined) {
+            const inventory = await Inventory.findOne({ product: id });
+            if (inventory) {
+                const defaultVariant = inventory.variants.find(v => v.name === 'default');
+                if (defaultVariant) {
+                    const diff = updates.stock - defaultVariant.totalStock;
+                    defaultVariant.totalStock = updates.stock;
+                    defaultVariant.availableStock = Math.max(0, defaultVariant.availableStock + diff);
+                    await inventory.save();
+                }
+            }
+        }
 
         await Promise.all([
             safelyInvalidateProductLists(),
@@ -425,13 +478,40 @@ async function deleteProduct(req, res) {
             });
         }
 
-        if (req.user.id !== product.seller.toString()) {
+        const isOwner = req.user.id === product.seller.toString();
+        const isAdmin = req.user.role === 'admin';
+
+        if (!isOwner && !isAdmin) {
             return res.status(403).json({
                 message: 'Forbidden'
             });
         }
 
+        // Prevent deletion if active reservations or orders reference this product
+        const activeReservation = await Reservation.findOne({
+            product: id,
+            status: { $in: ['reserved', 'confirmed'] }
+        });
+
+        if (activeReservation) {
+            return res.status(409).json({
+                message: 'Cannot delete product with active reservations or orders'
+            });
+        }
+
+        const activeOrder = await Order.findOne({
+            'items.product': id,
+            deliveryStatus: { $in: ['pending', 'shipped'] }
+        });
+
+        if (activeOrder) {
+            return res.status(409).json({
+                message: 'Cannot delete product with pending or shipped orders'
+            });
+        }
+
         const deletedProduct = await productModel.findByIdAndDelete(id);
+        await Inventory.findOneAndDelete({ product: id });
 
         await Promise.all([
             safelyInvalidateProductLists(),
