@@ -1,0 +1,78 @@
+services:
+  mongo:
+    image: mongo:7.0
+    container_name: ecommerce-mongo
+    restart: unless-stopped
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  mongo-init:
+    image: mongo:7.0
+    container_name: ecommerce-mongo-init
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: "no"
+    command: >
+      mongosh --host mongo:27017 --eval '
+        try {
+          rs.initiate({
+            _id: "rs0",
+            members: [{ _id: 0, host: "mongo:27017" }]
+          });
+        } catch (e) {
+          rs.status();
+        }
+      '
+
+  redis:
+    image: redis:7-alpine
+    container_name: ecommerce-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: ecommerce-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongo:27017/ecommerce?replicaSet=rs0
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=local_development_jwt_secret_key_32_chars_min
+      - RAZORPAY_KEY_ID=rzp_test_placeholder
+      - RAZORPAY_KEY_SECRET=rzp_test_secret_placeholder
+      - RAZORPAY_WEBHOOK_SECRET=rzp_test_webhook_secret_placeholder
+    depends_on:
+      mongo:
+        condition: service_healthy
+      mongo-init:
+        condition: service_completed_successfully
+      redis:
+        condition: service_healthy
+
+volumes:
+  mongo_data:
+  redis_data:
