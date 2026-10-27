@@ -37,11 +37,11 @@ This document outlines the systematic completion, hardening, testing, and verifi
   - [x] Durable reconciliation queue for duplicate charges and expired reservations
   - [x] Safe mockable payment service for testing without live credentials
 
-- [ ] **Phase 6: Infrastructure, Observability, and Graceful Shutdown**
-  - [ ] Centralized Express error handler and 404 handler
-  - [ ] Health (`/health`) and Readiness (`/ready`) endpoints
-  - [ ] Graceful shutdown handlers for HTTP server, MongoDB, Redis, and timers
-  - [ ] Resilient Redis connection lifecycle and failure tolerance
+- [x] **Phase 6: Infrastructure, Observability, and Graceful Shutdown**
+  - [x] Centralized Express error handler and 404 handler
+  - [x] Health (`/health`) and Readiness (`/ready`) endpoints
+  - [x] Graceful shutdown handlers for HTTP server, MongoDB, Redis, and timers
+  - [x] Resilient Redis connection lifecycle and failure tolerance
 
 - [ ] **Phase 7: Automated Unit and Integration Tests**
   - [ ] Auth & Authorization tests

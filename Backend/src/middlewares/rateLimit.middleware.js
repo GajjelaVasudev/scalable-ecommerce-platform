@@ -2,11 +2,20 @@ const { rateLimit } = require('express-rate-limit');
 const { RedisStore } = require('rate-limit-redis');
 const { redisClient } = require('../config/redis');
 
-function safeSendCommand(...args) {
-    if (!redisClient || !redisClient.isOpen) {
-        throw new Error('Redis client is not connected');
+function createStore(prefix) {
+    if (process.env.NODE_ENV === 'test' || !redisClient || !redisClient.isOpen) {
+        return undefined; // Uses built-in memory store gracefully
     }
-    return redisClient.sendCommand(args);
+
+    return new RedisStore({
+        prefix,
+        sendCommand: (...args) => {
+            if (!redisClient || !redisClient.isOpen) {
+                throw new Error('Redis client is not connected');
+            }
+            return redisClient.sendCommand(args);
+        }
+    });
 }
 
 const loginLimiter = rateLimit({
@@ -16,11 +25,7 @@ const loginLimiter = rateLimit({
     legacyHeaders: false,
     skipSuccessfulRequests: true,
     passOnStoreError: true,
-
-    store: new RedisStore({
-        prefix: 'rl:login:',
-        sendCommand: (...args) => safeSendCommand(...args)
-    }),
+    store: createStore('rl:login:'),
 
     handler: (req, res) => {
         res.status(429).json({
@@ -35,11 +40,7 @@ const registerLimiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
     passOnStoreError: true,
-
-    store: new RedisStore({
-        prefix: 'rl:register:',
-        sendCommand: (...args) => safeSendCommand(...args)
-    }),
+    store: createStore('rl:register:'),
 
     handler: (req, res) => {
         res.status(429).json({
