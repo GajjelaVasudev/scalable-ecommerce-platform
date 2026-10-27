@@ -6,6 +6,7 @@ const Payment = require('../models/payment.model');
 const PaymentIssue = require('../models/paymentIssue.model');
 const Reservation = require('../models/reservation.model');
 const Inventory = require('../models/inventory.model');
+const WebhookEvent = require('../models/webhookEvent.model');
 
 const { createRazorpayOrder } = require('../services/payment.service');
 
@@ -70,6 +71,10 @@ async function createPayment(req, res) {
     try {
         const { orderId } = req.params;
 
+        if (!mongoose.isValidObjectId(orderId)) {
+            return res.status(400).json({ message: 'Invalid order ID' });
+        }
+
         const order = await Order.findOne({
             _id: orderId,
             user: req.user.id
@@ -81,6 +86,10 @@ async function createPayment(req, res) {
 
         if (order.paymentStatus === 'paid') {
             return res.status(400).json({ message: 'Order is already paid' });
+        }
+
+        if (!Number.isFinite(Number(order.totalAmount)) || Number(order.totalAmount) <= 0) {
+            return res.status(400).json({ message: 'Order amount is invalid' });
         }
 
         const reservations = await Reservation.find({
@@ -222,10 +231,31 @@ async function handleWebhook(req, res) {
             return res.status(400).json({ message: 'Invalid payment payload' });
         }
 
+        // Razorpay supplies a stable event ID. Hash the raw body as a safe
+        // fallback for local/manual webhook tests where that header is absent.
+        const suppliedEventId = req.headers['x-razorpay-event-id'];
+        const eventId = suppliedEventId
+            ? String(suppliedEventId)
+            : crypto.createHash('sha256').update(req.body).digest('hex');
+
+        const alreadyProcessed = await WebhookEvent.exists({ eventId });
+        if (alreadyProcessed) {
+            return res.status(200).json({ message: 'Duplicate webhook event ignored' });
+        }
+
         session = await mongoose.startSession();
         let outcome = 'Webhook processed successfully';
 
         await session.withTransaction(async () => {
+            // Unique eventId index makes webhook processing idempotent. If two
+            // copies race, the losing transaction aborts and is acknowledged below.
+            await WebhookEvent.create([{
+                eventId,
+                event: event.event,
+                providerPaymentId: razorpayPayment.id,
+                providerOrderId: razorpayPayment.order_id
+            }], { session });
+
             const payment = await Payment.findOne({
                 providerOrderId: razorpayPayment.order_id
             }).session(session);
@@ -414,6 +444,9 @@ async function handleWebhook(req, res) {
 
         return res.status(200).json({ message: outcome });
     } catch (error) {
+        if (error.code === 11000 && error.keyPattern?.eventId) {
+            return res.status(200).json({ message: 'Duplicate webhook event ignored' });
+        }
         console.error('Webhook error:', error.message);
         return res.status(500).json({ message: 'Webhook processing failed' });
     } finally {
