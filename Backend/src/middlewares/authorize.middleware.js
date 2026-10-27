@@ -1,11 +1,12 @@
-function authorize(...roles){
+function authorize(...roles) {
+    const allowedRoles = roles.flat();
+
     return (req, res, next) => {
-        if(!roles.includes(req.user.role)){
-            return res.status(403).json({message: 'Forbidden'});
+        if (!req.user || !req.user.role || !allowedRoles.includes(req.user.role)) {
+            return res.status(403).json({ message: 'Forbidden' });
         }
         next();
-}   
-
+    };
 }
 
 module.exports = authorize;

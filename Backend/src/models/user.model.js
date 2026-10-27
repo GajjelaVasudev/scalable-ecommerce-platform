@@ -27,7 +27,19 @@ const userSchema = new mongoose.Schema({
         default: 'buyer'
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: {
+        transform(doc, ret) {
+            delete ret.password;
+            return ret;
+        }
+    },
+    toObject: {
+        transform(doc, ret) {
+            delete ret.password;
+            return ret;
+        }
+    }
 });
 
 const User = mongoose.model('User', userSchema);
