@@ -528,7 +528,26 @@ async function seedDatabase(options = {}) {
         logger(`[Seeder] Default merchant seller verified: ${seller.username} (${seller._id})`);
     }
 
-    // 2. Ensure Categories exist with deterministic IDs
+    // 2. Ensure Default Demo Buyer exists for development/testing environments (not in production)
+    if (process.env.NODE_ENV !== 'production') {
+        const defaultBuyerId = getDeterministicId('buyer', 'omizon_official_buyer');
+        let buyer = await User.findById(defaultBuyerId);
+        if (!buyer) {
+            const hashedBuyerPassword = await bcrypt.hash('password123', 10);
+            buyer = await User.create({
+                _id: defaultBuyerId,
+                username: 'priya_sharma',
+                email: 'priya@omizon.in',
+                password: hashedBuyerPassword,
+                role: 'buyer'
+            });
+            logger(`[Seeder] Created default demo buyer: ${buyer.username} (${buyer._id})`);
+        } else {
+            logger(`[Seeder] Default demo buyer verified: ${buyer.username} (${buyer._id})`);
+        }
+    }
+
+    // 3. Ensure Categories exist with deterministic IDs
     const categoryMap = new Map();
     let seededCategoriesCount = 0;
 
