@@ -50,7 +50,7 @@ export const HomePage: React.FC = () => {
       images: [image],
       rating: 4.8,
       reviewCount: 120,
-      seller: { _id: 's1', username: 'OMIZON Official' },
+      seller: { _id: '64a1b2c3d4e5f6789012345b', username: 'omizon_official' },
     });
   };
 
@@ -141,29 +141,29 @@ export const HomePage: React.FC = () => {
                 </span>
                 <span className="font-label-sm text-outline">Top Rated</span>
               </div>
-              <div className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
+              <Link to="/products/2545922d18419b69f8ab9ee3" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHWWLWbJsm8PBZcrAbnoEnCLTRy8FvboW1V0It7bSRfDaNJw9_9zwiAgBG33EAik6nFFM376B55D0p2F6mASAH9cVVCPt5k9Y92aQZqh_rGJOEnhVthWT3MhF9bzL8Gymd5XDsCYBfrz7QrhdeAKGTelyM_CHyHECrN84c5gjaFPYxpsVJNI0VEuNdxdGwVYG8PJINaaPZmhWewS0gnKwXTwFlu4I8BZBwl4lOh5tHwlvXuzwCLGJl9A"
                   alt="Studio Pro ANC Headphones"
                 />
-              </div>
+              </Link>
               <div className="flex items-center justify-between z-10">
-                <div>
-                  <p className="font-title-sm text-title-sm text-on-surface">Studio Pro ANC</p>
+                <Link to="/products/2545922d18419b69f8ab9ee3">
+                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Studio Pro ANC</p>
                   <p className="font-price-card text-primary">₹14,999</p>
-                </div>
+                </Link>
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'hero-1',
+                      '2545922d18419b69f8ab9ee3',
                       'Studio Pro ANC',
                       14999,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuDHWWLWbJsm8PBZcrAbnoEnCLTRy8FvboW1V0It7bSRfDaNJw9_9zwiAgBG33EAik6nFFM376B55D0p2F6mASAH9cVVCPt5k9Y92aQZqh_rGJOEnhVthWT3MhF9bzL8Gymd5XDsCYBfrz7QrhdeAKGTelyM_CHyHECrN84c5gjaFPYxpsVJNI0VEuNdxdGwVYG8PJINaaPZmhWewS0gnKwXTwFlu4I8BZBwl4lOh5tHwlvXuzwCLGJl9A',
                       'Electronics'
                     )
                   }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors"
+                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
                   title="Quick Add"
                   type="button"
                 >
@@ -180,29 +180,29 @@ export const HomePage: React.FC = () => {
                 </span>
                 <span className="font-label-sm text-outline">Cold-Pressed</span>
               </div>
-              <div className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
+              <Link to="/products/e76a094353f7362b563e05e1" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8XNentxmPfjVo4JmJbrZtkx8H5jQ7g-yNegsPRgq9RwRqkg8fuBv_i18A8GhlcDuX4JX6WCol_tqQuz5_Fvt_1TitDg2lqW3DsIgLjx0YxAB-SdFcpgnHqL5LRA0kVAFDQjSIHXNMhLWpZKAH6dKEpNRJQCwDgVptGx96PoWSe2EUCO1ajMT3vuQwO5zf7TLDwhrzETNWhN6dI2JSkrB_JRubgXIpamN_KRn3NgqNpyOiOM_56XfcCQ"
                   alt="Estate Olive Oil 1L"
                 />
-              </div>
+              </Link>
               <div className="flex items-center justify-between z-10">
-                <div>
-                  <p className="font-title-sm text-title-sm text-on-surface">Estate Olive Oil 1L</p>
+                <Link to="/products/e76a094353f7362b563e05e1">
+                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Estate Olive Oil 1L</p>
                   <p className="font-price-card text-primary">₹949</p>
-                </div>
+                </Link>
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'hero-2',
+                      'e76a094353f7362b563e05e1',
                       'Estate Olive Oil 1L',
                       949,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuA8XNentxmPfjVo4JmJbrZtkx8H5jQ7g-yNegsPRgq9RwRqkg8fuBv_i18A8GhlcDuX4JX6WCol_tqQuz5_Fvt_1TitDg2lqW3DsIgLjx0YxAB-SdFcpgnHqL5LRA0kVAFDQjSIHXNMhLWpZKAH6dKEpNRJQCwDgVptGx96PoWSe2EUCO1ajMT3vuQwO5zf7TLDwhrzETNWhN6dI2JSkrB_JRubgXIpamN_KRn3NgqNpyOiOM_56XfcCQ',
                       'Grocery & Essentials'
                     )
                   }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors"
+                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
                   title="Quick Add"
                   type="button"
                 >
@@ -219,29 +219,29 @@ export const HomePage: React.FC = () => {
                 </span>
                 <span className="font-label-sm text-outline">Handmade</span>
               </div>
-              <div className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
+              <Link to="/products/3807fe2700f4ceacb83c28de" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1wstpgOXEzsIPDWrUgDD7LaLjwFqh5uyogQN5k4wcQjo9o-RngcZqbRvEL8Q_HblR8eww8oBkLor_vGhrW2tMauZvPX_DJrcN_SwHL8MwkiurcFSft3IpDiwsjLjTA8S_H1_FRpyj9-vtvkecHn9Y59eITffuDW6aGzou-VWDNoNrRdQonABYi0uwEfqa-RPe7swbRu1k3ySqdgz6qjCvjyKaPsB-Eem4Qn0e9DN6EOH3XL7WKKT5vw"
                   alt="Clay Craft Carafe"
                 />
-              </div>
+              </Link>
               <div className="flex items-center justify-between z-10">
-                <div>
-                  <p className="font-title-sm text-title-sm text-on-surface">Clay Craft Carafe</p>
+                <Link to="/products/3807fe2700f4ceacb83c28de">
+                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Clay Craft Carafe</p>
                   <p className="font-price-card text-primary">₹2,190</p>
-                </div>
+                </Link>
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'hero-3',
+                      '3807fe2700f4ceacb83c28de',
                       'Clay Craft Carafe',
                       2190,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuB1wstpgOXEzsIPDWrUgDD7LaLjwFqh5uyogQN5k4wcQjo9o-RngcZqbRvEL8Q_HblR8eww8oBkLor_vGhrW2tMauZvPX_DJrcN_SwHL8MwkiurcFSft3IpDiwsjLjTA8S_H1_FRpyj9-vtvkecHn9Y59eITffuDW6aGzou-VWDNoNrRdQonABYi0uwEfqa-RPe7swbRu1k3ySqdgz6qjCvjyKaPsB-Eem4Qn0e9DN6EOH3XL7WKKT5vw',
                       'Home & Living'
                     )
                   }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors"
+                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
                   title="Quick Add"
                   type="button"
                 >
@@ -258,29 +258,29 @@ export const HomePage: React.FC = () => {
                 </span>
                 <span className="font-label-sm text-outline">Clean Formula</span>
               </div>
-              <div className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
+              <Link to="/products/35696643bb8fa566e4081c59" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
                 <img
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8knFJAJz82iOvxBcxvRTbcRMa8v0S1lb7zS7QNGn9i5Q0U2elOjlE5xuX7Di9JI3W52A0qi5xsCo0aSU5VorzqTz7JnZc3kFWxioeop3nO3WMrusKorD0U_ALViI-9zy8t26k7Ly2Zq_1qChP96voaISqizJFSlK4MH9P1D35iHTXk2QWv87GJ1G-52aVyY_3raaYGKShaZNmv5U5wz-yO1pYV2AwAwrwpBRljMU9jnf8BIa-mcRI6w"
                   alt="Barrier Elixir 50ml"
                 />
-              </div>
+              </Link>
               <div className="flex items-center justify-between z-10">
-                <div>
-                  <p className="font-title-sm text-title-sm text-on-surface">Barrier Elixir 50ml</p>
+                <Link to="/products/35696643bb8fa566e4081c59">
+                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Barrier Elixir 50ml</p>
                   <p className="font-price-card text-primary">₹1,850</p>
-                </div>
+                </Link>
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'hero-4',
+                      '35696643bb8fa566e4081c59',
                       'Barrier Elixir 50ml',
                       1850,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuD8knFJAJz82iOvxBcxvRTbcRMa8v0S1lb7zS7QNGn9i5Q0U2elOjlE5xuX7Di9JI3W52A0qi5xsCo0aSU5VorzqTz7JnZc3kFWxioeop3nO3WMrusKorD0U_ALViI-9zy8t26k7Ly2Zq_1qChP96voaISqizJFSlK4MH9P1D35iHTXk2QWv87GJ1G-52aVyY_3raaYGKShaZNmv5U5wz-yO1pYV2AwAwrwpBRljMU9jnf8BIa-mcRI6w',
                       'Beauty & Personal Care'
                     )
                   }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors"
+                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
                   title="Quick Add"
                   type="button"
                 >
@@ -427,7 +427,7 @@ export const HomePage: React.FC = () => {
             {/* Deal Card 1 */}
             <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
-                <div className="relative w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
+                <Link to="/products/2545922d18419b69f8ab9ee3" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDE5yxf0nqMEhj4IBd8eLDIRYCnRHa8WrZbBcy-R4i8hNft7TowHZdTE-7VJ1EDWSDoPn185GvneUSaPkov8fv1XUXDM232GrGhaH9rrNDXH-1c8hSCoztuzeCIp5M69Z1Wkhs54rEixWaHTOOhRDXz4gSxiAvCCd_q8_JCprJZhUO0LI2tpnHPPfynCSKbpCNkldEW1OhW8HLTPdFXGUvN8g-v53dWYrrFVcIOIcjBEG860RIf__lcw"
@@ -440,10 +440,14 @@ export const HomePage: React.FC = () => {
                     className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
                     title="Save to wishlist"
                     type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                   >
                     <span className="material-symbols-outlined text-[18px]">favorite_border</span>
                   </button>
-                </div>
+                </Link>
                 <div className="flex items-center gap-1 mb-1">
                   <span
                     className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
@@ -454,9 +458,11 @@ export const HomePage: React.FC = () => {
                   <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.8</span>
                   <span className="font-body-sm text-body-sm text-outline">(3,420)</span>
                 </div>
-                <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2">
-                  SoundPulse Studio Pro Wireless ANC Headphones
-                </h3>
+                <Link to="/products/2545922d18419b69f8ab9ee3">
+                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
+                    SoundPulse Studio Pro Wireless ANC Headphones
+                  </h3>
+                </Link>
               </div>
               <div className="mt-space-sm flex flex-col gap-space-xs">
                 <div className="flex items-baseline gap-space-xs">
@@ -471,14 +477,14 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'deal-1',
+                      '2545922d18419b69f8ab9ee3',
                       'SoundPulse Studio Pro Wireless ANC Headphones',
                       14999,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuBDE5yxf0nqMEhj4IBd8eLDIRYCnRHa8WrZbBcy-R4i8hNft7TowHZdTE-7VJ1EDWSDoPn185GvneUSaPkov8fv1XUXDM232GrGhaH9rrNDXH-1c8hSCoztuzeCIp5M69Z1Wkhs54rEixWaHTOOhRDXz4gSxiAvCCd_q8_JCprJZhUO0LI2tpnHPPfynCSKbpCNkldEW1OhW8HLTPdFXGUvN8g-v53dWYrrFVcIOIcjBEG860RIf__lcw',
                       'Electronics'
                     )
                   }
-                  className="mt-space-xs w-full bg-primary hover:bg-secondary text-on-primary h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors"
+                  className="mt-space-xs w-full bg-primary hover:bg-secondary text-on-primary h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
@@ -490,7 +496,7 @@ export const HomePage: React.FC = () => {
             {/* Deal Card 2 */}
             <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
-                <div className="relative w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
+                <Link to="/products/127ce0a9817f5707919b9baa" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYS6V6luaSnqEJ_yCAye1N3dYj0p0tOonG0CrVibxs2oQo6Wyzpq3qbmgB4pdJH1qVj5lAUYEftt4WzuRRauPkfweMroEcJY-hpX7lwQ_GEl7NrnsWH-gf7XNeTCdLjnMsAnKpxwuHl1XktLoo5tEWn0C3oTuONtw-5Dsiqv17RKLhAFkJkacLFTymo8nRDzVqrkC2q2UgUvO5nvonkJ7TogzEIODSRAyGUVZ3d1kkVdxS671n12jvpQ"
@@ -503,10 +509,14 @@ export const HomePage: React.FC = () => {
                     className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
                     title="Save to wishlist"
                     type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                   >
                     <span className="material-symbols-outlined text-[18px]">favorite_border</span>
                   </button>
-                </div>
+                </Link>
                 <div className="flex items-center gap-1 mb-1">
                   <span
                     className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
@@ -517,9 +527,11 @@ export const HomePage: React.FC = () => {
                   <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.9</span>
                   <span className="font-body-sm text-body-sm text-outline">(890)</span>
                 </div>
-                <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2">
-                  Nordic Oak Minimalist Task Lamp with Dimmable LED
-                </h3>
+                <Link to="/products/127ce0a9817f5707919b9baa">
+                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
+                    Nordic Oak Minimalist Task Lamp with Dimmable LED
+                  </h3>
+                </Link>
               </div>
               <div className="mt-space-sm flex flex-col gap-space-xs">
                 <div className="flex items-baseline gap-space-xs">
@@ -534,14 +546,14 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'deal-2',
+                      '127ce0a9817f5707919b9baa',
                       'Nordic Oak Minimalist Task Lamp',
                       3499,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuCYS6V6luaSnqEJ_yCAye1N3dYj0p0tOonG0CrVibxs2oQo6Wyzpq3qbmgB4pdJH1qVj5lAUYEftt4WzuRRauPkfweMroEcJY-hpX7lwQ_GEl7NrnsWH-gf7XNeTCdLjnMsAnKpxwuHl1XktLoo5tEWn0C3oTuONtw-5Dsiqv17RKLhAFkJkacLFTymo8nRDzVqrkC2q2UgUvO5nvonkJ7TogzEIODSRAyGUVZ3d1kkVdxS671n12jvpQ',
                       'Home & Living'
                     )
                   }
-                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors"
+                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
@@ -553,7 +565,7 @@ export const HomePage: React.FC = () => {
             {/* Deal Card 3 */}
             <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
-                <div className="relative w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
+                <Link to="/products/9eeae17659684624e4e8cbe2" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4tIfuCnVFI90s5zDrrG0qiD-YGOknHZ0yZxqmw44f1xVWZYWf7XEWbOyM7uEqXSMBN8BgHfE8d-8BPFaJ03BiRko4GMWKHqaRKLpNvLf62uTUNb-jqw0Iq09nIRcibA1LoVU_iDp7sVQipQsrVqO_RNhJHMTuFJ5iYN_qpZa0C4fUG3E7ou3pHv3SeIG6Jp8iqsQw2CTRol4c79I_9xepK5TKHdy3jLp1uuyxgdS9LX8dHXv7TIOoVA"
@@ -566,10 +578,14 @@ export const HomePage: React.FC = () => {
                     className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
                     title="Save to wishlist"
                     type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                   >
                     <span className="material-symbols-outlined text-[18px]">favorite_border</span>
                   </button>
-                </div>
+                </Link>
                 <div className="flex items-center gap-1 mb-1">
                   <span
                     className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
@@ -580,9 +596,11 @@ export const HomePage: React.FC = () => {
                   <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.7</span>
                   <span className="font-body-sm text-body-sm text-outline">(1,620)</span>
                 </div>
-                <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2">
-                  GlowBiome Barrier Repair Serum 50ml Ceramide + HA
-                </h3>
+                <Link to="/products/9eeae17659684624e4e8cbe2">
+                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
+                    GlowBiome Barrier Repair Serum 50ml Ceramide + HA
+                  </h3>
+                </Link>
               </div>
               <div className="mt-space-sm flex flex-col gap-space-xs">
                 <div className="flex items-baseline gap-space-xs">
@@ -597,14 +615,14 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'deal-3',
+                      '9eeae17659684624e4e8cbe2',
                       'GlowBiome Barrier Repair Serum',
                       1850,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuB4tIfuCnVFI90s5zDrrG0qiD-YGOknHZ0yZxqmw44f1xVWZYWf7XEWbOyM7uEqXSMBN8BgHfE8d-8BPFaJ03BiRko4GMWKHqaRKLpNvLf62uTUNb-jqw0Iq09nIRcibA1LoVU_iDp7sVQipQsrVqO_RNhJHMTuFJ5iYN_qpZa0C4fUG3E7ou3pHv3SeIG6Jp8iqsQw2CTRol4c79I_9xepK5TKHdy3jLp1uuyxgdS9LX8dHXv7TIOoVA',
                       'Beauty & Personal Care'
                     )
                   }
-                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors"
+                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
@@ -616,7 +634,7 @@ export const HomePage: React.FC = () => {
             {/* Deal Card 4 */}
             <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
-                <div className="relative w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
+                <Link to="/products/e76a094353f7362b563e05e1" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkH9W8BpvypqOlI4iJOkj35_DwPTLyMhpWxAtsJ5HwgYnL18JiidvEiIMM7oRzk_0tOm-gZNMEfMfwsWhwR_2-nVzfa7NVKtF0blrmM9RTV9NKm4W49F4zuS4ahOBQ_7HqWW0rL18VkS9Id2qRGtSMPhxIVRyui9G_54cGFxu7xH045Copyc8x3jf_gM5QwHd1PR9Wg7jbT9HadD7A47txZUmoaZlxLy-5eoC-JQ91Uaj7d1vmSYTq-Q"
@@ -629,10 +647,14 @@ export const HomePage: React.FC = () => {
                     className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
                     title="Save to wishlist"
                     type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
                   >
                     <span className="material-symbols-outlined text-[18px]">favorite_border</span>
                   </button>
-                </div>
+                </Link>
                 <div className="flex items-center gap-1 mb-1">
                   <span
                     className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
@@ -643,9 +665,11 @@ export const HomePage: React.FC = () => {
                   <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.9</span>
                   <span className="font-body-sm text-body-sm text-outline">(4,150)</span>
                 </div>
-                <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2">
-                  FarmFresh Cold-Pressed Extra Virgin Olive Oil 1L
-                </h3>
+                <Link to="/products/e76a094353f7362b563e05e1">
+                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
+                    FarmFresh Cold-Pressed Extra Virgin Olive Oil 1L
+                  </h3>
+                </Link>
               </div>
               <div className="mt-space-sm flex flex-col gap-space-xs">
                 <div className="flex items-baseline gap-space-xs">
@@ -660,14 +684,14 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'deal-4',
+                      'e76a094353f7362b563e05e1',
                       'FarmFresh Cold-Pressed Extra Virgin Olive Oil 1L',
                       949,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuCkH9W8BpvypqOlI4iJOkj35_DwPTLyMhpWxAtsJ5HwgYnL18JiidvEiIMM7oRzk_0tOm-gZNMEfMfwsWhwR_2-nVzfa7NVKtF0blrmM9RTV9NKm4W49F4zuS4ahOBQ_7HqWW0rL18VkS9Id2qRGtSMPhxIVRyui9G_54cGFxu7xH045Copyc8x3jf_gM5QwHd1PR9Wg7jbT9HadD7A47txZUmoaZlxLy-5eoC-JQ91Uaj7d1vmSYTq-Q',
                       'Grocery & Essentials'
                     )
                   }
-                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors"
+                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
@@ -756,21 +780,21 @@ export const HomePage: React.FC = () => {
               </div>
 
               <div>
-                <div className="w-full h-64 rounded-xl bg-surface-container-low overflow-hidden mb-space-md">
+                <Link to="/products/eb00eef4b99985cbc0933691" className="block w-full h-64 rounded-xl bg-surface-container-low overflow-hidden mb-space-md group">
                   <img
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkyTe1LqwU0-6EHPhxaWoVcP9JkNxlH4q8RfvUazPEC-36q-iOe5WAPah4-ogyWJ4D5HVpB9CCNrkpPmUj8jiZMLDO0saAhfhgdeBV2fNCRU2KNiCj7Dt_Jmivs9xhpQvYzMr_NQg1rDGgjKWMD7u3u4GkY6IMXR9-9TEql12A-wODb6I6PK6EA201943X2GI9c-0Nbqik92jVDuXf1wLzCVqnLTFBvs1IcMWVY9EoubZsYJ5hxjZ5Ww"
                     alt="ApexBook M3 Ultra"
                   />
-                </div>
+                </Link>
                 <div className="flex items-center justify-between pt-space-xs">
                   <div>
                     <span className="font-body-sm text-outline block">Special Launch Price</span>
                     <span className="font-price-hero text-price-hero text-on-surface">₹1,89,990</span>
                   </div>
                   <button
-                    onClick={() => navigate('/products')}
-                    className="bg-primary hover:bg-secondary text-on-primary px-space-lg h-12 rounded-lg font-title-sm flex items-center gap-space-xs transition-colors"
+                    onClick={() => navigate('/products/eb00eef4b99985cbc0933691')}
+                    className="bg-primary hover:bg-secondary text-on-primary px-space-lg h-12 rounded-lg font-title-sm flex items-center gap-space-xs transition-colors cursor-pointer"
                     type="button"
                   >
                     <span>Configure &amp; Buy</span>
@@ -939,14 +963,14 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'groc-1',
+                      'ab7b14f36a322390697b4261',
                       'Artisan Stoneground Sourdough',
                       220,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuAl6QFzMa4YNzF0kkp8vh70mmqWSH_y_GvS7EIy0efI6bFIZUmkipEFtyM2z4XgB-gNrHhXZMJ5DsVGVnuIQjTQRsnNp8FJXtT4qecm_hicjbaOi7iGzmZXUL7DtI1NOZlGYGKdpReE-L1vHgP9N_2jo19JvQVLVyT3Lhz2Qg_lIV29PqtabWiWZk1XRDVEt_cBCded9oeMUmaTu5e6yxscD4CSMyJuTi913RZ7FdcIoxFuH22jAvbWTw',
                       'Grocery & Essentials'
                     )
                   }
-                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors"
+                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[16px]">add</span>
@@ -976,14 +1000,14 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'groc-2',
+                      '87e4ee3279ce71acaaf991e3',
                       'Estate Arabica Beans 250g',
                       480,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuDr8SRkRRimmSJYvt5J0ZspPlhOPyf3fZJHUKurwcHEjSj-B4c712DN3WHVO1WGEJQgEmNC9bHuXfcpQg1CLgZcgN8hPW4Enxr3Kmnq_UQicaUh3Zc-Jto4VcIp-x9kTAntjD0S0iSOJcranJxatlNuLcqVp2XOUp-TfKvETwP10aNiV3qD7VNuYRX7B0_xLOB812Rr9u-czzFIvccldFmL5wS6KIQrPZ2twTaeK25uzaw96Fc81JnNhg',
                       'Grocery & Essentials'
                     )
                   }
-                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors"
+                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[16px]">add</span>
@@ -1013,14 +1037,14 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'groc-3',
+                      'ab7b14f36a322390697b4261',
                       'Himalayan Flora Honey 400g',
                       650,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuBgO5QDtBh27uuBnLBpBXuXZKfBKmxwzxGc5PQpHkJuaCMUu55xkU5boNAc6_icjhV_xmTR9eLgQHTfX8mkdbVsdwwCQ1saCc6NaFnpg9M8c_FUrwADQV4OJygRi5lRVZkaKcvhRpV1SYJraMfhyJSpsBefOehxUJmP1G3X48pZjO5xdyt5DshlVrcs8R4NMciZFaY8H3vl7HgOuBUSK5MoFPTR11d5qPKmh3NT7Rvmzeg21Ex5dLftMg',
                       'Grocery & Essentials'
                     )
                   }
-                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors"
+                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
                   type="button"
                 >
                   <span className="material-symbols-outlined text-[16px]">add</span>
@@ -1050,7 +1074,7 @@ export const HomePage: React.FC = () => {
                 <button
                   onClick={() =>
                     handleQuickAdd(
-                      'groc-4',
+                      'e76a094353f7362b563e05e1',
                       'Barista Oat & Almond Milk 1L',
                       295,
                       'https://lh3.googleusercontent.com/aida-public/AB6AXuBIbaXi7mzx6F3-v1VYNuvOXF2p5HEkDsyzluh5KngOEfFOTkHwC4hwa4UgDk20P8Vxa0wEF-Un3t0vHt9xItHmLFxzL_8QLWVY1VJijfkqUmOkujQLL8IQ8zM35_1jCisD6yZsNFJBm0w8lep8BoTCubno3Oa0999Zav90gJdc55Ihou-00ce-F6w8ZYBqSgdrRx673BTtc8ijhOq4722zt1GNQYkeAtcSrnF7j0sMfz0G969JcFAmRw',

@@ -1,18 +1,19 @@
 import { Product, Category } from '../types';
 
 export const INITIAL_CATEGORIES: Category[] = [
-  { _id: 'cat_electronics', name: 'Electronics', slug: 'electronics', productCount: 420 },
-  { _id: 'cat_home', name: 'Home & Living', slug: 'home-living', productCount: 312 },
-  { _id: 'cat_grocery', name: 'Grocery & Essentials', slug: 'grocery', productCount: 185 },
-  { _id: 'cat_beauty', name: 'Beauty & Personal Care', slug: 'beauty', productCount: 248 },
-  { _id: 'cat_fashion', name: 'Fashion & Apparel', slug: 'fashion', productCount: 512 },
-  { _id: 'cat_sports', name: 'Sports & Outdoors', slug: 'sports', productCount: 96 },
-  { _id: 'cat_books', name: 'Books & Stationery', slug: 'books', productCount: 140 },
+  { _id: 'b4fa1458bcff238edf645aa5', name: 'Electronics', slug: 'electronics', productCount: 420 },
+  { _id: '04990ca7ad918fbef87cdc10', name: 'Home & Living', slug: 'home-living', productCount: 312 },
+  { _id: '6c3d5ebfc25b3d534f6f1198', name: 'Grocery & Essentials', slug: 'grocery', productCount: 185 },
+  { _id: 'c1c4cda4b32fa5e508b93489', name: 'Beauty & Personal Care', slug: 'beauty', productCount: 248 },
+  { _id: '5aa2ad5f3aa231db0a7a972f', name: 'Fashion & Apparel', slug: 'fashion', productCount: 512 },
+  { _id: 'b1712378c92ec1b9356f7d1a', name: 'Sports & Outdoors', slug: 'sports', productCount: 96 },
+  { _id: '53546fab5b1412764d4b9cd6', name: 'Books & Stationery', slug: 'books', productCount: 140 },
+  { _id: '736fc9491e1126401427b328', name: 'Accessories', slug: 'accessories', productCount: 88 },
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [
   {
-    _id: 'prod_soundpulse_01',
+    _id: '2545922d18419b69f8ab9ee3',
     name: 'SoundPulse Studio Pro Wireless ANC Headphones',
     description:
       'Engineered with 40mm custom beryllium drivers and advanced hybrid 45dB Active Noise Cancellation. Delivers immersive spatial audio, 60-hour extended battery reserve, ultra-soft memory foam earcups, and dual low-latency multipoint Bluetooth 5.4 connectivity.',
@@ -43,7 +44,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
   },
   {
-    _id: 'prod_apexbook_02',
+    _id: 'eb00eef4b99985cbc0933691',
     name: 'ApexBook M3 Ultra 16" Pro Workstation',
     description:
       'Liquid Retina XDR display with ProMotion 120Hz refresh, Next-Gen 16-Core CPU, 40-Core GPU, 36GB unified memory, and 1TB ultra-fast PCIe Gen 4 SSD. Designed for creative developers and machine learning researchers.',
@@ -67,7 +68,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
   },
   {
-    _id: 'prod_stoneware_03',
+    _id: '3807fe2700f4ceacb83c28de',
     name: 'Artisan Handcrafted Stoneware Dining Set (16-Piece)',
     description:
       'Individually hand-thrown artisanal stoneware with organic reactive matte violet-charcoal glaze. Dishwasher and microwave safe. Includes 4 dinner plates, 4 salad plates, 4 pasta bowls, and 4 mugs.',
@@ -90,7 +91,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
   },
   {
-    _id: 'prod_oliveoil_04',
+    _id: 'e76a094353f7362b563e05e1',
     name: 'Cold-Pressed Extra Virgin Estate Olive Oil (500ml)',
     description:
       'First cold extraction from single-estate Koroneiki olives harvested by hand. Rich in polyphenols and antioxidants with an herbaceous peppery finish.',
@@ -112,7 +113,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
   },
   {
-    _id: 'prod_peptides_05',
+    _id: '35696643bb8fa566e4081c59',
     name: 'Luxe Peptide Regenerating Night Crème (50g)',
     description:
       'Multi-peptide matrix infused with botanical squalane and bioactive hyaluronic acid. Stimulates cellular rejuvenation, reinforces lipid barriers, and reduces fine lines.',
@@ -134,7 +135,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
   },
   {
-    _id: 'prod_merino_06',
+    _id: '5be199dbc2ce8fe65ecea9b8',
     name: 'Merino Wool Minimalist Travel Overshirt',
     description:
       'Crafted from 100% superfine 18.5-micron Australian merino wool. Naturally moisture-wicking, odor-resistant, and thermoregulating. Features concealed horn buttons and dual chest pockets.',
@@ -156,7 +157,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
   },
   {
-    _id: 'prod_chair_07',
+    _id: 'eb1140f7d019a3452db11a98',
     name: 'Ergonomic Task Chair with Adaptive Lumbar Mesh',
     description:
       'Award-winning posture engineering with 4D adjustable armrests, dynamic synchro-tilt mechanism, breathable matrix mesh backrest, and class-4 heavy-duty gas cylinder.',
@@ -178,7 +179,7 @@ export const INITIAL_PRODUCTS: Product[] = [
     },
   },
   {
-    _id: 'prod_smartring_08',
+    _id: 'a72eacdcfbb2a7fbd8def9ee',
     name: 'Titanium Smart Health Ring Gen 3 (Size 10)',
     description:
       'Ultra-lightweight grade 5 aerospace titanium ring. Continuously tracks continuous heart rate, SpO2, sleep staging, body temperature fluctuations, and recovery stress scores.',
@@ -225,7 +226,7 @@ export interface StitchCatalogProduct {
 
 export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
   {
-    _id: 'stitch_prod_01',
+    _id: '33d3cc8494560e1a998a2273',
     name: 'AeroSound Max Studio Wireless Headset with Active Hybrid ANC & 60h Battery',
     description:
       'High-end sleek wireless over-ear noise-cancelling headphones in matte charcoal black and subtle deep purple violet accents, minimalist studio photography.',
@@ -248,7 +249,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_02',
+    _id: '127ce0a9817f5707919b9baa',
     name: 'PureAir Smart HEPA H14 Air Purifier with Real-Time AQI Sensor & App Control',
     description:
       'Modern cylindrical smart home HEPA air purifier in seamless pure white finish with modern violet LED indicator ring.',
@@ -271,7 +272,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_03',
+    _id: '1ea7b39cbffc0e1fa70087d0',
     name: 'Artisanal Ceramic Pour-Over Coffee Set with Heat-Resistant Borosilicate Server',
     description:
       'Artisanal hand-crafted textured ceramic pour over dripper coffee carafes set in earthy speckled stone and dark charcoal violet tones.',
@@ -294,7 +295,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_04',
+    _id: 'ab7b14f36a322390697b4261',
     name: 'Organic Wildflower Himalayan Raw Honey 500g Glass Pot with Natural Comb',
     description:
       'Luxury glass jar of golden pure raw Himalayan wildflower organic honey with wooden dipper, rich warm amber reflections.',
@@ -317,7 +318,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_05',
+    _id: '9b975b594e13d7115488b7f6',
     name: 'UltraLight Merino Wool Wrinkle-Resistant Travel Blazer in Deep Midnight',
     description:
       'Tailored luxury menswear breathable dark navy violet Merino wool travel blazer displayed on minimalist sculpted bust.',
@@ -339,7 +340,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_06',
+    _id: '9eeae17659684624e4e8cbe2',
     name: 'Peptide Bio-Active Firming Night Cream 50ml with Multi-Molecular Hyaluronic',
     description:
       'High-end skincare luxury frosted cosmetic glass jar with metallic violet lid on polished stone pedestal.',
@@ -362,7 +363,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_07',
+    _id: 'd60bbaf7a8e51eece4afaf88',
     name: 'Smart Ergo Hydro Stainless Steel Insulated Bottle 1L with LED Temp Touch',
     description:
       'Insulated thermal matte titanium and violet vacuum water bottle 1L with ergonomic smart temperature cap.',
@@ -384,7 +385,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_08',
+    _id: 'cf3444b72e8818b8639be75e',
     name: 'Mechanical 75% Gaming Keyboard with Hot-Swappable Switches & RGB Glow',
     description:
       'Custom mechanical keyboard with premium anodized deep indigo aluminum case, illuminated per-key violet backlighting.',
@@ -407,7 +408,7 @@ export const STITCH_SHOP_ALL_PRODUCTS: StitchCatalogProduct[] = [
     status: 'active',
   },
   {
-    _id: 'stitch_prod_09',
+    _id: '87e4ee3279ce71acaaf991e3',
     name: 'Cold Brew Precision Glass Pitcher 1.5L with Ultra-Fine Micromesh Filter',
     description:
       'Heavy borosilicate cold brew coffee glass pitcher with precision stainless steel fine mesh filter infuser.',

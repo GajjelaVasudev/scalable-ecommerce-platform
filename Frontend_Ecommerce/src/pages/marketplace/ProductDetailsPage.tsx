@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { formatCurrency, calculateDiscount } from '../../utils/format';
-import { STITCH_SHOP_ALL_PRODUCTS, INITIAL_PRODUCTS } from '../../services/mockData';
+import { api } from '../../services/api';
 import { Product } from '../../types';
 
 interface Colorway {
@@ -113,31 +113,67 @@ export const ProductDetailsPage: React.FC = () => {
   const [cartBtnText, setCartBtnText] = useState<'Add to Cart' | 'Added to Basket'>('Add to Cart');
   const [bundleBtnText, setBundleBtnText] = useState<'Add all 3 to Cart' | 'Added 3 Items to Bag'>('Add all 3 to Cart');
 
-  // Match product from mock if ID provided, or use SoundPulse default
-  const baseProduct: Product = React.useMemo(() => {
-    const match =
-      STITCH_SHOP_ALL_PRODUCTS.find((p) => p._id === id) ||
-      INITIAL_PRODUCTS.find((p) => p._id === id);
+  // Live Database Product State
+  const [product, setProduct] = useState<Product | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(Boolean(id));
+  const [error, setError] = useState<string | null>(null);
 
-    return {
-      _id: match?._id || 'prod_soundpulse_01',
-      name:
-        match?.name ||
-        'SoundPulse Studio Pro Wireless Over-Ear Active Noise-Cancelling Headphones with Spatial Audio & 60h Battery',
-      description:
-        match?.description ||
-        'Crafted for pristine transparency, the SoundPulse Studio Pro features ultra-stiff Beryllium-coated diaphragm drivers delivering zero harmonic distortion.',
-      price: selectedEdition.price,
-      originalPrice: 22999,
-      stock: 14,
-      category: 'Audio & Headphones',
-      image: selectedColor.image,
-      seller: { _id: 'seller_soundpulse', username: 'SoundPulse Official Flagship Store' },
-      status: 'active',
-      rating: 4.8,
-      reviewCount: 4829,
+  useEffect(() => {
+    if (!id) return;
+    let isMounted = true;
+    setIsLoading(true);
+    setError(null);
+
+    api.products.getById(id)
+      .then((res) => {
+        if (!isMounted) return;
+        setProduct(res.product);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        setError(err.message || 'Product not found or failed to load');
+        setIsLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
     };
-  }, [id, selectedEdition.price, selectedColor.image]);
+  }, [id]);
+
+  // Dynamic Product Resolution
+  const displayProduct: Product = product || {
+    _id: '2545922d18419b69f8ab9ee3',
+    name:
+      'SoundPulse Studio Pro Wireless Over-Ear Active Noise-Cancelling Headphones with Spatial Audio & 60h Battery',
+    description:
+      'Crafted for pristine transparency, the SoundPulse Studio Pro features ultra-stiff Beryllium-coated diaphragm drivers delivering zero harmonic distortion.',
+    price: selectedEdition.price,
+    originalPrice: 22999,
+    stock: 14,
+    category: 'Electronics',
+    image: selectedColor.image,
+    seller: { _id: 'seller_soundpulse', username: 'SoundPulse Official Flagship Store' },
+    status: 'active',
+    rating: 4.8,
+    reviewCount: 4829,
+  };
+
+  const currentPrice =
+    selectedEdition.id === 'standard'
+      ? displayProduct.price
+      : (selectedEdition.price || Math.round(displayProduct.price * 1.15));
+  const originalPrice = displayProduct.originalPrice || Math.round(displayProduct.price * 1.25);
+  const discountPercent = calculateDiscount(originalPrice, currentPrice);
+  const storeName =
+    displayProduct.brand ||
+    (typeof displayProduct.seller === 'object'
+      ? displayProduct.seller.username
+      : 'OMIZON Official Flagship Store');
+  const categoryName =
+    typeof displayProduct.category === 'object'
+      ? displayProduct.category.name
+      : (displayProduct.category || 'Audio & Headphones');
 
   // Sticky Scroll Listener
   useEffect(() => {
@@ -170,23 +206,23 @@ export const ProductDetailsPage: React.FC = () => {
 
   // Add to cart
   const handleAddToCart = () => {
-    addItem(baseProduct, quantity, `${selectedColor.name} • ${selectedEdition.name}`);
+    addItem(displayProduct, quantity, `${selectedColor.name} • ${selectedEdition.name}`);
     setCartBtnText('Added to Basket');
     setTimeout(() => setCartBtnText('Add to Cart'), 1800);
   };
 
   // Buy Now
   const handleBuyNow = () => {
-    addItem(baseProduct, quantity, `${selectedColor.name} • ${selectedEdition.name}`);
+    addItem(displayProduct, quantity, `${selectedColor.name} • ${selectedEdition.name}`);
     navigate('/checkout');
   };
 
   // Add bundle items
   const handleAddBundle = () => {
-    addItem(baseProduct, 1, `${selectedColor.name} • Standard ANC`);
+    addItem(displayProduct, 1, `${selectedColor.name} • Standard ANC`);
     addItem(
       {
-        _id: 'bundle_case_02',
+        _id: '0f3d1539a06a6ca823451b60',
         name: 'Aegis Hard Travel Case',
         description: 'Rugged EVA waterproof protective hard travel case for over-ear headphones.',
         price: 999,
@@ -199,7 +235,7 @@ export const ProductDetailsPage: React.FC = () => {
     );
     addItem(
       {
-        _id: 'bundle_charger_03',
+        _id: 'ef3aed50ee5fcff014bb21f8',
         name: 'Volta 45W GaN Dual Charger',
         description: 'Ultra-compact 45W Dual USB-C GaN fast wall charger adapter in matte black.',
         price: 1199,
@@ -226,6 +262,62 @@ export const ProductDetailsPage: React.FC = () => {
   const activeMainImage =
     activeThumbIndex === 0 ? selectedColor.image : galleryThumbnails[activeThumbIndex].src;
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col w-full py-space-xl">
+        <div className="max-w-7xl mx-auto w-full px-margin">
+          <div className="h-6 bg-surface-container rounded w-64 mb-space-lg animate-pulse" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+            <div className="lg:col-span-5 flex flex-col gap-4 animate-pulse">
+              <div className="w-full aspect-square bg-surface-container rounded-xl" />
+              <div className="flex gap-2">
+                {[0, 1, 2, 3].map((i) => (
+                  <div key={i} className="w-16 h-16 bg-surface-container rounded-lg" />
+                ))}
+              </div>
+            </div>
+            <div className="lg:col-span-7 flex flex-col gap-4 animate-pulse">
+              <div className="h-5 bg-surface-container rounded w-1/3" />
+              <div className="h-9 bg-surface-container rounded w-full" />
+              <div className="h-6 bg-surface-container rounded w-1/4" />
+              <div className="h-28 bg-surface-container rounded-xl mt-4" />
+              <div className="h-12 bg-surface-container rounded-lg w-full mt-4" />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !product) {
+    return (
+      <div className="max-w-4xl mx-auto my-16 p-8 bg-surface-container-lowest rounded-2xl text-center flex flex-col items-center justify-center gap-space-md border border-outline-variant/30">
+        <div className="w-16 h-16 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+          <span className="material-symbols-outlined text-[32px]">error_outline</span>
+        </div>
+        <h2 className="font-headline-sm text-headline-sm text-on-surface">Unable to Load Product</h2>
+        <p className="font-body-md text-on-surface-variant max-w-md">{error}</p>
+        <div className="flex items-center gap-space-sm pt-2">
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="bg-primary hover:bg-secondary text-on-primary px-space-lg py-2.5 rounded-lg font-title-sm flex items-center gap-2 transition-colors cursor-pointer"
+          >
+            <span className="material-symbols-outlined text-[18px]">refresh</span>
+            <span>Retry</span>
+          </button>
+          <Link
+            to="/products"
+            className="bg-surface-container hover:bg-surface-container-high text-on-surface px-space-lg py-2.5 rounded-lg font-title-sm flex items-center gap-2 transition-colors"
+          >
+            <span>Browse All Products</span>
+            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col w-full">
       {/* Sticky Quick-Buy Header Bar (Appears on Scroll) */}
@@ -244,7 +336,7 @@ export const ProductDetailsPage: React.FC = () => {
             />
             <div className="flex flex-col min-w-0">
               <span className="font-title-sm text-on-surface truncate">
-                SoundPulse Studio Pro Wireless Over-Ear ANC Headphones
+                {displayProduct.name}
               </span>
               <span className="font-body-sm text-on-surface-variant flex items-center gap-2">
                 <span className="text-primary font-semibold">{selectedColor.name}</span> •{' '}
@@ -255,10 +347,10 @@ export const ProductDetailsPage: React.FC = () => {
           <div className="flex items-center gap-space-md shrink-0">
             <div className="flex flex-col text-right">
               <span className="font-price-card text-on-surface">
-                {formatCurrency(selectedEdition.price)}
+                {formatCurrency(currentPrice)}
               </span>
               <span className="font-body-sm text-outline line-through text-[12px]">
-                M.R.P. ₹22,999
+                M.R.P. {formatCurrency(originalPrice)}
               </span>
             </div>
             <button
@@ -294,29 +386,23 @@ export const ProductDetailsPage: React.FC = () => {
               <span className="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
             </li>
             <li>
-              <Link to="/products?category=Electronics" className="hover:text-primary transition-colors">
-                Electronics
+              <Link to="/products" className="hover:text-primary transition-colors">
+                Products
               </Link>
             </li>
             <li>
               <span className="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
             </li>
             <li>
-              <Link to="/products?category=Electronics" className="hover:text-primary transition-colors">
-                Audio &amp; Headphones
+              <Link to={`/products?category=${encodeURIComponent(categoryName)}`} className="hover:text-primary transition-colors">
+                {categoryName}
               </Link>
-            </li>
-            <li>
-              <span className="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
-            </li>
-            <li>
-              <span className="hover:text-primary transition-colors">Over-Ear</span>
             </li>
             <li>
               <span className="material-symbols-outlined text-[14px] text-outline">chevron_right</span>
             </li>
             <li className="font-semibold text-on-surface truncate max-w-xs md:max-w-md">
-              SoundPulse Studio Pro
+              {displayProduct.name}
             </li>
           </ol>
         </nav>
@@ -430,13 +516,13 @@ export const ProductDetailsPage: React.FC = () => {
             <div className="flex items-center justify-between gap-space-xs mb-space-xs">
               <div className="flex items-center gap-space-xs">
                 <span className="font-label-md text-primary font-semibold hover:underline cursor-pointer">
-                  SoundPulse Official Flagship Store
+                  {storeName}
                 </span>
                 <span className="bg-secondary-fixed text-on-secondary-fixed text-label-sm font-label-sm px-2 py-0.5 rounded-full flex items-center gap-0.5">
                   <span className="material-symbols-outlined text-[13px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                     star
                   </span>{' '}
-                  4.9★
+                  {displayProduct.rating ? Number(displayProduct.rating).toFixed(1) : '4.8'}★
                 </span>
               </div>
               <span className="text-body-sm font-body-sm text-outline hidden sm:inline">
@@ -446,13 +532,15 @@ export const ProductDetailsPage: React.FC = () => {
 
             {/* Product Title */}
             <h1 className="font-headline-md text-on-surface tracking-tight mb-space-xs font-bold font-['Space_Grotesk'] leading-tight">
-              SoundPulse Studio Pro Wireless Over-Ear Active Noise-Cancelling Headphones with Spatial Audio &amp; 60h Battery
+              {displayProduct.name}
             </h1>
 
             {/* Ratings & QA Meta Line */}
             <div className="flex items-center flex-wrap gap-space-sm pb-space-sm mb-space-md">
               <div className="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded-md">
-                <span className="font-title-sm text-on-surface text-[13px]">4.8</span>
+                <span className="font-title-sm text-on-surface text-[13px]">
+                  {displayProduct.rating ? Number(displayProduct.rating).toFixed(1) : '4.8'}
+                </span>
                 <div className="flex text-amber-500">
                   <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                     star
@@ -476,7 +564,7 @@ export const ProductDetailsPage: React.FC = () => {
                 onClick={() => setActiveTab('reviews')}
                 className="font-body-sm text-primary hover:underline cursor-pointer"
               >
-                4,829 verified ratings
+                {displayProduct.reviewCount ? displayProduct.reviewCount.toLocaleString() : '4,829'} verified ratings
               </button>
               <span className="text-outline-variant">•</span>
               <button
@@ -493,13 +581,13 @@ export const ProductDetailsPage: React.FC = () => {
               <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
               <div className="flex items-baseline gap-space-sm flex-wrap">
                 <span className="font-price-hero text-on-surface tabular-nums">
-                  {formatCurrency(selectedEdition.price)}
+                  {formatCurrency(currentPrice)}
                 </span>
                 <span className="font-body-lg text-outline line-through tabular-nums">
-                  ₹22,999
+                  {formatCurrency(originalPrice)}
                 </span>
                 <span className="bg-secondary-fixed text-on-secondary-fixed font-title-sm px-2.5 py-0.5 rounded-full font-bold">
-                  Save ₹8,000 ({calculateDiscount(22999, selectedEdition.price)}% OFF)
+                  Save {formatCurrency(originalPrice - currentPrice)} ({discountPercent}% OFF)
                 </span>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs mt-space-xs pt-space-xs">
@@ -612,7 +700,7 @@ export const ProductDetailsPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="font-title-sm text-emerald-800 text-[14px]">
-                    In Stock: Only 14 units remaining
+                    In Stock: Only {displayProduct.stock || 14} units remaining
                   </span>
                 </div>
                 <span className="font-body-sm text-outline text-[12px]">
@@ -980,48 +1068,59 @@ export const ProductDetailsPage: React.FC = () => {
             {/* TAB 2: Technical Specifications */}
             {activeTab === 'techspecs' && (
               <div className="tab-panel">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-xs font-body-md">
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Driver Size &amp; Type</span>
-                    <span className="font-semibold text-on-surface">40mm Custom Beryllium Dynamic</span>
+                {displayProduct.specs && Object.keys(displayProduct.specs).length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-xs font-body-md">
+                    {Object.entries(displayProduct.specs).map(([key, val]) => (
+                      <div key={key} className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                        <span className="text-on-surface-variant">{key}</span>
+                        <span className="font-semibold text-on-surface">{val}</span>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Frequency Response</span>
-                    <span className="font-semibold text-on-surface">10 Hz – 40,000 Hz</span>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-xs font-body-md">
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Driver Size &amp; Type</span>
+                      <span className="font-semibold text-on-surface">40mm Custom Beryllium Dynamic</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Frequency Response</span>
+                      <span className="font-semibold text-on-surface">10 Hz – 40,000 Hz</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Bluetooth Standard</span>
+                      <span className="font-semibold text-on-surface">v5.3 with LE Audio Support</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Supported Codecs</span>
+                      <span className="font-semibold text-on-surface">LDAC, aptX Adaptive, AAC, SBC</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Noise Cancellation Depth</span>
+                      <span className="font-semibold text-on-surface">Up to 45dB Hybrid ANC</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Battery Playtime (ANC ON)</span>
+                      <span className="font-semibold text-on-surface">45 Hours (Continuous)</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Battery Playtime (ANC OFF)</span>
+                      <span className="font-semibold text-on-surface">60 Hours</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Weight</span>
+                      <span className="font-semibold text-on-surface">248 grams (Ultra-lightweight)</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Charging Connector</span>
+                      <span className="font-semibold text-on-surface">USB Type-C (5V / 2A)</span>
+                    </div>
+                    <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                      <span className="text-on-surface-variant">Water &amp; Sweat Resistance</span>
+                      <span className="font-semibold text-on-surface">IPX4 Splashproof Rating</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Bluetooth Standard</span>
-                    <span className="font-semibold text-on-surface">v5.3 with LE Audio Support</span>
-                  </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Supported Codecs</span>
-                    <span className="font-semibold text-on-surface">LDAC, aptX Adaptive, AAC, SBC</span>
-                  </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Noise Cancellation Depth</span>
-                    <span className="font-semibold text-on-surface">Up to 45dB Hybrid ANC</span>
-                  </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Battery Playtime (ANC ON)</span>
-                    <span className="font-semibold text-on-surface">45 Hours (Continuous)</span>
-                  </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Battery Playtime (ANC OFF)</span>
-                    <span className="font-semibold text-on-surface">60 Hours</span>
-                  </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Weight</span>
-                    <span className="font-semibold text-on-surface">248 grams (Ultra-lightweight)</span>
-                  </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Charging Connector</span>
-                    <span className="font-semibold text-on-surface">USB Type-C (5V / 2A)</span>
-                  </div>
-                  <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                    <span className="text-on-surface-variant">Water &amp; Sweat Resistance</span>
-                    <span className="font-semibold text-on-surface">IPX4 Splashproof Rating</span>
-                  </div>
-                </div>
+                )}
               </div>
             )}
 

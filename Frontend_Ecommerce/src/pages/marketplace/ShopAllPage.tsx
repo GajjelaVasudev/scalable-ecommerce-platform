@@ -1,7 +1,8 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { STITCH_SHOP_ALL_PRODUCTS, StitchCatalogProduct } from '../../services/mockData';
 import { ProductCard } from '../../components/marketplace/ProductCard';
+import { api } from '../../services/api';
+import { Product } from '../../types';
 
 export const ShopAllPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -19,29 +20,29 @@ export const ShopAllPage: React.FC = () => {
   // Sidebar collapsible sections
   const [isCategoriesExpanded, setIsCategoriesExpanded] = useState(true);
 
-  // Filters (Initialized to match Stitch's curated default reference state)
+  // Filters
   const initialCategoryParam = searchParams.get('category');
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
-    initialCategoryParam ? [initialCategoryParam] : ['Electronics', 'Home Living']
+    initialCategoryParam ? [initialCategoryParam] : []
   );
 
-  const [minPriceInput, setMinPriceInput] = useState('499');
-  const [maxPriceInput, setMaxPriceInput] = useState('15,000');
-  const [appliedMinPrice, setAppliedMinPrice] = useState<number>(499);
-  const [appliedMaxPrice, setAppliedMaxPrice] = useState<number>(15000);
+  const [minPriceInput, setMinPriceInput] = useState('');
+  const [maxPriceInput, setMaxPriceInput] = useState('');
+  const [appliedMinPrice, setAppliedMinPrice] = useState<number>(0);
+  const [appliedMaxPrice, setAppliedMaxPrice] = useState<number>(999999);
 
   const [brandSearch, setBrandSearch] = useState('');
-  const [selectedBrands, setSelectedBrands] = useState<string[]>(['Sony', 'Dyson']);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
 
-  const [selectedRating, setSelectedRating] = useState<number>(4); // 4★ & Up by default
+  const [selectedRating, setSelectedRating] = useState<number>(0);
 
-  const [fastPrimeOnly, setFastPrimeOnly] = useState<boolean>(true);
+  const [fastPrimeOnly, setFastPrimeOnly] = useState<boolean>(false);
   const [twoDayOnly, setTwoDayOnly] = useState<boolean>(false);
   const [codOnly, setCodOnly] = useState<boolean>(false);
 
-  const [selectedDiscounts, setSelectedDiscounts] = useState<number[]>([30]); // 30% off or higher by default
+  const [selectedDiscounts, setSelectedDiscounts] = useState<number[]>([]);
 
-  const [inStockOnly, setInStockOnly] = useState<boolean>(true);
+  const [inStockOnly, setInStockOnly] = useState<boolean>(false);
 
   const [sortBy, setSortBy] = useState<string>('featured');
 
@@ -74,7 +75,7 @@ export const ShopAllPage: React.FC = () => {
   // Handle price apply
   const handleApplyPrice = () => {
     const min = parseInt(minPriceInput.replace(/[^0-9]/g, ''), 10) || 0;
-    const max = parseInt(maxPriceInput.replace(/[^0-9]/g, ''), 10) || 100000;
+    const max = parseInt(maxPriceInput.replace(/[^0-9]/g, ''), 10) || 999999;
     setAppliedMinPrice(min);
     setAppliedMaxPrice(max);
     setCurrentPage(1);
@@ -90,31 +91,12 @@ export const ShopAllPage: React.FC = () => {
 
   // Reset all filters to default Stitch baseline
   const handleResetFilters = () => {
-    setSelectedCategories(['Electronics', 'Home Living']);
-    setMinPriceInput('499');
-    setMaxPriceInput('15,000');
-    setAppliedMinPrice(499);
-    setAppliedMaxPrice(15000);
-    setBrandSearch('');
-    setSelectedBrands(['Sony', 'Dyson']);
-    setSelectedRating(4);
-    setFastPrimeOnly(true);
-    setTwoDayOnly(false);
-    setCodOnly(false);
-    setSelectedDiscounts([30]);
-    setInStockOnly(true);
-    setSortBy('featured');
-    setSearchParams({});
-    setCurrentPage(1);
-  };
-
-  // Clear all filters completely
-  const handleClearAllFilters = () => {
     setSelectedCategories([]);
     setMinPriceInput('');
     setMaxPriceInput('');
     setAppliedMinPrice(0);
     setAppliedMaxPrice(999999);
+    setBrandSearch('');
     setSelectedBrands([]);
     setSelectedRating(0);
     setFastPrimeOnly(false);
@@ -127,86 +109,110 @@ export const ShopAllPage: React.FC = () => {
     setCurrentPage(1);
   };
 
-  // Master product filtering & sorting logic
-  const filteredProducts = useMemo(() => {
-    return STITCH_SHOP_ALL_PRODUCTS.filter((prod) => {
-      // 1. Search Query
-      if (searchParam) {
-        const q = searchParam.toLowerCase();
-        const matchesName = prod.name.toLowerCase().includes(q);
-        const matchesBrand = prod.brand.toLowerCase().includes(q);
-        const matchesDesc = prod.description.toLowerCase().includes(q);
-        if (!matchesName && !matchesBrand && !matchesDesc) return false;
+  // Clear all filters completely
+  const handleClearAllFilters = () => {
+    handleResetFilters();
+  };
+
+  // Live Database Catalog State
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalProducts, setTotalProducts] = useState<number>(0);
+
+  // Fetch products from backend API
+  const fetchProducts = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const categoryParam = selectedCategories.length === 1 ? selectedCategories[0] : undefined;
+      const res = await api.products.list({
+        page: currentPage,
+        limit: productsPerPage,
+        category: categoryParam,
+        minprice: appliedMinPrice > 0 ? appliedMinPrice : undefined,
+        maxprice: appliedMaxPrice < 999999 ? appliedMaxPrice : undefined,
+        sort: sortBy,
+        search: searchParam || undefined,
+        inStock: inStockOnly ? true : undefined,
+      });
+
+      let list = res.products || [];
+
+      // Apply client-side facet filters when multiple categories are selected
+      if (selectedCategories.length > 1) {
+        list = list.filter((p) => {
+          const catName = typeof p.category === 'object' ? p.category.name : p.category;
+          return selectedCategories.some((c) => catName.toLowerCase().includes(c.toLowerCase()));
+        });
       }
 
-      // 2. Category Filter
-      if (selectedCategories.length > 0) {
-        if (!selectedCategories.includes(prod.category)) {
-          // Check for subcategory / partial match
-          const matches = selectedCategories.some((cat) =>
-            prod.category.toLowerCase().includes(cat.toLowerCase())
-          );
-          if (!matches) return false;
-        }
-      }
-
-      // 3. Price Filter (Applied)
-      if (appliedMinPrice > 0 && prod.price < appliedMinPrice) return false;
-      if (appliedMaxPrice > 0 && prod.price > appliedMaxPrice) return false;
-
-      // 4. Brand Filter
+      // Brand filter
       if (selectedBrands.length > 0) {
-        const matchesBrand =
-          selectedBrands.includes(prod.brandTag) ||
-          selectedBrands.some((b) => prod.brand.toLowerCase().includes(b.toLowerCase()));
-        if (!matchesBrand) return false;
+        list = list.filter((p) =>
+          selectedBrands.includes(p.brandTag || '') ||
+          selectedBrands.some((b) => (p.brand || '').toLowerCase().includes(b.toLowerCase()))
+        );
       }
 
-      // 5. Rating Filter
-      if (selectedRating > 0 && prod.rating < selectedRating) return false;
+      // Customer Rating filter
+      if (selectedRating > 0) {
+        list = list.filter((p) => (p.rating || 0) >= selectedRating);
+      }
 
-      // 6. Fulfillment & Speed Filter
-      if (fastPrimeOnly && !prod.fastPrime) return false;
-      if (twoDayOnly && !prod.twoDayDelivery) return false;
-      if (codOnly && !prod.codEligible) return false;
+      // Fulfillment & Speed filters
+      if (fastPrimeOnly) {
+        list = list.filter((p) => !!p.fastPrime);
+      }
+      if (twoDayOnly) {
+        list = list.filter((p) => !!p.twoDayDelivery);
+      }
+      if (codOnly) {
+        list = list.filter((p) => !!p.codEligible);
+      }
 
-      // 7. Discount Filter
+      // Discount tier filter
       if (selectedDiscounts.length > 0) {
         const minDisc = Math.min(...selectedDiscounts);
-        const prodDisc = prod.originalPrice
-          ? Math.round(((prod.originalPrice - prod.price) / prod.originalPrice) * 100)
-          : 0;
-        if (prodDisc < minDisc) return false;
+        list = list.filter((p) => {
+          const prodDisc = p.originalPrice && p.originalPrice > p.price
+            ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+            : 0;
+          return prodDisc >= minDisc;
+        });
       }
 
-      // 8. In Stock Filter
-      if (inStockOnly && prod.stock <= 0) return false;
-
-      return true;
-    }).sort((a, b) => {
-      if (sortBy === 'price_asc') return a.price - b.price;
-      if (sortBy === 'price_desc') return b.price - a.price;
-      if (sortBy === 'rating') return b.rating - a.rating;
-      if (sortBy === 'newest') return b._id.localeCompare(a._id);
-      return 0; // 'featured' retains Stitch's original curated order
-    });
+      setProducts(list);
+      setTotalPages(res.pagination?.totalPages || 1);
+      setTotalProducts(res.pagination?.totalProducts || list.length);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load catalog products');
+    } finally {
+      setIsLoading(false);
+    }
   }, [
-    searchParam,
+    currentPage,
+    productsPerPage,
     selectedCategories,
     appliedMinPrice,
     appliedMaxPrice,
+    sortBy,
+    searchParam,
+    inStockOnly,
     selectedBrands,
     selectedRating,
     fastPrimeOnly,
     twoDayOnly,
     codOnly,
     selectedDiscounts,
-    inStockOnly,
-    sortBy,
   ]);
 
-  // If strict filtering produces zero results, fallback gracefully to the 9 Stitch curated items
-  const displayProducts = filteredProducts.length > 0 ? filteredProducts : STITCH_SHOP_ALL_PRODUCTS;
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
+
+  const displayProducts = products;
 
   // Category counts
   const categoryTree = [
@@ -252,7 +258,7 @@ export const ShopAllPage: React.FC = () => {
           <div className="flex items-center gap-space-xs text-label-md font-label-md bg-surface-container px-space-sm py-1 rounded-full text-on-surface-variant">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             <span>
-              Catalog Synchronized: <strong className="text-on-surface font-semibold">1,482 verified items</strong>
+              Catalog Synchronized: <strong className="text-on-surface font-semibold">{isLoading ? 'Scanning...' : `${totalProducts} verified items`}</strong>
             </span>
           </div>
         </div>
@@ -763,9 +769,66 @@ export const ShopAllPage: React.FC = () => {
                   : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-sm'
               }
             >
-              {displayProducts.map((prod) => (
-                <ProductCard key={prod._id} product={prod} viewMode={viewMode} />
-              ))}
+              {isLoading ? (
+                Array.from({ length: 6 }).map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm animate-pulse flex flex-col gap-space-sm"
+                  >
+                    <div className="w-full aspect-square bg-surface-container rounded-lg" />
+                    <div className="h-4 bg-surface-container rounded w-3/4" />
+                    <div className="h-3 bg-surface-container rounded w-1/2" />
+                    <div className="h-5 bg-surface-container rounded w-1/3 mt-2" />
+                    <div className="h-9 bg-surface-container rounded-lg w-full mt-auto" />
+                  </div>
+                ))
+              ) : error ? (
+                <div className="col-span-full py-16 px-6 bg-surface-container-lowest rounded-2xl text-center flex flex-col items-center justify-center gap-space-md border border-outline-variant/30">
+                  <div className="w-16 h-16 rounded-full bg-error-container text-on-error-container flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[32px]">error_outline</span>
+                  </div>
+                  <div className="max-w-md">
+                    <h3 className="font-headline-sm text-headline-sm text-on-surface mb-1">
+                      Unable to Load Catalog
+                    </h3>
+                    <p className="font-body-md text-on-surface-variant">{error}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={fetchProducts}
+                    className="bg-primary hover:bg-secondary text-on-primary px-space-lg py-2.5 rounded-lg font-title-sm flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">refresh</span>
+                    <span>Retry Request</span>
+                  </button>
+                </div>
+              ) : displayProducts.length === 0 ? (
+                <div className="col-span-full py-16 px-6 bg-surface-container-lowest rounded-2xl text-center flex flex-col items-center justify-center gap-space-md border border-outline-variant/30">
+                  <div className="w-16 h-16 rounded-full bg-surface-container text-outline flex items-center justify-center">
+                    <span className="material-symbols-outlined text-[32px]">inventory_2</span>
+                  </div>
+                  <div className="max-w-md">
+                    <h3 className="font-headline-sm text-headline-sm text-on-surface mb-1">
+                      No Matching Products Found
+                    </h3>
+                    <p className="font-body-md text-on-surface-variant">
+                      We couldn't find any items matching your selected criteria. Try adjusting your filters or search keywords.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleClearAllFilters}
+                    className="bg-primary hover:bg-secondary text-on-primary px-space-lg py-2.5 rounded-lg font-title-sm flex items-center gap-2 transition-colors shadow-sm cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">filter_alt_off</span>
+                    <span>Clear All Filters</span>
+                  </button>
+                </div>
+              ) : (
+                displayProducts.map((prod) => (
+                  <ProductCard key={prod._id} product={prod} viewMode={viewMode} />
+                ))
+              )}
             </div>
 
             {/* PAGINATION & PAGE-SIZE SELECTOR */}
@@ -803,7 +866,7 @@ export const ShopAllPage: React.FC = () => {
                   <span className="material-symbols-outlined text-[18px]">chevron_left</span>
                 </button>
 
-                {[1, 2, 3].map((page) => (
+                {Array.from({ length: Math.min(5, Math.max(1, totalPages)) }, (_, i) => i + 1).map((page) => (
                   <button
                     key={page}
                     type="button"
@@ -818,34 +881,38 @@ export const ShopAllPage: React.FC = () => {
                   </button>
                 ))}
 
-                <span className="px-1.5 text-outline font-bold flex items-center justify-center select-none">
-                  …
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage(42)}
-                  className={`w-9 h-9 rounded-lg font-bold flex items-center justify-center transition-all ${
-                    currentPage === 42
-                      ? 'bg-primary text-on-primary shadow-xs'
-                      : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
-                  }`}
-                >
-                  42
-                </button>
+                {totalPages > 5 && (
+                  <>
+                    <span className="px-1.5 text-outline font-bold flex items-center justify-center select-none">
+                      …
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage(totalPages)}
+                      className={`w-9 h-9 rounded-lg font-bold flex items-center justify-center transition-all ${
+                        currentPage === totalPages
+                          ? 'bg-primary text-on-primary shadow-xs'
+                          : 'bg-surface-container hover:bg-surface-container-high text-on-surface'
+                      }`}
+                    >
+                      {totalPages}
+                    </button>
+                  </>
+                )}
 
                 <button
                   type="button"
                   aria-label="Next Page"
-                  onClick={() => setCurrentPage((p) => Math.min(42, p + 1))}
-                  className="flex items-center justify-center w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  className="flex items-center justify-center w-9 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface disabled:opacity-40 transition-colors"
                 >
                   <span className="material-symbols-outlined text-[18px]">chevron_right</span>
                 </button>
               </div>
 
               <span className="font-body-sm text-body-sm text-outline tabular-nums">
-                Page {currentPage} of 42
+                Page {currentPage} of {Math.max(1, totalPages)}
               </span>
             </div>
 

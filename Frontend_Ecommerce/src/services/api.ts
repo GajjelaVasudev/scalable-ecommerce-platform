@@ -106,6 +106,9 @@ export const api = {
       minprice?: number;
       maxprice?: number;
       sort?: string;
+      search?: string;
+      featured?: boolean;
+      inStock?: boolean;
     }) =>
       request<ProductListResponse>('/products', {
         method: 'GET',
