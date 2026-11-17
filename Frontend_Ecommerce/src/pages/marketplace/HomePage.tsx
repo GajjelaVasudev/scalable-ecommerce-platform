@@ -1,10 +1,55 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { api } from '../../services/api';
+import { Product } from '../../types';
+import { formatCurrency, calculateDiscount } from '../../utils/format';
 
 export const HomePage: React.FC = () => {
   const { addItem } = useCart();
   const navigate = useNavigate();
+
+  // Live Catalog State
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [dealProducts, setDealProducts] = useState<Product[]>([]);
+  const [groceryProducts, setGroceryProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch live products for homepage sections from MongoDB-backed public API
+  const fetchHomeData = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const [featuredRes, dealsRes, groceryRes] = await Promise.all([
+        api.products.list({ featured: true, limit: 8 }),
+        api.products.list({ limit: 4, sort: 'price_desc' }),
+        api.products.list({ category: 'grocery & essentials', limit: 4 }),
+      ]);
+
+      if (featuredRes?.products && Array.isArray(featuredRes.products)) {
+        setFeaturedProducts(featuredRes.products);
+      }
+      if (dealsRes?.products && Array.isArray(dealsRes.products)) {
+        setDealProducts(dealsRes.products);
+      }
+      if (groceryRes?.products && Array.isArray(groceryRes.products)) {
+        setGroceryProducts(groceryRes.products);
+      }
+    } catch (err: any) {
+      console.error('Failed to load homepage catalog data:', err);
+      setError(
+        err?.message ||
+          'Unable to connect to the OMIZON catalog service. Please check your backend connection.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchHomeData();
+  }, [fetchHomeData]);
 
   // Countdown Timer Micro-Interaction
   const [timeLeft, setTimeLeft] = useState({
@@ -50,7 +95,7 @@ export const HomePage: React.FC = () => {
       images: [image],
       rating: 4.8,
       reviewCount: 120,
-      seller: { _id: '64a1b2c3d4e5f6789012345b', username: 'omizon_official' },
+      seller: { _id: '6a7f809930f3650284ab9701', username: 'OMIZON Official Store' },
     });
   };
 
@@ -82,6 +127,24 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* Catalog Load Error Alert */}
+      {error && (
+        <div className="w-full bg-error/10 border-y border-error/20 px-margin py-3">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-error">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-[20px]">warning</span>
+              <p className="font-body-md font-medium">{error}</p>
+            </div>
+            <button
+              onClick={fetchHomeData}
+              className="px-4 py-1.5 bg-primary text-on-primary rounded-lg font-title-sm hover:bg-secondary transition-colors shrink-0 cursor-pointer"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* 2. Hero Section */}
       <section className="w-full px-margin py-space-xl bg-surface">
@@ -133,161 +196,88 @@ export const HomePage: React.FC = () => {
 
           {/* Right Visual Multi-Category Mosaic */}
           <div className="lg:col-span-6 grid grid-cols-2 gap-space-md">
-            {/* Item 1: High Tech Headphones */}
-            <div className="group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden">
-              <div className="flex items-center justify-between z-10">
-                <span className="bg-surface-container-high text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">
-                  Electronics
-                </span>
-                <span className="font-label-sm text-outline">Top Rated</span>
-              </div>
-              <Link to="/products/2545922d18419b69f8ab9ee3" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHWWLWbJsm8PBZcrAbnoEnCLTRy8FvboW1V0It7bSRfDaNJw9_9zwiAgBG33EAik6nFFM376B55D0p2F6mASAH9cVVCPt5k9Y92aQZqh_rGJOEnhVthWT3MhF9bzL8Gymd5XDsCYBfrz7QrhdeAKGTelyM_CHyHECrN84c5gjaFPYxpsVJNI0VEuNdxdGwVYG8PJINaaPZmhWewS0gnKwXTwFlu4I8BZBwl4lOh5tHwlvXuzwCLGJl9A"
-                  alt="Studio Pro ANC Headphones"
-                />
-              </Link>
-              <div className="flex items-center justify-between z-10">
-                <Link to="/products/2545922d18419b69f8ab9ee3">
-                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Studio Pro ANC</p>
-                  <p className="font-price-card text-primary">₹14,999</p>
-                </Link>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      '2545922d18419b69f8ab9ee3',
-                      'Studio Pro ANC',
-                      14999,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuDHWWLWbJsm8PBZcrAbnoEnCLTRy8FvboW1V0It7bSRfDaNJw9_9zwiAgBG33EAik6nFFM376B55D0p2F6mASAH9cVVCPt5k9Y92aQZqh_rGJOEnhVthWT3MhF9bzL8Gymd5XDsCYBfrz7QrhdeAKGTelyM_CHyHECrN84c5gjaFPYxpsVJNI0VEuNdxdGwVYG8PJINaaPZmhWewS0gnKwXTwFlu4I8BZBwl4lOh5tHwlvXuzwCLGJl9A',
-                      'Electronics'
-                    )
-                  }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-                  title="Quick Add"
-                  type="button"
+            {isLoading ? (
+              // 4 Shimmer Skeletons for Hero Mosaic
+              [0, 1, 2, 3].map((idx) => (
+                <div
+                  key={idx}
+                  className={`bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between overflow-hidden animate-pulse ${
+                    idx === 1 ? 'mt-6' : idx === 2 ? '-mt-6' : ''
+                  }`}
                 >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Item 2: Organic Olive Oil & Pantry */}
-            <div className="group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden mt-6">
-              <div className="flex items-center justify-between z-10">
-                <span className="bg-surface-container-high text-secondary font-label-sm text-label-sm px-2 py-0.5 rounded-full">
-                  Organic Pantry
-                </span>
-                <span className="font-label-sm text-outline">Cold-Pressed</span>
-              </div>
-              <Link to="/products/e76a094353f7362b563e05e1" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8XNentxmPfjVo4JmJbrZtkx8H5jQ7g-yNegsPRgq9RwRqkg8fuBv_i18A8GhlcDuX4JX6WCol_tqQuz5_Fvt_1TitDg2lqW3DsIgLjx0YxAB-SdFcpgnHqL5LRA0kVAFDQjSIHXNMhLWpZKAH6dKEpNRJQCwDgVptGx96PoWSe2EUCO1ajMT3vuQwO5zf7TLDwhrzETNWhN6dI2JSkrB_JRubgXIpamN_KRn3NgqNpyOiOM_56XfcCQ"
-                  alt="Estate Olive Oil 1L"
-                />
-              </Link>
-              <div className="flex items-center justify-between z-10">
-                <Link to="/products/e76a094353f7362b563e05e1">
-                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Estate Olive Oil 1L</p>
-                  <p className="font-price-card text-primary">₹949</p>
+                  <div className="flex items-center justify-between">
+                    <div className="h-5 w-20 bg-surface-container-high rounded-full" />
+                    <div className="h-4 w-14 bg-surface-container-high rounded" />
+                  </div>
+                  <div className="h-44 w-full my-space-sm rounded-lg bg-surface-container-high" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-1 w-2/3">
+                      <div className="h-4 w-full bg-surface-container-high rounded" />
+                      <div className="h-4 w-16 bg-surface-container-high rounded" />
+                    </div>
+                    <div className="w-9 h-9 rounded-full bg-surface-container-high shrink-0" />
+                  </div>
+                </div>
+              ))
+            ) : featuredProducts.length > 0 ? (
+              featuredProducts.slice(0, 4).map((item, idx) => {
+                const catName =
+                  typeof item.category === 'object' && item.category !== null
+                    ? (item.category as any).name
+                    : item.category || 'Featured';
+                return (
+                  <div
+                    key={item._id}
+                    className={`group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden ${
+                      idx === 1 ? 'mt-6' : idx === 2 ? '-mt-6' : ''
+                    }`}
+                  >
+                    <div className="flex items-center justify-between z-10">
+                      <span className="bg-surface-container-high text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">
+                        {catName}
+                      </span>
+                      <span className="font-label-sm text-outline">{item.badge || 'Curated'}</span>
+                    </div>
+                    <Link
+                      to={`/products/${item._id}`}
+                      className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low"
+                    >
+                      <img
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        src={item.image}
+                        alt={item.name}
+                      />
+                    </Link>
+                    <div className="flex items-center justify-between z-10">
+                      <Link to={`/products/${item._id}`} className="min-w-0 pr-2">
+                        <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors truncate">
+                          {item.name}
+                        </p>
+                        <p className="font-price-card text-primary">{formatCurrency(item.price)}</p>
+                      </Link>
+                      <button
+                        onClick={() =>
+                          handleQuickAdd(item._id, item.name, item.price, item.image, catName)
+                        }
+                        className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer shrink-0"
+                        title="Quick Add"
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">add</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-2 bg-surface-container-lowest rounded-xl p-space-lg text-center flex flex-col items-center justify-center gap-space-sm">
+                <span className="material-symbols-outlined text-outline text-[32px]">inventory_2</span>
+                <p className="font-body-md text-on-surface-variant">No featured products available.</p>
+                <Link to="/products" className="font-title-sm text-primary hover:underline">
+                  Browse Full Catalog
                 </Link>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      'e76a094353f7362b563e05e1',
-                      'Estate Olive Oil 1L',
-                      949,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuA8XNentxmPfjVo4JmJbrZtkx8H5jQ7g-yNegsPRgq9RwRqkg8fuBv_i18A8GhlcDuX4JX6WCol_tqQuz5_Fvt_1TitDg2lqW3DsIgLjx0YxAB-SdFcpgnHqL5LRA0kVAFDQjSIHXNMhLWpZKAH6dKEpNRJQCwDgVptGx96PoWSe2EUCO1ajMT3vuQwO5zf7TLDwhrzETNWhN6dI2JSkrB_JRubgXIpamN_KRn3NgqNpyOiOM_56XfcCQ',
-                      'Grocery & Essentials'
-                    )
-                  }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-                  title="Quick Add"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                </button>
               </div>
-            </div>
-
-            {/* Item 3: Artisan Ceramics */}
-            <div className="group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden -mt-6">
-              <div className="flex items-center justify-between z-10">
-                <span className="bg-surface-container-high text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">
-                  Home &amp; Living
-                </span>
-                <span className="font-label-sm text-outline">Handmade</span>
-              </div>
-              <Link to="/products/3807fe2700f4ceacb83c28de" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1wstpgOXEzsIPDWrUgDD7LaLjwFqh5uyogQN5k4wcQjo9o-RngcZqbRvEL8Q_HblR8eww8oBkLor_vGhrW2tMauZvPX_DJrcN_SwHL8MwkiurcFSft3IpDiwsjLjTA8S_H1_FRpyj9-vtvkecHn9Y59eITffuDW6aGzou-VWDNoNrRdQonABYi0uwEfqa-RPe7swbRu1k3ySqdgz6qjCvjyKaPsB-Eem4Qn0e9DN6EOH3XL7WKKT5vw"
-                  alt="Clay Craft Carafe"
-                />
-              </Link>
-              <div className="flex items-center justify-between z-10">
-                <Link to="/products/3807fe2700f4ceacb83c28de">
-                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Clay Craft Carafe</p>
-                  <p className="font-price-card text-primary">₹2,190</p>
-                </Link>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      '3807fe2700f4ceacb83c28de',
-                      'Clay Craft Carafe',
-                      2190,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuB1wstpgOXEzsIPDWrUgDD7LaLjwFqh5uyogQN5k4wcQjo9o-RngcZqbRvEL8Q_HblR8eww8oBkLor_vGhrW2tMauZvPX_DJrcN_SwHL8MwkiurcFSft3IpDiwsjLjTA8S_H1_FRpyj9-vtvkecHn9Y59eITffuDW6aGzou-VWDNoNrRdQonABYi0uwEfqa-RPe7swbRu1k3ySqdgz6qjCvjyKaPsB-Eem4Qn0e9DN6EOH3XL7WKKT5vw',
-                      'Home & Living'
-                    )
-                  }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-                  title="Quick Add"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Item 4: Botanical Skincare */}
-            <div className="group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden">
-              <div className="flex items-center justify-between z-10">
-                <span className="bg-surface-container-high text-secondary font-label-sm text-label-sm px-2 py-0.5 rounded-full">
-                  Skincare
-                </span>
-                <span className="font-label-sm text-outline">Clean Formula</span>
-              </div>
-              <Link to="/products/35696643bb8fa566e4081c59" className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low">
-                <img
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8knFJAJz82iOvxBcxvRTbcRMa8v0S1lb7zS7QNGn9i5Q0U2elOjlE5xuX7Di9JI3W52A0qi5xsCo0aSU5VorzqTz7JnZc3kFWxioeop3nO3WMrusKorD0U_ALViI-9zy8t26k7Ly2Zq_1qChP96voaISqizJFSlK4MH9P1D35iHTXk2QWv87GJ1G-52aVyY_3raaYGKShaZNmv5U5wz-yO1pYV2AwAwrwpBRljMU9jnf8BIa-mcRI6w"
-                  alt="Barrier Elixir 50ml"
-                />
-              </Link>
-              <div className="flex items-center justify-between z-10">
-                <Link to="/products/35696643bb8fa566e4081c59">
-                  <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors">Barrier Elixir 50ml</p>
-                  <p className="font-price-card text-primary">₹1,850</p>
-                </Link>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      '35696643bb8fa566e4081c59',
-                      'Barrier Elixir 50ml',
-                      1850,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuD8knFJAJz82iOvxBcxvRTbcRMa8v0S1lb7zS7QNGn9i5Q0U2elOjlE5xuX7Di9JI3W52A0qi5xsCo0aSU5VorzqTz7JnZc3kFWxioeop3nO3WMrusKorD0U_ALViI-9zy8t26k7Ly2Zq_1qChP96voaISqizJFSlK4MH9P1D35iHTXk2QWv87GJ1G-52aVyY_3raaYGKShaZNmv5U5wz-yO1pYV2AwAwrwpBRljMU9jnf8BIa-mcRI6w',
-                      'Beauty & Personal Care'
-                    )
-                  }
-                  className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer"
-                  title="Quick Add"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[18px]">add</span>
-                </button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -424,281 +414,148 @@ export const HomePage: React.FC = () => {
 
           {/* Product Cards Grid (4 Columns) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
-            {/* Deal Card 1 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
-              <div>
-                <Link to="/products/2545922d18419b69f8ab9ee3" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDE5yxf0nqMEhj4IBd8eLDIRYCnRHa8WrZbBcy-R4i8hNft7TowHZdTE-7VJ1EDWSDoPn185GvneUSaPkov8fv1XUXDM232GrGhaH9rrNDXH-1c8hSCoztuzeCIp5M69Z1Wkhs54rEixWaHTOOhRDXz4gSxiAvCCd_q8_JCprJZhUO0LI2tpnHPPfynCSKbpCNkldEW1OhW8HLTPdFXGUvN8g-v53dWYrrFVcIOIcjBEG860RIf__lcw"
-                    alt="SoundPulse Studio Pro Wireless ANC Headphones"
-                  />
-                  <span className="absolute top-2 left-2 bg-primary text-on-primary font-label-sm text-[11px] px-2 py-0.5 rounded-full uppercase">
-                    Lightning Deal
-                  </span>
-                  <button
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
-                    title="Save to wishlist"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                  >
-                    <span className="material-symbols-outlined text-[18px]">favorite_border</span>
-                  </button>
-                </Link>
-                <div className="flex items-center gap-1 mb-1">
-                  <span
-                    className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    star
-                  </span>
-                  <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.8</span>
-                  <span className="font-body-sm text-body-sm text-outline">(3,420)</span>
-                </div>
-                <Link to="/products/2545922d18419b69f8ab9ee3">
-                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
-                    SoundPulse Studio Pro Wireless ANC Headphones
-                  </h3>
-                </Link>
-              </div>
-              <div className="mt-space-sm flex flex-col gap-space-xs">
-                <div className="flex items-baseline gap-space-xs">
-                  <span className="font-price-card text-price-card text-on-surface">₹14,999</span>
-                  <span className="font-body-sm text-outline line-through">₹22,999</span>
-                  <span className="font-label-sm text-primary font-semibold">-35%</span>
-                </div>
-                <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-primary h-full w-[78%]"></div>
-                </div>
-                <span className="font-body-sm text-[11px] text-outline">78% claimed</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      '2545922d18419b69f8ab9ee3',
-                      'SoundPulse Studio Pro Wireless ANC Headphones',
-                      14999,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBDE5yxf0nqMEhj4IBd8eLDIRYCnRHa8WrZbBcy-R4i8hNft7TowHZdTE-7VJ1EDWSDoPn185GvneUSaPkov8fv1XUXDM232GrGhaH9rrNDXH-1c8hSCoztuzeCIp5M69Z1Wkhs54rEixWaHTOOhRDXz4gSxiAvCCd_q8_JCprJZhUO0LI2tpnHPPfynCSKbpCNkldEW1OhW8HLTPdFXGUvN8g-v53dWYrrFVcIOIcjBEG860RIf__lcw',
-                      'Electronics'
-                    )
-                  }
-                  className="mt-space-xs w-full bg-primary hover:bg-secondary text-on-primary h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
-                  type="button"
+            {isLoading ? (
+              // 4 Shimmer Skeletons for Flash Deals
+              [0, 1, 2, 3].map((idx) => (
+                <div
+                  key={idx}
+                  className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between animate-pulse"
                 >
-                  <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
-                  <span>Add to Cart</span>
-                </button>
-              </div>
-            </div>
+                  <div>
+                    <div className="w-full h-56 rounded-lg bg-surface-container-high mb-space-sm" />
+                    <div className="h-4 w-24 bg-surface-container-high rounded mb-2" />
+                    <div className="h-5 w-full bg-surface-container-high rounded mb-2" />
+                    <div className="h-5 w-3/4 bg-surface-container-high rounded mb-2" />
+                  </div>
+                  <div className="mt-space-sm flex flex-col gap-space-xs">
+                    <div className="h-6 w-32 bg-surface-container-high rounded" />
+                    <div className="w-full bg-surface-container rounded-full h-1.5" />
+                    <div className="h-3 w-20 bg-surface-container-high rounded" />
+                    <div className="w-full h-10 bg-surface-container-high rounded-lg mt-space-xs" />
+                  </div>
+                </div>
+              ))
+            ) : dealProducts.length > 0 ? (
+              dealProducts.slice(0, 4).map((deal, idx) => {
+                const originalPrice = deal.originalPrice || Math.round(deal.price * 1.28);
+                const discount = calculateDiscount(originalPrice, deal.price);
+                const claimedPct = [78, 62, 85, 45][idx % 4];
+                const catName =
+                  typeof deal.category === 'object' && deal.category !== null
+                    ? (deal.category as any).name
+                    : deal.category || 'Deals';
+                const badgeText =
+                  deal.badge ||
+                  (idx === 0
+                    ? 'Lightning Deal'
+                    : idx === 1
+                    ? 'Bestseller'
+                    : idx === 2
+                    ? 'Prime Deal'
+                    : 'Exclusive Deal');
 
-            {/* Deal Card 2 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
-              <div>
-                <Link to="/products/127ce0a9817f5707919b9baa" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYS6V6luaSnqEJ_yCAye1N3dYj0p0tOonG0CrVibxs2oQo6Wyzpq3qbmgB4pdJH1qVj5lAUYEftt4WzuRRauPkfweMroEcJY-hpX7lwQ_GEl7NrnsWH-gf7XNeTCdLjnMsAnKpxwuHl1XktLoo5tEWn0C3oTuONtw-5Dsiqv17RKLhAFkJkacLFTymo8nRDzVqrkC2q2UgUvO5nvonkJ7TogzEIODSRAyGUVZ3d1kkVdxS671n12jvpQ"
-                    alt="Nordic Oak Minimalist Task Lamp"
-                  />
-                  <span className="absolute top-2 left-2 bg-surface-container-highest text-on-surface font-label-sm text-[11px] px-2 py-0.5 rounded-full uppercase">
-                    Bestseller
-                  </span>
-                  <button
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
-                    title="Save to wishlist"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
+                return (
+                  <div
+                    key={deal._id}
+                    className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
                   >
-                    <span className="material-symbols-outlined text-[18px]">favorite_border</span>
-                  </button>
-                </Link>
-                <div className="flex items-center gap-1 mb-1">
-                  <span
-                    className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    star
-                  </span>
-                  <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.9</span>
-                  <span className="font-body-sm text-body-sm text-outline">(890)</span>
-                </div>
-                <Link to="/products/127ce0a9817f5707919b9baa">
-                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
-                    Nordic Oak Minimalist Task Lamp with Dimmable LED
-                  </h3>
-                </Link>
-              </div>
-              <div className="mt-space-sm flex flex-col gap-space-xs">
-                <div className="flex items-baseline gap-space-xs">
-                  <span className="font-price-card text-price-card text-on-surface">₹3,499</span>
-                  <span className="font-body-sm text-outline line-through">₹5,299</span>
-                  <span className="font-label-sm text-primary font-semibold">-34%</span>
-                </div>
-                <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-primary h-full w-[62%]"></div>
-                </div>
-                <span className="font-body-sm text-[11px] text-outline">62% claimed</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      '127ce0a9817f5707919b9baa',
-                      'Nordic Oak Minimalist Task Lamp',
-                      3499,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuCYS6V6luaSnqEJ_yCAye1N3dYj0p0tOonG0CrVibxs2oQo6Wyzpq3qbmgB4pdJH1qVj5lAUYEftt4WzuRRauPkfweMroEcJY-hpX7lwQ_GEl7NrnsWH-gf7XNeTCdLjnMsAnKpxwuHl1XktLoo5tEWn0C3oTuONtw-5Dsiqv17RKLhAFkJkacLFTymo8nRDzVqrkC2q2UgUvO5nvonkJ7TogzEIODSRAyGUVZ3d1kkVdxS671n12jvpQ',
-                      'Home & Living'
-                    )
-                  }
-                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
-                  type="button"
+                    <div>
+                      <Link
+                        to={`/products/${deal._id}`}
+                        className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm"
+                      >
+                        <img
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          src={deal.image}
+                          alt={deal.name}
+                        />
+                        <span className="absolute top-2 left-2 bg-primary text-on-primary font-label-sm text-[11px] px-2 py-0.5 rounded-full uppercase">
+                          {badgeText}
+                        </span>
+                        <button
+                          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
+                          title="Save to wishlist"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                        >
+                          <span className="material-symbols-outlined text-[18px]">favorite_border</span>
+                        </button>
+                      </Link>
+                      <div className="flex items-center gap-1 mb-1">
+                        <span
+                          className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
+                          style={{ fontVariationSettings: "'FILL' 1" }}
+                        >
+                          star
+                        </span>
+                        <span className="font-body-sm text-body-sm font-semibold text-on-surface">
+                          {deal.rating || 4.8}
+                        </span>
+                        <span className="font-body-sm text-body-sm text-outline">
+                          ({deal.reviewCount || 120})
+                        </span>
+                      </div>
+                      <Link to={`/products/${deal._id}`}>
+                        <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
+                          {deal.name}
+                        </h3>
+                      </Link>
+                    </div>
+                    <div className="mt-space-sm flex flex-col gap-space-xs">
+                      <div className="flex items-baseline gap-space-xs">
+                        <span className="font-price-card text-price-card text-on-surface">
+                          {formatCurrency(deal.price)}
+                        </span>
+                        {originalPrice > deal.price && (
+                          <>
+                            <span className="font-body-sm text-outline line-through">
+                              {formatCurrency(originalPrice)}
+                            </span>
+                            <span className="font-label-sm text-primary font-semibold">
+                              -{discount}%
+                            </span>
+                          </>
+                        )}
+                      </div>
+                      <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className="bg-primary h-full"
+                          style={{ width: `${claimedPct}%` }}
+                        />
+                      </div>
+                      <span className="font-body-sm text-[11px] text-outline">
+                        {claimedPct}% claimed {claimedPct > 80 ? '• Almost Gone' : ''}
+                      </span>
+                      <button
+                        onClick={() =>
+                          handleQuickAdd(deal._id, deal.name, deal.price, deal.image, catName)
+                        }
+                        className="mt-space-xs w-full bg-primary hover:bg-secondary text-on-primary h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+                        <span>Add to Cart</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-full bg-surface-container-lowest rounded-xl p-space-xl text-center flex flex-col items-center justify-center gap-space-sm">
+                <span className="material-symbols-outlined text-outline text-[36px]">schedule</span>
+                <p className="font-headline-sm text-on-surface">No Flash Deals Active Right Now</p>
+                <p className="font-body-md text-on-surface-variant">Check back soon for refreshed daily windows.</p>
+                <Link
+                  to="/products"
+                  className="mt-space-xs px-space-md py-2 bg-primary text-on-primary rounded-lg font-title-sm hover:bg-secondary transition-colors"
                 >
-                  <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
-                  <span>Add to Cart</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Deal Card 3 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
-              <div>
-                <Link to="/products/9eeae17659684624e4e8cbe2" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4tIfuCnVFI90s5zDrrG0qiD-YGOknHZ0yZxqmw44f1xVWZYWf7XEWbOyM7uEqXSMBN8BgHfE8d-8BPFaJ03BiRko4GMWKHqaRKLpNvLf62uTUNb-jqw0Iq09nIRcibA1LoVU_iDp7sVQipQsrVqO_RNhJHMTuFJ5iYN_qpZa0C4fUG3E7ou3pHv3SeIG6Jp8iqsQw2CTRol4c79I_9xepK5TKHdy3jLp1uuyxgdS9LX8dHXv7TIOoVA"
-                    alt="GlowBiome Barrier Repair Serum"
-                  />
-                  <span className="absolute top-2 left-2 bg-secondary-container text-on-secondary-container font-label-sm text-[11px] px-2 py-0.5 rounded-full uppercase">
-                    Derm Tested
-                  </span>
-                  <button
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
-                    title="Save to wishlist"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                  >
-                    <span className="material-symbols-outlined text-[18px]">favorite_border</span>
-                  </button>
-                </Link>
-                <div className="flex items-center gap-1 mb-1">
-                  <span
-                    className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    star
-                  </span>
-                  <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.7</span>
-                  <span className="font-body-sm text-body-sm text-outline">(1,620)</span>
-                </div>
-                <Link to="/products/9eeae17659684624e4e8cbe2">
-                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
-                    GlowBiome Barrier Repair Serum 50ml Ceramide + HA
-                  </h3>
+                  Explore All Products
                 </Link>
               </div>
-              <div className="mt-space-sm flex flex-col gap-space-xs">
-                <div className="flex items-baseline gap-space-xs">
-                  <span className="font-price-card text-price-card text-on-surface">₹1,850</span>
-                  <span className="font-body-sm text-outline line-through">₹2,400</span>
-                  <span className="font-label-sm text-primary font-semibold">-23%</span>
-                </div>
-                <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-primary h-full w-[91%]"></div>
-                </div>
-                <span className="font-body-sm text-[11px] text-outline">91% claimed • Almost Gone</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      '9eeae17659684624e4e8cbe2',
-                      'GlowBiome Barrier Repair Serum',
-                      1850,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuB4tIfuCnVFI90s5zDrrG0qiD-YGOknHZ0yZxqmw44f1xVWZYWf7XEWbOyM7uEqXSMBN8BgHfE8d-8BPFaJ03BiRko4GMWKHqaRKLpNvLf62uTUNb-jqw0Iq09nIRcibA1LoVU_iDp7sVQipQsrVqO_RNhJHMTuFJ5iYN_qpZa0C4fUG3E7ou3pHv3SeIG6Jp8iqsQw2CTRol4c79I_9xepK5TKHdy3jLp1uuyxgdS9LX8dHXv7TIOoVA',
-                      'Beauty & Personal Care'
-                    )
-                  }
-                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
-                  <span>Add to Cart</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Deal Card 4 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
-              <div>
-                <Link to="/products/e76a094353f7362b563e05e1" className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkH9W8BpvypqOlI4iJOkj35_DwPTLyMhpWxAtsJ5HwgYnL18JiidvEiIMM7oRzk_0tOm-gZNMEfMfwsWhwR_2-nVzfa7NVKtF0blrmM9RTV9NKm4W49F4zuS4ahOBQ_7HqWW0rL18VkS9Id2qRGtSMPhxIVRyui9G_54cGFxu7xH045Copyc8x3jf_gM5QwHd1PR9Wg7jbT9HadD7A47txZUmoaZlxLy-5eoC-JQ91Uaj7d1vmSYTq-Q"
-                    alt="FarmFresh Cold-Pressed Extra Virgin Olive Oil"
-                  />
-                  <span className="absolute top-2 left-2 bg-surface-container-high text-primary font-label-sm text-[11px] px-2 py-0.5 rounded-full uppercase">
-                    Organic Certified
-                  </span>
-                  <button
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
-                    title="Save to wishlist"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                  >
-                    <span className="material-symbols-outlined text-[18px]">favorite_border</span>
-                  </button>
-                </Link>
-                <div className="flex items-center gap-1 mb-1">
-                  <span
-                    className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
-                    style={{ fontVariationSettings: "'FILL' 1" }}
-                  >
-                    star
-                  </span>
-                  <span className="font-body-sm text-body-sm font-semibold text-on-surface">4.9</span>
-                  <span className="font-body-sm text-body-sm text-outline">(4,150)</span>
-                </div>
-                <Link to="/products/e76a094353f7362b563e05e1">
-                  <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
-                    FarmFresh Cold-Pressed Extra Virgin Olive Oil 1L
-                  </h3>
-                </Link>
-              </div>
-              <div className="mt-space-sm flex flex-col gap-space-xs">
-                <div className="flex items-baseline gap-space-xs">
-                  <span className="font-price-card text-price-card text-on-surface">₹949</span>
-                  <span className="font-body-sm text-outline line-through">₹1,299</span>
-                  <span className="font-label-sm text-primary font-semibold">-27%</span>
-                </div>
-                <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-primary h-full w-[45%]"></div>
-                </div>
-                <span className="font-body-sm text-[11px] text-outline">45% claimed</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      'e76a094353f7362b563e05e1',
-                      'FarmFresh Cold-Pressed Extra Virgin Olive Oil 1L',
-                      949,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuCkH9W8BpvypqOlI4iJOkj35_DwPTLyMhpWxAtsJ5HwgYnL18JiidvEiIMM7oRzk_0tOm-gZNMEfMfwsWhwR_2-nVzfa7NVKtF0blrmM9RTV9NKm4W49F4zuS4ahOBQ_7HqWW0rL18VkS9Id2qRGtSMPhxIVRyui9G_54cGFxu7xH045Copyc8x3jf_gM5QwHd1PR9Wg7jbT9HadD7A47txZUmoaZlxLy-5eoC-JQ91Uaj7d1vmSYTq-Q',
-                      'Grocery & Essentials'
-                    )
-                  }
-                  className="mt-space-xs w-full bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
-                  <span>Add to Cart</span>
-                </button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>
@@ -942,153 +799,84 @@ export const HomePage: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-gutter">
-            {/* Grocery 1 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <div className="relative w-full h-48 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl6QFzMa4YNzF0kkp8vh70mmqWSH_y_GvS7EIy0efI6bFIZUmkipEFtyM2z4XgB-gNrHhXZMJ5DsVGVnuIQjTQRsnNp8FJXtT4qecm_hicjbaOi7iGzmZXUL7DtI1NOZlGYGKdpReE-L1vHgP9N_2jo19JvQVLVyT3Lhz2Qg_lIV29PqtabWiWZk1XRDVEt_cBCded9oeMUmaTu5e6yxscD4CSMyJuTi913RZ7FdcIoxFuH22jAvbWTw"
-                  alt="Artisan Stoneground Sourdough"
-                />
-                <span className="absolute top-2 left-2 bg-surface-container-lowest/90 px-2 py-0.5 rounded text-[11px] font-semibold text-on-surface">
-                  Baked Daily
-                </span>
-              </div>
-              <div>
-                <h4 className="font-title-sm text-title-sm text-on-surface">Artisan Stoneground Sourdough</h4>
-                <p className="font-body-sm text-body-sm text-outline">500g • Farm Mill</p>
-              </div>
-              <div className="mt-space-sm flex items-center justify-between">
-                <span className="font-price-card text-price-card text-on-surface">₹220</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      'ab7b14f36a322390697b4261',
-                      'Artisan Stoneground Sourdough',
-                      220,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuAl6QFzMa4YNzF0kkp8vh70mmqWSH_y_GvS7EIy0efI6bFIZUmkipEFtyM2z4XgB-gNrHhXZMJ5DsVGVnuIQjTQRsnNp8FJXtT4qecm_hicjbaOi7iGzmZXUL7DtI1NOZlGYGKdpReE-L1vHgP9N_2jo19JvQVLVyT3Lhz2Qg_lIV29PqtabWiWZk1XRDVEt_cBCded9oeMUmaTu5e6yxscD4CSMyJuTi913RZ7FdcIoxFuH22jAvbWTw',
-                      'Grocery & Essentials'
-                    )
-                  }
-                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
-                  type="button"
+            {isLoading ? (
+              // 4 Shimmer Skeletons for Everyday Essentials
+              [0, 1, 2, 3].map((idx) => (
+                <div
+                  key={idx}
+                  className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between animate-pulse"
                 >
-                  <span className="material-symbols-outlined text-[16px]">add</span>
-                  <span>Add</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Grocery 2 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <div className="relative w-full h-48 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr8SRkRRimmSJYvt5J0ZspPlhOPyf3fZJHUKurwcHEjSj-B4c712DN3WHVO1WGEJQgEmNC9bHuXfcpQg1CLgZcgN8hPW4Enxr3Kmnq_UQicaUh3Zc-Jto4VcIp-x9kTAntjD0S0iSOJcranJxatlNuLcqVp2XOUp-TfKvETwP10aNiV3qD7VNuYRX7B0_xLOB812Rr9u-czzFIvccldFmL5wS6KIQrPZ2twTaeK25uzaw96Fc81JnNhg"
-                  alt="Estate Arabica Beans 250g"
-                />
-                <span className="absolute top-2 left-2 bg-surface-container-lowest/90 px-2 py-0.5 rounded text-[11px] font-semibold text-on-surface">
-                  Direct Trade
-                </span>
-              </div>
-              <div>
-                <h4 className="font-title-sm text-title-sm text-on-surface">Estate Arabica Beans 250g</h4>
-                <p className="font-body-sm text-body-sm text-outline">Medium Dark • Coorg Reserve</p>
-              </div>
-              <div className="mt-space-sm flex items-center justify-between">
-                <span className="font-price-card text-price-card text-on-surface">₹480</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      '87e4ee3279ce71acaaf991e3',
-                      'Estate Arabica Beans 250g',
-                      480,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuDr8SRkRRimmSJYvt5J0ZspPlhOPyf3fZJHUKurwcHEjSj-B4c712DN3WHVO1WGEJQgEmNC9bHuXfcpQg1CLgZcgN8hPW4Enxr3Kmnq_UQicaUh3Zc-Jto4VcIp-x9kTAntjD0S0iSOJcranJxatlNuLcqVp2XOUp-TfKvETwP10aNiV3qD7VNuYRX7B0_xLOB812Rr9u-czzFIvccldFmL5wS6KIQrPZ2twTaeK25uzaw96Fc81JnNhg',
-                      'Grocery & Essentials'
-                    )
-                  }
-                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
-                  type="button"
+                  <div className="w-full h-48 rounded-lg bg-surface-container-high mb-space-sm" />
+                  <div className="h-5 w-3/4 bg-surface-container-high rounded mb-2" />
+                  <div className="h-4 w-1/2 bg-surface-container-high rounded mb-4" />
+                  <div className="flex items-center justify-between">
+                    <div className="h-6 w-16 bg-surface-container-high rounded" />
+                    <div className="h-9 w-20 bg-surface-container-high rounded-lg" />
+                  </div>
+                </div>
+              ))
+            ) : groceryProducts.length > 0 ? (
+              groceryProducts.slice(0, 4).map((item) => {
+                const catName =
+                  typeof item.category === 'object' && item.category !== null
+                    ? (item.category as any).name
+                    : item.category || 'Grocery & Essentials';
+                return (
+                  <div
+                    key={item._id}
+                    className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                  >
+                    <Link
+                      to={`/products/${item._id}`}
+                      className="relative w-full h-48 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm block group"
+                    >
+                      <img
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        src={item.image}
+                        alt={item.name}
+                      />
+                      <span className="absolute top-2 left-2 bg-surface-container-lowest/90 px-2 py-0.5 rounded text-[11px] font-semibold text-on-surface">
+                        {item.badge || 'Fresh Daily'}
+                      </span>
+                    </Link>
+                    <div>
+                      <Link to={`/products/${item._id}`}>
+                        <h4 className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors line-clamp-1">
+                          {item.name}
+                        </h4>
+                      </Link>
+                      <p className="font-body-sm text-body-sm text-outline truncate">{catName}</p>
+                    </div>
+                    <div className="mt-space-sm flex items-center justify-between">
+                      <span className="font-price-card text-price-card text-on-surface">
+                        {formatCurrency(item.price)}
+                      </span>
+                      <button
+                        onClick={() =>
+                          handleQuickAdd(item._id, item.name, item.price, item.image, catName)
+                        }
+                        className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">add</span>
+                        <span>Add</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-full bg-surface-container-lowest rounded-xl p-space-xl text-center flex flex-col items-center justify-center gap-space-sm">
+                <span className="material-symbols-outlined text-outline text-[36px]">local_shipping</span>
+                <p className="font-headline-sm text-on-surface">Everyday Essentials Loading Soon</p>
+                <Link
+                  to="/products?category=Grocery+%26+Essentials"
+                  className="mt-space-xs px-space-md py-2 bg-primary text-on-primary rounded-lg font-title-sm hover:bg-secondary transition-colors"
                 >
-                  <span className="material-symbols-outlined text-[16px]">add</span>
-                  <span>Add</span>
-                </button>
+                  Browse Grocery Department
+                </Link>
               </div>
-            </div>
-
-            {/* Grocery 3 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <div className="relative w-full h-48 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgO5QDtBh27uuBnLBpBXuXZKfBKmxwzxGc5PQpHkJuaCMUu55xkU5boNAc6_icjhV_xmTR9eLgQHTfX8mkdbVsdwwCQ1saCc6NaFnpg9M8c_FUrwADQV4OJygRi5lRVZkaKcvhRpV1SYJraMfhyJSpsBefOehxUJmP1G3X48pZjO5xdyt5DshlVrcs8R4NMciZFaY8H3vl7HgOuBUSK5MoFPTR11d5qPKmh3NT7Rvmzeg21Ex5dLftMg"
-                  alt="Himalayan Flora Honey 400g"
-                />
-                <span className="absolute top-2 left-2 bg-surface-container-lowest/90 px-2 py-0.5 rounded text-[11px] font-semibold text-on-surface">
-                  100% Unprocessed
-                </span>
-              </div>
-              <div>
-                <h4 className="font-title-sm text-title-sm text-on-surface">Himalayan Flora Honey 400g</h4>
-                <p className="font-body-sm text-body-sm text-outline">Wild Harvest • Zero Additives</p>
-              </div>
-              <div className="mt-space-sm flex items-center justify-between">
-                <span className="font-price-card text-price-card text-on-surface">₹650</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      'ab7b14f36a322390697b4261',
-                      'Himalayan Flora Honey 400g',
-                      650,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBgO5QDtBh27uuBnLBpBXuXZKfBKmxwzxGc5PQpHkJuaCMUu55xkU5boNAc6_icjhV_xmTR9eLgQHTfX8mkdbVsdwwCQ1saCc6NaFnpg9M8c_FUrwADQV4OJygRi5lRVZkaKcvhRpV1SYJraMfhyJSpsBefOehxUJmP1G3X48pZjO5xdyt5DshlVrcs8R4NMciZFaY8H3vl7HgOuBUSK5MoFPTR11d5qPKmh3NT7Rvmzeg21Ex5dLftMg',
-                      'Grocery & Essentials'
-                    )
-                  }
-                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[16px]">add</span>
-                  <span>Add</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Grocery 4 */}
-            <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <div className="relative w-full h-48 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                <img
-                  className="w-full h-full object-cover"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIbaXi7mzx6F3-v1VYNuvOXF2p5HEkDsyzluh5KngOEfFOTkHwC4hwa4UgDk20P8Vxa0wEF-Un3t0vHt9xItHmLFxzL_8QLWVY1VJijfkqUmOkujQLL8IQ8zM35_1jCisD6yZsNFJBm0w8lep8BoTCubno3Oa0999Zav90gJdc55Ihou-00ce-F6w8ZYBqSgdrRx673BTtc8ijhOq4722zt1GNQYkeAtcSrnF7j0sMfz0G969JcFAmRw"
-                  alt="Barista Oat &amp; Almond Milk 1L"
-                />
-                <span className="absolute top-2 left-2 bg-surface-container-lowest/90 px-2 py-0.5 rounded text-[11px] font-semibold text-on-surface">
-                  Plant Based
-                </span>
-              </div>
-              <div>
-                <h4 className="font-title-sm text-title-sm text-on-surface">Barista Oat &amp; Almond Milk 1L</h4>
-                <p className="font-body-sm text-body-sm text-outline">Unsweetened • Calcium Rich</p>
-              </div>
-              <div className="mt-space-sm flex items-center justify-between">
-                <span className="font-price-card text-price-card text-on-surface">₹295</span>
-                <button
-                  onClick={() =>
-                    handleQuickAdd(
-                      'e76a094353f7362b563e05e1',
-                      'Barista Oat & Almond Milk 1L',
-                      295,
-                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBIbaXi7mzx6F3-v1VYNuvOXF2p5HEkDsyzluh5KngOEfFOTkHwC4hwa4UgDk20P8Vxa0wEF-Un3t0vHt9xItHmLFxzL_8QLWVY1VJijfkqUmOkujQLL8IQ8zM35_1jCisD6yZsNFJBm0w8lep8BoTCubno3Oa0999Zav90gJdc55Ihou-00ce-F6w8ZYBqSgdrRx673BTtc8ijhOq4722zt1GNQYkeAtcSrnF7j0sMfz0G969JcFAmRw',
-                      'Grocery & Essentials'
-                    )
-                  }
-                  className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors"
-                  type="button"
-                >
-                  <span className="material-symbols-outlined text-[16px]">add</span>
-                  <span>Add</span>
-                </button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

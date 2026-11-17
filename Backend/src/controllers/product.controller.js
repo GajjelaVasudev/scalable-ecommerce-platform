@@ -214,8 +214,12 @@ async function getProducts(req, res) {
                 filter.category = category;
             } else if (typeof category === 'string' && category.trim()) {
                 const escapedCat = category.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const fuzzyCat = escapedCat.replace(/\\&/g, '(&|and|\\s*)').replace(/[-\s]+/g, '[\\s-]+');
                 const catDoc = await Category.findOne({
-                    name: { $regex: new RegExp(`^${escapedCat}$`, 'i') }
+                    $or: [
+                        { name: { $regex: new RegExp(`^${escapedCat}$`, 'i') } },
+                        { name: { $regex: new RegExp(`^${fuzzyCat}$`, 'i') } }
+                    ]
                 });
                 if (catDoc) {
                     filter.category = catDoc._id;
