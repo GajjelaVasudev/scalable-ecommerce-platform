@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+<html lang="en" style=""><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"on-tertiary-container":"#e3daff","inverse-primary":"#d1bcff","tertiary-fixed":"#e6deff","on-primary-container":"#e7d9ff","on-tertiary-fixed-variant":"#493e78","surface-container-low":"#f7f1ff","surface-tint":"#7228ee","inverse-on-surface":"#f5eeff","on-secondary-fixed":"#1a0063","outline":"#7b7487","surface-dim":"#ded6f2","on-tertiary-fixed":"#1d104a","surface-container-lowest":"#ffffff","surface-container-high":"#ece4ff","primary":"#5c00d2","primary-fixed-dim":"#d1bcff","on-primary-fixed-variant":"#5800c8","on-primary-fixed":"#24005b","error-container":"#ffdad6","surface-container-highest":"#e6defa","on-error":"#ffffff","on-secondary-fixed-variant":"#451fc4","inverse-surface":"#322e42","secondary-fixed":"#e5deff","surface-container":"#f2ebff","primary-fixed":"#eaddff","secondary":"#5b3eda","surface-bright":"#fdf7ff","tertiary-container":"#655a96","secondary-fixed-dim":"#c9bfff","on-surface":"#1d192d","background":"#fdf7ff","on-surface-variant":"#4a4456","surface-variant":"#e6defa","on-tertiary":"#ffffff","on-background":"#1d192d","on-primary":"#ffffff","surface":"#fdf7ff","error":"#ba1a1a","on-secondary":"#ffffff","outline-variant":"#ccc3d9","secondary-container":"#745af4","primary-container":"#762ff2","on-secondary-container":"#fffbff","tertiary-fixed-dim":"#cbbeff","tertiary":"#4d427c","on-error-container":"#93000a"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-mobile":"0.75rem","space-md":"1rem","margin-mobile":"1rem","space-xs":"0.25rem","margin":"2rem","gutter":"1.5rem","space-lg":"1.5rem","space-xl":"2.5rem","space-sm":"0.5rem"},"fontFamily":{"headline-md":["Space Grotesk"],"price-card":["Inter"],"headline-lg":["Space Grotesk"],"headline-sm":["Space Grotesk"],"title-lg":["Inter"],"title-md":["Inter"],"body-md":["Inter"],"price-hero":["Inter"],"title-sm":["Inter"],"label-sm":["Inter"],"headline-lg-mobile":["Space Grotesk"],"body-lg":["Inter"],"display-hero":["Space Grotesk"],"body-sm":["Inter"],"label-md":["Inter"],"display-hero-mobile":["Space Grotesk"]},"fontSize":{"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"price-card":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"price-hero":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}};</script><style id="omizon-typography-override">
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+  :not(.material-symbols-outlined):not(.material-icons) {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+
+  html, body, h1, h2, h3, h4, h5, h6, .hero-title, .section-title, p, span:not(.material-symbols-outlined), button, a, input, select, label, div {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    vertical-align: middle;
+  }
+
+  .card-hover-refine {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+</style></head><body class="bg-background font-body-md text-on-surface antialiased" style='font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif !important;'><header class="fixed top-0 left-0 w-full z-50 shadow-[0_1px_8px_rgba(25,11,70,0.06)]"><div class="bg-inverse-surface text-inverse-on-surface h-9 px-margin flex items-center justify-between text-body-sm"><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-[16px] text-primary-fixed">location_on</span><span class="font-label-md text-inverse-on-surface">Deliver to <strong class="font-semibold text-surface-container-lowest">Mumbai 400001</strong></span><span class="hidden sm:inline text-outline-variant">•</span><span class="hidden sm:inline text-on-surface-variant font-body-sm">Fast 2-Day Delivery Guaranteed</span><button class="ml-space-xs text-primary-fixed hover:text-surface-container-lowest underline font-label-sm uppercase transition-colors" type="button">Change</button></div><div class="flex items-center gap-space-md"><a class="hidden md:inline font-body-sm text-inverse-on-surface hover:text-primary-fixed transition-colors" data-path="seller-portal" href="#">Sell on OMIZON</a><a class="hidden md:inline font-body-sm text-inverse-on-surface hover:text-primary-fixed transition-colors" data-path="customer-care" href="#">Customer Care</a><a class="hidden lg:inline font-body-sm text-inverse-on-surface hover:text-primary-fixed transition-colors" data-path="order-tracking" href="#">Track Order</a><div class="flex items-center gap-1 font-label-md cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-[15px]">language</span><span class="">INR (₹) / EN</span><span class="material-symbols-outlined text-[14px]">expand_more</span></div></div></div><div class="bg-surface-container-lowest h-20 px-margin flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md shrink-0"><a class="flex items-center gap-space-xs" data-path="home" href="#"><img alt="OMIZON Official Brand Logo" class="h-9 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W6UDv75lZR1fRtHof5oAabRt87m_5Fbu08ufLNlA_IJrkqZelfAVVlvKDHc5ZBF64GeTB3rQvrWV20nNIwZKlZSABM-aSxnyFe46lYwa-838f3kWNQdyWM9YbA3mRPk7goWbFvst7xvUvYmO09NM4GtUWSCjDN4ZipFYHBFU6fxaarplbOX7lz2B53I6XpAnAtU-r0X_oxkeZiHLEwnICH3LKac-Ml2sygiN_OvL1rgIfWqeYihNkTaEOv"/></a></div><div class="flex-1 max-w-3xl hidden md:flex items-center"><div class="w-full flex items-center bg-surface-container-low rounded-lg h-11 px-space-xs focus-within:ring-2 focus-within:ring-primary focus-within:bg-surface-container-lowest transition-all"><button class="flex items-center gap-1 px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md shrink-0" type="button"><span class="">All Categories</span><span class="material-symbols-outlined text-[16px]">expand_more</span></button><div class="h-5 w-[1px] bg-outline-variant mx-space-xs"></div><input class="w-full bg-transparent border-0 outline-none px-space-xs font-body-md text-on-surface placeholder:text-outline" placeholder="Search products, brands and essentials..." type="text"/><button aria-label="Search" class="ml-space-xs bg-primary hover:bg-secondary text-on-primary h-9 px-space-md rounded-md flex items-center justify-center transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">search</span></button></div></div><div class="flex items-center gap-space-md shrink-0"><a class="flex items-center gap-space-xs p-1 rounded-lg hover:bg-surface-container-low transition-colors" data-path="account" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSLDoLVV-esICWgftOC8qO_vu3IxcA9LuYrzkLPmY6pIyycTxZSkn6D0CnPNNROeivapYvHG1QcniYbRnkRyZ2VlFNdh46Yzit3OoH7WnVB8jUU2y_t4hJZRRKypu9H0RhxMKXaS4iMLrLhaIkXN7wr_v6Hh9PYDt2t57QTWua5kfD-cDL-FPAtj95ysmYTGh4Z6q46Hu5aqriN7DKlAqveDT_OAY5P9iHXZVD3ZIONLZM5sVE6U9bww"/><div class="hidden xl:flex flex-col text-left"><span class="font-label-sm text-outline uppercase">Hello, Priya</span><span class="font-title-sm text-on-surface leading-none">Account &amp; Lists</span></div></a><a class="relative flex items-center justify-center p-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="wishlist" href="#" title="Wishlist"><span class="material-symbols-outlined text-[24px]">favorite_border</span><span class="absolute -top-1 -right-1 bg-primary text-on-primary font-label-sm text-[10px] w-4 h-4 rounded-full flex items-center justify-center leading-none">4</span></a><a class="flex items-center gap-space-xs bg-surface-container-low hover:bg-surface-container px-space-sm py-1.5 rounded-lg transition-colors" data-path="cart" href="#"><div class="relative flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[24px]">shopping_bag</span><span class="absolute -top-1.5 -right-2 bg-secondary text-on-secondary font-label-sm text-[10px] w-4 h-4 rounded-full flex items-center justify-center leading-none">3</span></div><div class="hidden sm:flex flex-col text-left"><span class="font-label-sm text-outline uppercase">Cart</span><span class="font-price-card text-[15px] leading-tight text-on-surface">₹4,899</span></div></a><button class="p-space-xs text-on-surface-variant hover:text-on-surface rounded-full transition-colors" title="Toggle Appearance" type="button"><span class="material-symbols-outlined text-[20px]">dark_mode</span></button></div></div><div class="bg-surface-container-lowest h-11 px-margin flex items-center justify-between overflow-x-auto shadow-[0_1px_4px_rgba(25,11,70,0.03)]"><div class="flex items-center gap-space-lg shrink-0"><button class="flex items-center gap-space-xs font-title-sm text-primary hover:text-secondary py-1 transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">menu</span><span class="">All Categories</span></button><nav class="flex items-center gap-space-md" data-active-classes="text-primary font-bold"><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="electronics" href="#">Electronics</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="home-living" href="#">Home &amp; Living</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="grocery" href="#">Grocery &amp; Essentials</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="beauty" href="#">Beauty &amp; Personal Care</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="fashion" href="#">Fashion &amp; Apparel</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="sports" href="#">Sports &amp; Outdoors</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="books" href="#">Books</a><a class="font-body-md text-primary font-semibold hover:text-secondary transition-colors whitespace-nowrap" data-path="deals" href="#">Daily Deals &amp; Offers</a></nav></div></div></header><main class="w-full pt-40 bg-surface min-h-[calc(100vh-160px)]"><div class="flex flex-col w-full">
+<!-- Interactive Notification Toast (Hidden by default, triggered on actions) -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-space-sm bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm rounded-xl shadow-2xl" id="toastNotification">
+<span class="material-symbols-outlined text-secondary-fixed text-[20px]" id="toastIcon">check_circle</span>
+<span class="font-body-md font-medium" id="toastMessage">Tax Invoice downloaded successfully</span>
+</div>
+<!-- Main Content Wrap -->
+<div class="w-full max-w-7xl mx-auto px-margin py-space-lg">
+<!-- Top Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="flex items-center gap-space-xs text-on-surface-variant font-body-sm mb-space-md">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="text-outline-variant font-body-sm">/</span>
+<a class="hover:text-primary transition-colors" href="#">Account</a>
+<span class="text-outline-variant font-body-sm">/</span>
+<span class="text-on-surface font-title-sm text-[12px] font-semibold">Your Orders</span>
+</nav>
+<!-- Header Section with Search & Meta -->
+<div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md pb-space-lg border-b border-surface-container-highest/60 mb-space-lg">
+<div class="flex flex-col">
+<div class="flex items-baseline gap-space-sm flex-wrap">
+<h1 class="font-headline-lg text-on-surface tracking-tight">Your Orders</h1>
+<span class="font-body-md text-on-surface-variant font-medium">(24 orders placed in 2024)</span>
+</div>
+<p class="font-body-md text-on-surface-variant mt-1">Manage past purchases, monitor live shipments, and track returns or invoices.</p>
+</div>
+<!-- Quick Action Cluster: State Switcher & Search Bar -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm w-full lg:w-auto">
+<!-- Search Input -->
+<div class="relative flex-1 sm:w-80">
+<input class="w-full h-11 pl-10 pr-10 bg-surface-container-lowest text-on-surface font-body-md rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all" id="orderSearchInput" placeholder="Search orders by item, brand, or ID..." type="text"/>
+<span class="material-symbols-outlined text-outline absolute left-3 top-2.5 text-[20px]">search</span>
+<button class="hidden absolute right-3 top-2.5 text-outline hover:text-on-surface transition-colors" id="clearSearchBtn" title="Clear search">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Empty State Preview Toggle Pill -->
+<button class="h-11 px-space-md bg-surface-container-low hover:bg-surface-container text-primary font-title-sm text-[13px] rounded-lg transition-all flex items-center justify-center gap-1.5 shrink-0 shadow-sm" id="toggleEmptyStateBtn">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span id="toggleEmptyStateLabel">Preview Empty Filter</span>
+</button>
+</div>
+</div>
+<!-- Filter & Sort Bar Section -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md mb-space-lg">
+<!-- Status Pill Tabs -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1.5 md:pb-0 scrollbar-none" id="statusTabs">
+<button class="status-tab px-space-md py-2 rounded-full font-title-sm text-[13px] bg-inverse-surface text-inverse-on-surface transition-all shrink-0 shadow-sm" data-filter="all">
+          All Orders (24)
+        </button>
+<button class="status-tab px-space-md py-2 rounded-full font-title-sm text-[13px] bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all shrink-0" data-filter="transit">
+          In Transit <span class="ml-1 bg-primary text-on-primary text-[10px] font-bold px-1.5 py-0.5 rounded-full">2</span>
+</button>
+<button class="status-tab px-space-md py-2 rounded-full font-title-sm text-[13px] bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all shrink-0" data-filter="delivered">
+          Delivered (20)
+        </button>
+<button class="status-tab px-space-md py-2 rounded-full font-title-sm text-[13px] bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all shrink-0" data-filter="cancelled">
+          Cancelled (1)
+        </button>
+<button class="status-tab px-space-md py-2 rounded-full font-title-sm text-[13px] bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all shrink-0" data-filter="returns">
+          Returns &amp; Refunds (1)
+        </button>
+</div>
+<!-- Timeframe and Sort Selector -->
+<div class="flex items-center gap-space-sm shrink-0">
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-on-surface-variant text-[12px] whitespace-nowrap">Timeframe:</span>
+<select class="bg-surface-container-lowest text-on-surface font-title-sm text-[13px] h-9 px-space-sm rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer transition-all" id="timeframeSelect">
+<option value="last3">Last 3 months</option>
+<option selected="" value="2024">2024 (Whole Year)</option>
+<option value="2023">2023</option>
+<option value="archived">Archived Orders</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Active Orders Container -->
+<div class="flex flex-col gap-space-lg" id="ordersListSection">
+<!-- CARD 1: ACTIVE / OUT FOR DELIVERY (OMZ-993821-IN) -->
+<article class="order-card bg-surface-container-lowest rounded-xl shadow-md overflow-hidden relative transition-all duration-300 hover:shadow-xl" data-order-status="transit">
+<div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-secondary-container to-primary-fixed"></div>
+<!-- Order Header Strip -->
+<div class="bg-surface-container-low/70 px-space-lg py-space-md flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-x-space-xl gap-y-2">
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Order Placed</span>
+<span class="font-title-sm text-on-surface font-semibold">28 Oct 2024</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Total</span>
+<span class="font-price-card text-on-surface font-bold">₹74,990.00</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Ship To</span>
+<div class="relative group cursor-pointer">
+<span class="font-title-sm text-primary font-semibold flex items-center gap-0.5">
+                  Priya Sharma
+                  <span class="material-symbols-outlined text-[16px]">expand_more</span>
+</span>
+<div class="absolute left-0 top-full mt-1 hidden group-hover:block z-20 w-64 p-3 bg-surface-container-lowest rounded-lg shadow-xl text-on-surface text-body-sm">
+<p class="font-semibold text-on-surface">Priya Sharma (Home)</p>
+<p class="text-on-surface-variant">Flat 902, Tower B, Oberoi Sky City, Borivali East, Mumbai 400066</p>
+<p class="text-on-surface-variant mt-1 text-label-sm">Phone: +91 98200 44912</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Order #OMZ-993821-IN</span>
+<div class="flex items-center gap-2 justify-end">
+<button class="font-title-sm text-[13px] text-primary hover:text-secondary font-semibold hover:underline" onclick="openDrawer('OMZ-993821-IN')">View Order Details</button>
+<span class="text-outline-variant font-body-sm">|</span>
+<button class="font-title-sm text-[13px] text-primary hover:text-secondary font-semibold hover:underline flex items-center gap-0.5" onclick="triggerInvoiceDownload('OMZ-993821-IN')">
+<span class="material-symbols-outlined text-[14px]">receipt_long</span> Invoice
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card Main Content -->
+<div class="p-space-lg flex flex-col gap-space-lg">
+<!-- Delivery ETA & Live Tracker Bar -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-2.5">
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+</span>
+<span class="font-headline-sm text-primary font-bold text-[18px]">Arriving Today by 4:00 PM</span>
+<span class="bg-primary/10 text-primary font-label-sm px-2.5 py-0.5 rounded-full uppercase tracking-wider font-bold">Out for Delivery</span>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">electric_bolt</span>
+<span>Fulfilled by <strong>OMIZON Prime FastX</strong></span>
+</div>
+</div>
+<!-- Visual 4-Step Tracker -->
+<div class="w-full pt-space-xs pb-1">
+<div class="grid grid-cols-4 relative">
+<!-- Track background line -->
+<div class="absolute top-3.5 left-[12.5%] right-[12.5%] h-1 bg-surface-container-highest z-0"></div>
+<div class="absolute top-3.5 left-[12.5%] w-[75%] h-1 bg-primary z-0 transition-all duration-700"></div>
+<!-- Step 1: Placed -->
+<div class="flex flex-col items-center text-center z-10">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-semibold text-xs shadow-md">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="font-title-sm text-[12px] text-on-surface mt-2 font-semibold">Ordered</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">28 Oct, 09:14 AM</span>
+</div>
+<!-- Step 2: Dispatched -->
+<div class="flex flex-col items-center text-center z-10">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-semibold text-xs shadow-md">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="font-title-sm text-[12px] text-on-surface mt-2 font-semibold">Dispatched</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Bhiwandi Hub</span>
+</div>
+<!-- Step 3: In Transit -->
+<div class="flex flex-col items-center text-center z-10">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-semibold text-xs shadow-md">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<span class="font-title-sm text-[12px] text-on-surface mt-2 font-semibold">In Transit</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Goregaon Facility</span>
+</div>
+<!-- Step 4: Out for Delivery (Active) -->
+<div class="flex flex-col items-center text-center z-10">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary ring-4 ring-primary-fixed flex items-center justify-center font-semibold text-xs shadow-md animate-pulse">
+<span class="material-symbols-outlined text-[16px]">local_shipping</span>
+</div>
+<span class="font-title-sm text-[12px] text-primary mt-2 font-bold">Out for Delivery</span>
+<span class="font-body-sm text-[11px] text-primary font-semibold">Courier: Rajesh (OTP 4819)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Product Details Row -->
+<div class="flex flex-col md:flex-row items-start justify-between gap-space-lg">
+<div class="flex items-start gap-space-md flex-1">
+<div class="w-24 h-24 rounded-lg bg-surface-container-low shrink-0 overflow-hidden relative flex items-center justify-center">
+<img class="w-full h-full object-cover rounded-lg" data-alt="High-end metallic space gray flagship 16-inch laptop with ultra-thin bezels glowing screen on a clean minimal studio backdrop in crisp lighting matching deep violet tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvi-8LJJ1i7HGWvLb9E5ayTBU_2xxOuH2d7j0moluuodlJST3dnmf89ASEEuHChwaMWcg9G7zXk_joP7rxaw7HcbhoBq8z7Js4w7Hq5agTKxLn7EAtqKtupP2mA0Zh7VZ8zqdYCa4-8VTN0BvbO0rujlvcyKT8FYp0yE_H-NhMrvynFqL65eatjkKORDvq6JA7__htkscAw1t2nP-hfkUl8KN020-rSbmvRWAgU5f7xk_sOam2dLeRIQ"/>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="bg-secondary-fixed text-on-secondary-fixed font-label-sm text-[10px] px-2 py-0.5 rounded uppercase font-bold tracking-wide">OMIZON PRIME</span>
+<span class="font-body-sm text-outline">• Sold by OMIZON Retail Private Ltd.</span>
+</div>
+<h3 class="font-title-lg text-on-surface font-semibold mt-1 hover:text-primary cursor-pointer transition-colors">
+                  ApexBook M3 Ultra 16-inch (Space Gray, 36GB Unified RAM, 1TB Fast NVMe SSD)
+                </h3>
+<p class="font-body-sm text-on-surface-variant mt-0.5">Configuration: M3 Ultra 16-Core CPU, 40-Core GPU | Indian Keyboard layout | 1 Year AppleCare Warranty included</p>
+<div class="flex items-center gap-space-md mt-2">
+<span class="font-title-md text-on-surface font-bold">Qty: 1</span>
+<span class="font-body-sm text-outline-variant">|</span>
+<span class="font-title-md text-on-surface font-bold">₹74,990.00</span>
+<span class="bg-surface-container text-on-surface-variant font-label-sm text-[11px] px-2 py-0.5 rounded">Return Window: 7 Days after delivery</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons Column -->
+<div class="flex flex-col gap-2 w-full md:w-56 shrink-0">
+<button class="w-full h-10 bg-primary hover:bg-secondary text-on-primary font-title-sm text-[13px] rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm" onclick="toggleTrackModal(true)">
+<span class="material-symbols-outlined text-[18px]">location_searching</span>
+                Track Live Courier
+              </button>
+<button class="w-full h-10 bg-surface-container-low hover:bg-surface-container text-on-surface font-title-sm text-[13px] rounded-lg transition-colors flex items-center justify-center gap-1.5" onclick="openDrawer('OMZ-993821-IN')">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+                View Order Summary
+              </button>
+<div class="relative group">
+<button class="w-full h-9 bg-surface-container-lowest text-outline font-title-sm text-[12px] rounded-lg cursor-not-allowed opacity-60 flex items-center justify-center gap-1" disabled="">
+<span class="material-symbols-outlined text-[16px]">cancel</span>
+                  Cancel Order
+                </button>
+<div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block w-52 p-2 bg-inverse-surface text-inverse-on-surface rounded text-[11px] text-center font-body-sm z-20 shadow-lg">
+                  Package is out for delivery and cannot be cancelled directly. You can decline at doorstep.
+                </div>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- CARD 2: DELIVERED (OMZ-882104-IN) -->
+<article class="order-card bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden" data-order-status="delivered">
+<!-- Order Header Strip -->
+<div class="bg-surface-container-low/70 px-space-lg py-space-md flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-x-space-xl gap-y-2">
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Order Placed</span>
+<span class="font-title-sm text-on-surface font-semibold">15 Oct 2024</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Total</span>
+<span class="font-price-card text-on-surface font-bold">₹24,999.00</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Ship To</span>
+<span class="font-title-sm text-on-surface font-semibold">Priya Sharma (Home)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Order #OMZ-882104-IN</span>
+<div class="flex items-center gap-2 justify-end">
+<button class="font-title-sm text-[13px] text-primary hover:text-secondary font-semibold hover:underline" onclick="openDrawer('OMZ-882104-IN')">Order Details</button>
+<span class="text-outline-variant font-body-sm">|</span>
+<button class="font-title-sm text-[13px] text-primary hover:text-secondary font-semibold hover:underline flex items-center gap-0.5" onclick="triggerInvoiceDownload('OMZ-882104-IN')">
+<span class="material-symbols-outlined text-[14px]">receipt_long</span> Tax Invoice
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card Content -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Delivery Status Banner -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-space-sm border-b border-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">verified</span>
+<span class="font-headline-sm text-on-surface font-bold text-[18px]">Delivered 17 Oct 2024</span>
+<span class="text-on-surface-variant font-body-sm">• Package handed to security reception as requested</span>
+</div>
+<span class="font-body-sm text-primary font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">assignment_return</span>
+              Return window active until 31 Oct 2024
+            </span>
+</div>
+<!-- Product Details and Actions -->
+<div class="flex flex-col md:flex-row items-start justify-between gap-space-lg pt-space-xs">
+<div class="flex items-start gap-space-md flex-1">
+<div class="w-24 h-24 rounded-lg bg-surface-container-low shrink-0 overflow-hidden relative flex items-center justify-center">
+<img class="w-full h-full object-cover rounded-lg" data-alt="Premium sleek matte midnight black wireless over-ear noise-cancelling headphones resting on sculptured stone pedestal studio lighting with soft purple highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcFh5zK9ASuM0curjPnZE_wtNOUFVYixIFehcYkG3vWVYEc_PvKpZ7cNgRahyy-67s5zyBsX3_9hY3-3XT_I61S56pQKYN2TZOx9A3Uu1EcrfuDPm7H7-4MOjCgZxbz8cHZWURJDSylQV5_yoeZfQoBTWxco4QHMj1XT5S-Y2dtAYRIyY1aVHNe1FWRZ18IVBJGNlVNMa_N28JhYi-xymBW2HhMlqdGTGLgcKUWZL1kWtTRPjq0Epsww"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-outline">Audio &amp; Electronics • SoundPulse Official</span>
+<h3 class="font-title-lg text-on-surface font-semibold mt-0.5 hover:text-primary cursor-pointer transition-colors">
+                  SoundPulse Studio Pro Wireless ANC Headphones with Spatial Audio (Midnight Matte Black)
+                </h3>
+<p class="font-body-sm text-on-surface-variant mt-0.5">Color: Midnight Matte Black | 60-Hour Battery | Hi-Res LDAC Audio &amp; Multipoint Connect</p>
+<div class="flex items-center gap-space-md mt-2">
+<span class="font-title-md text-on-surface font-bold">Qty: 1</span>
+<span class="font-body-sm text-outline-variant">|</span>
+<span class="font-title-md text-on-surface font-bold">₹24,999.00</span>
+<span class="bg-surface-container text-on-surface-variant font-label-sm text-[11px] px-2 py-0.5 rounded">Prepaid via UPI</span>
+</div>
+</div>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-col gap-2 w-full md:w-56 shrink-0">
+<button class="w-full h-10 bg-primary hover:bg-secondary text-on-primary font-title-sm text-[13px] rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm" onclick="triggerToast('Added SoundPulse Studio Pro to your active shopping cart!')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+                Buy Again
+              </button>
+<button class="w-full h-9 bg-surface-container-low hover:bg-surface-container text-on-surface font-title-sm text-[13px] rounded-lg transition-colors flex items-center justify-center gap-1.5" onclick="triggerToast('Return initiation portal opened. Pickup slot scheduled.')">
+<span class="material-symbols-outlined text-[18px]">assignment_return</span>
+                Return or Replace
+              </button>
+<div class="grid grid-cols-2 gap-1.5">
+<button class="h-9 px-2 bg-surface-container-lowest hover:bg-surface-container-low text-on-surface font-title-sm text-[12px] rounded-lg transition-colors flex items-center justify-center gap-1 text-center" onclick="triggerToast('Review modal opened.')">
+<span class="material-symbols-outlined text-[14px]">star</span> Review
+                </button>
+<button class="h-9 px-2 bg-surface-container-lowest hover:bg-surface-container-low text-on-surface font-title-sm text-[12px] rounded-lg transition-colors flex items-center justify-center gap-1 text-center" onclick="triggerToast('Connecting to 24/7 technical support agent...')">
+<span class="material-symbols-outlined text-[14px]">support_agent</span> Support
+                </button>
+</div>
+</div>
+</div>
+</div>
+</article>
+<!-- CARD 3: RETURNED & REFUNDED (OMZ-771920-IN) -->
+<article class="order-card bg-surface-container-lowest rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden" data-order-status="returns">
+<!-- Order Header Strip -->
+<div class="bg-surface-container-low/70 px-space-lg py-space-md flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-x-space-xl gap-y-2">
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Order Placed</span>
+<span class="font-title-sm text-on-surface font-semibold">2 Oct 2024</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Refund Total</span>
+<span class="font-price-card text-on-surface font-bold">₹3,499.00</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Refund ID</span>
+<span class="font-title-sm text-primary font-semibold">#REF-99214-IN</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="flex flex-col text-right">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Order #OMZ-771920-IN</span>
+<div class="flex items-center gap-2 justify-end">
+<button class="font-title-sm text-[13px] text-primary hover:text-secondary font-semibold hover:underline" onclick="openDrawer('OMZ-771920-IN')">Refund Details</button>
+<span class="text-outline-variant font-body-sm">|</span>
+<button class="font-title-sm text-[13px] text-primary hover:text-secondary font-semibold hover:underline flex items-center gap-0.5" onclick="triggerInvoiceDownload('OMZ-771920-IN')">
+<span class="material-symbols-outlined text-[14px]">receipt_long</span> Credit Note
+                </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card Content -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Refund Status Notification Box -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">currency_rupee</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-on-surface font-bold text-[17px]">Refund Completed</span>
+<span class="bg-surface-container-highest text-primary font-label-sm text-[11px] px-2 py-0.5 rounded-full font-bold">Credited</span>
+</div>
+<p class="font-body-sm text-on-surface-variant mt-0.5">
+                  ₹3,499.00 was credited directly to your HDFC Bank Account via UPI (UTR: 428190348210) on <strong>6 Oct 2024</strong>.
+                </p>
+</div>
+</div>
+<!-- Courier Pickup badge -->
+<div class="flex items-center gap-2 bg-surface-container-lowest px-space-md py-2 rounded-lg shrink-0">
+<span class="material-symbols-outlined text-outline text-[18px]">inventory_2</span>
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-outline uppercase text-[10px]">Return Status</span>
+<span class="font-title-sm text-on-surface text-[12px] font-semibold">Inspected &amp; Restocked</span>
+</div>
+</div>
+</div>
+<!-- Product Row -->
+<div class="flex flex-col md:flex-row items-start justify-between gap-space-lg pt-space-xs">
+<div class="flex items-start gap-space-md flex-1">
+<div class="w-24 h-24 rounded-lg bg-surface-container-low shrink-0 overflow-hidden relative flex items-center justify-center">
+<img class="w-full h-full object-cover rounded-lg" data-alt="Modern architectural LED smart desk lamp with brushed aluminum arm and warm ambient lighting resting on dark wood workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqTH_z-MkdEMV9jegVbStgwjoOkw4ypayTg_ZUG6XxqgbOGnaYgduNmBBPC-a-latiWSKTDjebV3ycJFME2eh71tgRFVHIgFo-JjK9QG5_ZjdfBwTPukh3Rf--JpQDyFzlnrqiVdelJOjJD2osVorL5Jm3xZsEnTxw6MH2zCn06hATQHewAE-yFgEzaYR_jML30sVGBda1GfxJvXyA_cNmvm2TlF1f4kW34cygjSUeTa1opiwRmBTNUA"/>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-outline">Home &amp; Lighting • AuraGlow Studios</span>
+<h3 class="font-title-lg text-on-surface font-semibold mt-0.5">
+                  AuraGlow Minimalist Smart Desk Lamp with Wireless Charging Base (Space Gray)
+                </h3>
+<p class="font-body-sm text-on-surface-variant mt-0.5">Reason for Return: Ordered wrong color variant | Picked up by Shadowfax Logistics</p>
+<div class="flex items-center gap-space-md mt-2">
+<span class="font-title-md text-on-surface font-bold">Qty: 1</span>
+<span class="font-body-sm text-outline-variant">|</span>
+<span class="font-title-md text-on-surface font-bold">₹3,499.00</span>
+<span class="bg-surface-container-low text-primary font-label-sm text-[11px] px-2 py-0.5 rounded">UPI Refund Verified</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons Column -->
+<div class="flex flex-col gap-2 w-full md:w-56 shrink-0">
+<button class="w-full h-10 bg-primary hover:bg-secondary text-on-primary font-title-sm text-[13px] rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm" onclick="triggerToast('Added AuraGlow Smart Lamp to your cart!')">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+                Buy Again (White Variant)
+              </button>
+<button class="w-full h-9 bg-surface-container-low hover:bg-surface-container text-on-surface font-title-sm text-[13px] rounded-lg transition-colors flex items-center justify-center gap-1.5" onclick="openDrawer('OMZ-771920-IN')">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+                View Refund Receipt
+              </button>
+</div>
+</div>
+</div>
+</article>
+</div>
+<!-- Empty State View (Controlled via JS Switcher) -->
+<div class="hidden flex-col items-center justify-center py-20 px-space-md bg-surface-container-lowest rounded-2xl shadow-sm text-center" id="emptyOrdersView">
+<div class="w-20 h-20 rounded-full bg-surface-container-low flex items-center justify-center mb-space-md">
+<span class="material-symbols-outlined text-outline text-[40px]">package_2</span>
+</div>
+<h3 class="font-headline-md text-on-surface font-bold">No orders found matching criteria</h3>
+<p class="font-body-md text-on-surface-variant max-w-md mt-2">
+        We couldn't locate any purchases for your selected filters or search terms. Try changing the timeframe or clearing search keywords.
+      </p>
+<div class="flex flex-wrap items-center justify-center gap-space-sm mt-space-lg">
+<button class="h-11 px-space-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-title-sm text-[14px] rounded-lg transition-colors" onclick="resetFilters()">
+          Reset Filter Selections
+        </button>
+<a class="h-11 px-space-lg bg-primary hover:bg-secondary text-on-primary font-title-sm text-[14px] rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm" href="#">
+<span class="material-symbols-outlined text-[18px]">storefront</span>
+          Explore Marketplace
+        </a>
+</div>
+</div>
+<!-- Need Help Sticky Support Banner -->
+<div class="mt-space-xl bg-surface-container-low rounded-xl p-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-xl bg-primary text-on-primary flex items-center justify-center shrink-0 shadow-md">
+<span class="material-symbols-outlined text-[28px]">headset_mic</span>
+</div>
+<div class="flex flex-col">
+<h4 class="font-title-lg text-on-surface font-bold">Facing issues with a recent shipment or payment?</h4>
+<p class="font-body-md text-on-surface-variant">Our OMIZON Priority Resolution desk is available 24/7 with instant WhatsApp or phone callback assistance.</p>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="h-10 px-space-md bg-surface-container-lowest hover:bg-surface-container text-on-surface font-title-sm text-[13px] rounded-lg shadow-sm transition-colors flex items-center gap-1.5" onclick="triggerToast('Connecting to live concierge agent...')">
+<span class="material-symbols-outlined text-[18px]">chat</span> Chat with Us
+        </button>
+<button class="h-10 px-space-md bg-primary hover:bg-secondary text-on-primary font-title-sm text-[13px] rounded-lg shadow-sm transition-colors flex items-center gap-1.5" onclick="triggerToast('Scheduled instant callback in 2 minutes.')">
+<span class="material-symbols-outlined text-[18px]">call</span> Request Callback
+        </button>
+</div>
+</div>
+</div>
+<!-- Interactive Order Details Drawer / Modal Overlay -->
+<div class="fixed inset-0 bg-inverse-surface/50 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex justify-end" id="orderDetailsDrawerBackdrop">
+<!-- Slide-over Drawer Panel -->
+<div class="w-full max-w-2xl bg-surface-container-lowest h-full overflow-y-auto shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col" id="drawerPanel">
+<!-- Drawer Header -->
+<div class="sticky top-0 bg-surface-container-lowest z-10 px-space-lg py-space-md border-b border-surface-container-low flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase tracking-wider text-[11px]">Comprehensive Summary</span>
+<h2 class="font-headline-sm text-on-surface font-bold" id="drawerTitle">Order #OMZ-993821-IN</h2>
+</div>
+<button class="w-9 h-9 rounded-full hover:bg-surface-container-low flex items-center justify-center text-outline hover:text-on-surface transition-colors" onclick="closeDrawer()" title="Close Panel">
+<span class="material-symbols-outlined text-[22px]">close</span>
+</button>
+</div>
+<!-- Drawer Body -->
+<div class="p-space-lg flex flex-col gap-space-lg flex-1">
+<!-- Delivery Target & Instructions Card -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-primary font-bold uppercase text-[12px] flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+              Delivery Address &amp; Instructions
+            </span>
+<span class="bg-primary/10 text-primary font-label-sm text-[11px] px-2 py-0.5 rounded font-bold">Priority Prime</span>
+</div>
+<div class="flex flex-col text-on-surface font-body-md">
+<span class="font-bold text-on-surface">Priya Sharma (Home)</span>
+<span class="text-on-surface-variant">Flat 902, Tower B, Oberoi Sky City, Borivali East</span>
+<span class="text-on-surface-variant">Mumbai, Maharashtra 400066</span>
+<span class="text-on-surface-variant mt-1 text-[13px]">Contact: +91 98200 44912</span>
+</div>
+<div class="mt-2 pt-2 border-t border-surface-container-highest/60 flex items-start gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-outline text-[18px]">notes</span>
+<span><strong>Driver Instruction:</strong> Leave with tower reception if resident unavailable. Call via building intercom first.</span>
+</div>
+</div>
+<!-- Ordered Items Spec Breakdown -->
+<div class="flex flex-col gap-space-sm">
+<h4 class="font-title-md text-on-surface font-bold">Items in this Package (1)</h4>
+<div class="bg-surface-container-low rounded-xl p-space-md flex items-start gap-space-md">
+<div class="w-20 h-20 rounded-lg bg-surface-container-lowest shrink-0 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close-up of laptop aluminum chassis keyboard deck illuminated with crisp studio violet fill" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRh4wrqlGPczZVszDgDfCsAz8Tm2lPByxI-VD-ZGgkjOf8Th9KTcTJvpRwUAb5vsSfaZl4-MCum6rqkQG7pcA5yrVhQxWuNIn50IK9y489v7S4Nr3YPi2tAkX31UFMWWGrHXMdwoKwQ2PJ0d3edhbVPhyoYzApLkPPXQJ3wByLTNuYDGkIUpLYOOZgpfVS5CLzoP9JvRNzH7FbPcnhUBxomIhvZn7x5m5MhuSGAtX12f3BKPfVSXCmoQ"/>
+</div>
+<div class="flex flex-col flex-1">
+<span class="font-title-sm text-on-surface font-semibold leading-snug">
+                ApexBook M3 Ultra 16-inch (Space Gray, 36GB RAM, 1TB SSD)
+              </span>
+<span class="text-body-sm text-on-surface-variant mt-0.5">HSN: 84713010 | GST @ 18% Included</span>
+<div class="flex items-center justify-between mt-space-sm">
+<span class="font-title-sm text-on-surface">Qty: 1</span>
+<span class="font-price-card text-on-surface font-bold text-[18px]">₹74,990.00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Payment Breakdown & GST Details -->
+<div class="flex flex-col gap-space-sm">
+<h4 class="font-title-md text-on-surface font-bold">Payment &amp; Tax Summary</h4>
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-xs font-body-md text-on-surface-variant">
+<div class="flex justify-between text-on-surface">
+<span>Items Subtotal (Excl. Tax)</span>
+<span class="font-medium font-price-card text-[15px]">₹63,550.85</span>
+</div>
+<div class="flex justify-between">
+<span>CGST (9%)</span>
+<span class="font-price-card text-[15px]">₹5,719.57</span>
+</div>
+<div class="flex justify-between">
+<span>SGST (9%)</span>
+<span class="font-price-card text-[15px]">₹5,719.58</span>
+</div>
+<div class="flex justify-between text-primary font-medium">
+<span>OMIZON Prime Guaranteed 2-Day Delivery</span>
+<span class="uppercase font-bold text-[12px]">FREE (₹0.00)</span>
+</div>
+<div class="flex justify-between text-secondary font-medium">
+<span>Festive Electronic Coupon Applied (FEST24)</span>
+<span>-₹0.00</span>
+</div>
+<div class="h-px bg-surface-container-highest my-space-xs"></div>
+<div class="flex justify-between items-baseline text-on-surface">
+<span class="font-title-lg font-bold">Total Paid (Inclusive of all taxes)</span>
+<span class="font-price-card text-on-surface font-bold text-[22px]">₹74,990.00</span>
+</div>
+</div>
+</div>
+<!-- Payment Method Details -->
+<div class="flex flex-col gap-space-sm">
+<h4 class="font-title-md text-on-surface font-bold">Payment Method Used</h4>
+<div class="p-space-md bg-surface-container-low rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-8 bg-surface-container-lowest rounded flex items-center justify-center shadow-sm font-label-sm font-bold text-primary">
+                RuPay
+              </div>
+<div class="flex flex-col">
+<span class="font-title-sm text-on-surface font-semibold">HDFC Bank RuPay Platinum Credit Card</span>
+<span class="text-body-sm text-on-surface-variant">Ending in •••• 4092 | Authorization: #TXN-901842</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]">verified_user</span>
+</div>
+</div>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="sticky bottom-0 bg-surface-container-lowest px-space-lg py-space-md border-t border-surface-container-low flex items-center justify-between gap-space-sm">
+<button class="h-11 px-space-md bg-surface-container-low hover:bg-surface-container text-on-surface font-title-sm text-[13px] rounded-lg transition-colors flex items-center gap-2" onclick="triggerInvoiceDownload('OMZ-993821-IN')">
+<span class="material-symbols-outlined text-[18px]">download</span>
+          Tax Invoice (PDF)
+        </button>
+<button class="h-11 px-space-lg bg-primary hover:bg-secondary text-on-primary font-title-sm text-[14px] rounded-lg transition-colors shadow-sm" onclick="closeDrawer()">
+          Done
+        </button>
+</div>
+</div>
+</div>
+<!-- Live Courier Modal Tracker -->
+<div class="fixed inset-0 bg-inverse-surface/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-4" id="liveTrackModal">
+<div class="bg-surface-container-lowest w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300">
+<div class="p-space-md bg-primary text-on-primary flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[22px]">local_shipping</span>
+<span class="font-headline-sm text-[18px] font-bold">Live Tracking: OMZ-993821-IN</span>
+</div>
+<button class="text-on-primary/80 hover:text-on-primary" onclick="toggleTrackModal(false)">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Static Visual Map Placeholder (Using data-location mandate) -->
+<div class="w-full h-56 bg-surface-container-low relative flex items-center justify-center" data-location="Borivali East, Mumbai, Maharashtra" style="">
+<!-- Live marker ping overlay -->
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/80 via-transparent to-transparent flex flex-col justify-end p-space-md text-surface-container-lowest">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-secondary-fixed animate-ping"></span>
+<span class="font-title-sm text-[13px] font-semibold text-surface-container-lowest">Van 4 stops away from your building</span>
+</div>
+<p class="text-body-sm text-surface-container-lowest/80">Delivery Associate: Rajesh K. (+91 99872 11094)</p>
+</div>
+</div>
+<div class="p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-outline uppercase text-[11px]">Estimated Handover</span>
+<span class="font-headline-sm text-primary font-bold">Today, 3:45 PM – 4:15 PM</span>
+</div>
+<div class="text-right flex flex-col">
+<span class="font-label-sm text-outline uppercase text-[11px]">Delivery Verification OTP</span>
+<span class="font-price-hero text-[24px] font-bold text-on-surface tracking-wider">4 8 1 9</span>
+</div>
+</div>
+<p class="font-body-sm text-on-surface-variant bg-surface-container-low p-space-sm rounded-lg">
+          Please share the 4-digit OTP with your OMIZON delivery executive only upon physical verification of the sealed ApexBook tamper-proof carton.
+        </p>
+<button class="w-full h-11 bg-primary hover:bg-secondary text-on-primary font-title-sm text-[14px] rounded-lg transition-colors" onclick="toggleTrackModal(false)">
+          Close Live Tracker
+        </button>
+</div>
+</div>
+</div>
+<!-- Inline Script for Interactivity & Filter State Switching -->
+<script>
+    // Tab filtering behavior
+    const statusTabs = document.querySelectorAll('.status-tab');
+    const orderCards = document.querySelectorAll('.order-card');
+    const ordersListSection = document.getElementById('ordersListSection');
+    const emptyOrdersView = document.getElementById('emptyOrdersView');
+    const searchInput = document.getElementById('orderSearchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const toggleEmptyBtn = document.getElementById('toggleEmptyStateBtn');
+    const toggleEmptyLabel = document.getElementById('toggleEmptyStateLabel');
+
+    let isForcedEmpty = false;
+
+    // Filter status tabs
+    statusTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        statusTabs.forEach(t => {
+          t.className = 'status-tab px-space-md py-2 rounded-full font-title-sm text-[13px] bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all shrink-0';
+        });
+        tab.className = 'status-tab px-space-md py-2 rounded-full font-title-sm text-[13px] bg-inverse-surface text-inverse-on-surface transition-all shrink-0 shadow-sm';
+        
+        const filterVal = tab.getAttribute('data-filter');
+        filterOrders(filterVal);
+      });
+    });
+
+    function filterOrders(status) {
+      if (isForcedEmpty) return;
+      let visibleCount = 0;
+      orderCards.forEach(card => {
+        const cardStatus = card.getAttribute('data-order-status');
+        if (status === 'all' || cardStatus === status) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (visibleCount === 0) {
+        ordersListSection.classList.add('hidden');
+        emptyOrdersView.classList.remove('hidden');
+        emptyOrdersView.classList.add('flex');
+      } else {
+        ordersListSection.classList.remove('hidden');
+        emptyOrdersView.classList.add('hidden');
+        emptyOrdersView.classList.remove('flex');
+      }
+    }
+
+    // Toggle Empty State Switcher Button
+    toggleEmptyBtn.addEventListener('click', () => {
+      isForcedEmpty = !isForcedEmpty;
+      if (isForcedEmpty) {
+        ordersListSection.classList.add('hidden');
+        emptyOrdersView.classList.remove('hidden');
+        emptyOrdersView.classList.add('flex');
+        toggleEmptyLabel.textContent = 'Restore Order List';
+        toggleEmptyBtn.classList.replace('bg-surface-container-low', 'bg-primary');
+        toggleEmptyBtn.classList.replace('text-primary', 'text-on-primary');
+      } else {
+        ordersListSection.classList.remove('hidden');
+        emptyOrdersView.classList.add('hidden');
+        emptyOrdersView.classList.remove('flex');
+        toggleEmptyLabel.textContent = 'Preview Empty Filter';
+        toggleEmptyBtn.classList.replace('bg-primary', 'bg-surface-container-low');
+        toggleEmptyBtn.classList.replace('text-on-primary', 'text-primary');
+        filterOrders('all');
+      }
+    });
+
+    function resetFilters() {
+      isForcedEmpty = false;
+      searchInput.value = '';
+      clearSearchBtn.classList.add('hidden');
+      toggleEmptyLabel.textContent = 'Preview Empty Filter';
+      toggleEmptyBtn.classList.replace('bg-primary', 'bg-surface-container-low');
+      toggleEmptyBtn.classList.replace('text-on-primary', 'text-primary');
+      statusTabs[0].click();
+    }
+
+    // Instant Search Filter
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      clearSearchBtn.classList.toggle('hidden', query.length === 0);
+
+      let visibleCount = 0;
+      orderCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(query)) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      if (visibleCount === 0) {
+        ordersListSection.classList.add('hidden');
+        emptyOrdersView.classList.remove('hidden');
+        emptyOrdersView.classList.add('flex');
+      } else {
+        ordersListSection.classList.remove('hidden');
+        emptyOrdersView.classList.add('hidden');
+        emptyOrdersView.classList.remove('flex');
+      }
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      clearSearchBtn.classList.add('hidden');
+      filterOrders('all');
+    });
+
+    // Drawer functionality
+    const drawerBackdrop = document.getElementById('orderDetailsDrawerBackdrop');
+    const drawerPanel = document.getElementById('drawerPanel');
+    const drawerTitle = document.getElementById('drawerTitle');
+
+    function openDrawer(orderId) {
+      drawerTitle.textContent = 'Order #' + orderId;
+      drawerBackdrop.classList.remove('pointer-events-none', 'opacity-0');
+      drawerPanel.classList.remove('translate-x-full');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+      drawerBackdrop.classList.add('pointer-events-none', 'opacity-0');
+      drawerPanel.classList.add('translate-x-full');
+      document.body.style.overflow = '';
+    }
+
+    drawerBackdrop.addEventListener('click', (e) => {
+      if (e.target === drawerBackdrop) closeDrawer();
+    });
+
+    // Live Tracking Modal
+    const trackModal = document.getElementById('liveTrackModal');
+    function toggleTrackModal(show) {
+      if (show) {
+        trackModal.classList.remove('pointer-events-none', 'opacity-0');
+        trackModal.firstElementChild.classList.remove('scale-95');
+        document.body.style.overflow = 'hidden';
+      } else {
+        trackModal.classList.add('pointer-events-none', 'opacity-0');
+        trackModal.firstElementChild.classList.add('scale-95');
+        document.body.style.overflow = '';
+      }
+    }
+
+    trackModal.addEventListener('click', (e) => {
+      if (e.target === trackModal) toggleTrackModal(false);
+    });
+
+    // Toast Notification helper
+    let toastTimeout;
+    function triggerToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const msg = document.getElementById('toastMessage');
+      msg.textContent = message;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3500);
+    }
+
+    function triggerInvoiceDownload(orderId) {
+      triggerToast('Generating GST Tax Invoice for #' + orderId + '. Downloading PDF...');
+    }
+  </script>
+</div></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-space-xl pb-space-lg"><div class="max-w-7xl mx-auto px-margin"><div class="mb-space-xl pb-space-lg border-b border-surface-container-highest/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md"><div class="flex items-center gap-space-xs"><a class="inline-block" data-path="home" href="#"><img alt="OMIZON Official Brand Logo" class="h-9 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WRn3K1zfKXGux9v6zgjQ78wfZDiS3xlUEZcz_h_xSJ65lctSuvK88_jgiOpd3b4SI5rC6nIoAG6QzDP_dTV0yvT5hTPZnXetMbt4OIKWd9U81u9zbpMWfNLayq4JJyhsh_IsxakVma-H_6C0JSLh6CDRJoVyEEeirFlTiOh4ya-53ylDsy6Ceq-WOV5xg7vkCu-pkoGJv9IOhdjMKaLB7GZdhsSYSAWHtWQjgC_v22lUF6d98Jhc4tppBW"/></a></div><p class="font-body-md text-inverse-on-surface/80 max-w-2xl">OMIZON — Everything customers need, brought together in one destination. International multi-category commerce engineered for quality.</p></div><div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-space-xl mb-space-xl"><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">About OMIZON</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Our Story</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Careers</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Sustainability</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Press Center</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Investor Relations</li></ul></div><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Shop Categories</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Electronics</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Home Living</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Fresh Grocery</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Beauty</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Fashion</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Daily Steals</li></ul></div><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Customer Service</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Help Center</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Track Your Order</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Shipping &amp; Delivery</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Return Policy</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Payment Options</li></ul></div><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Sell with Us</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Sell on OMIZON</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Seller Hub</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Fulfilled by OMIZON</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Seller University</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Advertise</li></ul></div><div class="flex flex-col gap-space-sm col-span-2 md:col-span-1"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Stay Connected</h4><p class="font-body-sm text-inverse-on-surface/75">Subscribe for VIP offers, launches &amp; flash sales.</p><div class="flex items-center bg-surface-container-lowest/10 rounded-lg p-1"><input class="bg-transparent border-0 outline-none text-surface-container-lowest placeholder:text-outline font-body-sm px-space-xs w-full" placeholder="Your email address" type="email"/><button class="bg-primary hover:bg-secondary text-on-primary px-space-sm py-1.5 rounded font-label-md transition-colors shrink-0" type="button">Join</button></div><div class="mt-space-sm flex flex-col gap-space-xs"><span class="font-label-sm text-outline uppercase">Secure Payment Methods</span><div class="flex flex-wrap gap-space-xs text-surface-container-lowest/80"><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">UPI</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">RuPay</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">Visa</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">Mastercard</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">NetBanking</span></div></div></div></div><div class="pt-space-lg border-t border-surface-container-highest/20 flex flex-col sm:flex-row items-center justify-between gap-space-sm text-body-sm text-inverse-on-surface/60"><p class="">© 2025 OMIZON Marketplace Inc. All rights reserved.</p><div class="flex flex-wrap items-center gap-space-md"><a class="hover:text-surface-container-lowest transition-colors" href="#">Privacy Policy</a><span class="">•</span><a class="hover:text-surface-container-lowest transition-colors" href="#">Terms &amp; Conditions</a><span class="">•</span><a class="hover:text-surface-container-lowest transition-colors" href="#">Cookie Settings</a><span class="">•</span><a class="hover:text-surface-container-lowest transition-colors" href="#">Security</a></div></div></div></footer>
+</body></html>

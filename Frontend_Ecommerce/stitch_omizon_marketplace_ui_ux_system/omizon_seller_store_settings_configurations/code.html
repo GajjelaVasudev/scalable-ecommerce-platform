@@ -1,0 +1,722 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary-container":"#fffbff","on-primary-container":"#e7d9ff","surface-bright":"#f9f9fd","on-secondary":"#ffffff","tertiary-container":"#655a96","semantic-error":"#D92D20","surface-container-high":"#e8e8ec","ink":"#211D31","surface-tint":"#7228ee","on-error-container":"#93000a","on-tertiary-container":"#e3daff","tertiary-fixed-dim":"#cbbeff","semantic-warning":"#E27300","outline-variant":"#ccc3d9","obsidian-surface-1":"#1D1537","on-tertiary":"#ffffff","text-dark-secondary":"#C3BCD7","obsidian-violet":"#100A25","primary-fixed-dim":"#d1bcff","surface-container-low":"#f3f3f7","surface":"#f9f9fd","on-tertiary-fixed":"#1d104a","inverse-on-surface":"#f0f0f4","ink-subtle":"#928B9F","surface-variant":"#e2e2e6","outline":"#7b7487","on-error":"#ffffff","on-primary-fixed-variant":"#5800c8","secondary-fixed":"#e5deff","primary-fixed":"#eaddff","surface-container-highest":"#e2e2e6","primary-container":"#762ff2","surface-container-lowest":"#ffffff","on-tertiary-fixed-variant":"#493e78","midnight-violet":"#190B46","background":"#f9f9fd","inverse-primary":"#d1bcff","obsidian-border":"#382B54","royal-purple":"#4C2ACB","porcelain":"#F7F7FB","on-primary-fixed":"#24005b","surface-container":"#ededf1","secondary":"#5b3eda","tertiary-fixed":"#e6deff","on-primary":"#ffffff","error-container":"#ffdad6","on-surface-variant":"#4a4456","semantic-success":"#00875A","on-background":"#1a1c1f","on-secondary-fixed":"#1a0063","primary":"#5c00d2","obsidian-surface-2":"#211735","text-dark-primary":"#F7F5FF","secondary-fixed-dim":"#c9bfff","surface-dim":"#d9dade","on-surface":"#1a1c1f","tertiary":"#4d427c","inverse-surface":"#2e3034","text-dark-muted":"#A49ABF","lavender-mist":"#E8E6F0","secondary-container":"#745af4","error":"#ba1a1a","electric-violet":"#762FF2","on-secondary-fixed-variant":"#451fc4","ink-muted":"#655E7A"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{margin:"2rem","space-md":"1rem","margin-mobile":"1rem","space-sm":"0.5rem","space-xs":"0.25rem","space-lg":"1.5rem","space-xl":"2.5rem",gutter:"1.5rem","gutter-mobile":"0.75rem"},fontFamily:{"display-hero-mobile":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"]},fontSize:{"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"700"}],"price-hero":["32px",{lineHeight:"38px",letterSpacing:"-0.02em",fontWeight:"700"}],"display-hero":["56px",{lineHeight:"64px",letterSpacing:"-0.03em",fontWeight:"700"}],"price-card":["20px",{lineHeight:"26px",letterSpacing:"-0.01em",fontWeight:"700"}],"body-md":["14px",{lineHeight:"22px",fontWeight:"400"}],"title-sm":["14px",{lineHeight:"20px",fontWeight:"600"}],"headline-sm":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["28px",{lineHeight:"36px",letterSpacing:"-0.015em",fontWeight:"600"}],"title-lg":["18px",{lineHeight:"26px",letterSpacing:"-0.005em",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"26px",fontWeight:"400"}],"title-md":["16px",{lineHeight:"24px",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"600"}],"body-sm":["12px",{lineHeight:"18px",fontWeight:"400"}],"headline-lg-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["13px",{lineHeight:"18px",fontWeight:"500"}],"headline-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.02em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-obsidian-violet shadow-[0_4px_20px_rgba(25,11,70,0.18)]"><div class="h-16 w-full px-gutter flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><img alt="OMIZON Official Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W3APIMe4b-eVhcUIyutLJbjdCdhCxTEVtan4oQqYLhj8StZRp7SIjp4wvuCiFoQozWX76Q2grO2mQLN8_KoGDY8BzIztDCqil2cXbAw__flUdNNr_w-L_k6evgc4KgHU-Km8Ivlyy2WDedznr_I7B_wIMkKuGpEjPWLklyPOzLSjPu6gQ_-TirLHNxE9p8tCMFeLYveUt_hN_IuqzRV5jnFKpWv_VeoXNuX1YbNREJlGJqfpVP1urxUQVR"><span class="font-title-md text-title-md text-text-dark-primary tracking-tight">Seller Center</span></div><div class="h-5 w-[1px] bg-obsidian-border hidden md:block"></div><div class="hidden md:flex items-center gap-space-sm bg-obsidian-surface-1 px-space-md py-1 rounded-full shadow-[0_1px_3px_rgba(25,11,70,0.04)]"><span class="w-2 h-2 rounded-full bg-semantic-success animate-pulse"></span><span class="font-label-md text-label-md text-text-dark-primary font-semibold">ApexTech India</span><span class="text-text-dark-muted font-body-sm text-body-sm">•</span><span class="font-label-sm text-label-sm text-text-dark-secondary bg-obsidian-surface-2 px-space-xs py-0.5 rounded">Verified Seller</span><span class="font-label-sm text-label-sm text-semantic-warning flex items-center gap-0.5">★ 4.9</span><span class="text-text-dark-muted font-body-sm text-body-sm">•</span><span class="font-label-sm text-label-sm text-text-dark-secondary bg-obsidian-surface-2 px-space-xs py-0.5 rounded flex items-center gap-1"><span class="material-symbols-outlined text-[13px] text-electric-violet">hub</span>Bhiwandi Hub FC-04</span></div></div><div class="flex items-center gap-space-md"><a class="hidden lg:flex items-center gap-1.5 font-label-md text-label-md text-text-dark-secondary hover:text-text-dark-primary px-space-sm py-1.5 rounded-lg transition-colors" data-path="buyer-marketplace" href="#"><span class="material-symbols-outlined text-[18px]">storefront</span><span class="">Switch to Buyer Marketplace</span></a><div class="h-5 w-[1px] bg-obsidian-border hidden lg:block"></div><button aria-label="Notifications" class="relative p-2 rounded-lg text-text-dark-secondary hover:text-text-dark-primary hover:bg-obsidian-surface-1 transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-semantic-error ring-2 ring-obsidian-violet"></span></button><button aria-label="Help Quick Center" class="p-2 rounded-lg text-text-dark-secondary hover:text-text-dark-primary hover:bg-obsidian-surface-1 transition-colors"><span class="material-symbols-outlined text-[22px]">help</span></button><div class="flex items-center gap-space-sm pl-space-sm"><div class="text-right hidden sm:block"><div class="font-label-md text-label-md text-text-dark-primary font-semibold leading-tight">Rajesh Singhania</div><div class="font-label-sm text-label-sm text-text-dark-muted">Merchant Admin</div></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_6px_rgba(25,11,70,0.2)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(25,11,70,0.04)] z-40 flex flex-col justify-between overflow-y-auto"><div class="pt-space-md pb-space-sm px-space-sm"><div class="px-space-md py-space-xs mb-space-sm"><span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-semibold">Merchant Workspace</span></div><nav class="space-y-1" data-active-classes="bg-primary-container text-on-secondary font-semibold shadow-[0_2px_8px_rgba(118,47,242,0.24)]"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="seller-dashboard" href="#"><span class="">Seller Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="products-catalog" href="#"><span class="">Products &amp; Catalog</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="add-new-product" href="#"><span class="">Add New Product</span></a><a class="flex items-center justify-between px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="inventory-alerts" href="#"><span class="">Inventory &amp; Alerts</span><span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-error-container text-on-error-container font-semibold">4</span></a><a class="flex items-center justify-between px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="orders-shipments" href="#"><span class="">Orders &amp; Shipments</span><span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-semibold">28</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="payouts-invoices" href="#"><span class="">Payouts &amp; Invoices</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="sales-analytics" href="#"><span class="">Sales Analytics</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md bg-primary-container text-on-secondary font-semibold shadow-[0_2px_8px_rgba(118,47,242,0.24)] transition-all" data-path="store-settings" href="#"><span class="">Store Settings</span></a></nav></div><div class="p-space-sm mt-auto space-y-space-sm"><div class="p-space-md rounded-xl bg-obsidian-violet text-text-dark-primary shadow-[0_4px_16px_rgba(25,11,70,0.12)]"><div class="flex items-center justify-between mb-1.5"><span class="font-label-sm text-label-sm text-text-dark-secondary uppercase tracking-wider font-semibold">Merchant Tier</span><span class="font-label-sm text-label-sm text-on-primary-container bg-primary-container px-2 py-0.5 rounded-full font-bold">Platinum</span></div><div class="font-title-sm text-title-sm font-semibold mb-1">Tier 1 Commission Rate</div><p class="font-body-sm text-body-sm text-text-dark-muted leading-snug">3.2% marketplace fee capped with express 24h settlement dispatch.</p></div><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-ink-muted hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="help-documentation" href="#"><span class="">Help &amp; Documentation</span></a></div></aside><div class="pl-64"><main class="relative w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1440px] mx-auto px-4 md:px-gutter py-6 space-y-6">
+<!-- Top Header & Breadcrumbs Section -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<div class="space-y-2">
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-ink-subtle">
+<span class="hover:text-primary cursor-pointer transition-colors">Seller Center</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Store Settings</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-ink font-semibold">Overview &amp; Preferences</span>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<h1 class="font-headline-md text-headline-md text-ink tracking-tight font-bold">Store Settings</h1>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-low">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<span class="font-label-md text-label-md font-semibold text-ink">ApexTech India</span>
+<span class="font-body-sm text-body-sm text-ink-subtle">#OMZ-MCH-88201</span>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-primary/10 text-primary font-bold">Production Tier 1</span>
+</div>
+<p class="font-body-md text-body-md text-ink-muted max-w-3xl">
+          Manage your legal entity profile, storefront branding, statutory tax compliance, fulfillment nodes, team permissions, and developer webhooks.
+        </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-3 self-start lg:self-center">
+<div class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-low text-ink-muted font-label-sm text-label-sm font-medium">
+<span class="material-symbols-outlined text-[16px] text-ink-subtle">sync_saved_locally</span>
+<span class="">Unsaved Changes (<span id="unsavedCount" class="">0</span>)</span>
+</div>
+<button class="px-4 py-2.5 rounded-lg bg-surface text-ink font-label-md text-label-md font-medium hover:bg-surface-container-low transition-colors shadow-sm" id="discardBtn">
+          Discard Changes
+        </button>
+<button class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-electric-violet text-on-primary font-label-md text-label-md font-medium hover:bg-royal-purple transition-all shadow-md active:scale-95" id="saveTopBtn">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span class="">Save All Settings</span>
+</button>
+</div>
+</div>
+<!-- Main Two-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- Left Sub-Navigation Sidebar -->
+<div class="lg:col-span-3 bg-surface-container-lowest rounded-xl p-4 shadow-sm sticky top-20 space-y-6">
+<div>
+<span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-bold block mb-2 px-3">Business &amp; Brand</span>
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-primary-container text-on-primary font-label-md text-label-md font-semibold transition-all shadow-sm" href="#business-profile">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">store</span>
+<span class="">Business Profile</span>
+</span>
+<span class="w-1.5 h-1.5 rounded-full bg-on-primary"></span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#storefront-branding">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">palette</span>
+<span class="">Storefront &amp; Branding</span>
+</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#tax-compliance">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="">Tax &amp; Compliance</span>
+</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-semantic-success/15 text-semantic-success font-bold">Verified</span>
+</a>
+</nav>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-bold block mb-2 px-3">Fulfilment &amp; Warehouse</span>
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#shipping-fulfilment">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">local_shipping</span>
+<span class="">Shipping &amp; Fulfilment</span>
+</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#warehouses-inventory">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">warehouse</span>
+<span class="">Warehouses</span>
+</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-ink-muted">Bhiwandi</span>
+</a>
+</nav>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-bold block mb-2 px-3">Organisation &amp; Access</span>
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#team-permissions">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">group</span>
+<span class="">Team &amp; Permissions</span>
+</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container-high text-ink font-semibold">4 Active</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#security-account">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">lock</span>
+<span class="">Security &amp; Account</span>
+</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-semantic-success/15 text-semantic-success font-bold">2FA On</span>
+</a>
+</nav>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-bold block mb-2 px-3">Developer &amp; Alerts</span>
+<nav class="space-y-1">
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#notifications-alerts">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+<span class="">Notifications &amp; Alerts</span>
+</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-ink-muted hover:bg-surface-container-low hover:text-ink font-label-md text-label-md transition-colors" href="#integrations-webhooks">
+<span class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">webhook</span>
+<span class="">Integrations &amp; Webhooks</span>
+</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-electric-violet/15 text-electric-violet font-semibold">3 Live</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Right Main Content Panel -->
+<div class="lg:col-span-9 space-y-6">
+<!-- Card A: Business Profile & Entity Information -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6 scroll-mt-24" id="business-profile">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 bg-surface-container-low/50 -mx-6 -mt-6 p-6 rounded-t-xl"><div>
+<div class="flex items-center gap-2 flex-wrap">
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Business Profile &amp; Entity Information</h2>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Sample Profile / MCA Illustrative Record (Prototype Only)
+</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted mt-1">All business profile attributes, entity names, and registration numbers are sample illustrative data for design review.</p>
+</div>
+<div class="font-label-sm text-label-sm px-3 py-1.5 rounded-lg bg-surface-container text-ink-subtle flex items-center gap-1.5 self-start">
+<span class="material-symbols-outlined text-[16px]">info</span>
+<span class="">CIN: U72900MH2019PTC329188</span>
+</div></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold flex items-center justify-between">
+<span class="">Legal Business Name</span>
+<span class="font-label-sm text-label-sm text-ink-subtle flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">lock</span> Read-only Legal Record
+                </span>
+</label>
+<div class="relative">
+<input class="w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md cursor-not-allowed opacity-90 focus:outline-none" readonly="" type="text" value="ApexTech India Private Limited">
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Store Display Name</label>
+<input class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 transition-all" type="text" value="ApexTech Official Store">
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Merchant / Seller ID</label>
+<div class="flex items-center gap-2">
+<input class="w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md cursor-not-allowed" readonly="" type="text" value="#OMZ-MCH-88201">
+<button class="p-2.5 rounded-lg bg-surface-container text-ink hover:text-primary transition-colors" onclick="navigator.clipboard.writeText('#OMZ-MCH-88201')" title="Copy Seller ID">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+</div>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Entity Type</label>
+<select class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all">
+<option selected="">Private Limited Company (Pvt Ltd)</option>
+<option>Public Limited Company</option>
+<option>Limited Liability Partnership (LLP)</option>
+<option>Sole Proprietorship</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold flex items-center justify-between">
+<span class="">Primary Business Email</span>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Verified
+                </span>
+</label>
+<input class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all" type="email" value="ops@apextechindia.com">
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold flex items-center justify-between">
+<span class="">Official Support Phone</span>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> OTP Verified
+                </span>
+</label>
+<input class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all" type="text" value="+91 22 4920 ••••">
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Primary Operating Category</label>
+<select class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all">
+<option selected="">Consumer Electronics, Audio &amp; Smart Accessories</option>
+<option>Computers, Laptops &amp; Ergonomics</option>
+<option>Home Appliances &amp; Smart Living</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Registered Operating Address (MCA Records)</label>
+<input class="w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md cursor-not-allowed" readonly="" type="text" value="Unit 402, Quantum Towers, Malad West, Mumbai, MH - 400064, India">
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Store Bio / Marketplace Description</label>
+<textarea class="setting-input w-full p-4 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all" rows="3">Official manufacturer and distributor of premium acoustics, ergonomic workspaces, and certified electronic accessories on OMIZON.</textarea>
+<span class="font-body-sm text-body-sm text-ink-subtle">Maximum 250 characters. Appears publicly on your storefront profile.</span>
+</div>
+</div>
+</section>
+<!-- Card B: Storefront & Marketplace Branding -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6 scroll-mt-24" id="storefront-branding">
+<div class="flex items-center justify-between pb-4 bg-surface-container-low/50 -mx-6 -mt-6 p-6 rounded-t-xl">
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Storefront &amp; Marketplace Branding</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Tailor visual identity elements displayed to customers across the OMIZON buyer marketplace.</p>
+</div>
+<a class="flex items-center gap-1 font-label-md text-label-md text-electric-violet hover:underline font-semibold" href="#">
+<span class="">Preview Public Storefront</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+<!-- Logo & Banner Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Logo Section -->
+<div class="space-y-3">
+<span class="font-label-md text-label-md font-semibold text-ink block">Store Logo</span>
+<div class="flex flex-col items-center justify-center p-6 rounded-xl bg-surface-container-low gap-3">
+<div class="w-24 h-24 rounded-full overflow-hidden shadow-sm bg-obsidian-violet flex items-center justify-center">
+<img class="w-full h-full object-cover" data-alt="High-resolution crisp vector brand logo for ApexTech acoustics with vibrant electric violet neon gradient waveforms on dark obsidian indigo background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcKrPXh8wBHZ01Cqf-xyBAfgwvlL6SR4KU1DWM4ey7H5Q8BMRomH7Mx37yKygtJfUpDtwph2VcWI9VeIFrW3OFBeEav_aZtAOp3elfHd2yF2QmAlRjRDfBFBgBmzZh_n4xs4T3rcKstnF8ZFTBVePE_DiodtuGBzbbgfbJmDrTrkL-_YHCEM65kPEqm6VFcxsTBk5o_LYk3MDgyCrKeuaa18pa-_tjz_KGvPJneWNO">
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-ink font-label-sm text-label-sm font-semibold hover:bg-surface shadow-sm">Change Logo</button>
+<button class="p-1.5 rounded-lg text-semantic-error hover:bg-error-container/30 transition-colors" title="Remove logo">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-ink-subtle text-center">500x500 PNG, SVG or WEBP (Max 2MB)</span>
+</div>
+</div>
+<!-- Banner Section -->
+<div class="md:col-span-2 space-y-3">
+<span class="font-label-md text-label-md font-semibold text-ink block">Storefront Hero Banner</span>
+<div class="relative w-full h-44 rounded-xl overflow-hidden shadow-sm bg-obsidian-violet flex flex-col justify-end p-4">
+<div class="absolute inset-0 bg-cover bg-center opacity-60" data-alt="Panoramic modern luxury technology workspace panoramic hero banner with dark purple volumetric ambient lighting and glowing acoustic audio waves" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAjtcX9D66-OHoJ0K9Lq7xuuP300Fs0oeO5fakMgUhfWhYYzPDLvFysyvvePpLHeJgYJNR3iSWp-pC6TFBpDH9w8_hy_KZymXGXP3relg4QujMj6KToHQKCYp8P3HcddgRPOGIpQuhfIdTHtGm0St2t8q0RNnkAADwqu2YAdvs_KvY5zI5IfFu4RW-jKExnXh-gRnlFcz062FM3ivc7QA4dFANgw_WcQbth1qz3WrFu')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-obsidian-violet via-obsidian-violet/50 to-transparent"></div>
+<div class="relative z-10 flex flex-wrap items-center justify-between gap-2">
+<div>
+<h4 class="font-title-sm text-title-sm text-text-dark-primary font-bold">ApexTech Official Brand Hub</h4>
+<p class="font-body-sm text-body-sm text-text-dark-secondary">1920 × 480 px Banner Preview</p>
+</div>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest text-ink font-label-sm text-label-sm font-semibold hover:bg-surface transition-all shadow-sm">
+                    Upload New Banner
+                  </button>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<span class="font-label-md text-label-md font-medium text-ink">Storefront Status: Published &amp; Live</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox">
+<div class="w-11 h-6 bg-surface-container-high peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-electric-violet"></div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Card C: Statutory Tax & Compliance -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6 scroll-mt-24" id="tax-compliance">
+<div class="flex items-center justify-between pb-4 bg-surface-container-low/50 -mx-6 -mt-6 p-6 rounded-t-xl">
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Statutory Tax &amp; Compliance (GSTIN &amp; Regulatory)</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Statutory business registrations validated under the Central Board of Indirect Taxes and Customs (CBIC).</p>
+</div>
+<div class="flex items-center gap-1.5 px-3 py-1 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-bold"><span class="material-symbols-outlined text-[16px]">shield</span>
+<span class="">Sample Record (Illustrative Prototype - FY 2024-25)</span></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+<div class="p-4 rounded-xl bg-surface-container-low space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold text-ink-muted uppercase">GSTIN Identification</span>
+<span class="font-label-sm text-label-sm text-semantic-success font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Verified
+                </span>
+</div>
+<div class="font-title-md text-title-md font-bold text-ink tracking-wide font-mono">27AABC••••1ZM</div>
+<span class="font-body-sm text-body-sm text-ink-subtle block">Last validated: Oct 15, 2023 via GST Portal</span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold text-ink-muted uppercase">Company PAN</span>
+<span class="font-label-sm text-label-sm text-semantic-success font-bold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Verified
+                </span>
+</div>
+<div class="font-title-md text-title-md font-bold text-ink tracking-wide font-mono">AABCU••••R</div>
+<span class="font-body-sm text-body-sm text-ink-subtle block">Linked to CBDT e-Filing Master Database</span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-semibold text-ink-muted uppercase">TDS &amp; TCS (u/s 194-O)</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Auto Remitted</span>
+</div>
+<div class="font-title-md text-title-md font-bold text-ink">1.00% Platform TDS</div>
+<a class="font-body-sm text-body-sm text-electric-violet hover:underline block font-semibold" href="#">View TDS Remittance Invoices →</a>
+</div>
+</div><div class="p-3 rounded-lg bg-surface-container-low text-ink-subtle font-body-sm text-body-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">info</span>
+<span class="">Statutory 1.00% TDS/TCS and GSTIN records are illustrative configuration samples; not official regulatory certification.</span>
+</div>
+<div class="space-y-3">
+<span class="font-label-md text-label-md font-semibold text-ink block">Uploaded Statutory Documents</span>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<div class="flex items-center justify-between p-3.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[24px]">description</span>
+<div>
+<div class="font-label-md text-label-md font-semibold text-ink">GST Registration Certificate (REG-06.pdf)</div>
+<div class="font-body-sm text-body-sm text-ink-subtle">Issued by Maharashtra State Tax Authority</div>
+</div>
+</div>
+<button class="px-3 py-1 rounded bg-surface-container-lowest text-ink hover:text-primary font-label-sm text-label-sm font-semibold shadow-sm">View Document</button>
+</div>
+<div class="flex items-center justify-between p-3.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-semantic-success text-[24px]">verified</span>
+<div>
+<div class="font-label-md text-label-md font-semibold text-ink">Cancelled Cheque &amp; Bank Mandate</div>
+<div class="font-body-sm text-body-sm text-ink-subtle">HDFC Bank Ltd • Acc ending in 8109</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded-full bg-semantic-success/15 text-semantic-success font-bold">Verified</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Card D: Shipping & Fulfilment Preferences -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6 scroll-mt-24" id="shipping-fulfilment">
+<div class="flex items-center justify-between pb-4 bg-surface-container-low/50 -mx-6 -mt-6 p-6 rounded-t-xl">
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Shipping &amp; Fulfilment Preferences</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Configure default handling cutoffs, carrier priority tier, and reverse logistics nodes.</p>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded bg-electric-violet/10 text-electric-violet font-semibold">Priority FastX Node</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Default Fulfilment Mode</label>
+<select class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all">
+<option selected="">FastX Express Marketplace Fulfilment (Tier 1 Priority)</option>
+<option>Standard Surface Courier Dispatch</option>
+<option>Self-Ship Merchant Fleet</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Primary Dispatch Location</label>
+<select class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all">
+<option selected="">Bhiwandi Central FC-04 (Primary West Hub)</option>
+<option>Bengaluru Hub FC-02 (South Tech Center)</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Standard Handling Time &amp; Cutoff</label>
+<select class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all">
+<option selected="">Same-Day Dispatch (Cutoff: 2:00 PM IST)</option>
+<option>Same-Day Dispatch (Cutoff: 4:00 PM IST - High Velocity)</option>
+<option>Next-Day Dispatch (24h Lead SLA)</option>
+</select>
+</div>
+<div class="space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Operating Dispatch Schedule</label>
+<select class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all">
+<option selected="">Monday to Saturday (Sunday Express on Surge)</option>
+<option>7 Days a Week (Continuous Fulfillment)</option>
+<option>Monday to Friday</option>
+</select>
+</div>
+<div class="md:col-span-2 space-y-1.5">
+<label class="font-label-md text-label-md text-ink font-semibold">Return-to-Origin (RTO) Processing Node</label>
+<input class="setting-input w-full px-4 py-2.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest transition-all" type="text" value="Bhiwandi Hub - Reverse Logistics Section C (Building 4, Poman Logistics Park)">
+</div>
+</div>
+<div class="flex items-start gap-3 p-4 rounded-xl bg-semantic-warning/10 text-semantic-warning">
+<span class="material-symbols-outlined text-[20px] mt-0.5">warning</span>
+<div class="font-body-sm text-body-sm leading-relaxed">
+<span class="font-bold">Important Notice:</span> Modifications to standard cutoff time will reflect immediately on subsequent buyer checkout delivery dates and will not affect packages currently in-transit or scheduled for courier pickup.
+            </div>
+</div>
+</section>
+<!-- Card E: Fulfillment Centers & Warehouse Allocation -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6 scroll-mt-24" id="warehouses-inventory">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 bg-surface-container-low/50 -mx-6 -mt-6 p-6 rounded-t-xl">
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Fulfillment Centers &amp; Warehouse Allocation</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Active warehouse facilities synchronized with central OMIZON inventory allocations.</p>
+</div>
+<button class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-surface-container text-ink font-label-md text-label-md font-semibold hover:bg-primary-container hover:text-on-primary transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span class="">Add Facility</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="font-label-sm text-label-sm text-ink-subtle uppercase border-b border-surface-container-high pb-2">
+<th class="py-3 px-3">Warehouse Node</th>
+<th class="py-3 px-3">City / Region</th>
+<th class="py-3 px-3">SLA Status</th>
+<th class="py-3 px-3">Daily Capacity</th>
+<th class="py-3 px-3">Cutoff Time</th>
+<th class="py-3 px-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-3 font-medium text-ink">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">warehouse</span>
+<div>
+<div class="font-title-sm text-title-sm font-semibold">Bhiwandi Central FC-04</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-electric-violet/10 text-electric-violet font-semibold">Default Primary Hub</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-ink-muted">Mumbai / Thane, MH</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Active (99.8% SLA)</span>
+</td>
+<td class="py-3 px-3 font-semibold text-ink">2,500 orders/day</td>
+<td class="py-3 px-3 text-ink-muted">2:00 PM IST</td>
+<td class="py-3 px-3 text-right">
+<button class="font-label-sm text-label-sm px-3 py-1 rounded bg-surface-container text-ink font-semibold hover:bg-surface-container-high transition-colors">Manage Node</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-3 font-medium text-ink">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-ink-muted text-[20px]">warehouse</span>
+<div>
+<div class="font-title-sm text-title-sm font-semibold">Bengaluru Hub FC-02</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-surface-container text-ink-subtle">Secondary Tech Depot</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-3 text-ink-muted">Bengaluru, KA</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Active</span>
+</td>
+<td class="py-3 px-3 font-semibold text-ink">1,200 orders/day</td>
+<td class="py-3 px-3 text-ink-muted">1:00 PM IST</td>
+<td class="py-3 px-3 text-right">
+<button class="font-label-sm text-label-sm px-3 py-1 rounded bg-surface-container text-ink font-semibold hover:bg-surface-container-high transition-colors">Manage Node</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Card F: Team Members & Role-Based Permissions -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6 scroll-mt-24" id="team-permissions">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 bg-surface-container-low/50 -mx-6 -mt-6 p-6 rounded-t-xl">
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Team Members &amp; Role-Based Permissions (RBAC)</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Delegate store administration access while safeguarding sensitive payout and banking configurations.</p>
+</div>
+<button class="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-electric-violet text-on-primary font-label-md text-label-md font-semibold hover:bg-royal-purple transition-all shadow-sm">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span class="">Invite Team Member</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead>
+<tr class="font-label-sm text-label-sm text-ink-subtle uppercase border-b border-surface-container-high pb-2">
+<th class="py-3 px-3">Member Name &amp; Contact</th>
+<th class="py-3 px-3">Assigned Role</th>
+<th class="py-3 px-3">Status</th>
+<th class="py-3 px-3">Last Active</th>
+<th class="py-3 px-3 text-right">Access Controls</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-3 font-medium text-ink">
+<div class="font-title-sm text-title-sm font-semibold">Rajesh Singhania</div>
+<div class="font-body-sm text-body-sm text-ink-muted">rajesh@apextechindia.com</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded bg-primary-container text-on-primary font-semibold">Store Owner / Admin</span>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Full Access</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Today, 10:14 AM</td>
+<td class="py-3 px-3 text-right">
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded bg-surface-container text-ink-subtle font-medium">Owner Protected</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-3 font-medium text-ink">
+<div class="font-title-sm text-title-sm font-semibold">Sunita Verma</div>
+<div class="font-body-sm text-body-sm text-ink-muted">s.verma@apextechindia.com</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded bg-surface-container text-ink font-semibold">Inventory &amp; Dispatch Lead</span>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Active</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Today, 09:30 AM</td>
+<td class="py-3 px-3 text-right">
+<button class="font-label-sm text-label-sm px-3 py-1 rounded bg-surface-container text-ink font-semibold hover:bg-surface-container-high transition-colors">Edit Permissions</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-3 font-medium text-ink">
+<div class="font-title-sm text-title-sm font-semibold">Vikram Deshmukh</div>
+<div class="font-body-sm text-body-sm text-ink-muted">v.deshmukh@apextechindia.com</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded bg-surface-container text-ink font-semibold">Finance &amp; Settlements Manager</span>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Active</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Yesterday</td>
+<td class="py-3 px-3 text-right">
+<button class="font-label-sm text-label-sm px-3 py-1 rounded bg-surface-container text-ink font-semibold hover:bg-surface-container-high transition-colors">Edit Permissions</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/40 transition-colors">
+<td class="py-3 px-3 font-medium text-ink">
+<div class="font-title-sm text-title-sm font-semibold">Aniket Roy</div>
+<div class="font-body-sm text-body-sm text-ink-muted">a.roy@apextechindia.com</div>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2.5 py-1 rounded bg-surface-container text-ink font-semibold">Support &amp; Catalog Specialist</span>
+</td>
+<td class="py-3 px-3">
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Active</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Oct 28</td>
+<td class="py-3 px-3 text-right">
+<button class="font-label-sm text-label-sm px-3 py-1 rounded bg-surface-container text-ink font-semibold hover:bg-surface-container-high transition-colors">Edit Permissions</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low space-y-3">
+<span class="font-label-sm text-label-sm font-bold text-ink-muted uppercase block">Permission Matrix Overview</span>
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+<div class="p-2.5 rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-semantic-success text-[18px]">check_circle</span>
+<span class="font-label-sm text-label-sm font-semibold text-ink block mt-1">Catalog Editing</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-semantic-success text-[18px]">check_circle</span>
+<span class="font-label-sm text-label-sm font-semibold text-ink block mt-1">Shipment Dispatch</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-semantic-success text-[18px]">check_circle</span>
+<span class="font-label-sm text-label-sm font-semibold text-ink block mt-1">Inventory Sync</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-semantic-success text-[18px]">check_circle</span>
+<span class="font-label-sm text-label-sm font-semibold text-ink block mt-1">Settlement Reports</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-semantic-warning text-[18px]">verified_user</span>
+<span class="font-label-sm text-label-sm font-semibold text-ink block mt-1">Security / 2FA Locked</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Card G: Developer API & Webhook Integrations -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-sm space-y-6 scroll-mt-24" id="integrations-webhooks">
+<div class="flex items-center justify-between pb-4 bg-surface-container-low/50 -mx-6 -mt-6 p-6 rounded-t-xl">
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Developer API &amp; Webhook Integrations</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">High-concurrency webhook endpoints for automated ERP dispatch and live inventory sync.</p>
+</div>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container text-ink font-label-sm text-label-sm font-semibold hover:bg-surface-container-high transition-colors">
+              + New Webhook
+            </button>
+</div>
+<div class="space-y-4">
+<div class="p-4 rounded-xl bg-surface-container-low space-y-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-electric-violet">bolt</span>
+<span class="font-title-sm text-title-sm font-bold text-ink">ERP Order Stream</span>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Simulated Demo State (200 OK)</span>
+</div>
+<div class="font-mono font-body-sm text-body-sm text-ink p-2.5 rounded bg-surface-container-lowest break-all">
+                https://api.apextechindia.com/v1/omizon/orders
+              </div>
+<div class="flex flex-wrap items-center justify-between text-ink-muted font-body-sm text-body-sm gap-2">
+<span class="">Subscribed events: <code class="text-primary font-semibold">orders.created, orders.fulfilled</code></span>
+<span class="">Last payload fired: 2 mins ago</span>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low space-y-3">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-electric-violet">sync_alt</span>
+<span class="font-title-sm text-title-sm font-bold text-ink">Real-Time Stock Sync</span>
+</div>
+<span class="font-label-sm text-label-sm px-2.5 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-semibold">Simulated Demo State</span>
+</div>
+<div class="font-mono font-body-sm text-body-sm text-ink p-2.5 rounded bg-surface-container-lowest break-all">
+                https://api.apextechindia.com/v1/omizon/inventory
+              </div>
+<div class="flex flex-wrap items-center justify-between text-ink-muted font-body-sm text-body-sm gap-2">
+<span class="">Subscribed events: <code class="text-primary font-semibold">inventory.updated, low_stock.alert</code></span>
+<span class="">Last payload fired: 14 mins ago</span>
+</div>
+</div>
+</div>
+<!-- API Credentials Sub-Section -->
+<div class="p-4 rounded-xl bg-surface-container space-y-3">
+<span class="font-label-md text-label-md font-bold text-ink block">Production REST API Credentials</span>
+<div class="flex flex-col sm:flex-row items-center gap-3">
+<div class="w-full flex items-center justify-between px-4 py-2.5 rounded-lg bg-surface-container-lowest font-mono font-body-sm text-body-sm text-ink">
+<span id="apiKeyDisplay" class="">omz_live_••••••••••••••98a2</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-semantic-success/15 text-semantic-success font-semibold">Production Key</span>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<button class="px-3.5 py-2 rounded-lg bg-surface-container-lowest text-ink hover:text-primary font-label-sm text-label-sm font-semibold transition-colors shadow-sm" id="revealKeyBtn">
+                  Reveal (2FA)
+                </button>
+<button class="px-3.5 py-2 rounded-lg bg-semantic-warning/10 text-semantic-warning hover:bg-semantic-warning/20 font-label-sm text-label-sm font-semibold transition-colors">
+                  Regenerate Key
+                </button>
+</div>
+</div>
+<span class="font-body-sm text-body-sm text-ink-subtle block">Never share your merchant live token in client-side code repositories.</span>
+</div>
+</section>
+</div>
+</div>
+<!-- Sticky Bottom Save Banner -->
+<div class="sticky bottom-4 z-40 bg-obsidian-violet rounded-xl p-4 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4 text-text-dark-primary">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-electric-violet text-[24px]">verified</span>
+<div><div class="font-title-sm text-title-sm font-bold">Sample Merchant Audit Trail (Simulated ISO 27001 Prototype Framework)</div>
+<div class="font-body-sm text-body-sm text-text-dark-muted">All profile and compliance changes are digitally signed &amp; timestamped (Simulated Prototype Only).</div></div>
+</div>
+<div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+<button class="px-4 py-2.5 rounded-lg bg-obsidian-surface-1 text-text-dark-primary hover:bg-obsidian-surface-2 font-label-md text-label-md font-medium transition-colors">
+          Export Configuration
+        </button>
+<button class="px-6 py-2.5 rounded-lg bg-electric-violet text-on-primary hover:bg-royal-purple font-label-md text-label-md font-semibold transition-all shadow-md active:scale-95" id="saveBottomBtn">
+          Save All Settings
+        </button>
+</div>
+</div>
+</div>
+<script>
+    (function() {
+      let changeCount = 0;
+      const countEl = document.getElementById('unsavedCount');
+      const inputs = document.querySelectorAll('.setting-input');
+
+      inputs.forEach(input => {
+        input.addEventListener('input', () => {
+          changeCount++;
+          countEl.textContent = changeCount;
+          countEl.parentElement.classList.remove('bg-surface-container-low', 'text-ink-muted');
+          countEl.parentElement.classList.add('bg-semantic-warning/15', 'text-semantic-warning');
+        });
+      });
+
+      const handleSave = () => {
+        if(changeCount > 0) {
+          const btn = document.getElementById('saveTopBtn');
+          const originalText = btn.innerHTML;
+          btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Saving...';
+          setTimeout(() => {
+            changeCount = 0;
+            countEl.textContent = '0';
+            countEl.parentElement.classList.remove('bg-semantic-warning/15', 'text-semantic-warning');
+            countEl.parentElement.classList.add('bg-surface-container-low', 'text-ink-muted');
+            btn.innerHTML = originalText;
+            alert('Store configuration successfully saved to OMIZON Seller Central cluster.');
+          }, 800);
+        } else {
+          alert('No pending modifications to commit.');
+        }
+      };
+
+      document.getElementById('saveTopBtn').addEventListener('click', handleSave);
+      document.getElementById('saveBottomBtn').addEventListener('click', handleSave);
+
+      document.getElementById('discardBtn').addEventListener('click', () => {
+        if(changeCount > 0 && confirm('Discard all unsaved edits?')) {
+          window.location.reload();
+        }
+      });
+
+      document.getElementById('revealKeyBtn').addEventListener('click', () => {
+        const keyDisplay = document.getElementById('apiKeyDisplay');
+        if(keyDisplay.textContent.includes('••••')) {
+          keyDisplay.textContent = 'omz_live_8f0a28b9c9e13d47a82910898a2';
+          document.getElementById('revealKeyBtn').textContent = 'Hide Key';
+        } else {
+          keyDisplay.textContent = 'omz_live_••••••••••••••98a2';
+          document.getElementById('revealKeyBtn').textContent = 'Reveal (2FA)';
+        }
+      });
+    })();
+  </script>
+</div></main></div>
+
+</body></html>

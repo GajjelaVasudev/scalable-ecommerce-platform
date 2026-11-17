@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"tertiary":"#4d427c","semantic-warning":"#E27300","on-secondary-container":"#fffbff","royal-purple":"#4C2ACB","on-error":"#ffffff","background":"#f9f9fd","obsidian-surface-2":"#211735","surface-container-high":"#e8e8ec","obsidian-violet":"#100A25","electric-violet":"#762FF2","on-secondary-fixed-variant":"#451fc4","midnight-violet":"#190B46","ink-subtle":"#928B9F","on-surface":"#1a1c1f","on-tertiary-fixed-variant":"#493e78","on-surface-variant":"#4a4456","on-tertiary-container":"#e3daff","text-dark-muted":"#A49ABF","secondary-fixed":"#e5deff","surface-dim":"#d9dade","surface-variant":"#e2e2e6","on-tertiary-fixed":"#1d104a","on-secondary-fixed":"#1a0063","ink-muted":"#655E7A","on-tertiary":"#ffffff","surface":"#f9f9fd","porcelain":"#F7F7FB","on-primary":"#ffffff","inverse-on-surface":"#f0f0f4","surface-container-low":"#f3f3f7","on-background":"#1a1c1f","text-dark-secondary":"#C3BCD7","semantic-success":"#00875A","on-primary-fixed-variant":"#5800c8","secondary":"#5b3eda","primary-fixed-dim":"#d1bcff","obsidian-surface-1":"#1D1537","on-secondary":"#ffffff","surface-tint":"#7228ee","outline-variant":"#ccc3d9","on-primary-fixed":"#24005b","text-dark-primary":"#F7F5FF","tertiary-fixed-dim":"#cbbeff","inverse-surface":"#2e3034","error-container":"#ffdad6","lavender-mist":"#E8E6F0","tertiary-fixed":"#e6deff","secondary-fixed-dim":"#c9bfff","outline":"#7b7487","semantic-error":"#D92D20","ink":"#211D31","error":"#ba1a1a","primary-container":"#762ff2","secondary-container":"#745af4","tertiary-container":"#655a96","surface-container-lowest":"#ffffff","surface-bright":"#f9f9fd","on-primary-container":"#e7d9ff","primary":"#5c00d2","inverse-primary":"#d1bcff","obsidian-border":"#382B54","surface-container":"#ededf1","surface-container-highest":"#e2e2e6","primary-fixed":"#eaddff","on-error-container":"#93000a"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-sm":"0.5rem","margin":"2rem","space-xs":"0.25rem","gutter":"1.5rem","space-xl":"2.5rem","space-lg":"1.5rem","margin-mobile":"1rem","gutter-mobile":"0.75rem","space-md":"1rem"},"fontFamily":{"body-lg":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"]},"fontSize":{"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"price-hero":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"price-card":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}]}}}}</script></head><body class="bg-porcelain font-body-md text-body-md text-ink min-h-screen"><aside class="fixed left-0 top-0 h-full w-72 bg-obsidian-violet text-text-dark-primary z-50 flex flex-col justify-between shadow-[0_16px_36px_-8px_rgba(25,11,70,0.2)]"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md flex items-center gap-space-sm bg-obsidian-violet/90"><img alt="OMIZON Official Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UdlrUM8hyyFfQVS5dmLaEh62kAxW_rStX2OO5j_r1zHJphPs6pfdXHGfDL0SS-LW_BEeUrp7vsEjrLyFXnOBWfDYjrJlJcEEjcpNp4AnrHV4cy5bOVYu_KnI5jBuFr0EY-AzNwLKSQsH8hazC472Fa85bIN2voQfI0bYSYwAKVWSoY3Vix0yMPgECasdbSABNB3UZKOz0aICgQ9rG4blKonaeUmeoPR3z_qtI2AgAbUBQj4TNVvepFFRw"/><div class="flex flex-col ml-space-xs"><span class="font-title-sm text-title-sm text-text-dark-primary tracking-tight leading-none">OMIZON</span><span class="font-label-sm text-label-sm text-text-dark-muted tracking-wider uppercase leading-none mt-1">PLATFORM CONSOLE ADMIN</span></div><span class="ml-auto bg-electric-violet/20 text-electric-violet font-label-sm text-label-sm px-2 py-0.5 rounded uppercase tracking-wide">Super</span></div><div class="flex-1 overflow-y-auto px-space-md py-space-md space-y-space-md"><nav class="space-y-space-md" data-active-classes="bg-electric-violet text-on-primary font-semibold shadow-[0_2px_8px_rgba(118,47,242,0.35)]"><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Core Operations</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="overview" href="#"><span>Overview</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="seller-applications" href="#"><span>Seller Applications</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">14 New</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="sellers" href="#"><span>Sellers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="buyers" href="#"><span>Buyers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="catalog-governance" href="#"><span>Catalog Governance</span><span class="bg-semantic-warning text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">9 Flagged</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Commerce &amp; Fulfillment</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="all-orders" href="#"><span>All Orders</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="payments-and-settlements" href="#"><span>Payments &amp; Settlements</span><span class="bg-error text-on-error font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">3 Hold</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="returns-and-disputes" href="#"><span>Returns &amp; Disputes</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">5 Open</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="promotions" href="#"><span>Promotions</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Intelligence &amp; Security</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="reports-and-analytics" href="#"><span>Reports &amp; Analytics</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="risk-and-fraud" href="#"><span>Risk &amp; Fraud</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="audit-logs" href="#"><span>Audit Logs</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="platform-settings" href="#"><span>Platform Settings</span></a></div></div></nav></div></div><div class="p-space-md bg-obsidian-surface-1/90"><div class="flex items-center justify-between mb-1"><span class="font-label-sm text-label-sm text-text-dark-muted">OMIZON Core v4.12.0-demo</span><span class="inline-block w-2 h-2 rounded-full bg-semantic-success"></span></div><div class="font-body-sm text-body-sm text-text-dark-secondary flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-electric-violet"></span>Simulated Sandbox Mode</div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(25,11,70,0.04)] z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="hidden xl:flex items-center gap-2 px-space-sm py-1 rounded bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>Platform-Wide (Simulated Demo Environment)</div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Global search merchants, orders (#OMZ-), products, or buyers (⌘K)..." type="text"/><kbd class="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-container-lowest shadow-[0_1px_2px_rgba(25,11,70,0.06)] px-1.5 py-0.5 rounded font-label-sm text-label-sm text-ink-muted">⌘K</kbd></div></div><div class="flex items-center gap-space-md"><button class="hidden lg:flex items-center gap-2 h-10 px-space-sm rounded-lg bg-porcelain hover:bg-surface-container transition-colors text-ink font-label-md text-label-md"><span class="material-symbols-outlined text-[18px] text-ink-muted">calendar_today</span>System Date: Oct 01 – Oct 30, 2023</button><div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-electric-violet"></span>Services: Simulated Demo</div><button class="relative p-2 rounded-lg hover:bg-porcelain text-ink transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-semantic-error rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="h-6 w-px bg-lavender-mist"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-sm text-title-sm text-ink leading-tight">Siddharth Rao</span><span class="font-label-sm text-label-sm text-ink-muted leading-tight">Super Admin / Platform Lead</span></div></div></div></header><main class="relative pt-16 bg-porcelain min-h-screen w-full px-space-lg py-space-lg"><div class="flex flex-col w-full">
+<!-- TOP PLATFORM NOTICE STRIP -->
+<div class="mb-space-md p-space-sm bg-obsidian-violet text-text-dark-primary rounded-lg shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-electric-violet/20 text-electric-violet">
+<span class="material-symbols-outlined text-[16px]">campaign</span>
+</span>
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted font-semibold">Simulated Campaign Environment</span>
+<span class="inline-block w-1 h-1 rounded-full bg-text-dark-muted"></span>
+<span class="font-body-sm text-body-sm text-text-dark-secondary">No live advertising, payment, coupon, or checkout mutations</span>
+<span class="inline-block w-1 h-1 rounded-full bg-text-dark-muted"></span>
+<span class="font-label-sm text-label-sm bg-obsidian-surface-2 px-2 py-0.5 rounded text-electric-violet font-mono">Scope: Pan-India (All Hubs)</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm self-end md:self-auto">
+<span class="font-label-sm text-label-sm text-text-dark-muted font-mono">Campaign Engine v3.2 Active</span>
+<span class="w-2 h-2 rounded-full bg-semantic-success animate-pulse"></span>
+</div>
+</div>
+<!-- PAGE HEADER & PRIMARY CONTROL STRIP -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md mb-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-2 text-ink-muted font-label-sm text-label-sm tracking-wide uppercase">
+<span>Commerce &amp; Fulfillment</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-royal-purple font-semibold">Promotions &amp; Campaigns</span>
+</div>
+<div class="flex items-center gap-3">
+<h1 class="font-headline-md text-headline-md text-ink">Promotions &amp; Marketplace Campaigns</h1>
+<span class="bg-surface-container-high text-tertiary font-label-sm text-label-sm px-2.5 py-0.5 rounded-full uppercase tracking-wider font-semibold">Console v4.12</span>
+</div>
+<p class="font-body-md text-body-md text-ink-muted max-w-4xl">
+        Plan marketplace events, coordinate seller-funded offers, manage coupon eligibility, control promotional budgets, and monitor campaign performance across OMIZON.
+      </p>
+</div>
+<!-- PRIMARY ACTION BUTTONS -->
+<div class="flex items-center flex-wrap gap-2.5">
+<button class="h-10 px-4 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container transition-all shadow-sm font-label-md text-label-md flex items-center gap-2" onclick="document.getElementById('sim-campaign-toast').classList.remove('hidden'); setTimeout(() =&gt; document.getElementById('sim-campaign-toast').classList.add('hidden'), 3500);">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">sync</span>
+<span>Simulate Ingestion</span>
+</button>
+<button class="h-10 px-4 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container transition-all shadow-sm font-label-md text-label-md flex items-center gap-2" onclick="exportCampaignsCSV()">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">download</span>
+<span>Export Report (CSV)</span>
+</button>
+<button class="h-10 px-5 rounded-lg bg-electric-violet hover:bg-royal-purple active:scale-95 text-on-primary transition-all shadow-md font-title-sm text-title-sm flex items-center gap-2" onclick="toggleCreationWizard(true)">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Create Campaign</span>
+</button>
+</div>
+</div>
+<!-- OPERATIONAL CONTEXT STRIP -->
+<div class="mb-space-md px-space-md py-2.5 rounded-lg bg-surface-container-lowest shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between text-ink-muted font-body-sm text-body-sm gap-2">
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-1.5 text-ink font-medium">
+<span class="material-symbols-outlined text-electric-violet text-[16px]">info</span>
+<span>Demo Data: Simulated Records</span>
+</div>
+<span class="text-lavender-mist">|</span>
+<div>Last Budget Reconciliation: <span class="font-medium text-ink">Oct 30, 14:45 IST (Simulated)</span></div>
+<span class="text-lavender-mist">|</span>
+<div>Promotion Rules Engine: <span class="text-semantic-success font-medium">v3.2 Connected</span></div>
+</div>
+<div class="flex items-center gap-2 text-ink-muted">
+<span class="material-symbols-outlined text-[16px]">analytics</span>
+<span>Attribution: 7-Day Click / 1-Day View Baseline</span>
+</div>
+</div>
+<!-- 6 EXECUTIVE KPI CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-space-sm mb-space-md">
+<!-- KPI 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider font-semibold">Active Campaigns</span>
+<span class="bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm px-1.5 py-0.5 rounded font-semibold">Live</span>
+</div>
+<div class="font-price-hero text-price-hero text-ink tracking-tight my-1">24</div>
+<div class="font-body-sm text-body-sm text-ink-muted flex items-center justify-between">
+<span>18 Category</span>
+<span class="text-royal-purple font-medium">6 Platform</span>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider font-semibold">Scheduled</span>
+<span class="bg-secondary/15 text-secondary font-label-sm text-label-sm px-1.5 py-0.5 rounded font-semibold">Next 14D</span>
+</div>
+<div class="font-price-hero text-price-hero text-ink tracking-tight my-1">8</div>
+<div class="font-body-sm text-body-sm text-ink-muted">
+<span>Upcoming launches</span>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider font-semibold">Pending Approval</span>
+<span class="bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm px-1.5 py-0.5 rounded font-semibold">Review</span>
+</div>
+<div class="font-price-hero text-price-hero text-ink tracking-tight my-1">6</div>
+<div class="font-body-sm text-body-sm text-ink-muted">
+<span>Finance &amp; Merchant Sign-off</span>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider font-semibold">Allocated Pool</span>
+<span class="material-symbols-outlined text-ink-subtle text-[18px]">account_balance_wallet</span>
+</div>
+<div class="font-price-hero text-price-hero text-ink tracking-tight my-1">₹42.50 L</div>
+<div class="font-body-sm text-body-sm text-ink-muted">
+<span>Platform &amp; Co-funded Grants</span>
+</div>
+</div>
+<!-- KPI 5 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider font-semibold">Attributed GMV</span>
+<span class="bg-electric-violet/10 text-electric-violet font-label-sm text-label-sm px-1.5 py-0.5 rounded font-semibold">7D Post</span>
+</div>
+<div class="font-price-hero text-price-hero text-ink tracking-tight my-1">₹1.86 Cr</div>
+<div class="font-body-sm text-body-sm text-semantic-success flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+22.4% vs Non-promo</span>
+</div>
+</div>
+<!-- KPI 6 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider font-semibold">Promo CVR</span>
+<span class="text-ink-subtle font-label-sm text-label-sm">vs 3.2%</span>
+</div>
+<div class="font-price-hero text-price-hero text-ink tracking-tight my-1">4.8%</div>
+<div class="font-body-sm text-body-sm text-semantic-success flex items-center gap-1 font-medium">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span>+50.0% Relative Lift</span>
+</div>
+</div>
+</div>
+<!-- SECONDARY PERFORMANCE STRIP (MICRO-TELEMETRY) -->
+<div class="mb-space-md p-space-sm rounded-xl bg-surface-container-lowest shadow-sm grid grid-cols-2 md:grid-cols-6 gap-space-sm text-center">
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase">Impressions</span>
+<span class="font-title-md text-title-md text-ink mt-0.5">18.4 Lakh</span>
+</div>
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase">Clicks (15% CTR)</span>
+<span class="font-title-md text-title-md text-ink mt-0.5">2.76 Lakh</span>
+</div>
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase">Attributed Orders</span>
+<span class="font-title-md text-title-md text-ink mt-0.5">8,920 Orders</span>
+</div>
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase">Avg Discount Depth</span>
+<span class="font-title-md text-title-md text-ink mt-0.5">12.6% Cart</span>
+</div>
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase">Pool Utilization</span>
+<span class="font-title-md text-title-md text-ink mt-0.5">68.4% (₹29.07L)</span>
+</div>
+<div class="p-2 rounded-lg bg-surface-container-low flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase">Incremental Lift</span>
+<span class="font-title-md text-title-md text-electric-violet mt-0.5 font-bold">~1.42x Model</span>
+</div>
+</div>
+<!-- WORKSPACE TABS & ADVANCED FILTER BAR -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm mb-space-md p-space-md space-y-space-md">
+<!-- TABS -->
+<div class="flex items-center gap-2 overflow-x-auto pb-1">
+<button class="px-4 py-2 rounded-lg bg-electric-violet text-on-primary font-title-sm text-title-sm whitespace-nowrap shadow-sm">
+        All Campaigns (24 Active)
+      </button>
+<button class="px-4 py-2 rounded-lg hover:bg-surface-container text-ink-muted hover:text-ink font-title-sm text-title-sm whitespace-nowrap transition-colors">
+        Marketplace Events (6)
+      </button>
+<button class="px-4 py-2 rounded-lg hover:bg-surface-container text-ink-muted hover:text-ink font-title-sm text-title-sm whitespace-nowrap transition-colors">
+        Seller Promotions (12)
+      </button>
+<button class="px-4 py-2 rounded-lg hover:bg-surface-container text-ink-muted hover:text-ink font-title-sm text-title-sm whitespace-nowrap transition-colors">
+        Coupons &amp; Vouchers (18)
+      </button>
+<button class="px-4 py-2 rounded-lg hover:bg-surface-container text-ink-muted hover:text-ink font-title-sm text-title-sm whitespace-nowrap transition-colors flex items-center gap-2">
+<span>Approval Queue</span>
+<span class="px-1.5 py-0.2 rounded-full bg-semantic-warning text-on-primary font-label-sm text-label-sm">6</span>
+</button>
+<button class="px-4 py-2 rounded-lg hover:bg-surface-container text-ink-muted hover:text-ink font-title-sm text-title-sm whitespace-nowrap transition-colors">
+        Archived Campaigns (42)
+      </button>
+</div>
+<!-- FILTER BAR CONTROLS -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-sm pt-2">
+<!-- Search Input -->
+<div class="md:col-span-4 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all shadow-inner" id="campaign-search" oninput="filterCampaignRows()" placeholder="Search by Campaign ID, Name, Tag, SKU, Seller ID..." type="text" value="OMZ-CMP"/>
+</div>
+<!-- Dropdown 1: Status -->
+<div class="md:col-span-2">
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
+<option>Status: All Active (24)</option>
+<option>Active Only</option>
+<option>Scheduled Only</option>
+<option>Pending Approval</option>
+<option>Paused / Stopped</option>
+</select>
+</div>
+<!-- Dropdown 2: Type -->
+<div class="md:col-span-2">
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
+<option>Type: All Types</option>
+<option>Marketplace Event</option>
+<option>Category Campaign</option>
+<option>Buyer Acquisition</option>
+<option>Product Launch</option>
+<option>Seasonal Sale</option>
+</select>
+</div>
+<!-- Dropdown 3: Funding Source -->
+<div class="md:col-span-2">
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
+<option>Funding: All Sources</option>
+<option>Platform-Funded (100%)</option>
+<option>Seller-Funded (100%)</option>
+<option>Mixed Co-Funded</option>
+</select>
+</div>
+<!-- Dropdown 4: Category -->
+<div class="md:col-span-2">
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer">
+<option>Category: All Categories</option>
+<option>Electronics &amp; Tech</option>
+<option>Home &amp; Living</option>
+<option>Fashion &amp; Footwear</option>
+<option>Groceries &amp; Daily</option>
+</select>
+</div>
+</div>
+<!-- ACTIVE CHIP STRIP & ACTIONS -->
+<div class="flex items-center justify-between flex-wrap gap-2 pt-1">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase">Applied Filters:</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-md text-label-md text-ink">
+<span>Scope: Pan-India</span>
+<button class="hover:text-semantic-error"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-md text-label-md text-ink">
+<span>Status: Active &amp; Scheduled</span>
+<button class="hover:text-semantic-error"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-electric-violet/10 text-electric-violet font-label-md text-label-md font-medium">
+<span>Search: OMZ-CMP</span>
+<button class="hover:text-semantic-error"><span class="material-symbols-outlined text-[14px]">close</span></button>
+</span>
+<button class="text-royal-purple hover:underline font-label-md text-label-md ml-1 font-medium">Reset All Filters</button>
+</div>
+<div class="flex items-center gap-3">
+<span class="font-label-sm text-label-sm text-ink-muted">View Density:</span>
+<div class="inline-flex bg-porcelain p-0.5 rounded-lg">
+<button class="px-2.5 py-1 rounded-md bg-surface-container-lowest shadow-sm font-label-sm text-label-sm text-ink font-semibold">Standard</button>
+<button class="px-2.5 py-1 rounded-md hover:bg-surface-container font-label-sm text-label-sm text-ink-muted">Compact</button>
+</div>
+</div>
+</div>
+</div>
+<!-- MASTER-DETAIL SPLIT WORKSPACE (~64% Table, ~36% Detail Panel) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md mb-space-lg items-start">
+<!-- LEFT TABLE (~64% on 12-col = 8 cols) -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-space-md flex items-center justify-between">
+<div class="flex items-center gap-2">
+<h2 class="font-title-md text-title-md text-ink">Marketplace Campaigns Master Registry</h2>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-ink-muted font-label-sm text-label-sm">24 Records</span>
+</div>
+<div class="flex items-center gap-2 text-ink-muted font-body-sm text-body-sm">
+<span>Sorted by: Start Date (Descending)</span>
+<span class="material-symbols-outlined text-[18px]">sort</span>
+</div>
+</div>
+<!-- TABLE CONTAINER -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-porcelain text-ink-muted font-label-sm text-label-sm uppercase tracking-wider">
+<tr>
+<th class="py-3 px-space-md font-semibold">Campaign Details</th>
+<th class="py-3 px-space-sm font-semibold">Type &amp; Category</th>
+<th class="py-3 px-space-sm font-semibold">Funding Model</th>
+<th class="py-3 px-space-sm font-semibold">Budget / Consumed</th>
+<th class="py-3 px-space-sm font-semibold">Attributed GMV</th>
+<th class="py-3 px-space-sm font-semibold">Status</th>
+<th class="py-3 px-space-md font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="text-ink">
+<!-- ROW 1 (SELECTED ROW: OMZ-CMP-26001) -->
+<tr class="campaign-table-row cursor-pointer bg-electric-violet/5 hover:bg-electric-violet/10 transition-colors shadow-sm" id="row-26001" onclick="selectCampaignRow('26001')">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-electric-violet animate-pulse"></div>
+<div>
+<div class="font-title-sm text-title-sm text-ink flex items-center gap-1.5 font-semibold">
+<span>OMIZON Festive Tech Week</span>
+<span class="material-symbols-outlined text-electric-violet text-[16px]">stars</span>
+</div>
+<div class="font-mono text-ink-muted font-label-sm text-label-sm mt-0.5">#OMZ-CMP-26001 • Oct 20 – Oct 31, 2023</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-medium text-ink">Marketplace Event</div>
+<div class="text-ink-muted text-body-sm">Electronics &amp; Accessories</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm font-medium text-tertiary">
+                  Mixed (40% P / 60% S)
+                </span>
+<div class="text-ink-muted font-label-sm text-label-sm mt-0.5">3 Tier-1 Sellers</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-semibold text-ink">₹15,00,000</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<div class="w-16 h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-electric-violet rounded-full" style="width: 62%;"></div>
+</div>
+<span class="font-mono text-ink-muted font-label-sm text-label-sm">62.0%</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-bold text-ink text-title-sm">₹62,00,000</div>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">4.13x Attributed</span>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                  Active
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1 rounded hover:bg-surface-container text-electric-violet" title="Inspect Campaign">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-semantic-warning" title="Pause Simulation">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 2: OMZ-CMP-26002 -->
+<tr class="campaign-table-row cursor-pointer hover:bg-porcelain transition-colors" id="row-26002" onclick="selectCampaignRow('26002')">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-semantic-success"></div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Home Essentials Days</div>
+<div class="font-mono text-ink-muted font-label-sm text-label-sm mt-0.5">#OMZ-CMP-26002 • Oct 15 – Nov 05, 2023</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-medium text-ink">Category Campaign</div>
+<div class="text-ink-muted text-body-sm">Home &amp; Living</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-ink">
+                  Seller-Funded (100%)
+                </span>
+<div class="text-ink-muted font-label-sm text-label-sm mt-0.5">Zenith Home Goods</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-semibold text-ink">₹8,00,000</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<div class="w-16 h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-royal-purple rounded-full" style="width: 55%;"></div>
+</div>
+<span class="font-mono text-ink-muted font-label-sm text-label-sm">55.0%</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-bold text-ink text-title-sm">₹28,50,000</div>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">3.56x Attributed</span>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                  Active
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-semantic-warning">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 3: OMZ-CMP-26003 -->
+<tr class="campaign-table-row cursor-pointer hover:bg-porcelain transition-colors" id="row-26003" onclick="selectCampaignRow('26003')">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-semantic-success"></div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">New Buyer Welcome</div>
+<div class="font-mono text-ink-muted font-label-sm text-label-sm mt-0.5">#OMZ-CMP-26003 • Oct 01 – Dec 31, 2023</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-medium text-ink">Buyer Acquisition</div>
+<div class="text-ink-muted text-body-sm">All Categories (Global)</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm font-semibold">
+                  Platform-Funded (100%)
+                </span>
+<div class="text-ink-muted font-label-sm text-label-sm mt-0.5">OMIZON Growth Subsidy</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-semibold text-ink">₹5,00,000</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<div class="w-16 h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-electric-violet rounded-full" style="width: 42%;"></div>
+</div>
+<span class="font-mono text-ink-muted font-label-sm text-label-sm">42.0%</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-bold text-ink text-title-sm">₹16,20,000</div>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">3.24x Attributed</span>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                  Active
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-semantic-warning">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 4: OMZ-CMP-26004 -->
+<tr class="campaign-table-row cursor-pointer hover:bg-porcelain transition-colors" id="row-26004" onclick="selectCampaignRow('26004')">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-semantic-success"></div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Everyday Value Coupons</div>
+<div class="font-mono text-ink-muted font-label-sm text-label-sm mt-0.5">#OMZ-CMP-26004 • Oct 10 – Nov 10, 2023</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-medium text-ink">Coupon Program</div>
+<div class="text-ink-muted text-body-sm">Groceries &amp; Fashion</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm font-medium text-tertiary">
+                  Mixed (50% P / 50% S)
+                </span>
+<div class="text-ink-muted font-label-sm text-label-sm mt-0.5">Co-op Merchants</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-semibold text-ink">₹4,50,000</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<div class="w-16 h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-electric-violet rounded-full" style="width: 70%;"></div>
+</div>
+<span class="font-mono text-ink-muted font-label-sm text-label-sm">70.0%</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-bold text-ink text-title-sm">₹19,80,000</div>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">4.40x Attributed</span>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                  Active
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-semantic-warning">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 5: OMZ-CMP-26005 -->
+<tr class="campaign-table-row cursor-pointer hover:bg-porcelain transition-colors" id="row-26005" onclick="selectCampaignRow('26005')">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Premium Audio Launch</div>
+<div class="font-mono text-ink-muted font-label-sm text-label-sm mt-0.5">#OMZ-CMP-26005 • Nov 05 – Nov 20, 2023</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-medium text-ink">Product Launch</div>
+<div class="text-ink-muted text-body-sm">Audio &amp; Wearables</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-ink">
+                  Seller-Funded (100%)
+                </span>
+<div class="text-ink-muted font-label-sm text-label-sm mt-0.5">NovaCraft Audio Ltd</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-semibold text-ink">₹3,00,000</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<div class="w-16 h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-secondary" style="width: 0%;"></div>
+</div>
+<span class="font-mono text-ink-muted font-label-sm text-label-sm">0.0%</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-bold text-ink-muted text-title-sm">₹0.00</div>
+<span class="text-ink-subtle font-label-sm text-label-sm">Pending Launch</span>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                  Scheduled
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-semantic-warning">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 6: OMZ-CMP-26006 -->
+<tr class="campaign-table-row cursor-pointer hover:bg-porcelain transition-colors" id="row-26006" onclick="selectCampaignRow('26006')">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2.5">
+<div class="w-2.5 h-2.5 rounded-full bg-semantic-warning"></div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Monsoon Clearance</div>
+<div class="font-mono text-ink-muted font-label-sm text-label-sm mt-0.5">#OMZ-CMP-26006 • Oct 28 – Nov 15, 2023</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-medium text-ink">Seasonal Sale</div>
+<div class="text-ink-muted text-body-sm">Footwear &amp; Apparel</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-ink">
+                  Seller-Funded (NexaWear)
+                </span>
+<div class="text-ink-muted font-label-sm text-label-sm mt-0.5">Merchant Group</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-semibold text-ink">₹2,50,000</div>
+<div class="flex items-center gap-1.5 mt-0.5">
+<div class="w-16 h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-semantic-warning rounded-full" style="width: 76%;"></div>
+</div>
+<span class="font-mono text-ink-muted font-label-sm text-label-sm">76.0%</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm">
+<div class="font-bold text-ink text-title-sm">₹12,40,000</div>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">4.96x Attributed</span>
+</td>
+<td class="py-3.5 px-space-sm">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-warning"></span>
+                  In Review
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</button>
+<button class="p-1 rounded hover:bg-surface-container text-semantic-success font-semibold">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- TABLE PAGINATION FOOTER -->
+<div class="p-space-md bg-porcelain flex items-center justify-between text-ink-muted font-body-sm text-body-sm">
+<div class="flex items-center gap-2">
+<span>Showing <strong class="text-ink">1–6</strong> of <strong class="text-ink">24</strong> active campaigns</span>
+</div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink-subtle cursor-not-allowed">Previous</button>
+<button class="px-2.5 py-1 rounded bg-electric-violet text-on-primary font-semibold">1</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container">2</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container">3</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container">4</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container">Next</button>
+</div>
+</div>
+</div>
+<!-- RIGHT DETAIL INSPECTION PANEL (~36% on 12-col = 4 cols) -->
+<div class="lg:col-span-4 bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col space-y-space-md p-space-md">
+<!-- DETAIL HEADER -->
+<div class="pb-space-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="font-mono font-bold text-electric-violet font-title-sm text-title-sm">#OMZ-CMP-26001</span>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+              Active
+            </span>
+<span class="px-2 py-0.5 rounded bg-midnight-violet text-on-primary font-label-sm text-label-sm font-semibold">Tier 1 Hero</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-ink leading-snug">OMIZON Festive Tech Week</h3>
+<p class="font-body-sm text-body-sm text-ink-muted mt-1">Objective: Category GMV Growth &amp; Electronics Acceleration during Diwali Pre-Season.</p>
+<div class="mt-space-sm p-space-sm rounded-lg bg-porcelain flex items-center justify-between text-body-sm">
+<div>
+<span class="text-ink-muted">Owner:</span>
+<span class="font-medium text-ink ml-1">Siddharth Rao</span>
+</div>
+<div>
+<span class="text-ink-muted">Validity:</span>
+<span class="font-medium text-ink ml-1 font-mono">Oct 20 – Oct 31 (11D)</span>
+</div>
+</div>
+</div>
+<!-- FINANCIAL FUNDING WATERFALL (CO-FUNDING ACCORDION / CONTAINER) -->
+<div class="p-space-sm rounded-lg bg-surface-container-low space-y-2.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">pie_chart</span>
+<span class="font-title-sm text-title-sm text-ink">Financial Funding Waterfall</span>
+</div>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">62.0% Consumed</span>
+</div>
+<!-- PROGRESS BAR -->
+<div class="w-full h-3 rounded-full bg-lavender-mist overflow-hidden flex">
+<div class="h-full bg-electric-violet" style="width: 40%;" title="Platform Contribution: 40%"></div>
+<div class="h-full bg-secondary" style="width: 60%;" title="Seller Pool Contribution: 60%"></div>
+</div>
+<div class="grid grid-cols-2 gap-2 pt-1 font-body-sm text-body-sm">
+<div class="p-2 rounded bg-surface-container-lowest">
+<div class="text-ink-muted font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-electric-violet"></span>
+              Platform Pool (40%)
+            </div>
+<div class="font-bold text-ink mt-0.5 font-mono">₹6,00,000</div>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest">
+<div class="text-ink-muted font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+              Seller Pool (60%)
+            </div>
+<div class="font-bold text-ink mt-0.5 font-mono">₹9,00,000</div>
+</div>
+</div>
+<div class="p-2.5 rounded bg-surface-container-lowest space-y-1.5 font-body-sm text-body-sm">
+<div class="flex justify-between">
+<span class="text-ink-muted">Total Campaign Budget:</span>
+<span class="font-bold text-ink font-mono">₹15,00,000</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-muted">Consumed Spend to Date:</span>
+<span class="font-medium text-semantic-warning font-mono">₹9,30,000</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-muted">Remaining Balance:</span>
+<span class="font-medium text-semantic-success font-mono">₹5,70,000</span>
+</div>
+<div class="flex justify-between pt-1">
+<span class="text-ink font-semibold">Attributed 7D GMV:</span>
+<span class="font-bold text-electric-violet font-mono text-title-sm">₹62,00,000</span>
+</div>
+</div>
+<div class="text-[11px] text-ink-subtle leading-tight">
+          *Attributed GMV is derived from 7-day post-click tracking; does not imply pure incremental lift.
+        </div>
+</div>
+<!-- PARTICIPATING MERCHANTS & SKU COVERAGE -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-ink flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">storefront</span>
+            Participating Merchants (3)
+          </span>
+<span class="font-label-sm text-label-sm text-ink-muted">28 Total SKUs</span>
+</div>
+<!-- MERCHANT 1 -->
+<div class="p-2.5 rounded-lg bg-porcelain flex items-center justify-between">
+<div class="space-y-0.5">
+<div class="font-title-sm text-title-sm text-ink flex items-center gap-1.5">
+<span>ApexTech India</span>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">Active</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">#OMZ-MCH-88201 • 14 SKUs (Apex Pro Audio)</div>
+</div>
+<div class="text-right">
+<div class="font-mono font-semibold text-ink">₹4,20,000</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Co-funded</div>
+</div>
+</div>
+<!-- MERCHANT 2 -->
+<div class="p-2.5 rounded-lg bg-porcelain flex items-center justify-between">
+<div class="space-y-0.5">
+<div class="font-title-sm text-title-sm text-ink flex items-center gap-1.5">
+<span>NovaCraft Audio Ltd</span>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">Active</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">#OMZ-MCH-65109 • 8 SKUs (Studio Series)</div>
+</div>
+<div class="text-right">
+<div class="font-mono font-semibold text-ink">₹2,80,000</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Co-funded</div>
+</div>
+</div>
+<!-- MERCHANT 3 -->
+<div class="p-2.5 rounded-lg bg-porcelain flex items-center justify-between">
+<div class="space-y-0.5">
+<div class="font-title-sm text-title-sm text-ink flex items-center gap-1.5">
+<span>Zenith Home Goods</span>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">Active</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">#OMZ-MCH-77412 • 6 SKUs (Smart IoT Hub)</div>
+</div>
+<div class="text-right">
+<div class="font-mono font-semibold text-ink">₹2,00,000</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Co-funded</div>
+</div>
+</div>
+</div>
+<!-- PROMOTION MECHANICS & DISCOUNT CAPS -->
+<div class="p-space-sm rounded-lg bg-porcelain space-y-2">
+<span class="font-title-sm text-title-sm text-ink flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">tune</span>
+          Promotion Logic &amp; Discount Engine
+        </span>
+<div class="text-body-sm text-ink space-y-1">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-electric-violet text-[16px] mt-0.5">check</span>
+<span><strong>Rule:</strong> Flat 10% instant off on cart value &gt;= ₹2,499</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-electric-violet text-[16px] mt-0.5">check</span>
+<span><strong>Max Cap:</strong> ₹1,500 maximum discount per order</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-electric-violet text-[16px] mt-0.5">check</span>
+<span><strong>Coupon Voucher:</strong> Linked code <code class="px-1.5 py-0.5 rounded bg-surface-container text-electric-violet font-mono font-semibold">TECH-10</code> (Auto-apply enabled)</span>
+</div>
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-electric-violet text-[16px] mt-0.5">check</span>
+<span><strong>Stacking:</strong> Non-stackable with Welcome Voucher; Stacks with Merchant Free Shipping</span>
+</div>
+</div>
+</div>
+<!-- SIMULATED AUDIT REVIEW CHECKLIST (6-POINT AUDIT) -->
+<div class="space-y-2">
+<span class="font-title-sm text-title-sm text-ink flex items-center justify-between">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-semantic-success">verified_user</span>
+            Platform Compliance Checklist
+          </span>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">6 / 6 Passed</span>
+</span>
+<div class="space-y-1.5 font-body-sm text-body-sm">
+<div class="flex items-center gap-2 text-ink">
+<span class="material-symbols-outlined text-semantic-success text-[16px]">check_circle</span>
+<span>Budget verified against Q4 Growth allocation</span>
+</div>
+<div class="flex items-center gap-2 text-ink">
+<span class="material-symbols-outlined text-semantic-success text-[16px]">check_circle</span>
+<span>Funding split confirmed with 3 Tier-1 Sellers</span>
+</div>
+<div class="flex items-center gap-2 text-ink">
+<span class="material-symbols-outlined text-semantic-success text-[16px]">check_circle</span>
+<span>Discount logic &amp; max cap stress-tested</span>
+</div>
+<div class="flex items-center gap-2 text-ink">
+<span class="material-symbols-outlined text-semantic-success text-[16px]">check_circle</span>
+<span>Catalog listings screened (9 Governance Flags cleared)</span>
+</div>
+<div class="flex items-center gap-2 text-ink">
+<span class="material-symbols-outlined text-semantic-success text-[16px]">check_circle</span>
+<span>Pan-India fulfillment hubs synchronization</span>
+</div>
+<div class="flex items-center gap-2 text-ink">
+<span class="material-symbols-outlined text-semantic-success text-[16px]">check_circle</span>
+<span>Cart stacking anti-abuse conflict rules active</span>
+</div>
+</div>
+</div>
+<!-- PRIVILEGED OPERATOR ACTIONS -->
+<div class="pt-space-xs space-y-2">
+<button class="w-full h-10 rounded-lg bg-surface-container text-ink hover:bg-surface-container-high transition-colors font-title-sm text-title-sm flex items-center justify-center gap-2" onclick="triggerSimulatedAction('Pause Campaign OMZ-CMP-26001')">
+<span class="material-symbols-outlined text-[18px] text-semantic-warning">pause_circle</span>
+<span>Pause Campaign (Simulated)</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="h-9 px-3 rounded-lg bg-porcelain hover:bg-surface-container text-ink font-body-sm text-body-sm transition-colors flex items-center justify-center gap-1.5" onclick="toggleCreationWizard(true)">
+<span class="material-symbols-outlined text-[16px] text-ink-muted">edit</span>
+<span>Edit Draft</span>
+</button>
+<button class="h-9 px-3 rounded-lg bg-porcelain hover:bg-surface-container text-ink font-body-sm text-body-sm transition-colors flex items-center justify-center gap-1.5" onclick="triggerSimulatedAction('View Seller Agreements')">
+<span class="material-symbols-outlined text-[16px] text-ink-muted">contract</span>
+<span>Agreements</span>
+</button>
+</div>
+<div class="text-[11px] text-ink-subtle text-center">
+          Demo Action — Non-mutating sandbox simulation; no live checkout disruption.
+        </div>
+</div>
+<!-- SIMULATED AUDIT TRAIL LOG -->
+<div class="p-2.5 rounded-lg bg-porcelain space-y-1.5">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider font-semibold">Audit Trail (Recent)</span>
+<div class="space-y-1 text-[12px] font-mono text-ink-muted">
+<div>• Oct 20, 00:01 IST — Campaign state changed to ACTIVE (Auto)</div>
+<div>• Oct 18, 17:30 IST — Siddharth Rao signed off budget release ₹6.00L</div>
+<div>• Oct 16, 11:20 IST — NovaCraft Audio approved ₹2.80L co-fund</div>
+</div>
+</div>
+</div>
+</div>
+<!-- COUPON & VOUCHER REGISTRY MINI-PANEL -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-space-md mb-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-md">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-ink">Active Coupon &amp; Voucher Engine Registry</h3>
+<p class="font-body-sm text-body-sm text-ink-muted">Direct promo tokens currently live in checkout tokenization stack</p>
+</div>
+<div class="flex items-center gap-2">
+<button class="h-9 px-3 rounded-lg bg-surface-container text-ink hover:bg-surface-container-high transition-colors font-label-md text-label-md flex items-center gap-1.5" onclick="toggleCreationWizard(true)">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Generate Coupon Code</span>
+</button>
+</div>
+</div>
+<!-- 4 COUPON CARDS -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- COUPON 1 -->
+<div class="p-space-md rounded-xl bg-porcelain flex flex-col justify-between hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded bg-electric-violet/10 text-electric-violet font-mono font-bold text-title-sm tracking-wider">TECH-10</span>
+<span class="px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">Active</span>
+</div>
+<div class="font-title-sm text-title-sm text-ink">10% Off Electronics</div>
+<div class="text-body-sm text-ink-muted mt-1">Min Order: ₹2,499 • Max Cap: ₹1,500</div>
+</div>
+<div class="mt-space-md pt-2">
+<div class="flex justify-between text-body-sm font-medium mb-1">
+<span class="text-ink-muted">Redemptions:</span>
+<span class="font-mono text-ink">4,120 / 10,000</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-electric-violet" style="width: 41.2%;"></div>
+</div>
+</div>
+</div>
+<!-- COUPON 2 -->
+<div class="p-space-md rounded-xl bg-porcelain flex flex-col justify-between hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded bg-electric-violet/10 text-electric-violet font-mono font-bold text-title-sm tracking-wider">OMZ-WELCOME</span>
+<span class="px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">Active</span>
+</div>
+<div class="font-title-sm text-title-sm text-ink">₹200 Instant Off First Order</div>
+<div class="text-body-sm text-ink-muted mt-1">Min Order: ₹999 • First Purchase Only</div>
+</div>
+<div class="mt-space-md pt-2">
+<div class="flex justify-between text-body-sm font-medium mb-1">
+<span class="text-ink-muted">Redemptions:</span>
+<span class="font-mono text-ink">1,840 / 5,000</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-royal-purple" style="width: 36.8%;"></div>
+</div>
+</div>
+</div>
+<!-- COUPON 3 -->
+<div class="p-space-md rounded-xl bg-porcelain flex flex-col justify-between hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded bg-electric-violet/10 text-electric-violet font-mono font-bold text-title-sm tracking-wider">HOME-250</span>
+<span class="px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">Active</span>
+</div>
+<div class="font-title-sm text-title-sm text-ink">₹250 Off Home Goods</div>
+<div class="text-body-sm text-ink-muted mt-1">Min Order: ₹1,499 • Home &amp; Kitchen</div>
+</div>
+<div class="mt-space-md pt-2">
+<div class="flex justify-between text-body-sm font-medium mb-1">
+<span class="text-ink-muted">Redemptions:</span>
+<span class="font-mono text-ink">980 / 2,500</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-electric-violet" style="width: 39.2%;"></div>
+</div>
+</div>
+</div>
+<!-- COUPON 4 -->
+<div class="p-space-md rounded-xl bg-porcelain flex flex-col justify-between hover:shadow-md transition-shadow">
+<div>
+<div class="flex items-center justify-between mb-2">
+<span class="px-2.5 py-1 rounded bg-electric-violet/10 text-electric-violet font-mono font-bold text-title-sm tracking-wider">SHIPFREE</span>
+<span class="px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">Active</span>
+</div>
+<div class="font-title-sm text-title-sm text-ink">Free Express Shipping</div>
+<div class="text-body-sm text-ink-muted mt-1">Orders &gt; ₹799 • Stacks with promo rules</div>
+</div>
+<div class="mt-space-md pt-2">
+<div class="flex justify-between text-body-sm font-medium mb-1">
+<span class="text-ink-muted">Redemptions:</span>
+<span class="font-mono text-ink">6,400 / 15,000</span>
+</div>
+<div class="w-full h-1.5 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-semantic-success" style="width: 42.6%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- CAMPAIGN CREATION WIZARD MODAL (PROTOTYPE OVERLAY / DRAWER) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-midnight-violet/60 backdrop-blur-sm hidden" id="campaign-wizard-modal">
+<div class="w-full max-w-3xl bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[921px]">
+<!-- MODAL HEADER -->
+<div class="p-space-md bg-obsidian-violet text-text-dark-primary flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-electric-violet flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[20px]">add_task</span>
+</div>
+<div>
+<h3 class="font-title-lg text-title-lg leading-tight">Create Marketplace Campaign</h3>
+<span class="font-label-sm text-label-sm text-text-dark-muted font-mono">Workflow Wizard • 5 Stages Verification</span>
+</div>
+</div>
+<button class="p-1 rounded-lg text-text-dark-muted hover:text-on-primary hover:bg-obsidian-surface-1 transition-colors" onclick="toggleCreationWizard(false)">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+</div>
+<!-- 5-STEP WIZARD STEPPER -->
+<div class="px-space-md py-3 bg-porcelain flex items-center justify-between text-body-sm overflow-x-auto">
+<div class="flex items-center gap-2 text-electric-violet font-semibold whitespace-nowrap">
+<span class="w-6 h-6 rounded-full bg-electric-violet text-on-primary flex items-center justify-center font-label-sm text-label-sm">1</span>
+<span>Basics</span>
+</div>
+<span class="text-ink-subtle">›</span>
+<div class="flex items-center gap-2 text-ink-muted whitespace-nowrap">
+<span class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center font-label-sm text-label-sm">2</span>
+<span>Audience &amp; Eligibility</span>
+</div>
+<span class="text-ink-subtle">›</span>
+<div class="flex items-center gap-2 text-ink-muted whitespace-nowrap">
+<span class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center font-label-sm text-label-sm">3</span>
+<span>Mechanics</span>
+</div>
+<span class="text-ink-subtle">›</span>
+<div class="flex items-center gap-2 text-ink-muted whitespace-nowrap">
+<span class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center font-label-sm text-label-sm">4</span>
+<span>Budget &amp; Co-funding</span>
+</div>
+<span class="text-ink-subtle">›</span>
+<div class="flex items-center gap-2 text-ink-muted whitespace-nowrap">
+<span class="w-6 h-6 rounded-full bg-surface-container flex items-center justify-center font-label-sm text-label-sm">5</span>
+<span>Review</span>
+</div>
+</div>
+<!-- WIZARD BODY -->
+<div class="p-space-md overflow-y-auto space-y-space-md">
+<!-- STEP 1 CONTENT -->
+<div class="space-y-space-sm">
+<h4 class="font-title-md text-title-md text-ink">Step 1: Campaign Basics &amp; Schedule</h4>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-sm">
+<div>
+<label class="block font-label-md text-label-md text-ink mb-1">Campaign Title</label>
+<input class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20" type="text" value="OMIZON Diwali Super Sale 2023"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-ink mb-1">Campaign Type</label>
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option>Marketplace Event (Hero Tier)</option>
+<option>Category Flash Sale</option>
+<option>Seller Clearance Event</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-sm">
+<div>
+<label class="block font-label-md text-label-md text-ink mb-1">Start Date (Simulated)</label>
+<input class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20" type="date" value="2023-11-01"/>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-ink mb-1">End Date (Simulated)</label>
+<input class="w-full h-10 px-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20" type="date" value="2023-11-12"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-ink mb-1">Strategic Objective</label>
+<textarea class="w-full p-2.5 rounded-lg bg-porcelain font-body-md text-body-md text-ink focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Describe primary north star (e.g. increase high-ticket electronics GMV by 25%)..." rows="2">Drive peak festive conversions across consumer tech and home decor with verified merchant co-funding.</textarea>
+</div>
+</div>
+<!-- STEP 4 CO-FUNDING PREVIEW -->
+<div class="p-space-sm rounded-xl bg-porcelain space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm text-ink">Funding Structure Split Calculator</span>
+<span class="text-semantic-success font-label-sm text-label-sm font-semibold">100% Balanced</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="p-2 rounded bg-surface-container-lowest">
+<span class="text-ink-muted font-label-sm text-label-sm">Total Budget Target</span>
+<div class="font-bold text-ink mt-0.5 font-mono">₹10,00,000</div>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest">
+<span class="text-ink-muted font-label-sm text-label-sm">Platform Grant (40%)</span>
+<div class="font-bold text-electric-violet mt-0.5 font-mono">₹4,00,000</div>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest">
+<span class="text-ink-muted font-label-sm text-label-sm">Seller Grants (60%)</span>
+<div class="font-bold text-secondary mt-0.5 font-mono">₹6,00,000</div>
+</div>
+</div>
+</div>
+<!-- EDGE CASE TEST CONFIRMATION -->
+<div class="p-3 rounded-lg bg-electric-violet/5 flex items-start gap-2 text-ink">
+<span class="material-symbols-outlined text-electric-violet text-[20px] mt-0.5">shield</span>
+<div class="text-body-sm">
+<strong class="text-ink">Automated Governance Pre-Check:</strong> Target merchants are verified against minimum 98.5% on-time fulfillment and zero active counterfeit strikes.
+          </div>
+</div>
+</div>
+<!-- MODAL FOOTER -->
+<div class="p-space-md bg-porcelain flex items-center justify-between">
+<button class="h-10 px-4 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container transition-colors font-title-sm text-title-sm" onclick="toggleCreationWizard(false)">
+          Cancel Draft
+        </button>
+<div class="flex items-center gap-2">
+<button class="h-10 px-4 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container transition-colors font-title-sm text-title-sm" onclick="triggerSimulatedAction('Save Campaign as Inactive Draft')">
+            Save as Draft
+          </button>
+<button class="h-10 px-5 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-title-sm text-title-sm flex items-center gap-2 shadow-sm" onclick="submitCampaignCreation()">
+<span>Submit for Sign-Off</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- TOAST FEEDBACK NOTIFICATION -->
+<div class="fixed bottom-6 right-6 z-50 p-4 rounded-xl bg-obsidian-violet text-text-dark-primary shadow-2xl flex items-center gap-3 transition-all hidden" id="sim-campaign-toast">
+<span class="material-symbols-outlined text-semantic-success text-[24px]">check_circle</span>
+<div>
+<div class="font-title-sm text-title-sm leading-tight">Simulation Ingestion Cycle Completed</div>
+<div class="font-body-sm text-body-sm text-text-dark-muted">Recomputed 24 campaigns across 18 sortation nodes. 0 anomalies detected.</div>
+</div>
+</div>
+</div>
+<!-- CLIENT INTERACTIVITY LOGIC -->
+<script>
+  function toggleCreationWizard(show) {
+    const modal = document.getElementById('campaign-wizard-modal');
+    if (show) {
+      modal.classList.remove('hidden');
+    } else {
+      modal.classList.add('hidden');
+    }
+  }
+
+  function triggerSimulatedAction(actionName) {
+    const toast = document.getElementById('sim-campaign-toast');
+    const titleEl = toast.querySelector('.font-title-sm');
+    const subEl = toast.querySelector('.font-body-sm');
+    
+    titleEl.textContent = actionName + ' executed';
+    subEl.textContent = 'Simulated non-mutating event logged to audit stream.';
+    
+    toast.classList.remove('hidden');
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 3500);
+  }
+
+  function submitCampaignCreation() {
+    toggleCreationWizard(false);
+    triggerSimulatedAction('New Campaign Submitted for Approvals');
+  }
+
+  function selectCampaignRow(id) {
+    document.querySelectorAll('.campaign-table-row').forEach(row => {
+      row.classList.remove('bg-electric-violet/5', 'hover:bg-electric-violet/10');
+      row.classList.add('hover:bg-porcelain');
+    });
+    
+    const activeRow = document.getElementById('row-' + id);
+    if (activeRow) {
+      activeRow.classList.remove('hover:bg-porcelain');
+      activeRow.classList.add('bg-electric-violet/5', 'hover:bg-electric-violet/10');
+    }
+  }
+
+  function filterCampaignRows() {
+    const query = document.getElementById('campaign-search').value.toLowerCase();
+    const rows = document.querySelectorAll('.campaign-table-row');
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      if (text.includes(query)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  function exportCampaignsCSV() {
+    triggerSimulatedAction('CSV Export: 24 active campaigns generated');
+  }
+</script></main></div></body></html>

@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary-fixed":"#1a0063","midnight-violet":"#190B46","tertiary-container":"#655a96","text-dark-secondary":"#C3BCD7","surface-container-highest":"#e2e2e6","surface-container":"#ededf1","on-primary":"#ffffff","surface-variant":"#e2e2e6","on-error":"#ffffff","on-error-container":"#93000a","obsidian-border":"#382B54","obsidian-violet":"#100A25","lavender-mist":"#E8E6F0","on-tertiary":"#ffffff","on-background":"#1a1c1f","outline-variant":"#ccc3d9","text-dark-primary":"#F7F5FF","surface-container-high":"#e8e8ec","on-secondary-fixed-variant":"#451fc4","porcelain":"#F7F7FB","text-dark-muted":"#A49ABF","inverse-on-surface":"#f0f0f4","surface-container-low":"#f3f3f7","secondary-container":"#745af4","on-surface-variant":"#4a4456","primary-container":"#762ff2","on-primary-fixed-variant":"#5800c8","outline":"#7b7487","tertiary":"#4d427c","on-tertiary-container":"#e3daff","on-primary-container":"#e7d9ff","inverse-surface":"#2e3034","surface-bright":"#f9f9fd","ink":"#211D31","tertiary-fixed":"#e6deff","primary":"#5c00d2","surface":"#f9f9fd","royal-purple":"#4C2ACB","error-container":"#ffdad6","surface-tint":"#7228ee","secondary-fixed-dim":"#c9bfff","inverse-primary":"#d1bcff","secondary-fixed":"#e5deff","ink-subtle":"#928B9F","surface-container-lowest":"#ffffff","primary-fixed-dim":"#d1bcff","on-secondary-container":"#fffbff","ink-muted":"#655E7A","on-tertiary-fixed":"#1d104a","tertiary-fixed-dim":"#cbbeff","semantic-warning":"#E27300","on-tertiary-fixed-variant":"#493e78","background":"#f9f9fd","obsidian-surface-1":"#1D1537","semantic-error":"#D92D20","surface-dim":"#d9dade","electric-violet":"#762FF2","on-primary-fixed":"#24005b","semantic-success":"#00875A","on-surface":"#1a1c1f","error":"#ba1a1a","obsidian-surface-2":"#211735","primary-fixed":"#eaddff","secondary":"#5b3eda","on-secondary":"#ffffff"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{margin:"2rem","space-xs":"0.25rem","margin-mobile":"1rem","space-xl":"2.5rem","gutter-mobile":"0.75rem","space-sm":"0.5rem","space-lg":"1.5rem",gutter:"1.5rem","space-md":"1rem"},fontFamily:{"body-lg":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"]},fontSize:{"body-lg":["16px",{lineHeight:"26px",fontWeight:"400"}],"display-hero":["56px",{lineHeight:"64px",letterSpacing:"-0.03em",fontWeight:"700"}],"title-md":["16px",{lineHeight:"24px",fontWeight:"600"}],"body-md":["14px",{lineHeight:"22px",fontWeight:"400"}],"headline-lg-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-sm":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"600"}],"title-sm":["14px",{lineHeight:"20px",fontWeight:"600"}],"body-sm":["12px",{lineHeight:"18px",fontWeight:"400"}],"price-hero":["32px",{lineHeight:"38px",letterSpacing:"-0.02em",fontWeight:"700"}],"title-lg":["18px",{lineHeight:"26px",letterSpacing:"-0.005em",fontWeight:"600"}],"headline-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.02em",fontWeight:"600"}],"label-md":["13px",{lineHeight:"18px",fontWeight:"500"}],"price-card":["20px",{lineHeight:"26px",letterSpacing:"-0.01em",fontWeight:"700"}],"headline-md":["28px",{lineHeight:"36px",letterSpacing:"-0.015em",fontWeight:"600"}],"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"700"}]}}}};</script></head><body class="bg-porcelain text-on-surface font-body-md text-body-md antialiased min-h-screen"><aside class="fixed left-0 top-0 h-full w-72 bg-midnight-violet z-50 flex flex-col justify-between overflow-y-auto shadow-[4px_0_24px_rgba(25,11,70,0.12)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center gap-space-sm bg-obsidian-surface-1/60"><img alt="OMIZON Official Brand Logo for dark surfaces with white geometric wordmark and glowing purple infinity ribbon symbol" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UdlrUM8hyyFfQVS5dmLaEh62kAxW_rStX2OO5j_r1zHJphPs6pfdXHGfDL0SS-LW_BEeUrp7vsEjrLyFXnOBWfDYjrJlJcEEjcpNp4AnrHV4cy5bOVYu_KnI5jBuFr0EY-AzNwLKSQsH8hazC472Fa85bIN2voQfI0bYSYwAKVWSoY3Vix0yMPgECasdbSABNB3UZKOz0aICgQ9rG4blKonaeUmeoPR3z_qtI2AgAbUBQj4TNVvepFFRw"/><div class="flex flex-col"><span class="font-title-sm text-title-sm text-text-dark-primary font-bold tracking-tight">OMIZON</span><span class="font-label-sm text-label-sm text-text-dark-muted tracking-wider uppercase">Console Admin</span></div></div><div class="px-space-md py-space-sm"><div class="px-space-sm py-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Management Core</div><nav class="space-y-1 mt-space-xs" data-active-classes="bg-electric-violet text-on-primary font-bold rounded-lg shadow-[0_4px_12px_rgba(118,47,242,0.35)]"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="overview" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-body-md text-body-md">Overview</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="seller-applications" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">assignment_ind</span><span class="font-body-md text-body-md">Seller Applications</span></div><span class="bg-royal-purple text-text-dark-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">14 New</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="sellers" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">storefront</span><span class="font-body-md text-body-md">Sellers</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="buyers" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">groups</span><span class="font-body-md text-body-md">Buyers</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="catalog-governance" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span class="font-body-md text-body-md">Catalog Governance</span></div><span class="bg-semantic-warning/20 text-text-dark-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">9 Flagged</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="all-orders" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">shopping_bag</span><span class="font-body-md text-body-md">All Orders</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="payments-&amp;-settlements" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">payments</span><span class="font-body-md text-body-md">Payments &amp; Settlements</span></div><span class="bg-semantic-error/20 text-text-dark-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">3 Hold</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="returns-&amp;-disputes" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">published_with_changes</span><span class="font-body-md text-body-md">Returns &amp; Disputes</span></div><span class="bg-royal-purple text-text-dark-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">5 Open</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="promotions" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">loyalty</span><span class="font-body-md text-body-md">Promotions</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="risk-&amp;-fraud" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">shield</span><span class="font-body-md text-body-md">Risk &amp; Fraud</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="reports-&amp;-analytics" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">insights</span><span class="font-body-md text-body-md">Reports &amp; Analytics</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-text-dark-primary transition-all" data-path="audit-logs" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span class="font-body-md text-body-md">Audit Logs</span></div></a><a aria-current="page" class="flex items-center justify-between px-space-sm py-2 transition-all bg-electric-violet text-on-primary font-bold rounded-lg shadow-[0_4px_12px_rgba(118,47,242,0.35)]" data-path="platform-settings" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">tune</span><span class="font-body-md text-body-md">Platform Settings</span></div></a></nav></div></div><div class="p-space-md border-t border-obsidian-border bg-obsidian-surface-1/40"><div class="flex items-center justify-between"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-electric-violet flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">verified_user</span></div><div class="flex flex-col"><span class="font-label-md text-label-md text-text-dark-primary font-medium">Cluster 01-PROD</span><span class="font-label-sm text-label-sm text-semantic-success flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-semantic-success inline-block"></span>Healthy</span></div></div><span class="material-symbols-outlined text-text-dark-muted text-[18px]">dns</span></div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(25,11,70,0.04)] flex items-center justify-between px-space-lg"><div class="flex items-center gap-space-md flex-1"><div class="flex items-center gap-space-xs"><img alt="OMIZON Official Brand Logo for dark surfaces with white geometric wordmark and glowing purple infinity ribbon symbol" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UdlrUM8hyyFfQVS5dmLaEh62kAxW_rStX2OO5j_r1zHJphPs6pfdXHGfDL0SS-LW_BEeUrp7vsEjrLyFXnOBWfDYjrJlJcEEjcpNp4AnrHV4cy5bOVYu_KnI5jBuFr0EY-AzNwLKSQsH8hazC472Fa85bIN2voQfI0bYSYwAKVWSoY3Vix0yMPgECasdbSABNB3UZKOz0aICgQ9rG4blKonaeUmeoPR3z_qtI2AgAbUBQj4TNVvepFFRw"/><span class="font-title-sm text-title-sm font-bold text-midnight-violet tracking-tight hidden xl:inline">OMIZON CONSOLE</span><span class="font-label-sm text-label-sm text-ink-subtle hidden xl:inline">| PLATFORM ADMIN</span></div><span class="bg-surface-container text-ink-muted px-2.5 py-1 rounded-full font-label-sm text-label-sm tracking-wide hidden lg:inline-flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-secondary"></span>Platform-Wide (Simulated Demo Environment)</span><div class="relative max-w-md w-full ml-space-sm"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle text-[18px]">search</span><input class="w-full h-10 pl-9 pr-4 rounded-lg bg-surface-container-low text-ink font-body-sm text-body-sm placeholder:text-ink-subtle focus:outline-none focus:bg-surface-container-lowest transition-colors" placeholder="Global search (settings, admins, policies...) ⌘K" type="text"/></div></div><div class="flex items-center gap-space-md"><div class="hidden md:flex items-center gap-1.5 bg-surface-container-low px-3 py-1.5 rounded-lg text-ink-muted font-body-sm text-body-sm"><span class="material-symbols-outlined text-[16px] text-ink-subtle">calendar_today</span><span>Oct 01 - Oct 30, 2023 (Simulated)</span></div><div class="flex items-center gap-space-xs"><button class="w-9 h-9 rounded-lg flex items-center justify-center text-ink-muted hover:bg-surface-container hover:text-ink transition-colors relative" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-2 right-2 w-2 h-2 bg-semantic-error rounded-full"></span></button><button class="w-9 h-9 rounded-lg flex items-center justify-center text-ink-muted hover:bg-surface-container hover:text-ink transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">tune</span></button></div><div class="h-6 w-px bg-lavender-mist"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right hidden sm:flex"><span class="font-title-sm text-title-sm text-ink font-semibold">Siddharth Rao</span><span class="font-label-sm text-label-sm text-ink-subtle">Super Admin / Platform Lead</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-16 bg-porcelain min-h-screen"><div class="flex flex-col w-full">
+<!-- Main Container -->
+<div class="p-space-lg max-w-[1440px] mx-auto w-full space-y-space-md">
+<!-- Breadcrumb & Top Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex flex-col">
+<div class="flex items-center gap-2 text-ink-subtle font-label-md text-label-md">
+<span class="flex items-center gap-1 hover:text-ink transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">shield</span>
+            Governance &amp; Security
+          </span>
+<span class="text-ink-subtle">/</span>
+<span class="text-midnight-violet font-semibold">Platform Settings &amp; Access Control</span>
+</div>
+<div class="flex items-baseline gap-space-sm mt-1">
+<h1 class="font-headline-md text-headline-md text-midnight-violet font-bold tracking-tight">
+            Platform Settings &amp; Access Control
+          </h1>
+<span class="font-label-sm text-label-sm bg-obsidian-violet/10 text-midnight-violet px-2.5 py-0.5 rounded-full font-semibold uppercase tracking-wider">
+            Console v4.12 • SIMULATED DATA
+          </span>
+</div>
+<p class="font-body-md text-body-md text-ink-muted mt-0.5">
+          Manage platform configuration, administrator access, security policies, integrations, and system governance.
+        </p>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-space-sm self-start md:self-auto shrink-0">
+<button class="h-10 px-4 rounded-lg bg-surface-container-lowest text-ink font-title-sm text-title-sm shadow-sm hover:bg-surface-container transition-all flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">file_download</span>
+<span>Export Config Snapshot (Sandbox)</span>
+</button>
+<button class="h-10 px-4 rounded-lg bg-electric-violet text-on-primary font-title-sm text-title-sm shadow-md hover:bg-royal-purple active:scale-[0.985] transition-all flex items-center gap-2 group" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Save All Changes (Simulated)</span>
+<span class="bg-obsidian-surface-1/40 text-on-primary text-[10px] px-1.5 py-0.5 rounded tracking-wide font-mono">Local Prototype</span>
+</button>
+</div>
+</div>
+<!-- Prominent Safety & Demo Disclosure Banner -->
+<div class="rounded-xl p-space-md bg-gradient-to-r from-semantic-warning/10 via-electric-violet/10 to-transparent flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md shadow-sm">
+<div class="flex items-start sm:items-center gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-semantic-warning/20 text-semantic-warning flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">lock_reset</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold uppercase tracking-wider text-semantic-warning">
+              SIMULATED PLATFORM CONFIGURATION
+            </span>
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-warning inline-block"></span>
+<span class="font-label-sm text-label-sm text-ink-muted">Demonstration settings only</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted mt-0.5">
+            No production permissions, credentials, integrations, or security policies are changed. All cryptographic tokens, Webhook endpoints, and administrator directories are synthetic entities.
+          </p>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-label-sm text-label-sm px-2.5 py-1 bg-surface-container-lowest text-midnight-violet rounded-lg shadow-sm font-mono font-medium">
+          STAGING: v4.12.0-demo
+        </span>
+</div>
+</div>
+<!-- Two-Column Workspace Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left Sub-Navigation Menu (Fixed footprint width column) -->
+<div class="lg:col-span-3 space-y-space-md sticky top-20">
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm space-y-1">
+<div class="px-3 py-2 text-ink-subtle font-label-sm text-label-sm uppercase tracking-wider font-bold">
+            Settings Workspace
+          </div>
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg bg-electric-violet text-on-primary font-title-sm text-title-sm shadow-[0_4px_12px_rgba(118,47,242,0.25)] transition-all" href="#section-general">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px]">tune</span>
+<span>General Configuration</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-on-primary"></span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-admins">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">admin_panel_settings</span>
+<span>Administrator Accounts</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container text-ink-muted px-2 py-0.5 rounded-full">6</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-rbac">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">verified_user</span>
+<span>Roles &amp; Permissions</span>
+</div>
+<span class="font-label-sm text-label-sm bg-secondary-fixed text-on-secondary-fixed px-2 py-0.5 rounded-full">Matrix</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-auth">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">fingerprint</span>
+<span>Auth &amp; Sessions</span>
+</div>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded-full">MFA</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-integrations">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">api</span>
+<span>API &amp; Webhooks</span>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container text-ink-muted px-2 py-0.5 rounded-full">5 Mock</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-notifications">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">notifications_active</span>
+<span>Notification Rules</span>
+</div>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-privacy">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">policy</span>
+<span>Data Retention &amp; DPDP</span>
+</div>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-flags">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">toggle_on</span>
+<span>Feature Flags</span>
+</div>
+<span class="font-label-sm text-label-sm bg-royal-purple/15 text-royal-purple px-2 py-0.5 rounded-full">5 Active</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-audit">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">history</span>
+<span>Security Events &amp; Audit</span>
+</div>
+</a>
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-ink hover:bg-surface-container-low transition-colors font-title-sm text-title-sm" href="#section-health">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[19px] text-ink-subtle">monitor_heart</span>
+<span>Environment &amp; Health</span>
+</div>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-1.5 py-0.5 rounded">99.98%</span>
+</a>
+</div>
+<!-- Quick Security Snapshot Widget -->
+<div class="bg-midnight-violet text-text-dark-primary rounded-xl p-space-md shadow-md space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-text-dark-muted uppercase tracking-wider font-semibold">Security Posture</span>
+<span class="bg-semantic-success text-on-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold">Compliant</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-hero text-headline-md font-bold text-text-dark-primary">100%</span>
+<span class="font-body-sm text-body-sm text-text-dark-secondary">2FA Coverage</span>
+</div>
+<div class="w-full bg-obsidian-surface-2 rounded-full h-1.5 overflow-hidden">
+<div class="bg-electric-violet h-full rounded-full w-full"></div>
+</div>
+<div class="text-[12px] text-text-dark-muted leading-tight pt-1">
+            Zero pending permission escalations across active sessions. Next automated key rotation scheduled in 14 days.
+          </div>
+</div>
+</div>
+<!-- Right Detail Workspace Panels -->
+<div class="lg:col-span-9 space-y-space-lg">
+<!-- SECTION 1: GENERAL CONFIGURATION & OPERATIONAL DEFAULTS -->
+<section class="space-y-space-md" id="section-general">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-title-lg text-title-lg text-midnight-violet font-bold">1. General Configuration &amp; Defaults</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Core market parameters, national localization, and platform operational thresholds.</p>
+</div>
+<span class="font-label-sm text-label-sm text-ink-subtle bg-surface-container px-2.5 py-1 rounded">Module ID: CFG-CORE-01</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Card 1: Core Platform Identity -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-electric-violet">corporate_fare</span>
+<h3 class="font-title-md text-title-md text-ink font-semibold">Core Platform Identity</h3>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-medium bg-semantic-success/10 px-2 py-0.5 rounded">Active Master</span>
+</div>
+<div class="space-y-3">
+<div>
+<label class="block font-label-sm text-label-sm text-ink-muted uppercase font-bold mb-1">Marketplace Legal Brand Name</label>
+<div class="flex items-center justify-between bg-surface-container-low px-3 py-2 rounded-lg">
+<span class="font-title-sm text-title-sm text-ink font-bold">OMIZON PLATFORM INDIA</span>
+<button class="text-electric-violet hover:text-royal-purple p-1"><span class="material-symbols-outlined text-[18px]">edit</span></button>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block font-label-sm text-label-sm text-ink-muted uppercase font-bold mb-1">Default Currency</label>
+<div class="bg-surface-container-low px-3 py-2 rounded-lg font-body-sm text-body-sm text-ink font-medium">
+                      INR (₹ — Indian Rupee)
+                    </div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-ink-muted uppercase font-bold mb-1">Timezone</label>
+<div class="bg-surface-container-low px-3 py-2 rounded-lg font-body-sm text-body-sm text-ink font-medium">
+                      Asia/Kolkata (IST UTC+05:30)
+                    </div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<label class="block font-label-sm text-label-sm text-ink-muted uppercase font-bold mb-1">Localization Locale</label>
+<div class="bg-surface-container-low px-3 py-2 rounded-lg font-body-sm text-body-sm text-ink font-medium">
+                      en_IN (English - India)
+                    </div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-ink-muted uppercase font-bold mb-1">Operational Scope</label>
+<div class="bg-surface-container-low px-3 py-2 rounded-lg font-body-sm text-body-sm text-ink font-medium">
+                      Pan-India Distribution
+                    </div>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-ink-muted uppercase font-bold mb-1">Runtime Environment Profile</label>
+<div class="flex items-center justify-between bg-lavender-mist/40 px-3 py-2 rounded-lg">
+<span class="font-label-md text-label-md text-midnight-violet font-mono">SANDBOX_SIMULATED_STAGING_v4.12</span>
+<span class="font-label-sm text-label-sm bg-electric-violet/20 text-electric-violet px-2 py-0.5 rounded font-bold">Non-Production</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Operational Safeguards -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-sm">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-electric-violet">gavel</span>
+<h3 class="font-title-md text-title-md text-ink font-semibold">Governance Safeguards &amp; Thresholds</h3>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted bg-surface-container px-2 py-0.5 rounded">Enforced</span>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-ink font-semibold">Default Order Hold Window</span>
+<span class="font-body-sm text-body-sm text-ink-subtle">Fraud &amp; heuristic anomaly scanning quarantine buffer</span>
+</div>
+<span class="font-title-sm text-title-sm text-midnight-violet font-bold bg-surface-container-lowest px-3 py-1 rounded shadow-sm">
+                    15 Minutes
+                  </span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-ink font-semibold">Seller Onboarding Review</span>
+<span class="font-body-sm text-body-sm text-ink-subtle">Mandatory verified KYC + GSTIN portal clearance</span>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success bg-semantic-success/15 px-2.5 py-1 rounded font-bold">
+                    Manual Strict
+                  </span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-ink font-semibold">Catalog Moderation Tier</span>
+<span class="font-body-sm text-body-sm text-ink-subtle">Automated heuristic screening + 100% flagged review</span>
+</div>
+<span class="font-label-sm text-label-sm text-electric-violet bg-electric-violet/10 px-2.5 py-1 rounded font-bold">
+                    Heuristic + Human
+                  </span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-ink font-semibold">Refund Review Threshold</span>
+<span class="font-body-sm text-body-sm text-ink-subtle">Auto-approve &lt; ₹500, Operations approval &gt;= ₹500</span>
+</div>
+<span class="font-title-sm text-title-sm text-midnight-violet font-bold bg-surface-container-lowest px-3 py-1 rounded shadow-sm">
+                    ₹500.00
+                  </span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-title-sm text-title-sm text-ink font-semibold">Settlement Reconciliation Gate</span>
+<span class="font-body-sm text-body-sm text-ink-subtle">Auto-flag ledger variance &gt; ₹0.00 (Exception: OMZ-REC-9921)</span>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-warning bg-semantic-warning/15 px-2.5 py-1 rounded font-bold">
+                    Strict Zero Tolerance
+                  </span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 2: ADMINISTRATOR ACCOUNTS DIRECTORY -->
+<section class="space-y-space-md" id="section-admins">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<h2 class="font-title-lg text-title-lg text-midnight-violet font-bold">2. Platform Administrator Accounts</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">6 credentialed operators with active system access and hardware key bindings.</p>
+</div>
+<button class="h-9 px-3 bg-midnight-violet text-text-dark-primary font-title-sm text-title-sm rounded-lg hover:bg-obsidian-surface-1 transition-colors flex items-center gap-1.5 self-start sm:self-auto" type="button">
+<span class="material-symbols-outlined text-[18px]">person_add</span>
+<span>+ Invite Administrator (Simulated)</span>
+</button>
+</div>
+<!-- Administrators Table -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="p-space-sm bg-surface-container-low/70 flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-2 flex-1 max-w-sm">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle text-[18px]">search</span>
+<input class="w-full h-9 pl-9 pr-3 rounded-lg bg-surface-container-lowest font-body-sm text-body-sm placeholder:text-ink-subtle focus:outline-none focus:bg-surface-container-lowest shadow-sm" placeholder="Search by name, ID (OMZ-ADM-*), or role..." type="text" value=""/>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-ink-muted">Filter Role:</span>
+<span class="font-label-sm text-label-sm bg-midnight-violet text-on-primary px-2.5 py-1 rounded-full font-medium">All Roles (6)</span>
+<span class="font-label-sm text-label-sm bg-surface-container text-ink px-2.5 py-1 rounded-full font-medium">Security &amp; Ops</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low text-ink-muted uppercase font-label-sm text-label-sm font-semibold tracking-wider">
+<tr>
+<th class="py-3 px-4">Administrator</th>
+<th class="py-3 px-4">Assigned Role</th>
+<th class="py-3 px-4">Status &amp; Last Active</th>
+<th class="py-3 px-4">2FA Enforced Method</th>
+<th class="py-3 px-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Row 1: Siddharth Rao -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-electric-violet/5">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-electric-violet text-on-primary flex items-center justify-center font-bold text-title-sm">
+                          SR
+                        </div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-bold flex items-center gap-1.5">
+                            Siddharth Rao
+                            <span class="font-label-sm text-label-sm bg-royal-purple text-on-primary px-1.5 py-0.2 rounded font-semibold text-[10px]">Lead</span>
+</div>
+<span class="font-mono text-ink-subtle text-[11px]">ID: OMZ-ADM-001 • siddharth@omizon.internal</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 font-title-sm text-title-sm text-midnight-violet font-semibold">
+                      Super Admin / Platform Lead
+                    </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-semantic-success font-medium">
+<span class="w-2 h-2 rounded-full bg-semantic-success animate-pulse"></span>
+                        Active
+                      </div>
+<span class="text-ink-subtle text-[11px]">2 mins ago (Current Session)</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-midnight-violet font-medium font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[17px] text-electric-violet">key</span>
+                        FIDO2 Hardware Token (YubiKey)
+                      </div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Edit Role</button>
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Audit</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Meera Iyer -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-title-sm">
+                          MI
+                        </div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Meera Iyer</div>
+<span class="font-mono text-ink-subtle text-[11px]">ID: OMZ-ADM-014 • meera.iyer@omizon.internal</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 font-body-md text-body-md text-ink font-medium">
+                      Finance Operations
+                    </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-semantic-success font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                        Active
+                      </div>
+<span class="text-ink-subtle text-[11px]">14 mins ago</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-ink font-medium">
+<span class="material-symbols-outlined text-[17px] text-secondary">phonelink_lock</span>
+                        TOTP App (RFC 6238)
+                      </div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Edit Role</button>
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Audit</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Vikram Sethi -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-royal-purple text-on-primary flex items-center justify-center font-bold text-title-sm">
+                          VS
+                        </div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Vikram Sethi</div>
+<span class="font-mono text-ink-subtle text-[11px]">ID: OMZ-ADM-022 • vikram.sethi@omizon.internal</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 font-body-md text-body-md text-ink font-medium">
+                      Risk &amp; Trust Operations
+                    </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-semantic-success font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                        Active
+                      </div>
+<span class="text-ink-subtle text-[11px]">8 mins ago</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-ink font-medium">
+<span class="material-symbols-outlined text-[17px] text-secondary">phonelink_lock</span>
+                        TOTP App (RFC 6238)
+                      </div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Edit Role</button>
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Audit</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Ananya Deshmukh -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold text-title-sm">
+                          AD
+                        </div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Ananya Deshmukh</div>
+<span class="font-mono text-ink-subtle text-[11px]">ID: OMZ-ADM-035 • ananya.d@omizon.internal</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 font-body-md text-body-md text-ink font-medium">
+                      Seller Operations
+                    </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-semantic-success font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                        Active
+                      </div>
+<span class="text-ink-subtle text-[11px]">1 hour ago</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-ink font-medium">
+<span class="material-symbols-outlined text-[17px] text-secondary">phonelink_lock</span>
+                        TOTP App (RFC 6238)
+                      </div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Edit Role</button>
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Audit</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Arjun Menon -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-ink flex items-center justify-center font-bold text-title-sm">
+                          AM
+                        </div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Arjun Menon</div>
+<span class="font-mono text-ink-subtle text-[11px]">ID: OMZ-ADM-048 • arjun.m@omizon.internal</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 font-body-md text-body-md text-ink font-medium">
+                      Catalog Governance
+                    </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-semantic-success font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                        Active
+                      </div>
+<span class="text-ink-subtle text-[11px]">3 hours ago</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-ink font-medium">
+<span class="material-symbols-outlined text-[17px] text-secondary">phonelink_lock</span>
+                        TOTP App (RFC 6238)
+                      </div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Edit Role</button>
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Audit</button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Neha Kapoor -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-ink flex items-center justify-center font-bold text-title-sm">
+                          NK
+                        </div>
+<div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Neha Kapoor</div>
+<span class="font-mono text-ink-subtle text-[11px]">ID: OMZ-ADM-061 • neha.kapoor@omizon.internal</span>
+</div>
+</div>
+</td>
+<td class="py-3 px-4 font-body-md text-body-md text-ink font-medium">
+                      Read-Only Auditor
+                    </td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-ink-muted font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-ink-subtle"></span>
+                        Offline
+                      </div>
+<span class="text-ink-subtle text-[11px]">Yesterday 17:40 IST</span>
+</td>
+<td class="py-3 px-4">
+<div class="flex items-center gap-1.5 text-ink font-medium">
+<span class="material-symbols-outlined text-[17px] text-secondary">phonelink_lock</span>
+                        TOTP App (RFC 6238)
+                      </div>
+</td>
+<td class="py-3 px-4 text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Edit Role</button>
+<button class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high rounded text-ink font-label-md text-label-md">Audit</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Focus Administrator Info Panel (Siddharth Rao) -->
+<div class="p-space-md bg-surface-container-low/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-electric-violet/10 text-electric-violet flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">security</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm text-midnight-violet font-bold flex items-center gap-2">
+                    Active Inspection: Siddharth Rao (Super Admin / Lead)
+                    <span class="font-mono text-[11px] text-ink-subtle font-normal">Active IP: 10.14.0.0/16 (Corporate Tailscale Gateway)</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">
+                    Elevated permissions: Dual-authorization bypass for sandbox recovery • Master key rotation rights • Policy overrides
+                  </div>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-label-sm text-label-sm bg-semantic-success/20 text-semantic-success px-2.5 py-1 rounded font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                  Session Verified FIDO2
+                </span>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 3: ROLES & LEAST-PRIVILEGE PERMISSION MATRIX -->
+<section class="space-y-space-md" id="section-rbac">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-title-lg text-title-lg text-midnight-violet font-bold">3. Least-Privilege Role &amp; Permission Matrix</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Enforcing strict separation of duties across financial, risk, and catalog verticals.</p>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted bg-surface-container px-2.5 py-1 rounded">
+              Illustrative Permission Model — Not Enforced in Production
+            </span>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container-low text-ink-muted uppercase font-label-sm text-label-sm font-semibold tracking-wider">
+<tr>
+<th class="py-3 px-4">System Role</th>
+<th class="py-3 px-3 text-center">View All</th>
+<th class="py-3 px-3 text-center">Create</th>
+<th class="py-3 px-3 text-center">Edit Config</th>
+<th class="py-3 px-3 text-center">Approve</th>
+<th class="py-3 px-3 text-center">Suspend</th>
+<th class="py-3 px-3 text-center">Export</th>
+<th class="py-3 px-3 text-center">Manage Admins</th>
+<th class="py-3 px-4">Vertical Domain Scope</th>
+</tr>
+</thead>
+<tbody class="divide-y-0 font-body-sm text-body-sm">
+<!-- Super Admin -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 font-title-sm text-title-sm text-midnight-violet font-bold">Super Admin</td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-4 text-ink-muted font-mono text-[12px]">Full Platform Scope (Unrestricted)</td>
+</tr>
+<!-- Finance Operations -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 font-title-sm text-title-sm text-ink font-semibold">Finance Operations</td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-4 text-ink-muted font-mono text-[12px]">Settlements, Gateways, Payout Ledgers</td>
+</tr>
+<!-- Risk & Trust Ops -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 font-title-sm text-title-sm text-ink font-semibold">Risk &amp; Trust Ops</td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-4 text-ink-muted font-mono text-[12px]">Fraud Heuristics, Quarantine Holds, User Risk</td>
+</tr>
+<!-- Seller Operations -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 font-title-sm text-title-sm text-ink font-semibold">Seller Operations</td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-4 text-ink-muted font-mono text-[12px]">Seller Onboarding, GSTIN KYC, Storefronts</td>
+</tr>
+<!-- Catalog Governance -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 font-title-sm text-title-sm text-ink font-semibold">Catalog Governance</td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-4 text-ink-muted font-mono text-[12px]">Product Listings, Taxonomy, Flagged Moderation</td>
+</tr>
+<!-- Customer Support -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 font-title-sm text-title-sm text-ink font-semibold">Customer Support</td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-4 text-ink-muted font-mono text-[12px]">Buyer Orders, Return Tickets, Triage</td>
+</tr>
+<!-- Read-Only Auditor -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-4 font-title-sm text-title-sm text-ink font-semibold">Read-Only Auditor</td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-3 text-center"><span class="material-symbols-outlined text-[18px] text-semantic-success">check_circle</span></td>
+<td class="py-3 px-3 text-center"><span class="text-ink-subtle font-bold">—</span></td>
+<td class="py-3 px-4 text-ink-muted font-mono text-[12px]">Audit Trails, DPDP Compliance Verification</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- SECTION 4: AUTHENTICATION, SESSIONS & SECURITY POLICIES -->
+<section class="space-y-space-md" id="section-auth">
+<div>
+<h2 class="font-title-lg text-title-lg text-midnight-violet font-bold">4. Authentication, Sessions &amp; Security Policies</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Cryptographic authentication gates, session lifetimes, and brute-force defenses.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Card 1: MFA -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-royal-purple/10 text-royal-purple flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">security</span>
+</div>
+<h3 class="font-title-md text-title-md text-ink font-bold">Multi-Factor Authentication (MFA)</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-bold">Mandatory</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Enforced across 100% of staff roles with no unauthenticated bypass allowed.</p>
+<div class="space-y-2 pt-1">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">FIDO2 / WebAuthn Hardware Keys</span>
+<span class="text-semantic-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check</span> Allowed
+                  </span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">RFC 6238 TOTP Authenticator Apps</span>
+<span class="text-semantic-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check</span> Allowed
+                  </span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">Insecure SMS OTP Fallback</span>
+<span class="text-semantic-error font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">block</span> Disabled
+                  </span>
+</div>
+</div>
+</div>
+<!-- Card 2: Session Lifetime -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-electric-violet/10 text-electric-violet flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+</div>
+<h3 class="font-title-md text-title-md text-ink font-bold">Session Timeout Rules</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-surface-container text-ink-muted px-2 py-0.5 rounded font-bold">Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Continuous inactivity validation and token revocation timers.</p>
+<div class="space-y-2 pt-1">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">Idle Inactivity Invalidation</span>
+<span class="font-mono text-midnight-violet font-bold">15 Minutes</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">Max Absolute Session Lifetime</span>
+<span class="font-mono text-midnight-violet font-bold">12 Hours</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">Concurrent Active Logins / Admin</span>
+<span class="font-mono text-midnight-violet font-bold">Max 2 Devices</span>
+</div>
+</div>
+</div>
+<!-- Card 3: Brute Force & Lockout -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-semantic-warning/15 text-semantic-warning flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">no_encryption</span>
+</div>
+<h3 class="font-title-md text-title-md text-ink font-bold">Lockout &amp; Rate-Limiting</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-semantic-warning/20 text-semantic-warning px-2 py-0.5 rounded font-bold">Heuristic</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Automated IP backoff and credential defense mechanisms.</p>
+<div class="space-y-2 pt-1">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">Failed Attempts Threshold</span>
+<span class="font-mono text-ink font-bold">5 Attempts</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">Cool-off Quarantine Period</span>
+<span class="font-mono text-ink font-bold">30 Mins (Exp. Backoff)</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low font-body-sm text-body-sm">
+<span class="text-ink font-medium">Security Ops Alert Trigger</span>
+<span class="text-semantic-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">check</span> P1 Incident Pager
+                  </span>
+</div>
+</div>
+</div>
+<!-- Card 4: Step-Up Re-Authentication -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-secondary/15 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<h3 class="font-title-md text-title-md text-ink font-bold">Step-Up Re-Authentication</h3>
+</div>
+<span class="font-label-sm text-label-sm bg-royal-purple/15 text-royal-purple px-2 py-0.5 rounded font-bold">Elevation Gate</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Mandates biometric or hardware token prompt for sensitive actions:</p>
+<div class="space-y-1.5 pt-1 text-ink-muted text-[13px]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-electric-violet">verified</span>
+<span>Release of Settlement Holds (&gt; ₹50,000)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-electric-violet">verified</span>
+<span>Direct modification of Financial Ledger Entries</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-electric-violet">verified</span>
+<span>Escalation of Admin Privileges &amp; Role grants</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-electric-violet">verified</span>
+<span>API Master Secret and Webhook Private Key Rotation</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 5: API, WEBHOOKS & INTEGRATION REGISTRY -->
+<section class="space-y-space-md" id="section-integrations">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<h2 class="font-title-lg text-title-lg text-midnight-violet font-bold">5. API, Webhook &amp; Integration Registry</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">5 simulated network connectors and mock telemetry relays.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm bg-obsidian-surface-1/10 text-midnight-violet px-2.5 py-1 rounded font-mono font-medium">
+                Masked Secrets Disclosure: Synthetic Adapters Only
+              </span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden space-y-px">
+<!-- Adapter 1: Payment Gateway -->
+<div class="p-space-md hover:bg-surface-container-low/40 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-midnight-violet text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">Payment Gateway Adapter</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.2 rounded font-semibold">Sandbox Connected</span>
+<span class="font-label-sm text-label-sm text-ink-subtle bg-surface-container px-2 py-0.2 rounded">Razorpay / PineLabs Mock</span>
+</div>
+<div class="font-mono text-[12px] text-ink-muted mt-0.5">https://api.sandbox.omizon.internal/v1/payments</div>
+<div class="flex items-center gap-3 text-ink-subtle text-[11px] mt-1 font-mono">
+<span>Key: omz_live_sec_••••••••9941</span>
+<span>•</span>
+<span>Last Ping: 3 mins ago</span>
+<span>•</span>
+<span class="text-semantic-success">HTTP 200 OK</span>
+</div>
+</div>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-low hover:bg-surface-container text-ink font-title-sm text-title-sm transition-colors shrink-0">
+                Test Connection
+              </button>
+</div>
+<!-- Adapter 2: Logistics & Carrier Feed -->
+<div class="p-space-md hover:bg-surface-container-low/40 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-midnight-violet text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">local_shipping</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">Logistics &amp; Carrier Feed Webhook</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.2 rounded font-semibold">Mock Adapter</span>
+<span class="font-label-sm text-label-sm text-ink-subtle bg-surface-container px-2 py-0.2 rounded">FastX / ShipOmics Mock</span>
+</div>
+<div class="font-mono text-[12px] text-ink-muted mt-0.5">https://logistics.mock.omizon.internal/webhook/tracking</div>
+<div class="flex items-center gap-3 text-ink-subtle text-[11px] mt-1 font-mono">
+<span>Key: omz_whk_sec_••••••••4102</span>
+<span>•</span>
+<span>Last Ping: 12 mins ago</span>
+<span>•</span>
+<span class="text-semantic-success">Ingesting</span>
+</div>
+</div>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-low hover:bg-surface-container text-ink font-title-sm text-title-sm transition-colors shrink-0">
+                Test Connection
+              </button>
+</div>
+<!-- Adapter 3: Seller Notification Dispatcher -->
+<div class="p-space-md hover:bg-surface-container-low/40 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-midnight-violet text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">sms</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">Seller Notification Dispatcher</span>
+<span class="font-label-sm text-label-sm bg-surface-container text-ink-muted px-2 py-0.2 rounded font-semibold">Simulated Idle</span>
+<span class="font-label-sm text-label-sm text-ink-subtle bg-surface-container px-2 py-0.2 rounded">SendGrid / SMS Mock</span>
+</div>
+<div class="font-mono text-[12px] text-ink-muted mt-0.5">https://notify.sandbox.omizon.internal/dispatch</div>
+<div class="flex items-center gap-3 text-ink-subtle text-[11px] mt-1 font-mono">
+<span>Key: omz_notif_••••••••1184</span>
+<span>•</span>
+<span>Last Ping: 45 mins ago</span>
+<span>•</span>
+<span>Queue Clean</span>
+</div>
+</div>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-low hover:bg-surface-container text-ink font-title-sm text-title-sm transition-colors shrink-0">
+                Test Connection
+              </button>
+</div>
+<!-- Adapter 4: BI Analytics Sink -->
+<div class="p-space-md hover:bg-surface-container-low/40 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-midnight-violet text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">query_stats</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">Business Intelligence &amp; Analytics Sink</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.2 rounded font-semibold">Demo Connector</span>
+<span class="font-label-sm text-label-sm text-ink-subtle bg-surface-container px-2 py-0.2 rounded">ClickStream Analytics Mock</span>
+</div>
+<div class="font-mono text-[12px] text-ink-muted mt-0.5">https://bi-stream.omizon.internal/events</div>
+<div class="flex items-center gap-3 text-ink-subtle text-[11px] mt-1 font-mono">
+<span>Key: omz_bi_••••••••8821</span>
+<span>•</span>
+<span>Last Ping: 1 min ago</span>
+<span>•</span>
+<span class="text-semantic-success">Sync Active</span>
+</div>
+</div>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-low hover:bg-surface-container text-ink font-title-sm text-title-sm transition-colors shrink-0">
+                Test Connection
+              </button>
+</div>
+<!-- Adapter 5: Marketplace Core Event Bus -->
+<div class="p-space-md hover:bg-surface-container-low/40 transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 rounded-xl bg-electric-violet text-on-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[22px]">hub</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">Marketplace Core Event Bus (Kafka Cluster)</span>
+<span class="font-label-sm text-label-sm bg-royal-purple/20 text-royal-purple px-2 py-0.2 rounded font-semibold">Sandbox Kafka</span>
+<span class="font-label-sm text-label-sm text-semantic-success bg-semantic-success/10 px-2 py-0.2 rounded font-medium">14ms Latency</span>
+</div>
+<div class="font-mono text-[12px] text-ink-muted mt-0.5">kafka://broker-01.sandbox.omizon.internal:9092</div>
+<div class="flex items-center gap-3 text-ink-subtle text-[11px] mt-1 font-mono">
+<span>Key: omz_kfk_••••••••3319</span>
+<span>•</span>
+<span>Last Ping: 30 secs ago</span>
+<span>•</span>
+<span>Partitions Healthy (8/8)</span>
+</div>
+</div>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-low hover:bg-surface-container text-ink font-title-sm text-title-sm transition-colors shrink-0">
+                Test Connection
+              </button>
+</div>
+</div>
+</section>
+<!-- SECTION 6: FEATURE FLAGS & EXPERIMENTATION -->
+<section class="space-y-space-md" id="section-flags">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-title-lg text-title-lg text-midnight-violet font-bold">6. Platform Feature Flags &amp; Experimentation</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Dynamic runtime toggles without redeployment overhead.</p>
+</div>
+<span class="font-label-sm text-label-sm bg-electric-violet/10 text-electric-violet font-semibold px-2.5 py-1 rounded">5 Active Flags</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-md">
+<!-- Flag 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-mono text-[12px] text-electric-violet font-bold">feat_seller_onboarding_v2</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-bold">ON</span>
+</div>
+<h4 class="font-title-sm text-title-sm text-ink font-semibold">New Seller KYC &amp; Verification Flow</h4>
+<p class="font-body-sm text-body-sm text-ink-muted mt-1">Multi-step document parsing pipeline with OCR instant matching.</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-label-sm text-label-sm text-ink-subtle">Rollout: 100% Beta Merchants</span>
+<div class="w-10 h-5 bg-electric-violet rounded-full flex items-center justify-end px-0.5 cursor-pointer shadow-sm">
+<div class="w-4 h-4 rounded-full bg-on-primary"></div>
+</div>
+</div>
+</div>
+<!-- Flag 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-mono text-[12px] text-electric-violet font-bold">feat_catalog_ai_moderation</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-bold">ON</span>
+</div>
+<h4 class="font-title-sm text-title-sm text-ink font-semibold">Automated Spec Moderation</h4>
+<p class="font-body-sm text-body-sm text-ink-muted mt-1">AI heuristic analysis on product titles, claims &amp; images.</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-label-sm text-label-sm text-ink-subtle">Rollout: High-Risk Categories</span>
+<div class="w-10 h-5 bg-electric-violet rounded-full flex items-center justify-end px-0.5 cursor-pointer shadow-sm">
+<div class="w-4 h-4 rounded-full bg-on-primary"></div>
+</div>
+</div>
+</div>
+<!-- Flag 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-mono text-[12px] text-electric-violet font-bold">feat_risk_heuristic_v28</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-bold">ON</span>
+</div>
+<h4 class="font-title-sm text-title-sm text-ink font-semibold">Risk Engine Heuristic v2.8</h4>
+<p class="font-body-sm text-body-sm text-ink-muted mt-1">Staged Pan-India bot-scoring and checkout velocity checks.</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-label-sm text-label-sm text-ink-subtle">Rollout: Staged Pan-India</span>
+<div class="w-10 h-5 bg-electric-violet rounded-full flex items-center justify-end px-0.5 cursor-pointer shadow-sm">
+<div class="w-4 h-4 rounded-full bg-on-primary"></div>
+</div>
+</div>
+</div>
+<!-- Flag 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-mono text-[12px] text-electric-violet font-bold">feat_promo_stack_checker</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-bold">ON</span>
+</div>
+<h4 class="font-title-sm text-title-sm text-ink font-semibold">Cart Coupon Stacking Rule Engine</h4>
+<p class="font-body-sm text-body-sm text-ink-muted mt-1">Restricts simultaneous vendor coupon with site promotion codes.</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-label-sm text-label-sm text-ink-subtle">Rollout: Festive Tech Week</span>
+<div class="w-10 h-5 bg-electric-violet rounded-full flex items-center justify-end px-0.5 cursor-pointer shadow-sm">
+<div class="w-4 h-4 rounded-full bg-on-primary"></div>
+</div>
+</div>
+</div>
+<!-- Flag 5 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-3 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-mono text-[12px] text-electric-violet font-bold">feat_analytics_bi_v4</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-bold">ON</span>
+</div>
+<h4 class="font-title-sm text-title-sm text-ink font-semibold">Executive Run-Rate Dashboards</h4>
+<p class="font-body-sm text-body-sm text-ink-muted mt-1">Real-time GMV aggregation widgets across all platform zones.</p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="font-label-sm text-label-sm text-ink-subtle">Rollout: Admin Console</span>
+<div class="w-10 h-5 bg-electric-violet rounded-full flex items-center justify-end px-0.5 cursor-pointer shadow-sm">
+<div class="w-4 h-4 rounded-full bg-on-primary"></div>
+</div>
+</div>
+</div>
+<!-- Flag Info Promo -->
+<div class="bg-gradient-to-br from-obsidian-surface-1 to-midnight-violet rounded-xl p-space-md text-text-dark-primary shadow-sm flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-electric-violet text-[28px]">flag_circle</span>
+<h4 class="font-title-sm text-title-sm text-text-dark-primary font-bold mt-2">Experimental Sandbox</h4>
+<p class="font-body-sm text-body-sm text-text-dark-secondary mt-1">Changes made to toggles remain local to this simulated session instance.</p>
+</div>
+<button class="mt-3 text-left font-label-sm text-label-sm text-text-dark-primary underline underline-offset-4 hover:text-white">
+                View Canary Deployment Logs →
+              </button>
+</div>
+</div>
+</section>
+<!-- SECTION 7: SAMPLE AUDIT TRAIL & SYSTEM HEALTH -->
+<section class="space-y-space-md" id="section-audit">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-title-lg text-title-lg text-midnight-violet font-bold">7. Recent Audit Trail &amp; System Health</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Simulated tamper-evident log stream capturing platform changes.</p>
+</div>
+<button class="font-title-sm text-title-sm text-royal-purple hover:underline flex items-center gap-1">
+<span>View Complete Audit Ledger (1,480 events)</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<!-- Audit Log Cards -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden divide-y-0">
+<div class="p-space-md hover:bg-surface-container-low/30 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<div class="font-mono text-ink-subtle text-[12px] shrink-0">10:14 IST</div>
+<div>
+<span class="font-title-sm text-title-sm text-ink font-semibold">Siddharth Rao (Super Admin)</span>
+<span class="text-ink-muted"> updated Session Inactivity Rule to </span>
+<span class="font-mono font-bold text-midnight-violet">15m</span>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+<span class="font-mono text-ink-subtle text-[11px]">Ref: #AUD-CFG-9842</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-semibold">Success</span>
+</div>
+</div>
+<div class="p-space-md hover:bg-surface-container-low/30 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-electric-violet"></span>
+<div class="font-mono text-ink-subtle text-[12px] shrink-0">09:45 IST</div>
+<div>
+<span class="font-title-sm text-title-sm text-ink font-semibold">Meera Iyer (Finance Ops)</span>
+<span class="text-ink-muted"> exported Settlement Discrepancy Snapshot (</span>
+<span class="font-mono font-bold text-midnight-violet">#OMZ-REC-9921</span>
+<span class="text-ink-muted">)</span>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+<span class="font-mono text-ink-subtle text-[11px]">Ref: #AUD-EXP-9839</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-semibold">Success</span>
+</div>
+</div>
+<div class="p-space-md hover:bg-surface-container-low/30 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-semantic-warning"></span>
+<div class="font-mono text-ink-subtle text-[12px] shrink-0">08:30 IST</div>
+<div>
+<span class="font-title-sm text-title-sm text-ink font-semibold">Vikram Sethi (Risk Ops)</span>
+<span class="text-ink-muted"> previewed Heuristic Anomaly Threshold for </span>
+<span class="font-mono font-bold text-midnight-violet">R-PAY-801</span>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+<span class="font-mono text-ink-subtle text-[11px]">Ref: #AUD-RSK-9831</span>
+<span class="font-label-sm text-label-sm bg-surface-container text-ink-muted px-2 py-0.5 rounded font-semibold">Verified</span>
+</div>
+</div>
+<div class="p-space-md hover:bg-surface-container-low/30 transition-colors flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<div class="font-mono text-ink-subtle text-[12px] shrink-0">Yesterday</div>
+<div>
+<span class="font-title-sm text-title-sm text-ink font-semibold">Siddharth Rao (Super Admin)</span>
+<span class="text-ink-muted"> rotated Sandbox API Key for Payment Gateway Adapter</span>
+</div>
+</div>
+<div class="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+<span class="font-mono text-ink-subtle text-[11px]">Ref: #AUD-SEC-9810</span>
+<span class="font-label-sm text-label-sm bg-semantic-success/15 text-semantic-success px-2 py-0.5 rounded font-semibold">Success</span>
+</div>
+</div>
+</div>
+<!-- Bottom System Health Telemetry Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm" id="section-health">
+<div class="flex flex-wrap items-center justify-between gap-space-md text-[13px]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-semantic-success">health_and_safety</span>
+<span class="font-title-sm text-title-sm text-midnight-violet font-bold">System Health Bar:</span>
+</div>
+<div class="flex flex-wrap items-center gap-space-lg text-ink-muted font-mono text-[12px]">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<span>Admin Console: <strong class="text-ink">Demo (Operational)</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<span>Reporting Engine: <strong class="text-ink">Simulated (OK)</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<span>Payment Gateway Adapter: <strong class="text-ink">Sandbox (OK)</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<span>Carrier Mock: <strong class="text-ink">Operational</strong></span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<span>Event Bus: <strong class="text-ink">Latency 14ms</strong></span>
+</div>
+</div>
+<div class="font-mono text-[11px] text-ink-subtle">
+                Cluster: BLR-01-MOCK • STAGING
+              </div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</div></main></div></body></html>
