@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-secondary-container":"#fffbff","on-primary-container":"#e7d9ff","surface-bright":"#f9f9fd","on-secondary":"#ffffff","tertiary-container":"#655a96","semantic-error":"#D92D20","surface-container-high":"#e8e8ec","ink":"#211D31","surface-tint":"#7228ee","on-error-container":"#93000a","on-tertiary-container":"#e3daff","tertiary-fixed-dim":"#cbbeff","semantic-warning":"#E27300","outline-variant":"#ccc3d9","obsidian-surface-1":"#1D1537","on-tertiary":"#ffffff","text-dark-secondary":"#C3BCD7","obsidian-violet":"#100A25","primary-fixed-dim":"#d1bcff","surface-container-low":"#f3f3f7","surface":"#f9f9fd","on-tertiary-fixed":"#1d104a","inverse-on-surface":"#f0f0f4","ink-subtle":"#928B9F","surface-variant":"#e2e2e6","outline":"#7b7487","on-error":"#ffffff","on-primary-fixed-variant":"#5800c8","secondary-fixed":"#e5deff","primary-fixed":"#eaddff","surface-container-highest":"#e2e2e6","primary-container":"#762ff2","surface-container-lowest":"#ffffff","on-tertiary-fixed-variant":"#493e78","midnight-violet":"#190B46","background":"#f9f9fd","inverse-primary":"#d1bcff","obsidian-border":"#382B54","royal-purple":"#4C2ACB","porcelain":"#F7F7FB","on-primary-fixed":"#24005b","surface-container":"#ededf1","secondary":"#5b3eda","tertiary-fixed":"#e6deff","on-primary":"#ffffff","error-container":"#ffdad6","on-surface-variant":"#4a4456","semantic-success":"#00875A","on-background":"#1a1c1f","on-secondary-fixed":"#1a0063","primary":"#5c00d2","obsidian-surface-2":"#211735","text-dark-primary":"#F7F5FF","secondary-fixed-dim":"#c9bfff","surface-dim":"#d9dade","on-surface":"#1a1c1f","tertiary":"#4d427c","inverse-surface":"#2e3034","text-dark-muted":"#A49ABF","lavender-mist":"#E8E6F0","secondary-container":"#745af4","error":"#ba1a1a","electric-violet":"#762FF2","on-secondary-fixed-variant":"#451fc4","ink-muted":"#655E7A"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{margin:"2rem","space-md":"1rem","margin-mobile":"1rem","space-sm":"0.5rem","space-xs":"0.25rem","space-lg":"1.5rem","space-xl":"2.5rem",gutter:"1.5rem","gutter-mobile":"0.75rem"},fontFamily:{"display-hero-mobile":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"]},fontSize:{"display-hero-mobile":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"700"}],"price-hero":["32px",{lineHeight:"38px",letterSpacing:"-0.02em",fontWeight:"700"}],"display-hero":["56px",{lineHeight:"64px",letterSpacing:"-0.03em",fontWeight:"700"}],"price-card":["20px",{lineHeight:"26px",letterSpacing:"-0.01em",fontWeight:"700"}],"body-md":["14px",{lineHeight:"22px",fontWeight:"400"}],"title-sm":["14px",{lineHeight:"20px",fontWeight:"600"}],"headline-sm":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["28px",{lineHeight:"36px",letterSpacing:"-0.015em",fontWeight:"600"}],"title-lg":["18px",{lineHeight:"26px",letterSpacing:"-0.005em",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"26px",fontWeight:"400"}],"title-md":["16px",{lineHeight:"24px",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"600"}],"body-sm":["12px",{lineHeight:"18px",fontWeight:"400"}],"headline-lg-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["13px",{lineHeight:"18px",fontWeight:"500"}],"headline-lg":["40px",{lineHeight:"48px",letterSpacing:"-0.02em",fontWeight:"600"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><header class="fixed top-0 w-full z-50 bg-obsidian-violet shadow-[0_4px_20px_rgba(25,11,70,0.18)]"><div class="h-16 w-full px-gutter flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm"><img alt="OMIZON Official Brand Logo with continuous infinity ribbon symbol and geometric bold wordmark in Midnight Violet" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W3APIMe4b-eVhcUIyutLJbjdCdhCxTEVtan4oQqYLhj8StZRp7SIjp4wvuCiFoQozWX76Q2grO2mQLN8_KoGDY8BzIztDCqil2cXbAw__flUdNNr_w-L_k6evgc4KgHU-Km8Ivlyy2WDedznr_I7B_wIMkKuGpEjPWLklyPOzLSjPu6gQ_-TirLHNxE9p8tCMFeLYveUt_hN_IuqzRV5jnFKpWv_VeoXNuX1YbNREJlGJqfpVP1urxUQVR"/><span class="font-title-md text-title-md text-text-dark-primary tracking-tight">Seller Center</span></div><div class="h-5 w-[1px] bg-obsidian-border hidden md:block"></div><div class="hidden md:flex items-center gap-space-sm bg-obsidian-surface-1 px-space-md py-1 rounded-full shadow-[0_1px_3px_rgba(25,11,70,0.04)]"><span class="w-2 h-2 rounded-full bg-semantic-success animate-pulse"></span><span class="font-label-md text-label-md text-text-dark-primary font-semibold">ApexTech India</span><span class="text-text-dark-muted font-body-sm text-body-sm">•</span><span class="font-label-sm text-label-sm text-text-dark-secondary bg-obsidian-surface-2 px-space-xs py-0.5 rounded">Verified Seller</span><span class="font-label-sm text-label-sm text-semantic-warning flex items-center gap-0.5">★ 4.9</span></div></div><div class="flex items-center gap-space-md"><a class="hidden lg:flex items-center gap-1.5 font-label-md text-label-md text-text-dark-secondary hover:text-text-dark-primary px-space-sm py-1.5 rounded-lg transition-colors" data-path="buyer-marketplace" href="#"><span class="material-symbols-outlined text-[18px]">storefront</span><span>Switch to Buyer Marketplace</span></a><div class="h-5 w-[1px] bg-obsidian-border hidden lg:block"></div><button aria-label="Notifications" class="relative p-2 rounded-lg text-text-dark-secondary hover:text-text-dark-primary hover:bg-obsidian-surface-1 transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-semantic-error ring-2 ring-obsidian-violet"></span></button><button aria-label="Help Quick Center" class="p-2 rounded-lg text-text-dark-secondary hover:text-text-dark-primary hover:bg-obsidian-surface-1 transition-colors"><span class="material-symbols-outlined text-[22px]">help</span></button><div class="flex items-center gap-space-sm pl-space-sm"><div class="text-right hidden sm:block"><div class="font-label-md text-label-md text-text-dark-primary font-semibold leading-tight">Rajesh Singhania</div><div class="font-label-sm text-label-sm text-text-dark-muted">Merchant Admin</div></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_6px_rgba(25,11,70,0.2)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><aside class="fixed left-0 top-16 bottom-0 w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(25,11,70,0.04)] z-40 flex flex-col justify-between overflow-y-auto"><div class="pt-space-md pb-space-sm px-space-sm"><div class="px-space-md py-space-xs mb-space-sm"><span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-semibold">Merchant Workspace</span></div><nav class="space-y-1" data-active-classes="bg-primary-container text-on-secondary font-semibold shadow-[0_2px_8px_rgba(118,47,242,0.24)]"><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="dashboard" href="#"><span class="material-symbols-outlined text-[20px]">space_dashboard</span><span>Seller Dashboard</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="products-catalog" href="#"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span>Products &amp; Catalog</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="add-new-product" href="#"><span class="material-symbols-outlined text-[20px]">add_circle</span><span>Add New Product</span></a><a class="flex items-center justify-between px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="inventory-alerts" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">warning</span><span>Inventory &amp; Alerts</span></div><span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-error-container text-on-error-container font-semibold">4</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="orders-shipments" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">local_shipping</span><span>Orders &amp; Shipments</span></div><span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-semibold">28</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="payouts-invoices" href="#"><span class="material-symbols-outlined text-[20px]">account_balance_wallet</span><span>Payouts &amp; Invoices</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="sales-analytics" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span>Sales Analytics</span></a><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-all" data-path="store-settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Store Settings</span></a></nav></div><div class="p-space-sm mt-auto space-y-space-sm"><div class="p-space-md rounded-xl bg-obsidian-violet text-text-dark-primary shadow-[0_4px_16px_rgba(25,11,70,0.12)]"><div class="flex items-center justify-between mb-1.5"><span class="font-label-sm text-label-sm text-text-dark-secondary uppercase tracking-wider font-semibold">Merchant Tier</span><span class="font-label-sm text-label-sm text-on-primary-container bg-primary-container px-2 py-0.5 rounded-full font-bold">Platinum</span></div><div class="font-title-sm text-title-sm font-semibold mb-1">Tier 1 Commission Rate</div><p class="font-body-sm text-body-sm text-text-dark-muted leading-snug">3.2% marketplace fee capped with express 24h settlement dispatch.</p></div><a class="flex items-center gap-space-sm px-space-md py-2.5 rounded-lg font-label-md text-label-md text-ink-muted hover:bg-surface-container-low hover:text-on-surface transition-colors" data-path="help-documentation" href="#"><span class="material-symbols-outlined text-[20px]">menu_book</span><span>Help &amp; Documentation</span></a></div></aside><div class="pl-64"><main class="relative w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="w-full max-w-[1440px] mx-auto px-margin space-y-space-md pb-space-xl">
+<!-- Breadcrumb & Top Bar -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-sm pt-space-md">
+<nav class="flex items-center gap-2 font-label-md text-label-md text-ink-muted">
+<span class="hover:text-ink cursor-pointer">Seller Center</span>
+<span class="text-ink-subtle">/</span>
+<a class="hover:text-ink cursor-pointer" data-path="orders-shipments" href="#">Orders &amp; Shipments</a>
+<span class="text-ink-subtle">/</span>
+<span class="text-ink font-semibold">Order Fulfilment</span>
+</nav>
+<div class="flex items-center gap-space-md">
+<a class="flex items-center gap-1 font-label-md text-label-md text-royal-purple hover:underline" data-path="orders-shipments" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Back to Orders Ledger</span>
+</a>
+<div class="h-4 w-px bg-lavender-mist hidden sm:block"></div>
+<div class="flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-surface-container-high text-ink font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-semantic-success animate-ping"></span>
+<span>Bhiwandi Hub FC-04 • Active Packing Shift</span>
+</div>
+</div>
+</div>
+<!-- Header & Search -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md pb-space-xs">
+<div>
+<h1 class="font-headline-md text-headline-md text-ink tracking-tight">Order Fulfilment &amp; Dispatch</h1>
+<p class="font-body-md text-body-md text-ink-muted mt-0.5">High-velocity packing queue, real-time SKU verification, and outbound courier handover manifests.</p>
+</div>
+<div class="relative w-full lg:w-96">
+<span class="material-symbols-outlined absolute left-3.5 top-3 text-[20px] text-ink-subtle">search</span>
+<input class="w-full h-11 pl-11 pr-4 bg-surface-container-lowest rounded-lg font-body-md text-body-md text-ink placeholder:text-ink-subtle shadow-sm focus:outline-none focus:bg-surface-container-low transition-all" placeholder="Search Order #, AWB, or SKU..." type="text"/>
+<kbd class="absolute right-3 top-3 text-[10px] font-label-sm uppercase px-1.5 py-0.5 rounded bg-surface-container-high text-ink-muted">⌘K</kbd>
+</div>
+</div>
+<!-- Top Fulfilment Summary Metrics -->
+<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-space-sm">
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between text-ink-subtle mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Awaiting Picking</span>
+<span class="material-symbols-outlined text-[18px] text-royal-purple">inventory_2</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-sm text-headline-sm text-ink font-bold">14</span>
+<span class="font-body-sm text-body-sm text-ink-muted">Orders</span>
+</div>
+<div class="mt-1 flex items-center gap-1 font-label-sm text-label-sm text-semantic-error">
+<span class="material-symbols-outlined text-[13px]">bolt</span>
+<span>4 High Priority</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between text-ink-subtle mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Being Packed</span>
+<span class="material-symbols-outlined text-[18px] text-electric-violet">package_2</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-sm text-headline-sm text-ink font-bold">8</span>
+<span class="font-body-sm text-body-sm text-ink-muted">Orders</span>
+</div>
+<div class="mt-1 font-label-sm text-label-sm text-royal-purple">
+<span>2 active in station</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between text-ink-subtle mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Ready for Dispatch</span>
+<span class="material-symbols-outlined text-[18px] text-semantic-success">local_shipping</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-sm text-headline-sm text-ink font-bold">19</span>
+<span class="font-body-sm text-body-sm text-ink-muted">Orders</span>
+</div>
+<div class="mt-1 font-label-sm text-label-sm text-ink-muted truncate">
+<span>FastX slot: 2:00 PM</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between text-ink-subtle mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Courier Handover</span>
+<span class="material-symbols-outlined text-[18px] text-secondary">assignment_turned_in</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-sm text-headline-sm text-ink font-bold">3</span>
+<span class="font-body-sm text-body-sm text-ink-muted">Batches</span>
+</div>
+<div class="mt-1 font-label-sm text-label-sm text-semantic-success">
+<span>Manifest signed ✓</span>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1 bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between text-ink-subtle mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Exceptions</span>
+<span class="material-symbols-outlined text-[18px] text-semantic-warning">report_problem</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-sm text-headline-sm text-semantic-error font-bold">2</span>
+<span class="font-body-sm text-body-sm text-ink-muted">Blocked</span>
+</div>
+<div class="mt-1 font-label-sm text-label-sm text-semantic-error truncate">
+<span>1 SKU • 1 Address</span>
+</div>
+</div>
+</div>
+<!-- Operational Filters Bar -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm flex flex-col xl:flex-row xl:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 xl:pb-0 scrollbar-none">
+<button class="px-3 py-1.5 rounded-lg bg-midnight-violet text-on-primary font-label-md text-label-md flex items-center gap-1.5 whitespace-nowrap shadow-sm">
+<span>All Fulfilment</span>
+<span class="px-1.5 py-0.2 rounded-full bg-obsidian-surface-1 text-text-dark-primary text-[10px]">46</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-ink font-label-md text-label-md flex items-center gap-1.5 whitespace-nowrap transition-colors">
+<span class="w-2 h-2 rounded-full bg-semantic-error"></span>
+<span>Urgent SLA (&lt;60m)</span>
+<span class="px-1.5 py-0.2 rounded-full bg-error-container text-on-error-container text-[10px] font-bold">6</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-ink font-label-md text-label-md flex items-center gap-1.5 whitespace-nowrap transition-colors">
+<span>Awaiting Picking</span>
+<span class="text-ink-subtle text-[11px]">(14)</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-ink font-label-md text-label-md flex items-center gap-1.5 whitespace-nowrap transition-colors">
+<span>Being Packed</span>
+<span class="text-ink-subtle text-[11px]">(8)</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-ink font-label-md text-label-md flex items-center gap-1.5 whitespace-nowrap transition-colors">
+<span>Ready for Dispatch</span>
+<span class="text-ink-subtle text-[11px]">(19)</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-ink font-label-md text-label-md flex items-center gap-1.5 whitespace-nowrap transition-colors">
+<span>Multi-Package</span>
+<span class="text-ink-subtle text-[11px]">(5)</span>
+</button>
+</div>
+<div class="flex items-center gap-space-sm pt-2 xl:pt-0">
+<div class="flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-[16px] text-ink-subtle">warehouse</span>
+<select aria-label="Warehouse Location" class="bg-transparent font-label-md text-label-md text-ink focus:outline-none cursor-pointer">
+<option>Bhiwandi Central (FC-04)</option>
+<option>Kurla Air Hub (FC-01)</option>
+<option>Panvel Logistics (FC-09)</option>
+</select>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-low px-2.5 py-1.5 rounded-lg">
+<span class="material-symbols-outlined text-[16px] text-ink-subtle">local_shipping</span>
+<select aria-label="Courier Partner" class="bg-transparent font-label-md text-label-md text-ink focus:outline-none cursor-pointer">
+<option>All Couriers (FastX, Delhivery, BlueDart)</option>
+<option>FastX Express Exclusive</option>
+<option>Delhivery Surface</option>
+<option>BlueDart Express Air</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Two-Column Operational Workspace Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-md items-start">
+<!-- LEFT COLUMN: Fulfilment Queue (38% -> 5 cols) -->
+<div class="lg:col-span-5 space-y-space-sm">
+<div class="flex items-center justify-between px-1">
+<div class="flex items-center gap-2">
+<h2 class="font-title-md text-title-md text-ink">Fulfilment Queue</h2>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold">46</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted">Sorted: Urgent SLA First</span>
+</div>
+<div class="space-y-space-sm">
+<!-- Order Card 1 (Active) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-md cursor-pointer transition-all relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-electric-violet"></div>
+<div class="flex items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">#OMZ-994821</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">alarm</span>
+<span>42m left</span>
+</span>
+</div>
+<span class="px-2 py-0.5 rounded-md bg-secondary-container text-on-secondary font-label-sm text-label-sm font-medium">Packing Active</span>
+</div>
+<div class="grid grid-cols-2 gap-y-1.5 gap-x-2 text-body-sm font-body-sm text-ink-muted">
+<div>
+<span class="text-ink-subtle">Buyer:</span>
+<span class="text-ink font-semibold ml-1">Rohan S.</span>
+<span class="text-[11px] block text-ink-subtle">Mumbai 400051</span>
+</div>
+<div class="text-right">
+<span class="text-ink-subtle">Total:</span>
+<span class="text-ink font-bold ml-1">₹18,998</span>
+<span class="text-[11px] block text-semantic-success font-medium">Verified UPI ✓</span>
+</div>
+</div>
+<div class="mt-3 pt-2.5 bg-surface-container-low rounded-lg p-2 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-royal-purple">grid_view</span>
+<span class="font-label-md text-label-md text-ink font-medium">Bin B-14 • Zone West</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted">2 SKU items</span>
+</div>
+<div class="mt-2.5 flex items-center justify-between font-label-sm text-label-sm text-ink-subtle">
+<span>Cutoff: Today 2:00 PM</span>
+<span class="text-electric-violet font-semibold flex items-center gap-0.5">
+<span>View Station</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Order Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md cursor-pointer transition-all">
+<div class="flex items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">#OMZ-994844</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-semantic-error font-label-sm text-label-sm font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">alarm</span>
+<span>55m left</span>
+</span>
+</div>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-ink-muted font-label-sm text-label-sm">Awaiting Pick</span>
+</div>
+<div class="grid grid-cols-2 gap-y-1.5 gap-x-2 text-body-sm font-body-sm text-ink-muted">
+<div>
+<span class="text-ink-subtle">Buyer:</span>
+<span class="text-ink font-medium ml-1">Meera J.</span>
+<span class="text-[11px] block text-ink-subtle">Pune 411004</span>
+</div>
+<div class="text-right">
+<span class="text-ink-subtle">Total:</span>
+<span class="text-ink font-bold ml-1">₹18,499</span>
+<span class="text-[11px] block text-ink-subtle">Express Air</span>
+</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between pt-2 text-body-sm font-body-sm text-ink-subtle">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">shelves</span> Bin A-08 (1 Item)</span>
+<span class="text-ink-muted">FastX Guaranteed</span>
+</div>
+</div>
+<!-- Order Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md cursor-pointer transition-all">
+<div class="flex items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">#OMZ-994812</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-ink font-label-sm text-label-sm font-medium">Multi-Pkg (2)</span>
+</div>
+<span class="px-2 py-0.5 rounded-md bg-surface-container text-semantic-success font-label-sm text-label-sm font-medium">Label Ready</span>
+</div>
+<div class="grid grid-cols-2 gap-y-1.5 gap-x-2 text-body-sm font-body-sm text-ink-muted">
+<div>
+<span class="text-ink-subtle">Buyer:</span>
+<span class="text-ink font-medium ml-1">Amit K.</span>
+<span class="text-[11px] block text-ink-subtle">Delhi 110001</span>
+</div>
+<div class="text-right">
+<span class="text-ink-subtle">Total:</span>
+<span class="text-ink font-bold ml-1">₹24,150</span>
+<span class="text-[11px] block text-ink-subtle">BlueDart Air</span>
+</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between pt-2 text-body-sm font-body-sm text-ink-subtle">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[15px]">shelves</span> Bin C-02 &amp; D-05</span>
+<span class="text-ink-muted">3 SKU Items</span>
+</div>
+</div>
+<!-- Order Card 4 (Exception) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md cursor-pointer transition-all">
+<div class="flex items-center justify-between gap-2 mb-2">
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">#OMZ-994799</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">block</span>
+<span>Blocked</span>
+</span>
+</div>
+<span class="px-2 py-0.5 rounded-md bg-surface-container-high text-semantic-warning font-label-sm text-label-sm font-medium">Redirection Alert</span>
+</div>
+<div class="grid grid-cols-2 gap-y-1.5 gap-x-2 text-body-sm font-body-sm text-ink-muted">
+<div>
+<span class="text-ink-subtle">Buyer:</span>
+<span class="text-ink font-medium ml-1">Priya D.</span>
+<span class="text-[11px] block text-ink-subtle">Bengaluru 560038</span>
+</div>
+<div class="text-right">
+<span class="text-ink-subtle">Issue:</span>
+<span class="text-semantic-error font-semibold ml-1">Pincode Check</span>
+</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between pt-2 text-body-sm font-body-sm text-ink-subtle">
+<span class="text-semantic-warning flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">contact_support</span> Address Discrepancy
+              </span>
+<span class="text-ink-muted">Requires Fix</span>
+</div>
+</div>
+</div>
+<div class="pt-2 text-center">
+<span class="font-label-sm text-label-sm text-ink-subtle">Showing 4 of 46 orders requiring physical fulfilment</span>
+</div>
+</div>
+<!-- RIGHT COLUMN: Dedicated Fulfilment & Dispatch Station (62% -> 7 cols) -->
+<div class="lg:col-span-7 space-y-space-md">
+<!-- Active Order Header Card -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-ink font-bold tracking-tight">Order #OMZ-994821</span>
+<span class="px-2 py-0.5 rounded-full bg-semantic-success text-on-primary font-label-sm text-label-sm font-semibold">Priority Batch</span>
+</div>
+<div class="flex items-center gap-2 font-body-sm text-body-sm text-ink-muted mt-0.5">
+<span>Placed: Today 10:14 AM</span>
+<span>•</span>
+<span>Prepaid UPI: <span class="font-mono text-ink font-medium">UPI-883920194</span></span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="h-9 px-3 rounded-lg bg-surface-container-low hover:bg-surface-container text-ink font-label-md text-label-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">print</span>
+<span>Print Pick Sheet</span>
+</button>
+<button aria-label="More Options" class="h-9 w-9 rounded-lg bg-surface-container-low hover:bg-surface-container text-ink-muted flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Urgent SLA Banner -->
+<div class="bg-obsidian-violet rounded-xl p-space-md text-text-dark-primary flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm shadow-md">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-obsidian-surface-1 flex items-center justify-center text-semantic-warning">
+<span class="material-symbols-outlined text-[24px]">timer</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm text-text-dark-primary font-semibold">Dispatch Deadline: Today 2:00 PM</div>
+<div class="font-body-sm text-body-sm text-text-dark-muted">FastX Carrier Handover Slot FC-04 (West Gate)</div>
+</div>
+</div>
+<div class="flex items-center gap-2 self-start sm:self-auto bg-obsidian-surface-1 px-3 py-1.5 rounded-lg">
+<span class="w-2 h-2 rounded-full bg-semantic-error animate-ping"></span>
+<span class="font-price-card text-price-card text-semantic-warning font-mono">42:18</span>
+<span class="font-label-sm text-label-sm text-text-dark-secondary">remaining</span>
+</div>
+</div>
+<!-- Multi-Step Fulfilment Progression Pipeline -->
+<div>
+<div class="flex items-center justify-between font-label-sm text-label-sm uppercase tracking-wider text-ink-subtle mb-3 font-semibold">
+<span>Fulfilment Pipeline Stage</span>
+<span class="text-royal-purple">Step 3 of 6</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-6 gap-2">
+<!-- Step 1 -->
+<div class="flex flex-col gap-1 p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-ink-muted font-bold">01</span>
+<span class="material-symbols-outlined text-[16px] text-semantic-success">check_circle</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink font-semibold">Verify Order</span>
+<span class="text-[10px] text-semantic-success">Completed</span>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col gap-1 p-2 rounded-lg bg-surface-container-low">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-ink-muted font-bold">02</span>
+<span class="material-symbols-outlined text-[16px] text-semantic-success">check_circle</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink font-semibold">Pick Items</span>
+<span class="text-[10px] text-semantic-success">Bin B-14</span>
+</div>
+<!-- Step 3 (Active) -->
+<div class="flex flex-col gap-1 p-2 rounded-lg bg-midnight-violet text-text-dark-primary shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-text-dark-secondary font-bold">03</span>
+<span class="w-2 h-2 rounded-full bg-electric-violet animate-pulse"></span>
+</div>
+<span class="font-label-sm text-label-sm text-text-dark-primary font-semibold">Verify &amp; Pack</span>
+<span class="text-[10px] text-primary-fixed-dim">In Station</span>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col gap-1 p-2 rounded-lg bg-surface-container opacity-60">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-ink-subtle font-bold">04</span>
+<span class="material-symbols-outlined text-[16px] text-ink-subtle">schedule</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-subtle font-semibold">Shipping</span>
+<span class="text-[10px] text-ink-subtle">Auto-assigned</span>
+</div>
+<!-- Step 5 -->
+<div class="flex flex-col gap-1 p-2 rounded-lg bg-surface-container opacity-60">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-ink-subtle font-bold">05</span>
+<span class="material-symbols-outlined text-[16px] text-ink-subtle">schedule</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-subtle font-semibold">Documents</span>
+<span class="text-[10px] text-ink-subtle">Labels &amp; GST</span>
+</div>
+<!-- Step 6 -->
+<div class="flex flex-col gap-1 p-2 rounded-lg bg-surface-container opacity-60">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-ink-subtle font-bold">06</span>
+<span class="material-symbols-outlined text-[16px] text-ink-subtle">schedule</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-subtle font-semibold">Handover</span>
+<span class="text-[10px] text-ink-subtle">Courier Run</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Barcode & SKU Scanning Panel -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[22px] text-royal-purple">barcode_scanner</span>
+<h3 class="font-title-md text-title-md text-ink">Barcode &amp; SKU Verification Station</h3>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded bg-surface-container text-ink-muted">Scanner Ready (USB / Bluetooth)</span>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-space-sm">
+<div class="relative flex-1 w-full">
+<span class="material-symbols-outlined absolute left-3.5 top-3 text-[20px] text-ink-subtle">qr_code_scanner</span>
+<input class="w-full h-11 pl-11 pr-24 bg-surface-container-low rounded-lg font-title-sm text-title-sm font-mono text-ink focus:outline-none focus:bg-surface-container" placeholder="Scan or Type EAN/SKU barcode..." type="text" value="890432190823"/>
+<button class="absolute right-2 top-2 h-7 px-2 rounded bg-surface-container-high hover:bg-surface-variant font-label-sm text-label-sm text-ink font-semibold">Manual</button>
+</div>
+<button class="w-full sm:w-auto h-11 px-5 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-label-md text-label-md font-semibold flex items-center justify-center gap-2 shadow-sm transition-all">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Scan Item</span>
+</button>
+</div>
+<!-- Prototypical UI Scan Banner Feedback -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-2 text-semantic-success font-medium">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+<span>SKU Scanned: <strong class="font-mono text-ink">AS-WH100-BLK</strong> matched 1 of 1 expected unit.</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-subtle hidden sm:inline">10:48:22 AM</span>
+</div>
+<!-- Physical Packing & Inspection Checklist -->
+<div class="space-y-space-sm pt-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-ink-subtle font-semibold">Order Bill of Materials (2 SKUs)</span>
+<div class="space-y-2">
+<!-- Item 1 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm flex-shrink-0">
+<span class="material-symbols-outlined text-[24px] text-royal-purple">headphones</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm text-ink">ApexSound Wireless ANC Headphones</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Midnight Black • SKU: <span class="font-mono text-ink font-medium">AS-WH100-BLK</span></div>
+<div class="font-label-sm text-label-sm text-ink-subtle mt-0.5">Assigned Bin: <strong class="text-ink">B-14-R2</strong></div>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end gap-space-md">
+<div class="text-right">
+<div class="font-title-sm text-title-sm text-ink font-bold">Qty: 1</div>
+<div class="font-label-sm text-label-sm text-semantic-success font-semibold">Scanned: 1/1</div>
+</div>
+<div class="h-8 w-8 rounded-full bg-semantic-success text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[18px]">done</span>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-surface-container-lowest flex items-center justify-center shadow-sm flex-shrink-0">
+<span class="material-symbols-outlined text-[24px] text-royal-purple">cable</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm text-ink">Apex Braided 3.5mm Gold-Plated Audio Cable</div>
+<div class="font-body-sm text-body-sm text-ink-muted">1.5m Length • SKU: <span class="font-mono text-ink font-medium">APX-CBL-35</span></div>
+<div class="font-label-sm text-label-sm text-ink-subtle mt-0.5">Assigned Bin: <strong class="text-ink">B-14-R4</strong></div>
+</div>
+</div>
+<div class="flex items-center justify-between sm:justify-end gap-space-md">
+<div class="text-right">
+<div class="font-title-sm text-title-sm text-ink font-bold">Qty: 1</div>
+<div class="font-label-sm text-label-sm text-semantic-success font-semibold">Scanned: 1/1</div>
+</div>
+<div class="h-8 w-8 rounded-full bg-semantic-success text-on-primary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[18px]">done</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Mandatory Quality Checklist -->
+<div class="p-space-md rounded-xl bg-surface-container-low space-y-2 mt-space-md">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-ink-subtle font-semibold">Physical Integrity &amp; Compliance Checklist</span>
+<div class="space-y-1.5 pt-1">
+<label class="flex items-center gap-2.5 cursor-pointer text-body-sm font-body-sm text-ink">
+<input checked="" class="w-4 h-4 rounded text-electric-violet focus:ring-0 cursor-pointer" type="checkbox"/>
+<span>Visual Physical Inspection: No box denting, manufacturer seal completely intact.</span>
+</label>
+<label class="flex items-center gap-2.5 cursor-pointer text-body-sm font-body-sm text-ink">
+<input checked="" class="w-4 h-4 rounded text-electric-violet focus:ring-0 cursor-pointer" type="checkbox"/>
+<span>Mandatory Inclusion: GST Tax Invoice <span class="font-mono text-[12px] font-semibold">#OMZ-INV-2023-8891</span> enclosed in plastic pouch.</span>
+</label>
+<label class="flex items-center gap-2.5 cursor-pointer text-body-sm font-body-sm text-ink">
+<input checked="" class="w-4 h-4 rounded text-electric-violet focus:ring-0 cursor-pointer" type="checkbox"/>
+<span>Anti-Tamper Hologram Security Seal applied (<span class="font-mono text-[12px] font-semibold">OMI-SEAL-88219</span>).</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Packaging & Weight Configuration -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-ink">Package Dimensions &amp; Scale Weight</h3>
+<span class="font-label-sm text-label-sm text-royal-purple font-semibold">Scale Connected (COM-3)</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-sm">
+<div class="md:col-span-4 space-y-1">
+<label class="font-label-sm text-label-sm text-ink-muted">Box Specification</label>
+<select class="w-full h-11 px-3 bg-surface-container-low rounded-lg font-body-md text-body-md text-ink focus:outline-none">
+<option>Package 1 of 1 (Corrugated #M2)</option>
+<option>Package 1 of 1 (Corrugated #M3 Large)</option>
+<option>Tamper-Evident Polybag #B1</option>
+</select>
+</div>
+<div class="md:col-span-3 space-y-1">
+<label class="font-label-sm text-label-sm text-ink-muted">Dead Scale Weight</label>
+<div class="relative">
+<input class="w-full h-11 px-3 pr-10 bg-surface-container-low rounded-lg font-title-sm text-title-sm font-bold text-ink focus:outline-none" type="text" value="0.85"/>
+<span class="absolute right-3 top-3 font-label-md text-label-md text-ink-subtle">kg</span>
+</div>
+</div>
+<div class="md:col-span-5 space-y-1">
+<label class="font-label-sm text-label-sm text-ink-muted">Dimensions (L × W × H cm)</label>
+<div class="grid grid-cols-3 gap-1.5">
+<input class="h-11 px-2 text-center bg-surface-container-low rounded-lg font-title-sm text-title-sm text-ink focus:outline-none" type="text" value="24"/>
+<input class="h-11 px-2 text-center bg-surface-container-low rounded-lg font-title-sm text-title-sm text-ink focus:outline-none" type="text" value="19"/>
+<input class="h-11 px-2 text-center bg-surface-container-low rounded-lg font-title-sm text-title-sm text-ink focus:outline-none" type="text" value="9"/>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 font-body-sm text-body-sm text-ink-muted">
+<div class="flex items-center gap-2">
+<span>Volumetric Weight: <strong class="text-ink">0.82 kg</strong> (Billable: 0.85 kg)</span>
+</div>
+<button class="text-royal-purple font-label-md text-label-md font-semibold hover:underline flex items-center gap-1 self-start sm:self-auto">
+<span class="material-symbols-outlined text-[16px]">add_box</span>
+<span>+ Add Additional Parcel (Multi-Package Order)</span>
+</button>
+</div>
+</div>
+<!-- Shipping Logistics & Carrier Handover Section -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md text-ink">Carrier Allocation &amp; Handover Manifest</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-semantic-success font-label-sm text-label-sm font-bold">FastX Express Priority</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Carrier Card -->
+<div class="p-space-sm rounded-xl bg-surface-container-low space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-semibold">Assigned Courier</span>
+<span class="font-mono text-body-sm text-body-sm font-bold text-ink">FX-MUM-992140281</span>
+</div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">FastX Express Hub Linehaul</div>
+<div class="font-body-sm text-body-sm text-ink-muted space-y-0.5">
+<div>Pickup Slot: <strong class="text-ink">Today 2:00 PM Slot</strong></div>
+<div>Courier Marshall: <strong class="text-ink">Ramesh Kumar (MH-04-AZ-2019)</strong></div>
+</div>
+</div>
+<!-- Destination Card -->
+<div class="p-space-sm rounded-xl bg-surface-container-low space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-ink-subtle uppercase tracking-wider font-semibold">Ship To Customer</span>
+<span class="font-label-sm text-label-sm text-semantic-success font-medium">Pin Verified ✓</span>
+</div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Rohan Singhania</div>
+<div class="font-body-sm text-body-sm text-ink-muted leading-snug">
+                Flat 402, Sea Breeze, Bandra East, Mumbai - 400051<br/>
+<span class="text-ink-subtle">Phone: +91 98201 ••••56</span>
+</div>
+</div>
+</div>
+<!-- Document Preview & Generation Strip -->
+<div class="space-y-2 pt-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-ink-subtle font-semibold">Fulfillment Documents (Generated)</span>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+<!-- Label Card -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col justify-between gap-2">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="material-symbols-outlined text-[18px] text-royal-purple">label</span>
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+</div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Shipping Label</div>
+<div class="font-body-sm text-body-sm text-ink-subtle">4x6" Barcode PDF</div>
+</div>
+<button class="w-full py-1.5 rounded bg-surface-container-lowest hover:bg-surface-variant font-label-sm text-label-sm text-ink font-semibold shadow-sm transition-colors">Print Label</button>
+</div>
+<!-- Invoice Card -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col justify-between gap-2">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="material-symbols-outlined text-[18px] text-royal-purple">receipt_long</span>
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+</div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Tax Invoice</div>
+<div class="font-body-sm text-body-sm text-ink-subtle">GST B2C Compliant</div>
+</div>
+<button class="w-full py-1.5 rounded bg-surface-container-lowest hover:bg-surface-variant font-label-sm text-label-sm text-ink font-semibold shadow-sm transition-colors">Preview GST</button>
+</div>
+<!-- Packing Slip -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col justify-between gap-2">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="material-symbols-outlined text-[18px] text-royal-purple">description</span>
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+</div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Packing Slip</div>
+<div class="font-body-sm text-body-sm text-ink-subtle">Order Slip BOM</div>
+</div>
+<button class="w-full py-1.5 rounded bg-surface-container-lowest hover:bg-surface-variant font-label-sm text-label-sm text-ink font-semibold shadow-sm transition-colors">Download PDF</button>
+</div>
+<!-- Manifest -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex flex-col justify-between gap-2">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="material-symbols-outlined text-[18px] text-royal-purple">fact_check</span>
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+</div>
+<div class="font-title-sm text-title-sm text-ink font-semibold">Handover Sheet</div>
+<div class="font-body-sm text-body-sm text-ink-subtle">2:00 PM Batch #04</div>
+</div>
+<button class="w-full py-1.5 rounded bg-surface-container-lowest hover:bg-surface-variant font-label-sm text-label-sm text-ink font-semibold shadow-sm transition-colors">Add to Batch</button>
+</div>
+</div>
+</div>
+<!-- Dispatch Handover Final Confirmation -->
+<div class="pt-space-sm border-t-0 space-y-3">
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center gap-2.5 text-body-sm font-body-sm text-ink">
+<span class="material-symbols-outlined text-[20px] text-semantic-success">verified_user</span>
+<span>Physical pack ready. Barcodes verified. Courier handover scheduled in <strong>42 minutes</strong>.</span>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-space-sm">
+<button class="w-full sm:flex-1 h-12 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-title-sm text-title-sm font-semibold flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.99]">
+<span class="material-symbols-outlined text-[20px]">package_2</span>
+<span>Confirm Pack &amp; Mark Ready for Dispatch</span>
+</button>
+<button class="w-full sm:w-auto h-12 px-5 rounded-lg bg-surface-container-lowest hover:bg-surface-container-low text-ink font-label-md text-label-md font-semibold shadow-sm transition-colors">
+                Reprint Documents
+              </button>
+</div>
+</div>
+</div>
+<!-- Compact Dispatch Exceptions Panel -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2 text-semantic-warning">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+<span class="font-title-sm text-title-sm text-ink font-bold">Exceptions Requiring Action (2 Orders)</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-subtle">Hold Queue</span>
+</div>
+<div class="space-y-2">
+<!-- Exception 1 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">#OMZ-994799</span>
+<span class="font-body-sm text-body-sm text-ink-muted">Priya D. (Bengaluru)</span>
+</div>
+<div class="font-body-sm text-body-sm text-semantic-error mt-0.5">Address mismatch: Declared 560038 vs GPS Carrier Route 560076</div>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-lowest hover:bg-surface-variant text-royal-purple font-label-sm text-label-sm font-semibold shadow-sm transition-colors whitespace-nowrap self-start sm:self-auto">
+                Resolve with Buyer
+              </button>
+</div>
+<!-- Exception 2 -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-bold">#OMZ-994760</span>
+<span class="font-body-sm text-body-sm text-ink-muted">AuraGlow Desk Lamp White</span>
+</div>
+<div class="font-body-sm text-body-sm text-semantic-warning mt-0.5">Stock discrepancy: 0 of 1 available in Bin A-03</div>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-lowest hover:bg-surface-variant text-royal-purple font-label-sm text-label-sm font-semibold shadow-sm transition-colors whitespace-nowrap self-start sm:self-auto">
+                Transfer from Hub-02
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

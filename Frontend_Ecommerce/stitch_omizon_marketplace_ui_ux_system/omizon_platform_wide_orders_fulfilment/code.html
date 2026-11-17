@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-fixed-variant":"#5800c8","lavender-mist":"#E8E6F0","ink":"#211D31","ink-muted":"#655E7A","inverse-on-surface":"#f0f0f4","on-primary-fixed":"#24005b","error":"#ba1a1a","surface-container-lowest":"#ffffff","obsidian-border":"#382B54","secondary-fixed":"#e5deff","text-dark-secondary":"#C3BCD7","text-dark-muted":"#A49ABF","on-surface-variant":"#4a4456","text-dark-primary":"#F7F5FF","semantic-success":"#00875A","on-tertiary-fixed":"#1d104a","outline":"#7b7487","on-secondary-container":"#fffbff","surface-container":"#ededf1","error-container":"#ffdad6","on-secondary-fixed":"#1a0063","background":"#f9f9fd","on-error":"#ffffff","surface-bright":"#f9f9fd","surface":"#f9f9fd","semantic-warning":"#E27300","inverse-primary":"#d1bcff","on-secondary-fixed-variant":"#451fc4","on-background":"#1a1c1f","surface-container-highest":"#e2e2e6","surface-container-low":"#f3f3f7","surface-container-high":"#e8e8ec","on-surface":"#1a1c1f","secondary-fixed-dim":"#c9bfff","on-error-container":"#93000a","ink-subtle":"#928B9F","midnight-violet":"#190B46","royal-purple":"#4C2ACB","on-primary":"#ffffff","primary-container":"#762ff2","porcelain":"#F7F7FB","semantic-error":"#D92D20","tertiary-fixed-dim":"#cbbeff","tertiary-fixed":"#e6deff","obsidian-surface-2":"#211735","on-secondary":"#ffffff","tertiary":"#4d427c","obsidian-surface-1":"#1D1537","surface-variant":"#e2e2e6","surface-tint":"#7228ee","secondary":"#5b3eda","outline-variant":"#ccc3d9","primary-fixed-dim":"#d1bcff","inverse-surface":"#2e3034","secondary-container":"#745af4","primary":"#5c00d2","on-tertiary-container":"#e3daff","tertiary-container":"#655a96","on-primary-container":"#e7d9ff","surface-dim":"#d9dade","primary-fixed":"#eaddff","obsidian-violet":"#100A25","on-tertiary-fixed-variant":"#493e78","electric-violet":"#762FF2","on-tertiary":"#ffffff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","space-lg":"1.5rem","gutter-mobile":"0.75rem","margin-mobile":"1rem","space-md":"1rem","space-sm":"0.5rem","gutter":"1.5rem","space-xl":"2.5rem","margin":"2rem"},"fontFamily":{"body-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"]},"fontSize":{"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}],"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"price-hero":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"600"}],"price-card":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"700"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}]}}}}</script></head><body class="bg-porcelain font-body-md text-body-md text-ink min-h-screen"><aside class="fixed left-0 top-0 h-full w-72 bg-obsidian-violet text-text-dark-primary z-50 flex flex-col justify-between shadow-[0_16px_36px_-8px_rgba(25,11,70,0.2)]"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md flex items-center gap-space-sm bg-obsidian-violet/90"><img alt="OMIZON Official Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UdlrUM8hyyFfQVS5dmLaEh62kAxW_rStX2OO5j_r1zHJphPs6pfdXHGfDL0SS-LW_BEeUrp7vsEjrLyFXnOBWfDYjrJlJcEEjcpNp4AnrHV4cy5bOVYu_KnI5jBuFr0EY-AzNwLKSQsH8hazC472Fa85bIN2voQfI0bYSYwAKVWSoY3Vix0yMPgECasdbSABNB3UZKOz0aICgQ9rG4blKonaeUmeoPR3z_qtI2AgAbUBQj4TNVvepFFRw"/><div class="flex flex-col ml-space-xs"><span class="font-title-sm text-title-sm text-text-dark-primary tracking-tight leading-none">OMIZON</span><span class="font-label-sm text-label-sm text-text-dark-muted tracking-wider uppercase leading-none mt-1">PLATFORM CONSOLE ADMIN</span></div><span class="ml-auto bg-electric-violet/20 text-electric-violet font-label-sm text-label-sm px-2 py-0.5 rounded uppercase tracking-wide">Super</span></div><div class="flex-1 overflow-y-auto px-space-md py-space-md space-y-space-md"><nav class="space-y-space-md" data-active-classes="bg-electric-violet text-on-primary font-semibold shadow-[0_2px_8px_rgba(118,47,242,0.35)]"><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Core Operations</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="overview" href="#"><span>Overview</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="seller-applications" href="#"><span>Seller Applications</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">14 New</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="sellers" href="#"><span>Sellers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="buyers" href="#"><span>Buyers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="catalog-governance" href="#"><span>Catalog Governance</span><span class="bg-semantic-warning text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">9 Flagged</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Commerce &amp; Fulfillment</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="all-orders" href="#"><span>All Orders</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="payments-and-settlements" href="#"><span>Payments &amp; Settlements</span><span class="bg-error text-on-error font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">3 Hold</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="returns-and-disputes" href="#"><span>Returns &amp; Disputes</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">5 Open</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="promotions" href="#"><span>Promotions</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Intelligence &amp; Security</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="reports-and-analytics" href="#"><span>Reports &amp; Analytics</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="risk-and-fraud" href="#"><span>Risk &amp; Fraud</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="audit-logs" href="#"><span>Audit Logs</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="platform-settings" href="#"><span>Platform Settings</span></a></div></div></nav></div></div><div class="p-space-md bg-obsidian-surface-1/90"><div class="flex items-center justify-between mb-1"><span class="font-label-sm text-label-sm text-text-dark-muted">OMIZON Core v4.12.0-demo</span><span class="inline-block w-2 h-2 rounded-full bg-semantic-success"></span></div><div class="font-body-sm text-body-sm text-text-dark-secondary flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-electric-violet"></span>Simulated Sandbox Mode</div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(25,11,70,0.04)] z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="hidden xl:flex items-center gap-2 px-space-sm py-1 rounded bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>Platform-Wide (Simulated Demo Environment)</div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Global search merchants, orders (#OMZ-), products, or buyers (⌘K)..." type="text"/><kbd class="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-container-lowest shadow-[0_1px_2px_rgba(25,11,70,0.06)] px-1.5 py-0.5 rounded font-label-sm text-label-sm text-ink-muted">⌘K</kbd></div></div><div class="flex items-center gap-space-md"><button class="hidden lg:flex items-center gap-2 h-10 px-space-sm rounded-lg bg-porcelain hover:bg-surface-container transition-colors text-ink font-label-md text-label-md"><span class="material-symbols-outlined text-[18px] text-ink-muted">calendar_today</span>System Date: Oct 01 – Oct 30, 2023</button><div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-electric-violet"></span>Services: Simulated Demo</div><button class="relative p-2 rounded-lg hover:bg-porcelain text-ink transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-semantic-error rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="h-6 w-px bg-lavender-mist"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-sm text-title-sm text-ink leading-tight">Siddharth Rao</span><span class="font-label-sm text-label-sm text-ink-muted leading-tight">Super Admin / Platform Lead</span></div></div></div></header><main class="relative pt-16 bg-porcelain min-h-screen w-full px-space-lg py-space-lg"><div class="flex flex-col w-full">
+<!-- 1. PAGE HEADER & AUDIT STRIP -->
+<section class="flex flex-col gap-4 mb-6">
+<div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success animate-pulse"></span>
+            LIVE OMS FEED
+          </span>
+<span class="font-body-sm text-body-sm text-ink-muted">Simulated Sandbox Environment</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-ink tracking-tight font-bold">Platform-Wide Orders &amp; Fulfilment</h1>
+<p class="font-body-md text-body-md text-ink-muted mt-1 max-w-4xl">
+          Monitor order progression, delivery performance, fulfilment exceptions, and seller-level operational risks across OMIZON.
+        </p>
+</div>
+<!-- Action controls -->
+<div class="flex items-center gap-2.5 shrink-0">
+<button class="h-10 px-4 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container font-label-md text-label-md shadow-sm transition-all flex items-center gap-2 active:scale-95" id="btn-simulate-resync">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">sync</span>
+          Simulate Order Resync (Demo)
+        </button>
+<button class="h-10 px-4 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-label-md text-label-md shadow-sm transition-all flex items-center gap-2 active:scale-95">
+<span class="material-symbols-outlined text-[18px]">download</span>
+          Export Orders (CSV)
+        </button>
+</div>
+</div>
+<!-- Operational Status Disclosure Strip -->
+<div class="rounded-xl bg-surface-container-lowest p-3 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-3 text-ink-muted font-body-sm text-body-sm">
+<div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
+<span class="inline-flex items-center gap-1.5 text-ink font-semibold">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+          Demo Data — Simulated Records
+        </span>
+<span class="text-lavender-mist hidden sm:inline">•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-ink-subtle">schedule</span> OMS Sync: Simulated Oct 30, 14:35 IST</span>
+<span class="text-lavender-mist hidden sm:inline">•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-ink-subtle">local_shipping</span> FastX Logistics Engine: v4.2 Active (Simulated)</span>
+<span class="text-lavender-mist hidden sm:inline">•</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-ink-subtle">hub</span> Scope: All Marketplace Hubs (Pan-India)</span>
+<span class="text-lavender-mist hidden sm:inline">•</span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-ink font-medium">ISO/IEC 27001 Staged</span>
+</div>
+<div class="inline-flex items-center gap-1.5 text-semantic-warning bg-semantic-warning/10 px-2.5 py-1 rounded font-label-sm text-label-sm self-start md:self-auto">
+<span class="material-symbols-outlined text-[14px]">info</span>
+        Illustrative demo data • Simulated operational events • No live mutations
+      </div>
+</div>
+</section>
+<!-- 2. EXECUTIVE ORDER LIFECYCLE KPI CARDS (Strict Mathematical Reconciliation) -->
+<section class="mb-6">
+<div class="grid grid-cols-2 lg:grid-cols-6 gap-3 mb-3">
+<!-- Total Orders -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm relative overflow-hidden flex flex-col justify-between">
+<div class="absolute -right-3 -top-3 w-16 h-16 bg-electric-violet/5 rounded-full"></div>
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider block mb-1">Total Orders</span>
+<div class="font-headline-md text-headline-md font-bold text-ink leading-tight">142,850</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between text-xs">
+<span class="inline-flex items-center text-semantic-success font-semibold font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] mr-0.5">trending_up</span>+11.6%
+          </span>
+<span class="text-ink-subtle text-[11px]">vs prev period</span>
+</div>
+</div>
+<!-- Delivered -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider block mb-1">Delivered</span>
+<div class="font-headline-md text-headline-md font-bold text-semantic-success leading-tight">118,420</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between text-xs">
+<span class="font-title-sm text-title-sm text-ink font-semibold">82.90%</span>
+<span class="text-ink-subtle text-[11px]">Lifecycle Met</span>
+</div>
+</div>
+<!-- In Transit -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider block mb-1">In Transit</span>
+<div class="font-headline-md text-headline-md font-bold text-electric-violet leading-tight">14,250</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between text-xs">
+<span class="font-title-sm text-title-sm text-ink font-semibold">9.98%</span>
+<span class="text-ink-subtle text-[11px]">FastX / Partners</span>
+</div>
+</div>
+<!-- Processing -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider block mb-1">Processing (FC)</span>
+<div class="font-headline-md text-headline-md font-bold text-secondary leading-tight">6,420</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between text-xs">
+<span class="font-title-sm text-title-sm text-ink font-semibold">4.49%</span>
+<span class="text-ink-subtle text-[11px]">Packing / QC</span>
+</div>
+</div>
+<!-- Pending Payment -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider block mb-1">Pending Payment</span>
+<div class="font-headline-md text-headline-md font-bold text-semantic-warning leading-tight">1,940</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between text-xs">
+<span class="font-title-sm text-title-sm text-ink font-semibold">1.36%</span>
+<span class="text-ink-subtle text-[11px]">PG Awaiting</span>
+</div>
+</div>
+<!-- Fulfilment Exceptions -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between ring-1 ring-semantic-error/20">
+<div>
+<span class="font-label-sm text-label-sm text-semantic-error uppercase tracking-wider block mb-1 font-semibold flex items-center justify-between">
+            Exceptions
+            <span class="w-2 h-2 rounded-full bg-semantic-error animate-ping"></span>
+</span>
+<div class="font-headline-md text-headline-md font-bold text-semantic-error leading-tight">980</div>
+</div>
+<div class="mt-2.5 flex items-center justify-between text-xs">
+<span class="font-title-sm text-title-sm text-semantic-error font-semibold">0.69%</span>
+<span class="text-semantic-error text-[11px] font-medium">Intervention Req.</span>
+</div>
+</div>
+</div>
+<!-- Mathematical Reconciliation Bar & Secondary Operational Benchmark Strip -->
+<div class="bg-midnight-violet text-text-dark-primary p-3.5 rounded-xl shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-3 text-xs">
+<div class="flex flex-wrap items-center gap-y-2 gap-x-5">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-text-dark-primary font-semibold">
+<span class="material-symbols-outlined text-electric-violet text-[18px]">verified</span>
+          Pipeline Reconciliation:
+        </div>
+<div class="font-body-sm text-body-sm text-text-dark-secondary">
+          142,010 Active Pipe + <span class="text-text-dark-primary font-medium">840 Cancelled / RTO (0.59%)</span> <span class="text-text-dark-muted">[510 Pre-dispatch + 330 Return to Origin]</span> = <span class="text-text-dark-primary font-bold">142,850 Exactly</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-text-dark-secondary text-[11px] border-t border-obsidian-border/40 lg:border-t-0 pt-2 lg:pt-0">
+<span class="flex items-center gap-1"><span class="text-text-dark-muted">Dispatch SLA:</span> <b class="text-semantic-success">98.7%</b> (Tgt &gt;98%)</span>
+<span class="text-obsidian-border">•</span>
+<span class="flex items-center gap-1"><span class="text-text-dark-muted">Delivery SLA:</span> <b class="text-text-dark-primary">96.4%</b></span>
+<span class="text-obsidian-border">•</span>
+<span class="flex items-center gap-1"><span class="text-text-dark-muted">Avg Dispatch:</span> <b class="text-text-dark-primary">4.8h</b></span>
+<span class="text-obsidian-border">•</span>
+<span class="flex items-center gap-1 text-semantic-warning font-semibold"><span class="material-symbols-outlined text-[14px]">timer</span> At Risk (&lt;2h): 42 orders</span>
+<span class="text-obsidian-border">•</span>
+<span class="flex items-center gap-1 text-semantic-success"><span class="material-symbols-outlined text-[14px]">dns</span> 6/6 Central FCs Active</span>
+</div>
+</div>
+</section>
+<!-- 3. ORDER LIFECYCLE & EXCEPTION FUNNEL VISUALIZATION -->
+<section class="mb-6 bg-surface-container-lowest p-4 rounded-xl shadow-sm">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-electric-violet text-[20px]">timeline</span>
+<h2 class="font-title-md text-title-md text-ink font-semibold">End-to-End Fulfilment Progression &amp; Drop-off Off-Ramps</h2>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted">Linear OMS Ingestion → Carrier Delivery</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-2 relative">
+<!-- Stage 1 -->
+<div class="bg-surface-container-low p-3 rounded-lg relative flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-ink-muted font-bold">1. Payment</span>
+<span class="text-semantic-warning font-semibold text-xs">1.36%</span>
+</div>
+<div class="font-title-lg text-title-lg font-bold text-ink">1,940</div>
+<div class="font-body-sm text-body-sm text-ink-muted mt-0.5">Pending Webhook</div>
+<div class="mt-2.5 pt-2 border-t border-lavender-mist/50 flex items-center justify-between text-[11px] text-ink-muted">
+<span>Off-ramp:</span>
+<span class="text-error font-medium">510 Auto-cancel</span>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="bg-surface-container-low p-3 rounded-lg relative flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-ink-muted font-bold">2. Confirmed</span>
+<span class="text-electric-violet font-semibold text-xs">98.6%</span>
+</div>
+<div class="font-title-lg text-title-lg font-bold text-ink">140,910</div>
+<div class="font-body-sm text-body-sm text-ink-muted mt-0.5">Escrow Reserved</div>
+<div class="mt-2.5 pt-2 border-t border-lavender-mist/50 flex items-center justify-between text-[11px] text-ink-muted">
+<span>Routed to FCs:</span>
+<span class="text-ink font-semibold">100% Validated</span>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="bg-surface-container-low p-3 rounded-lg relative flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-ink-muted font-bold">3. Processing</span>
+<span class="text-secondary font-semibold text-xs">4.49%</span>
+</div>
+<div class="font-title-lg text-title-lg font-bold text-ink">6,420</div>
+<div class="font-body-sm text-body-sm text-ink-muted mt-0.5">Pick, Pack &amp; Label</div>
+<div class="mt-2.5 pt-2 border-t border-lavender-mist/50 flex items-center justify-between text-[11px] text-ink-muted">
+<span>Critical Queue:</span>
+<span class="text-semantic-warning font-semibold">42 Near SLA</span>
+</div>
+</div>
+<!-- Stage 4 -->
+<div class="bg-surface-container-low p-3 rounded-lg relative flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-ink-muted font-bold">4. In Transit</span>
+<span class="text-primary font-semibold text-xs">9.98%</span>
+</div>
+<div class="font-title-lg text-title-lg font-bold text-ink">14,250</div>
+<div class="font-body-sm text-body-sm text-ink-muted mt-0.5">Mid-mile / Last-mile</div>
+<div class="mt-2.5 pt-2 border-t border-lavender-mist/50 flex items-center justify-between text-[11px] text-ink-muted">
+<span>Active Escort:</span>
+<span class="text-semantic-error font-medium">980 Exceptions</span>
+</div>
+</div>
+<!-- Stage 5 -->
+<div class="bg-surface-container-low p-3 rounded-lg relative flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs mb-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-semantic-success font-bold">5. Delivered</span>
+<span class="text-semantic-success font-semibold text-xs">82.90%</span>
+</div>
+<div class="font-title-lg text-title-lg font-bold text-semantic-success">118,420</div>
+<div class="font-body-sm text-body-sm text-ink-muted mt-0.5">Signed &amp; Closed</div>
+<div class="mt-2.5 pt-2 border-t border-lavender-mist/50 flex items-center justify-between text-[11px] text-ink-muted">
+<span>Terminal RTO:</span>
+<span class="text-ink-muted font-medium">330 Doorstep Refused</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. WORKSPACE TABS & GRANULAR TOOLBAR -->
+<section class="mb-4 space-y-3">
+<!-- View Switcher Tabs -->
+<div class="flex flex-wrap items-center justify-between gap-2 border-b border-lavender-mist pb-2">
+<div class="flex flex-wrap items-center gap-1.5" id="status-tab-group">
+<button class="px-3.5 py-1.5 rounded-lg bg-electric-violet text-on-primary font-title-sm text-title-sm shadow-sm transition-all" data-filter="all">
+          All Orders <span class="ml-1 opacity-90 text-xs font-normal">(1,42,850)</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-ink font-title-sm text-title-sm transition-all flex items-center gap-1.5" data-filter="exceptions">
+          Exceptions Queue <span class="px-1.5 py-0.2 bg-semantic-error text-on-error rounded-full text-xs font-semibold">980</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-ink font-title-sm text-title-sm transition-all flex items-center gap-1.5" data-filter="sla">
+          At Risk of SLA <span class="px-1.5 py-0.2 bg-semantic-warning text-on-primary rounded-full text-xs font-semibold">42</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-ink font-title-sm text-title-sm transition-all flex items-center gap-1.5" data-filter="rto">
+          RTO &amp; Returns <span class="px-1.5 py-0.2 bg-ink-muted text-on-primary rounded-full text-xs font-semibold">330</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-ink font-title-sm text-title-sm transition-all" data-filter="carrier">
+          Carrier Performance
+        </button>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-0.5 shadow-sm text-xs text-ink-muted">
+<button class="px-2.5 py-1 rounded bg-surface-container text-ink font-medium">Standard View</button>
+<button class="px-2.5 py-1 rounded hover:text-ink">Compact</button>
+</div>
+</div>
+</div>
+<!-- Omnibar & Filters -->
+<div class="bg-surface-container-lowest p-3.5 rounded-xl shadow-sm flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3">
+<!-- Search -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span>
+<input class="w-full h-10 pl-10 pr-8 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:outline-none focus:ring-2 focus:ring-electric-violet/20" id="orders-search-input" placeholder="Search by Order ID (OMZ-ORD-), Buyer ID, Seller Name, Tracking ID..." type="text" value="OMZ-ORD-260184"/>
+<button class="absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-muted hover:text-ink text-[16px] material-symbols-outlined">close</button>
+</div>
+<!-- Dropdown Selectors -->
+<div class="flex flex-wrap items-center gap-2">
+<select class="h-10 px-3 rounded-lg bg-porcelain text-ink font-body-sm text-body-sm focus:outline-none">
+<option>Status: All Statuses (1,42,850)</option>
+<option>Delivered (1,18,420)</option>
+<option>In Transit (14,250)</option>
+<option>Processing (6,420)</option>
+<option>Pending Payment (1,940)</option>
+<option>Exceptions (980)</option>
+</select>
+<select class="h-10 px-3 rounded-lg bg-porcelain text-ink font-body-sm text-body-sm focus:outline-none">
+<option>Hub: All Hubs (Pan-India)</option>
+<option>Bhiwandi Central FC-04</option>
+<option>Bengaluru Hub FC-02</option>
+<option>New Delhi Hub FC-01</option>
+<option>Surat Hub FC-05</option>
+<option>Agra Footwear Hub FC-06</option>
+</select>
+<select class="h-10 px-3 rounded-lg bg-porcelain text-ink font-body-sm text-body-sm focus:outline-none">
+<option>Carrier: All Partners (FastX, Delhivery, BlueDart)</option>
+<option>FastX Priority (Direct API)</option>
+<option>Delhivery Express</option>
+<option>BlueDart Air</option>
+</select>
+<select class="h-10 px-3 rounded-lg bg-porcelain text-ink font-body-sm text-body-sm focus:outline-none">
+<option>Severity: All Exceptions</option>
+<option>Carrier Weather Hold</option>
+<option>Address Discrepancy</option>
+<option>Customer Doorstep Refusal</option>
+</select>
+</div>
+</div>
+<!-- Active Filter Chips Strip -->
+<div class="flex flex-wrap items-center gap-2 pt-1 font-body-sm text-body-sm">
+<span class="text-ink-muted text-xs font-medium">Active Triage Filters:</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm">
+        Hub: Pan-India
+        <button class="hover:text-electric-violet material-symbols-outlined text-[14px]">cancel</button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm">
+        Status: Active Pipeline
+        <button class="hover:text-electric-violet material-symbols-outlined text-[14px]">cancel</button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-electric-violet/10 text-electric-violet font-label-sm text-label-sm font-semibold">
+        Search: "OMZ-ORD-260184"
+        <button class="hover:text-royal-purple material-symbols-outlined text-[14px]">cancel</button>
+</span>
+<button class="text-electric-violet hover:underline text-xs font-semibold ml-2">Clear all filters</button>
+</div>
+</section>
+<!-- 5 & 6. MASTER-DETAIL WORKSPACE (64% Left / 36% Right) -->
+<section class="grid grid-cols-1 xl:grid-cols-12 gap-5 mb-8">
+<!-- LEFT TABLE (~64% -> 7 or 8 columns in 12-grid, using 7.5 ratio: 7 col on XL, or xl:col-span-7 / 8) -->
+<div class="xl:col-span-8 flex flex-col gap-3">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Table Header Info Bar -->
+<div class="p-3.5 bg-surface-container-lowest flex items-center justify-between border-b border-lavender-mist">
+<div class="flex items-center gap-2">
+<span class="font-title-sm text-title-sm text-ink font-semibold">Master Order Ingestion Stream</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-ink-muted font-label-sm text-label-sm">Live Stream</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">
+            Showing <strong class="text-ink">1–6</strong> of <strong class="text-ink">142,850</strong> records
+          </div>
+</div>
+<!-- Orders Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs border-collapse">
+<thead>
+<tr class="bg-porcelain text-ink-muted uppercase font-label-sm text-label-sm border-b border-lavender-mist tracking-wider">
+<th class="py-3 px-3.5">Order Ref &amp; Date</th>
+<th class="py-3 px-3">Buyer</th>
+<th class="py-3 px-3">Seller &amp; Hub</th>
+<th class="py-3 px-3">Value</th>
+<th class="py-3 px-3">Shipment Status</th>
+<th class="py-3 px-3">Promised Delivery</th>
+<th class="py-3 px-3">SLA Health</th>
+<th class="py-3 px-3.5 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-lavender-mist/60 font-body-md text-body-md">
+<!-- ROW 1 (SELECTED ROW) -->
+<tr class="bg-electric-violet/5 hover:bg-electric-violet/10 transition-colors cursor-pointer ring-2 ring-electric-violet ring-inset" onclick="selectOrder('OMZ-ORD-260184')">
+<td class="py-3.5 px-3.5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-electric-violet"></span>
+<span class="font-title-sm text-title-sm font-bold text-electric-violet">OMZ-ORD-260184</span>
+</div>
+<div class="text-[11px] text-ink-muted mt-0.5 pl-4">Oct 30, 2023 • 11:24 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">OMZ-BUY-1042</div>
+<div class="text-[11px] text-ink-muted">Rahul M. • Mumbai</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="text-ink font-semibold truncate max-w-[150px]">ApexTech India</div>
+<div class="text-[11px] text-ink-muted truncate max-w-[150px]">Bhiwandi Hub FC-04</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm font-bold text-ink">₹4,999</div>
+<div class="text-[10px] text-semantic-success font-medium">Prepaid UPI • Settled</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-electric-violet/15 text-electric-violet font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-electric-violet"></span>
+                    In Transit
+                  </span>
+<div class="text-[11px] text-ink-muted mt-0.5">FastX #FX-982144</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">Oct 31, 2023</div>
+<div class="text-[11px] text-ink-muted">By 18:00 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-semantic-success/10 text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">check_circle</span>
+                    On Track
+                  </span>
+</td>
+<td class="py-3.5 px-3.5 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- ROW 2 -->
+<tr class="hover:bg-porcelain/80 transition-colors cursor-pointer" onclick="selectOrder('OMZ-ORD-260183')">
+<td class="py-3.5 px-3.5">
+<span class="font-title-sm text-title-sm font-bold text-ink">OMZ-ORD-260183</span>
+<div class="text-[11px] text-ink-muted mt-0.5">Oct 29, 2023 • 18:15 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">OMZ-BUY-3981</div>
+<div class="text-[11px] text-ink-muted">Pooja K. • Bengaluru</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="text-ink font-semibold truncate max-w-[150px]">NovaCraft Audio</div>
+<div class="text-[11px] text-ink-muted truncate max-w-[150px]">Bengaluru Hub FC-02</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm font-bold text-ink">₹3,499</div>
+<div class="text-[10px] text-semantic-success font-medium">Paid • Card</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-error/10 text-semantic-error font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-error"></span>
+                    Delivery Delayed
+                  </span>
+<div class="text-[11px] text-ink-muted mt-0.5">Carrier Weather Hold</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-semantic-error">Oct 30, 2023</div>
+<div class="text-[11px] text-semantic-error font-medium">Overdue by 4h</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-semantic-error/15 text-semantic-error font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">warning</span>
+                    High Priority
+                  </span>
+</td>
+<td class="py-3.5 px-3.5 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- ROW 3 -->
+<tr class="hover:bg-porcelain/80 transition-colors cursor-pointer" onclick="selectOrder('OMZ-ORD-260182')">
+<td class="py-3.5 px-3.5">
+<span class="font-title-sm text-title-sm font-bold text-ink">OMZ-ORD-260182</span>
+<div class="text-[11px] text-ink-muted mt-0.5">Oct 30, 2023 • 13:40 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">OMZ-BUY-5521</div>
+<div class="text-[11px] text-ink-muted">Vikas G. • Delhi</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="text-ink font-semibold truncate max-w-[150px]">UrbanRoots Organic</div>
+<div class="text-[11px] text-ink-muted truncate max-w-[150px]">New Delhi Hub FC-01</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm font-bold text-ink">₹849</div>
+<div class="text-[10px] text-semantic-warning font-medium">Pending Confirmation</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-ink-muted font-label-sm text-label-sm">
+                    Payment Pending
+                  </span>
+<div class="text-[11px] text-ink-muted mt-0.5">Unassigned Hub</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">Nov 02, 2023</div>
+<div class="text-[11px] text-ink-muted">Standard Express</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">pending</span>
+                    Awaiting PG
+                  </span>
+</td>
+<td class="py-3.5 px-3.5 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- ROW 4 -->
+<tr class="hover:bg-porcelain/80 transition-colors cursor-pointer" onclick="selectOrder('OMZ-ORD-260181')">
+<td class="py-3.5 px-3.5">
+<span class="font-title-sm text-title-sm font-bold text-ink">OMZ-ORD-260181</span>
+<div class="text-[11px] text-ink-muted mt-0.5">Oct 28, 2023 • 09:12 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">OMZ-BUY-2204</div>
+<div class="text-[11px] text-ink-muted">Neha S. • Surat</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="text-ink font-semibold truncate max-w-[150px]">Prism Apparel Studio</div>
+<div class="text-[11px] text-ink-muted truncate max-w-[150px]">Surat Hub FC-05</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm font-bold text-ink">₹1,599</div>
+<div class="text-[10px] text-semantic-success font-medium">Paid • UPI Net</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">done_all</span>
+                    Delivered
+                  </span>
+<div class="text-[11px] text-ink-muted mt-0.5">Oct 30, 10:15 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">Oct 30, 2023</div>
+<div class="text-[11px] text-semantic-success font-medium">Met 7h Early</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-semantic-success/10 text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">verified</span>
+                    SLA Met
+                  </span>
+</td>
+<td class="py-3.5 px-3.5 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- ROW 5 -->
+<tr class="hover:bg-porcelain/80 transition-colors cursor-pointer" onclick="selectOrder('OMZ-ORD-260180')">
+<td class="py-3.5 px-3.5">
+<span class="font-title-sm text-title-sm font-bold text-ink">OMZ-ORD-260180</span>
+<div class="text-[11px] text-ink-muted mt-0.5">Oct 27, 2023 • 14:05 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">OMZ-BUY-8712</div>
+<div class="text-[11px] text-ink-muted">Amit T. • Agra</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="text-ink font-semibold truncate max-w-[150px]">NexaWear Footwear</div>
+<div class="text-[11px] text-ink-muted truncate max-w-[150px]">Agra Hub FC-06</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm font-bold text-ink">₹2,799</div>
+<div class="text-[10px] text-ink-muted font-medium">Escrow Held</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">undo</span>
+                    RTO Initiated
+                  </span>
+<div class="text-[11px] text-ink-muted mt-0.5">Returning to Hub</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">Oct 29, 2023</div>
+<div class="text-[11px] text-ink-muted">Attempted 2x</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">cancel</span>
+                    Doorstep Refusal
+                  </span>
+</td>
+<td class="py-3.5 px-3.5 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- ROW 6 -->
+<tr class="hover:bg-porcelain/80 transition-colors cursor-pointer" onclick="selectOrder('OMZ-ORD-260179')">
+<td class="py-3.5 px-3.5">
+<span class="font-title-sm text-title-sm font-bold text-ink">OMZ-ORD-260179</span>
+<div class="text-[11px] text-ink-muted mt-0.5">Oct 30, 2023 • 08:30 IST</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">OMZ-BUY-6643</div>
+<div class="text-[11px] text-ink-muted">Sunil P. • Mumbai</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="text-ink font-semibold truncate max-w-[150px]">Zenith Home Goods</div>
+<div class="text-[11px] text-ink-muted truncate max-w-[150px]">Mumbai Western FC</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm font-bold text-ink">₹6,250</div>
+<div class="text-[10px] text-semantic-success font-medium">Paid • Card</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary/15 text-secondary font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">inventory_2</span>
+                    Processing FC
+                  </span>
+<div class="text-[11px] text-ink-muted mt-0.5">Packaging Unit 4</div>
+</td>
+<td class="py-3.5 px-3">
+<div class="font-title-sm text-title-sm text-ink">Nov 01, 2023</div>
+<div class="text-[11px] text-ink-muted">Standard Express</div>
+</td>
+<td class="py-3.5 px-3">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-semantic-warning/20 text-semantic-warning font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[13px]">alarm</span>
+                    &lt;1.5h to SLA
+                  </span>
+</td>
+<td class="py-3.5 px-3.5 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted hover:text-ink">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination -->
+<div class="p-3.5 bg-porcelain border-t border-lavender-mist flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-ink-muted">
+<div class="flex items-center gap-2">
+<span>Showing rows 1–6 of 142,850 orders</span>
+<span class="inline-block w-1 h-1 rounded-full bg-ink-subtle"></span>
+<span class="text-semantic-warning font-semibold">42 at risk in queue</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-medium text-ink">Page 1 of 23,809</span>
+<div class="flex items-center gap-1">
+<button class="w-7 h-7 rounded bg-surface-container-lowest flex items-center justify-center text-ink-subtle disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="w-7 h-7 rounded bg-electric-violet text-on-primary font-semibold flex items-center justify-center">1</button>
+<button class="w-7 h-7 rounded bg-surface-container-lowest text-ink flex items-center justify-center hover:bg-surface-container">2</button>
+<button class="w-7 h-7 rounded bg-surface-container-lowest text-ink flex items-center justify-center hover:bg-surface-container">3</button>
+<span class="px-1 text-ink-subtle">…</span>
+<button class="w-7 h-7 rounded bg-surface-container-lowest text-ink flex items-center justify-center hover:bg-surface-container">23809</button>
+<button class="w-7 h-7 rounded bg-surface-container-lowest flex items-center justify-center text-ink hover:bg-surface-container">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT DETAIL PANEL (~36% -> xl:col-span-4) -->
+<div class="xl:col-span-4 flex flex-col gap-4">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden sticky top-20">
+<!-- Detail Header -->
+<div class="bg-midnight-violet text-text-dark-primary p-4">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded bg-electric-violet/30 text-primary-fixed-dim font-label-sm text-label-sm font-semibold uppercase">Selected Order</span>
+<span class="text-text-dark-muted font-body-sm text-body-sm">Standard Express</span>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-semantic-success/20 text-semantic-success text-[11px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span> In Transit
+            </span>
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-sm text-headline-sm font-bold text-text-dark-primary tracking-tight">OMZ-ORD-260184</h3>
+<span class="font-title-sm text-title-sm text-primary-fixed-dim font-semibold">₹4,999.00</span>
+</div>
+<div class="mt-2 pt-2 border-t border-obsidian-border/50 flex items-center justify-between text-xs text-text-dark-secondary">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-electric-violet">timer</span> Delivery expected in 21h 35m</span>
+<span class="text-text-dark-muted text-[11px]">SLA: Oct 31, 18:00 IST</span>
+</div>
+</div>
+<div class="p-4 space-y-4 text-xs">
+<!-- Item & Merchant Card -->
+<div class="bg-porcelain p-3 rounded-lg space-y-2">
+<div class="flex items-center justify-between text-ink-muted font-label-sm text-label-sm uppercase font-semibold">
+<span>Item &amp; Seller Profile</span>
+<span class="text-semantic-success font-semibold">Tier 1 Platinum</span>
+</div>
+<div class="flex items-start gap-3">
+<img class="w-12 h-12 rounded-lg object-cover bg-surface-container shrink-0" data-alt="Close up studio product photograph of sleek matte black wireless headphones resting on a minimalist surface with subtle purple ambient rim lighting and soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKluLulOcccG8OaWMEmPPuvm01d7qs7Yg_K88cLMg9hD85cY2Dp-jZoUyxm_3Q_Yw3WYS0KM820-weOPyUNyAXFw848qA1xqL4ZwuScHLiQobtJhUIi_2iO9URXJB9AvQk0eQFKAnU8uYCQl3YLCZi5qQkaWqcxEnOdgw42EL7OBU5ZgCVXsnceOK7GLmAznK1MT4YDThbKA5lNzenZAjDr2-Mm49Sd9gH5VIjGeC6"/>
+<div class="flex-1 min-w-0">
+<div class="font-title-sm text-title-sm font-semibold text-ink truncate">Apex Pro Wireless Headphones</div>
+<div class="text-[11px] text-ink-muted">SKU: #SKU-AP-WH100 • Qty: 1 • Cosmic Black</div>
+<div class="text-ink font-medium mt-1">Merchant: ApexTech India Pvt Ltd <span class="text-ink-muted">(#OMZ-MCH-88201)</span></div>
+</div>
+</div>
+</div>
+<!-- Customer & Escrow Information -->
+<div class="grid grid-cols-2 gap-2 text-ink">
+<div class="p-2.5 bg-porcelain rounded-lg">
+<span class="text-[11px] text-ink-muted uppercase font-semibold block mb-0.5">Masked Buyer PII</span>
+<div class="font-title-sm text-title-sm font-bold">OMZ-BUY-1042</div>
+<div class="text-[11px] text-ink-muted truncate">R**** M*****</div>
+<div class="text-[10px] text-ink-muted truncate">Andheri West, Mumbai, 400058</div>
+</div>
+<div class="p-2.5 bg-porcelain rounded-lg">
+<span class="text-[11px] text-ink-muted uppercase font-semibold block mb-0.5">Escrow Settlement</span>
+<div class="font-title-sm text-title-sm font-bold text-semantic-success">₹4,999.00 Settled</div>
+<div class="text-[11px] text-ink-muted truncate">Razorpay UPI • pay_sim_99214</div>
+<div class="text-[10px] text-semantic-success font-medium">Escrow Release: Post-Del</div>
+</div>
+</div>
+<!-- Fulfilment Architecture -->
+<div class="p-2.5 bg-porcelain rounded-lg flex items-center justify-between">
+<div>
+<span class="text-[10px] text-ink-muted uppercase font-bold block">Fulfilment Center &amp; Carrier</span>
+<div class="font-title-sm text-title-sm font-semibold text-ink">Bhiwandi Central FC-04 (Dock 12)</div>
+<div class="text-[11px] text-ink-muted">FastX Priority Cargo • #FX-982144-BOM</div>
+</div>
+<div class="text-right">
+<span class="px-2 py-0.5 bg-semantic-success/15 text-semantic-success rounded font-label-sm text-label-sm font-semibold">Dispatch SLA Met</span>
+<div class="text-[11px] text-ink-muted mt-1">1h 21m turnaround</div>
+</div>
+</div>
+<!-- Shipment Lifecycle Timeline -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase font-bold text-ink-muted">Carrier Progress Timeline</span>
+<span class="text-semantic-success font-semibold text-[11px]">FastX Synchronized</span>
+</div>
+<div class="relative pl-5 space-y-3 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-lavender-mist">
+<!-- Event 1 -->
+<div class="relative flex items-start gap-2">
+<span class="absolute -left-5 top-0.5 w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<div class="font-semibold text-ink text-[12px]">Order Placed &amp; Payment Confirmed</div>
+<div class="text-[11px] text-ink-muted">Oct 30, 11:24 IST • UPI Gateway Settled</div>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="relative flex items-start gap-2">
+<span class="absolute -left-5 top-0.5 w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<div class="font-semibold text-ink text-[12px]">Auto-routed to Bhiwandi FC-04</div>
+<div class="text-[11px] text-ink-muted">Oct 30, 11:35 IST • Intelligent Allocation</div>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="relative flex items-start gap-2">
+<span class="absolute -left-5 top-0.5 w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<div class="font-semibold text-ink text-[12px]">Packed &amp; Barcode Scanned</div>
+<div class="text-[11px] text-ink-muted">Oct 30, 12:10 IST • Warehouse Bin A-14</div>
+</div>
+</div>
+<!-- Event 4 -->
+<div class="relative flex items-start gap-2">
+<span class="absolute -left-5 top-0.5 w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<div class="font-semibold text-ink text-[12px]">Manifest Handed Over to FastX</div>
+<div class="text-[11px] text-ink-muted">Oct 30, 12:45 IST • Dispatch Seal #9042</div>
+</div>
+</div>
+<!-- Event 5 -->
+<div class="relative flex items-start gap-2">
+<span class="absolute -left-5 top-0.5 w-2.5 h-2.5 rounded-full bg-electric-violet ring-2 ring-electric-violet/20 animate-pulse"></span>
+<div>
+<div class="font-semibold text-electric-violet text-[12px]">Arrived at Mumbai Western Sorting Hub</div>
+<div class="text-[11px] text-ink-muted">Oct 30, 14:10 IST • Inbound Bag Sorted</div>
+</div>
+</div>
+<!-- Event 6 -->
+<div class="relative flex items-start gap-2 opacity-50">
+<span class="absolute -left-5 top-0.5 w-2.5 h-2.5 rounded-full bg-lavender-mist"></span>
+<div>
+<div class="font-semibold text-ink text-[12px]">Out for Delivery</div>
+<div class="text-[11px] text-ink-muted">Scheduled: Oct 31, 09:00 IST</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Operator Governance Actions -->
+<div class="space-y-2 pt-2 border-t border-lavender-mist">
+<span class="font-label-sm text-label-sm uppercase font-bold text-ink-muted block">Operator Governance</span>
+<div class="grid grid-cols-2 gap-2">
+<button class="h-8 px-2 rounded bg-surface-container hover:bg-lavender-mist text-ink font-label-sm text-label-sm transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">assignment_ind</span> Assign Ops
+              </button>
+<button class="h-8 px-2 rounded bg-surface-container hover:bg-lavender-mist text-ink font-label-sm text-label-sm transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">support_agent</span> Contact Carrier Desk
+              </button>
+<button class="h-8 px-2 rounded bg-surface-container hover:bg-lavender-mist text-ink font-label-sm text-label-sm transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">flag</span> Add Internal Flag
+              </button>
+<button class="h-8 px-2 rounded bg-surface-container hover:bg-lavender-mist text-ink font-label-sm text-label-sm transition-all flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[14px]">alt_route</span> Reroute (Simulated)
+              </button>
+</div>
+<!-- Related Quick Links -->
+<div class="pt-2 flex flex-wrap gap-2 text-[11px] text-electric-violet">
+<a class="hover:underline flex items-center gap-0.5" href="#">Open Seller Account (#OMZ-MCH-88201) →</a>
+<a class="hover:underline flex items-center gap-0.5" href="#">Inspect Catalog Listing (#SKU-AP-WH100) →</a>
+<a class="hover:underline flex items-center gap-0.5" href="#">Check Escrow Payouts (#PAY-EX-9921) →</a>
+</div>
+</div>
+<!-- ISO Audit Trail Log -->
+<div class="p-2.5 rounded bg-surface-container-low text-[10px] space-y-1 font-mono text-ink-muted">
+<div class="font-bold text-ink flex items-center justify-between">
+<span>ISO 27001 AUDIT RECORD (SIMULATED)</span>
+<span class="text-semantic-success">• IMMUTABLE</span>
+</div>
+<div>[11:24:02 IST] OMS Pipeline • Automated routing completed</div>
+<div>[12:45:11 IST] FastX Webhook • Dispatch confirmation 200 OK</div>
+<div>[14:15:00 IST] Op: Siddharth Rao • Order audit opened</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 7. BOTTOM ANALYTICS STRIP: FULFILMENT HUB & PERFORMANCE BENCHMARKS -->
+<section class="bg-surface-container-lowest p-4 rounded-xl shadow-sm mb-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-electric-violet text-[20px]">warehouse</span>
+<h3 class="font-title-md text-title-md text-ink font-semibold">Central Fulfilment Hub Operating Health &amp; Dispatch Benchmarks</h3>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted">Pan-India Network SLA Matrix • Real-time Simulated Telemetry</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-5 gap-3">
+<!-- Hub 1 -->
+<div class="p-3 rounded-lg bg-porcelain flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-title-sm text-title-sm font-bold text-ink">Bhiwandi Central</span>
+<span class="px-1.5 py-0.2 rounded bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">Optimal</span>
+</div>
+<div class="text-xs text-ink-muted">Code: FC-04 (Western Hub)</div>
+<div class="font-title-lg text-title-lg font-bold text-ink mt-2">42,100 <span class="font-body-sm text-body-sm font-normal text-ink-muted">orders</span></div>
+</div>
+<div class="mt-3 pt-2 border-t border-lavender-mist/70 space-y-1 text-xs">
+<div class="flex justify-between">
+<span class="text-ink-muted">On-Time Dispatch:</span>
+<span class="text-semantic-success font-semibold">99.4%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-muted">Exception Rate:</span>
+<span class="text-ink font-medium">0.4%</span>
+</div>
+</div>
+</div>
+<!-- Hub 2 -->
+<div class="p-3 rounded-lg bg-porcelain flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-title-sm text-title-sm font-bold text-ink">Bengaluru Hub</span>
+<span class="px-1.5 py-0.2 rounded bg-semantic-warning/20 text-semantic-warning font-label-sm text-label-sm font-semibold">Weather Flag</span>
+</div>
+<div class="text-xs text-ink-muted">Code: FC-02 (Southern Hub)</div>
+<div class="font-title-lg text-title-lg font-bold text-ink mt-2">34,800 <span class="font-body-sm text-body-sm font-normal text-ink-muted">orders</span></div>
+</div>
+<div class="mt-3 pt-2 border-t border-lavender-mist/70 space-y-1 text-xs">
+<div class="flex justify-between">
+<span class="text-ink-muted">On-Time Dispatch:</span>
+<span class="text-semantic-warning font-semibold">96.1%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-muted">Exception Rate:</span>
+<span class="text-semantic-warning font-medium">1.4%</span>
+</div>
+</div>
+</div>
+<!-- Hub 3 -->
+<div class="p-3 rounded-lg bg-porcelain flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-title-sm text-title-sm font-bold text-ink">New Delhi Hub</span>
+<span class="px-1.5 py-0.2 rounded bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">Optimal</span>
+</div>
+<div class="text-xs text-ink-muted">Code: FC-01 (Northern Hub)</div>
+<div class="font-title-lg text-title-lg font-bold text-ink mt-2">28,950 <span class="font-body-sm text-body-sm font-normal text-ink-muted">orders</span></div>
+</div>
+<div class="mt-3 pt-2 border-t border-lavender-mist/70 space-y-1 text-xs">
+<div class="flex justify-between">
+<span class="text-ink-muted">On-Time Dispatch:</span>
+<span class="text-semantic-success font-semibold">98.8%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-muted">Exception Rate:</span>
+<span class="text-ink font-medium">0.6%</span>
+</div>
+</div>
+</div>
+<!-- Hub 4 -->
+<div class="p-3 rounded-lg bg-porcelain flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-title-sm text-title-sm font-bold text-ink">Surat Regional</span>
+<span class="px-1.5 py-0.2 rounded bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">Optimal</span>
+</div>
+<div class="text-xs text-ink-muted">Code: FC-05 (Textiles Hub)</div>
+<div class="font-title-lg text-title-lg font-bold text-ink mt-2">18,600 <span class="font-body-sm text-body-sm font-normal text-ink-muted">orders</span></div>
+</div>
+<div class="mt-3 pt-2 border-t border-lavender-mist/70 space-y-1 text-xs">
+<div class="flex justify-between">
+<span class="text-ink-muted">On-Time Dispatch:</span>
+<span class="text-semantic-success font-semibold">99.1%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-muted">Exception Rate:</span>
+<span class="text-ink font-medium">0.3%</span>
+</div>
+</div>
+</div>
+<!-- Hub 5 -->
+<div class="p-3 rounded-lg bg-porcelain flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-1">
+<span class="font-title-sm text-title-sm font-bold text-ink">Agra Hub</span>
+<span class="px-1.5 py-0.2 rounded bg-semantic-error/15 text-semantic-error font-label-sm text-label-sm font-semibold">Watchlist</span>
+</div>
+<div class="text-xs text-ink-muted">Code: FC-06 (Footwear Hub)</div>
+<div class="font-title-lg text-title-lg font-bold text-ink mt-2">11,200 <span class="font-body-sm text-body-sm font-normal text-ink-muted">orders</span></div>
+</div>
+<div class="mt-3 pt-2 border-t border-lavender-mist/70 space-y-1 text-xs">
+<div class="flex justify-between">
+<span class="text-ink-muted">On-Time Dispatch:</span>
+<span class="text-semantic-error font-semibold">93.8%</span>
+</div>
+<div class="flex justify-between">
+<span class="text-ink-muted">Exception Rate:</span>
+<span class="text-semantic-error font-medium">2.8%</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive script for demo triggers -->
+<script>
+    function selectOrder(orderId) {
+      console.log('Inspecting order:', orderId);
+    }
+
+    document.getElementById('btn-simulate-resync')?.addEventListener('click', function() {
+      const btn = this;
+      const originalHtml = btn.innerHTML;
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin text-electric-violet">sync</span> Synchronizing...';
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.innerHTML = '<span class="material-symbols-outlined text-[18px] text-semantic-success">check</span> Re-synced Oct 30 14:36';
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          btn.disabled = false;
+        }, 2000);
+      }, 900);
+    });
+
+    document.querySelectorAll('#status-tab-group button').forEach(button => {
+      button.addEventListener('click', function() {
+        document.querySelectorAll('#status-tab-group button').forEach(b => {
+          b.classList.remove('bg-electric-violet', 'text-on-primary', 'shadow-sm');
+          b.classList.add('bg-surface-container-lowest', 'text-ink');
+        });
+        this.classList.remove('bg-surface-container-lowest', 'text-ink');
+        this.classList.add('bg-electric-violet', 'text-on-primary', 'shadow-sm');
+      });
+    });
+  </script>
+</div></main></div></body></html>

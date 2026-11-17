@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"tertiary":"#4d427c","semantic-warning":"#E27300","on-secondary-container":"#fffbff","royal-purple":"#4C2ACB","on-error":"#ffffff","background":"#f9f9fd","obsidian-surface-2":"#211735","surface-container-high":"#e8e8ec","obsidian-violet":"#100A25","electric-violet":"#762FF2","on-secondary-fixed-variant":"#451fc4","midnight-violet":"#190B46","ink-subtle":"#928B9F","on-surface":"#1a1c1f","on-tertiary-fixed-variant":"#493e78","on-surface-variant":"#4a4456","on-tertiary-container":"#e3daff","text-dark-muted":"#A49ABF","secondary-fixed":"#e5deff","surface-dim":"#d9dade","surface-variant":"#e2e2e6","on-tertiary-fixed":"#1d104a","on-secondary-fixed":"#1a0063","ink-muted":"#655E7A","on-tertiary":"#ffffff","surface":"#f9f9fd","porcelain":"#F7F7FB","on-primary":"#ffffff","inverse-on-surface":"#f0f0f4","surface-container-low":"#f3f3f7","on-background":"#1a1c1f","text-dark-secondary":"#C3BCD7","semantic-success":"#00875A","on-primary-fixed-variant":"#5800c8","secondary":"#5b3eda","primary-fixed-dim":"#d1bcff","obsidian-surface-1":"#1D1537","on-secondary":"#ffffff","surface-tint":"#7228ee","outline-variant":"#ccc3d9","on-primary-fixed":"#24005b","text-dark-primary":"#F7F5FF","tertiary-fixed-dim":"#cbbeff","inverse-surface":"#2e3034","error-container":"#ffdad6","lavender-mist":"#E8E6F0","tertiary-fixed":"#e6deff","secondary-fixed-dim":"#c9bfff","outline":"#7b7487","semantic-error":"#D92D20","ink":"#211D31","error":"#ba1a1a","primary-container":"#762ff2","secondary-container":"#745af4","tertiary-container":"#655a96","surface-container-lowest":"#ffffff","surface-bright":"#f9f9fd","on-primary-container":"#e7d9ff","primary":"#5c00d2","inverse-primary":"#d1bcff","obsidian-border":"#382B54","surface-container":"#ededf1","surface-container-highest":"#e2e2e6","primary-fixed":"#eaddff","on-error-container":"#93000a"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-sm":"0.5rem","margin":"2rem","space-xs":"0.25rem","gutter":"1.5rem","space-xl":"2.5rem","space-lg":"1.5rem","margin-mobile":"1rem","gutter-mobile":"0.75rem","space-md":"1rem"},"fontFamily":{"body-lg":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"]},"fontSize":{"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"price-hero":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"price-card":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}]}}}}</script></head><body class="bg-porcelain font-body-md text-body-md text-ink min-h-screen"><aside class="fixed left-0 top-0 h-full w-72 bg-obsidian-violet text-text-dark-primary z-50 flex flex-col justify-between shadow-[0_16px_36px_-8px_rgba(25,11,70,0.2)]"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md flex items-center gap-space-sm bg-obsidian-violet/90"><img alt="OMIZON Official Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UdlrUM8hyyFfQVS5dmLaEh62kAxW_rStX2OO5j_r1zHJphPs6pfdXHGfDL0SS-LW_BEeUrp7vsEjrLyFXnOBWfDYjrJlJcEEjcpNp4AnrHV4cy5bOVYu_KnI5jBuFr0EY-AzNwLKSQsH8hazC472Fa85bIN2voQfI0bYSYwAKVWSoY3Vix0yMPgECasdbSABNB3UZKOz0aICgQ9rG4blKonaeUmeoPR3z_qtI2AgAbUBQj4TNVvepFFRw"/><div class="flex flex-col ml-space-xs"><span class="font-title-sm text-title-sm text-text-dark-primary tracking-tight leading-none">OMIZON</span><span class="font-label-sm text-label-sm text-text-dark-muted tracking-wider uppercase leading-none mt-1">PLATFORM CONSOLE ADMIN</span></div><span class="ml-auto bg-electric-violet/20 text-electric-violet font-label-sm text-label-sm px-2 py-0.5 rounded uppercase tracking-wide">Super</span></div><div class="flex-1 overflow-y-auto px-space-md py-space-md space-y-space-md"><nav class="space-y-space-md" data-active-classes="bg-electric-violet text-on-primary font-semibold shadow-[0_2px_8px_rgba(118,47,242,0.35)]"><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Core Operations</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="overview" href="#"><span>Overview</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="seller-applications" href="#"><span>Seller Applications</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">14 New</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="sellers" href="#"><span>Sellers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="buyers" href="#"><span>Buyers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="catalog-governance" href="#"><span>Catalog Governance</span><span class="bg-semantic-warning text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">9 Flagged</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Commerce &amp; Fulfillment</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="all-orders" href="#"><span>All Orders</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="payments-and-settlements" href="#"><span>Payments &amp; Settlements</span><span class="bg-error text-on-error font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">3 Hold</span></a><a aria-current="page" class="flex items-center justify-between px-space-sm py-2 rounded-lg transition-colors bg-electric-violet text-on-primary font-semibold shadow-[0_2px_8px_rgba(118,47,242,0.35)]" data-path="returns-and-disputes" href="#"><span>Returns &amp; Disputes</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">5 Open</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="promotions" href="#"><span>Promotions</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Intelligence &amp; Security</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="reports-and-analytics" href="#"><span>Reports &amp; Analytics</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="risk-and-fraud" href="#"><span>Risk &amp; Fraud</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="audit-logs" href="#"><span>Audit Logs</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors font-label-md text-label-md" data-path="platform-settings" href="#"><span>Platform Settings</span></a></div></div></nav></div></div><div class="p-space-md bg-obsidian-surface-1/90"><div class="flex items-center justify-between mb-1"><span class="font-label-sm text-label-sm text-text-dark-muted">OMIZON Core v4.12.0-demo</span><span class="inline-block w-2 h-2 rounded-full bg-semantic-success"></span></div><div class="font-body-sm text-body-sm text-text-dark-secondary flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-electric-violet"></span>Simulated Sandbox Mode</div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(25,11,70,0.04)] z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="hidden xl:flex items-center gap-2 px-space-sm py-1 rounded bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>Platform-Wide (Simulated Demo Environment)</div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Global search merchants, orders (#OMZ-), products, or buyers (⌘K)..." type="text"/><kbd class="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-container-lowest shadow-[0_1px_2px_rgba(25,11,70,0.06)] px-1.5 py-0.5 rounded font-label-sm text-label-sm text-ink-muted">⌘K</kbd></div></div><div class="flex items-center gap-space-md"><button class="hidden lg:flex items-center gap-2 h-10 px-space-sm rounded-lg bg-porcelain hover:bg-surface-container transition-colors text-ink font-label-md text-label-md"><span class="material-symbols-outlined text-[18px] text-ink-muted">calendar_today</span>System Date: Oct 01 – Oct 30, 2023</button><div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-electric-violet"></span>Services: Simulated Demo</div><button class="relative p-2 rounded-lg hover:bg-porcelain text-ink transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-semantic-error rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="h-6 w-px bg-lavender-mist"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-sm text-title-sm text-ink leading-tight">Siddharth Rao</span><span class="font-label-sm text-label-sm text-ink-muted leading-tight">Super Admin / Platform Lead</span></div></div></div></header><main class="relative pt-16 bg-porcelain min-h-screen w-full px-space-lg py-space-lg"><div class="flex flex-col w-full">
+<!-- Persistent Regulatory & Simulation Notice -->
+<div class="mb-4 px-4 py-2.5 rounded-lg bg-obsidian-violet text-text-dark-primary flex flex-wrap items-center justify-between gap-3 shadow-sm">
+<div class="flex items-center gap-2.5">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-electric-violet/30 text-electric-violet">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold text-text-dark-secondary">
+        SIMULATED CASE DATA • No live carrier, payment gateway, court, card-network, or external dispute-system connections • Currency: INR (₹) Normalized • Scope: Platform-Wide (Pan-India)
+      </span>
+</div>
+<div class="flex items-center gap-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-obsidian-surface-1 text-text-dark-muted font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-semantic-success animate-pulse"></span>
+        SLA Engine Active
+      </span>
+<span class="font-label-sm text-label-sm text-text-dark-muted">ISO 27001 Logged</span>
+</div>
+</div>
+<!-- Page Header & Action Controls -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-md text-headline-md text-ink font-bold tracking-tight">Returns, Disputes &amp; Chargebacks</h1>
+<span class="px-2.5 py-0.5 rounded-full bg-electric-violet/10 text-electric-violet font-label-sm text-label-sm font-semibold">Consolidated Queue</span>
+</div>
+<p class="font-body-md text-body-md text-ink-muted mt-1 max-w-3xl">
+        Manage return requests, delivery disputes, seller escalations, payment chargebacks, and evidence-based case resolution across the marketplace.
+      </p>
+</div>
+<div class="flex flex-wrap items-center gap-3">
+<button class="h-10 px-4 rounded-lg bg-surface-container-lowest text-ink font-label-md text-label-md flex items-center gap-2 shadow-sm hover:bg-surface-container transition-all" onclick="alert('Simulated CSV export initiated: Returns_Disputes_Oct2023.csv')">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">download</span>
+        Export Cases (CSV)
+      </button>
+<button class="h-10 px-4 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-label-md text-label-md flex items-center gap-2 shadow-md transition-all active:scale-95" onclick="alert('Simulated Dispute Ingestion: Webhook trigger #SIM-WH-8841 sent successfully.')">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+        Simulate Dispute Ingestion
+      </button>
+<div class="hidden xl:flex items-center gap-2 h-10 px-3 rounded-lg bg-surface-container text-ink font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[17px] text-ink-muted">schedule</span>
+<span>System Date: Oct 01 – Oct 30, 2023</span>
+</div>
+</div>
+</div>
+<!-- Executive KPI Strip (6 Cards) -->
+<div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3.5 mb-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between transition-transform hover:-translate-y-0.5">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase font-semibold">Open Cases</span>
+<span class="bg-electric-violet/10 text-electric-violet font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold">Active Pipeline</span>
+</div>
+<div>
+<div class="font-price-hero text-price-hero text-ink font-bold leading-none tracking-tight">128</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1.5 truncate">Total across all operational queues</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between transition-transform hover:-translate-y-0.5">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase font-semibold">Return Requests</span>
+<span class="material-symbols-outlined text-[20px] text-ink-muted">assignment_return</span>
+</div>
+<div>
+<div class="font-price-hero text-price-hero text-ink font-bold leading-none tracking-tight">74</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1.5 truncate">Physical return &amp; transit claims</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between transition-transform hover:-translate-y-0.5">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase font-semibold">Buyer–Seller</span>
+<span class="material-symbols-outlined text-[20px] text-ink-muted">balance</span>
+</div>
+<div>
+<div class="font-price-hero text-price-hero text-ink font-bold leading-none tracking-tight">28</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1.5 truncate">Mediation &amp; item mismatch</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between transition-transform hover:-translate-y-0.5">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase font-semibold">Chargebacks</span>
+<span class="material-symbols-outlined text-[20px] text-semantic-warning">save_as</span>
+</div>
+<div>
+<div class="font-price-hero text-price-hero text-ink font-bold leading-none tracking-tight">16</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1.5 truncate">Bank / card-network disputes</p>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between transition-transform hover:-translate-y-0.5">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase font-semibold">Evidence Due</span>
+<span class="bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold">SLA &lt; 24h</span>
+</div>
+<div>
+<div class="font-price-hero text-price-hero text-ink font-bold leading-none tracking-tight">12</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1.5 truncate">Awaiting merchant or buyer upload</p>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm flex flex-col justify-between transition-transform hover:-translate-y-0.5">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase font-semibold">SLA Breaches</span>
+<span class="bg-semantic-error/15 text-semantic-error font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold">Escalated</span>
+</div>
+<div>
+<div class="font-price-hero text-price-hero text-semantic-error font-bold leading-none tracking-tight">5</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1.5 truncate">Response or decision overdue</p>
+</div>
+</div>
+</div>
+<!-- SLA & Performance Telemetry Strip -->
+<div class="bg-surface-container-low p-3.5 rounded-xl shadow-sm mb-6 flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">monitoring</span>
+<span class="font-label-md text-label-md font-semibold text-ink">30-Day Operational Velocity:</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 flex-1 max-w-4xl">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest flex items-center justify-center text-electric-violet shadow-sm">
+<span class="material-symbols-outlined text-[18px]">timer</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-bold text-ink">2.4h <span class="font-body-sm text-body-sm font-normal text-semantic-success">(Target &lt; 4.0h)</span></div>
+<div class="font-label-sm text-label-sm text-ink-muted">Median 1st Response</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest flex items-center justify-center text-royal-purple shadow-sm">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-bold text-ink">26.5h <span class="font-body-sm text-body-sm font-normal text-semantic-success">(Target &lt; 36.0h)</span></div>
+<div class="font-label-sm text-label-sm text-ink-muted">Median Resolution</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest flex items-center justify-center text-tertiary shadow-sm">
+<span class="material-symbols-outlined text-[18px]">upload_file</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-bold text-ink">91.8% <span class="font-body-sm text-body-sm font-normal text-ink-muted">(112/122 cases)</span></div>
+<div class="font-label-sm text-label-sm text-ink-muted">Evidence Upload Rate</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest flex items-center justify-center text-semantic-success shadow-sm">
+<span class="material-symbols-outlined text-[18px]">task_alt</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-bold text-ink">94.2% <span class="font-body-sm text-body-sm font-normal text-semantic-success">(488/518 cases)</span></div>
+<div class="font-label-sm text-label-sm text-ink-muted">Resolved Inside SLA</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Workspace Filter Tabs & Controls -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm p-4 mb-5">
+<!-- Tab Navigation -->
+<div class="flex flex-wrap items-center gap-2 pb-4 mb-4">
+<button class="px-4 py-2 rounded-lg bg-electric-violet text-on-primary font-label-md text-label-md font-semibold shadow-sm transition-all flex items-center gap-2">
+<span>All Cases</span>
+<span class="px-2 py-0.2 rounded-full bg-surface-container-lowest/20 font-label-sm text-label-sm">128</span>
+</button>
+<button class="px-4 py-2 rounded-lg text-ink hover:bg-surface-container font-label-md text-label-md transition-all flex items-center gap-2">
+<span>Returns &amp; Refund Requests</span>
+<span class="px-2 py-0.2 rounded-full bg-surface-container font-label-sm text-label-sm text-ink-muted">74</span>
+</button>
+<button class="px-4 py-2 rounded-lg text-ink hover:bg-surface-container font-label-md text-label-md transition-all flex items-center gap-2">
+<span>Buyer–Seller Disputes</span>
+<span class="px-2 py-0.2 rounded-full bg-surface-container font-label-sm text-label-sm text-ink-muted">28</span>
+</button>
+<button class="px-4 py-2 rounded-lg text-ink hover:bg-surface-container font-label-md text-label-md transition-all flex items-center gap-2">
+<span>Payment Chargebacks</span>
+<span class="px-2 py-0.2 rounded-full bg-surface-container font-label-sm text-label-sm text-ink-muted">16</span>
+</button>
+<button class="px-4 py-2 rounded-lg text-ink hover:bg-surface-container font-label-md text-label-md transition-all flex items-center gap-2">
+<span class="text-semantic-error">Escalations &amp; SLA</span>
+<span class="px-2 py-0.2 rounded-full bg-semantic-error/10 text-semantic-error font-label-sm text-label-sm font-semibold">5</span>
+</button>
+</div>
+<!-- Filter Fields Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-2.5 items-center">
+<div class="lg:col-span-2 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-lg bg-porcelain font-body-sm text-body-sm text-ink focus:bg-surface-container-lowest focus:outline-none transition-all" placeholder="Search by Case ID, Order ID (#OMZ-ORD-), Seller ID, Buyer, or Payment Ref..." type="text" value="OMZ-CASE-9921"/>
+</div>
+<div>
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:outline-none cursor-pointer">
+<option>Status: All Active (128)</option>
+<option>Under Investigation (42)</option>
+<option>Evidence Requested (36)</option>
+<option>Ops Review (21)</option>
+<option>Approved for Return (18)</option>
+<option>Pending Chargeback Submission (11)</option>
+</select>
+</div>
+<div>
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:outline-none cursor-pointer">
+<option>Case Type: All Types</option>
+<option>Return &amp; Physical Claims</option>
+<option>Buyer-Seller Mediation</option>
+<option>Payment Chargeback</option>
+<option>Transit / Damage Claim</option>
+</select>
+</div>
+<div>
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:outline-none cursor-pointer">
+<option>Priority: All</option>
+<option>High Priority</option>
+<option>Medium Priority</option>
+<option>Low Priority</option>
+</select>
+</div>
+<div>
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:outline-none cursor-pointer">
+<option>Owner: All Owners</option>
+<option>Vikram Sethi</option>
+<option>Ananya Rao</option>
+<option>Devika Sen</option>
+<option>Unassigned</option>
+</select>
+</div>
+<div>
+<select class="w-full h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:outline-none cursor-pointer">
+<option>SLA: All SLAs</option>
+<option>&lt; 4 Hours Remaining</option>
+<option>&lt; 24 Hours Remaining</option>
+<option>Breached / Overdue</option>
+</select>
+</div>
+</div>
+<!-- Active Filters Strip -->
+<div class="flex flex-wrap items-center gap-2 mt-3 pt-3">
+<span class="font-label-sm text-label-sm text-ink-muted">Active Filters:</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-ink">
+<span>Hub: Pan-India</span>
+<button class="material-symbols-outlined text-[14px] hover:text-semantic-error">close</button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container font-label-sm text-label-sm text-ink">
+<span>Status: Active Queue</span>
+<button class="material-symbols-outlined text-[14px] hover:text-semantic-error">close</button>
+</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-electric-violet/10 font-label-sm text-label-sm text-electric-violet font-semibold">
+<span>Search: OMZ-CASE-9921</span>
+<button class="material-symbols-outlined text-[14px] hover:text-semantic-error">close</button>
+</span>
+<button class="font-label-sm text-label-sm text-electric-violet hover:underline ml-2 font-semibold">Reset Filters</button>
+</div>
+</div>
+<!-- Master-Detail Split Workspace (64% Left Queue / 36% Right Panel) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+<!-- LEFT QUEUE TABLE (~64% width = 7.7 cols -> 8 cols) -->
+<div class="xl:col-span-7 2xl:col-span-8 bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-4 flex items-center justify-between bg-surface-container-lowest">
+<div>
+<h2 class="font-title-lg text-title-lg font-bold text-ink">Dispute Pipeline Cases</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Showing calibrated queues ordered by SLA urgency and investigation state</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-ink-muted">Density:</span>
+<span class="px-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm font-semibold">Compact</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-porcelain text-ink-muted font-label-sm text-label-sm uppercase tracking-wider">
+<tr>
+<th class="py-3 px-3.5">Case ID &amp; Date</th>
+<th class="py-3 px-3">Type &amp; Priority</th>
+<th class="py-3 px-3">Order &amp; Value</th>
+<th class="py-3 px-3">Buyer &amp; Merchant</th>
+<th class="py-3 px-3">Current Stage</th>
+<th class="py-3 px-3">SLA Status</th>
+<th class="py-3 px-3 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<!-- Row 1 (SELECTED ROW: OMZ-CASE-9921) -->
+<tr class="bg-electric-violet/5 hover:bg-electric-violet/10 transition-colors cursor-pointer">
+<td class="py-3 px-3.5">
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-6 rounded-full bg-electric-violet"></span>
+<div>
+<div class="font-title-sm text-title-sm font-bold text-electric-violet">#OMZ-CASE-9921</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Oct 29 • 14:10 IST</div>
+</div>
+</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-semibold text-ink">Return / Settlement</div>
+<span class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-semantic-error/15 text-semantic-error font-label-sm text-label-sm font-semibold">High Priority</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-bold text-ink">₹4,999.00</div>
+<div class="font-label-sm text-label-sm text-ink-muted">#OMZ-ORD-260184</div>
+</td>
+<td class="py-3 px-3">
+<div class="truncate max-w-[130px] font-semibold text-ink">R**** M***** (MUM)</div>
+<div class="font-label-sm text-label-sm text-ink-muted truncate max-w-[130px]">ApexTech India (#88201)</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-electric-violet/15 text-electric-violet font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-electric-violet animate-ping"></span>
+                  Under Investigation
+                </span>
+<div class="font-label-sm text-label-sm text-ink-muted mt-0.5">Evidence Review</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-semibold text-semantic-warning">3h 45m left</div>
+<div class="font-label-sm text-label-sm text-semantic-success font-semibold">On Track</div>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-electric-violet">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: OMZ-CASE-9884 -->
+<tr class="hover:bg-porcelain transition-colors cursor-pointer">
+<td class="py-3 px-3.5">
+<div class="font-title-sm text-title-sm font-semibold text-ink">#OMZ-CASE-9884</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Oct 29 • 09:20 IST</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-medium text-ink">Buyer–Seller Dispute</div>
+<span class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-surface-container text-ink-muted font-label-sm text-label-sm">Medium</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-bold text-ink">₹3,499.00</div>
+<div class="font-label-sm text-label-sm text-ink-muted">#OMZ-ORD-260183</div>
+</td>
+<td class="py-3 px-3">
+<div class="truncate max-w-[130px] font-semibold text-ink">Pooja K. (BLR)</div>
+<div class="font-label-sm text-label-sm text-ink-muted truncate max-w-[130px]">NovaCraft Audio Ltd</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-semibold">
+                  Evidence Requested
+                </span>
+<div class="font-label-sm text-label-sm text-ink-muted mt-0.5">Awaiting Seller Spec</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-semibold text-ink">6h 10m left</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Standard SLA</div>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: OMZ-CASE-9840 -->
+<tr class="hover:bg-porcelain transition-colors cursor-pointer">
+<td class="py-3 px-3.5">
+<div class="font-title-sm text-title-sm font-semibold text-ink">#OMZ-CASE-9840</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Oct 28 • 18:30 IST</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-medium text-ink">Refund Dispute</div>
+<span class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-semantic-error/15 text-semantic-error font-label-sm text-label-sm font-semibold">High Priority</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-bold text-ink">₹6,250.00</div>
+<div class="font-label-sm text-label-sm text-ink-muted">#OMZ-ORD-260179</div>
+</td>
+<td class="py-3 px-3">
+<div class="truncate max-w-[130px] font-semibold text-ink">Sunil P. (DEL)</div>
+<div class="font-label-sm text-label-sm text-ink-muted truncate max-w-[130px]">Zenith Home Goods</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container text-ink font-label-sm text-label-sm font-semibold">
+                  Awaiting Ops Review
+                </span>
+<div class="font-label-sm text-label-sm text-ink-muted mt-0.5">Double Debit Check</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-semibold text-semantic-error">1h 15m left</div>
+<div class="font-label-sm text-label-sm text-semantic-error font-semibold">Urgent Attention</div>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: OMZ-CASE-9799 -->
+<tr class="hover:bg-porcelain transition-colors cursor-pointer">
+<td class="py-3 px-3.5">
+<div class="font-title-sm text-title-sm font-semibold text-ink">#OMZ-CASE-9799</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Oct 27 • 11:00 IST</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-medium text-ink">Delivery / COD Dispute</div>
+<span class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-surface-container text-ink-muted font-label-sm text-label-sm">Medium</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-bold text-ink">₹2,799.00</div>
+<div class="font-label-sm text-label-sm text-ink-muted">#OMZ-ORD-260180</div>
+</td>
+<td class="py-3 px-3">
+<div class="truncate max-w-[130px] font-semibold text-ink">Amit T. (HYD)</div>
+<div class="font-label-sm text-label-sm text-ink-muted truncate max-w-[130px]">NexaWear Footwear</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-semantic-error/10 text-semantic-error font-label-sm text-label-sm font-semibold">
+                  Seller Action Overdue
+                </span>
+<div class="font-label-sm text-label-sm text-ink-muted mt-0.5">RTO Handover Issue</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-bold text-semantic-error">-2h 40m overdue</div>
+<span class="inline-block px-1.5 py-0.2 rounded bg-semantic-error text-on-error font-label-sm text-label-sm font-bold uppercase">Breached</span>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: OMZ-CASE-9755 -->
+<tr class="hover:bg-porcelain transition-colors cursor-pointer">
+<td class="py-3 px-3.5">
+<div class="font-title-sm text-title-sm font-semibold text-ink">#OMZ-CASE-9755</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Oct 26 • 15:45 IST</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-medium text-ink">Return Request</div>
+<span class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-surface-container text-ink-muted font-label-sm text-label-sm">Low Priority</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-bold text-ink">₹849.00</div>
+<div class="font-label-sm text-label-sm text-ink-muted">#OMZ-ORD-260182</div>
+</td>
+<td class="py-3 px-3">
+<div class="truncate max-w-[130px] font-semibold text-ink">Vikas G. (PUN)</div>
+<div class="font-label-sm text-label-sm text-ink-muted truncate max-w-[130px]">UrbanRoots Organic</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-semibold">
+                  Approved for Return
+                </span>
+<div class="font-label-sm text-label-sm text-ink-muted mt-0.5">Pickup Scheduled</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-semibold text-semantic-success">On Track</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Next Check: Nov 01</div>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+</tr>
+<!-- Row 6: OMZ-CASE-9712 -->
+<tr class="hover:bg-porcelain transition-colors cursor-pointer">
+<td class="py-3 px-3.5">
+<div class="font-title-sm text-title-sm font-semibold text-ink">#OMZ-CASE-9712</div>
+<div class="font-label-sm text-label-sm text-ink-muted">Oct 25 • 10:15 IST</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-medium text-ink">Payment Chargeback</div>
+<span class="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-semantic-error/15 text-semantic-error font-label-sm text-label-sm font-semibold">High Priority</span>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-bold text-ink">₹1,599.00</div>
+<div class="font-label-sm text-label-sm text-ink-muted">#OMZ-ORD-259902</div>
+</td>
+<td class="py-3 px-3">
+<div class="truncate max-w-[130px] font-semibold text-ink">Neha S. (KOL)</div>
+<div class="font-label-sm text-label-sm text-ink-muted truncate max-w-[130px]">Prism Apparel Studio</div>
+</td>
+<td class="py-3 px-3">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-surface-container text-ink font-label-sm text-label-sm font-semibold">
+                  Evidence Pack Prep
+                </span>
+<div class="font-label-sm text-label-sm text-ink-muted mt-0.5">Visa/Mastercard Gateway</div>
+</td>
+<td class="py-3 px-3">
+<div class="font-label-md text-label-md font-semibold text-ink">18h remaining</div>
+<div class="font-label-sm text-label-sm text-semantic-warning font-semibold">Gateway Limit: 24h</div>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="p-1 rounded hover:bg-surface-container text-ink-muted">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footbar -->
+<div class="p-3.5 bg-porcelain flex flex-wrap items-center justify-between gap-3 font-label-sm text-label-sm">
+<span class="text-ink-muted">Showing <strong>1–6</strong> of <strong>128</strong> simulated marketplace disputes</span>
+<div class="flex items-center gap-1.5">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink-muted hover:text-ink shadow-sm" disabled="">Previous</button>
+<button class="px-2.5 py-1 rounded bg-electric-violet text-on-primary font-semibold shadow-sm">1</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container shadow-sm">2</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container shadow-sm">3</button>
+<span class="px-1 text-ink-muted">…</span>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container shadow-sm">22</button>
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-ink hover:bg-surface-container shadow-sm">Next</button>
+</div>
+</div>
+</div>
+<!-- RIGHT DETAIL PANEL (~36% width = 4.3 cols -> 4-5 cols) -->
+<div class="xl:col-span-5 2xl:col-span-4 bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Case Header Card -->
+<div class="p-5 bg-gradient-to-r from-obsidian-violet to-midnight-violet text-text-dark-primary">
+<div class="flex items-start justify-between gap-2 mb-2">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-text-dark-primary tracking-tight">#OMZ-CASE-9921</span>
+<span class="px-2 py-0.5 rounded-full bg-semantic-error/30 text-semantic-error font-label-sm text-label-sm font-semibold">High Priority</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-electric-violet/30 text-electric-violet font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-electric-violet animate-pulse"></span>
+                Under Investigation
+              </span>
+<span class="font-body-sm text-body-sm text-text-dark-muted">Initiated Oct 29, 2023 • 14:10 IST</span>
+</div>
+</div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg bg-obsidian-surface-1 text-text-dark-secondary hover:text-text-dark-primary transition-colors" title="Copy Case Deep Link">
+<span class="material-symbols-outlined text-[18px]">share</span>
+</button>
+<button class="p-1.5 rounded-lg bg-obsidian-surface-1 text-text-dark-secondary hover:text-text-dark-primary transition-colors" title="Bookmark Case">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+</div>
+</div>
+<div class="mt-4 pt-3 flex flex-wrap items-center justify-between gap-2 bg-obsidian-surface-1/50 rounded-lg p-2.5">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-royal-purple text-on-primary flex items-center justify-center font-bold text-[12px]">VS</div>
+<div>
+<div class="font-label-md text-label-md text-text-dark-primary leading-tight font-semibold">Vikram Sethi</div>
+<div class="font-label-sm text-label-sm text-text-dark-muted leading-tight">Finance &amp; Disputes Ops Lead</div>
+</div>
+</div>
+<div class="text-right">
+<div class="font-label-sm text-label-sm text-text-dark-muted">SLA Countdown</div>
+<div class="font-title-sm text-title-sm font-bold text-semantic-warning flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+              3h 45m left
+            </div>
+<div class="font-label-sm text-label-sm text-text-dark-muted">Target: Oct 30, 18:00 IST</div>
+</div>
+</div>
+</div>
+<!-- Financial & Entity Context Card -->
+<div class="p-4 bg-porcelain">
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-sm text-label-sm uppercase font-bold text-ink-muted">Financial &amp; Entity Relationships</span>
+<span class="font-label-sm text-label-sm text-electric-violet font-semibold">Order In Transit</span>
+</div>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm">
+<div class="font-label-sm text-label-sm text-ink-muted">Disputed Amount</div>
+<div class="font-price-card text-price-card font-bold text-ink text-royal-purple">₹4,999.00</div>
+<div class="font-body-sm text-body-sm text-ink-subtle truncate">Apex Pro Wireless Headphone (1x)</div>
+</div>
+<div class="bg-surface-container-lowest p-2.5 rounded-lg shadow-sm">
+<div class="font-label-sm text-label-sm text-ink-muted">Payment Protocol</div>
+<div class="font-title-sm text-title-sm font-bold text-ink">UPI / Razorpay</div>
+<div class="font-body-sm text-body-sm text-ink-muted truncate">Ref: OMZ-PAY-260184</div>
+</div>
+</div>
+<div class="space-y-1.5 font-body-sm text-body-sm bg-surface-container-lowest p-3 rounded-lg shadow-sm">
+<div class="flex items-center justify-between">
+<span class="text-ink-muted">Order Identifier:</span>
+<span class="font-semibold text-ink font-mono text-[13px]">#OMZ-ORD-260184</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-ink-muted">Merchant Ref:</span>
+<span class="font-semibold text-ink truncate max-w-[200px]">ApexTech India (#OMZ-MCH-88201)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-ink-muted">Buyer Profile:</span>
+<span class="font-semibold text-ink">R**** M***** (Andheri West, Mumbai)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-ink-muted">Carrier Tracking:</span>
+<span class="font-semibold text-electric-violet">FastX #FX-982144-BOM</span>
+</div>
+</div>
+<!-- Critical Cross-Reference Notice (Callout) -->
+<div class="mt-3 p-3 rounded-lg bg-surface-container shadow-sm flex items-start gap-2.5">
+<span class="material-symbols-outlined text-[20px] text-semantic-warning shrink-0 mt-0.5">info</span>
+<div class="font-body-sm text-body-sm text-ink leading-snug">
+<span class="font-bold text-ink">Related Financial Ledger Investigation:</span>
+<span class="text-electric-violet font-semibold font-mono"> #OMZ-REC-9921</span> (Unreconciled Settlement Variance: <strong class="text-ink">₹1,12,952.00</strong>). Note: The ₹4,999 order dispute is a separate customer case from the ₹1,12,952 settlement clearing discrepancy.
+          </div>
+</div>
+</div>
+<!-- Lifecycle Progress Timeline -->
+<div class="p-4 bg-surface-container-lowest">
+<div class="flex items-center justify-between mb-3">
+<h3 class="font-label-md text-label-md font-bold text-ink uppercase tracking-wider">Multi-Stage Resolution Lifecycle</h3>
+<span class="font-label-sm text-label-sm text-electric-violet font-semibold">Stage 5 of 6</span>
+</div>
+<div class="space-y-3 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-0.5 before:bg-lavender-mist">
+<!-- Stage 1 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-6 h-6 rounded-full bg-semantic-success text-on-primary flex items-center justify-center shrink-0 z-10 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-semibold text-ink">Stage 1: Case Opened</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Oct 29, 14:10 IST</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Automated ticket generated via Buyer App claim.</p>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-6 h-6 rounded-full bg-semantic-success text-on-primary flex items-center justify-center shrink-0 z-10 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-semibold text-ink">Stage 2: Initial Ops Review</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Oct 29, 15:30 IST</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Classified as potential specification variance.</p>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-6 h-6 rounded-full bg-semantic-success text-on-primary flex items-center justify-center shrink-0 z-10 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-semibold text-ink">Stage 3: Seller Evidence Requested</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Oct 29, 16:00 IST</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Notified merchant ApexTech India with 24h SLA.</p>
+</div>
+</div>
+<!-- Stage 4 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-6 h-6 rounded-full bg-semantic-success text-on-primary flex items-center justify-center shrink-0 z-10 shadow-sm">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-semibold text-ink">Stage 4: Evidence Received</span>
+<span class="font-label-sm text-label-sm text-ink-muted">Oct 30, 11:20 IST</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">QC batch certificates and serial manifests provided.</p>
+</div>
+</div>
+<!-- Stage 5: CURRENT ACTIVE -->
+<div class="flex items-start gap-3 relative">
+<div class="w-6 h-6 rounded-full bg-electric-violet text-on-primary flex items-center justify-center shrink-0 z-10 ring-4 ring-electric-violet/20 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-on-primary animate-ping"></span>
+</div>
+<div class="flex-1 bg-electric-violet/5 p-2 rounded-lg">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-bold text-electric-violet">Stage 5: Decision Pending (Active)</span>
+<span class="font-label-sm text-label-sm text-semantic-warning font-semibold">Under Ops Review</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink font-medium mt-0.5">Evaluating physical inspection status at Bhiwandi sorting hub.</p>
+</div>
+</div>
+<!-- Stage 6 -->
+<div class="flex items-start gap-3 relative opacity-60">
+<div class="w-6 h-6 rounded-full bg-lavender-mist text-ink-muted flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[14px]">pending</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-semibold text-ink-muted">Stage 6: Resolution &amp; Escrow Adjustment</span>
+<span class="font-label-sm text-label-sm text-ink-subtle">Upcoming</span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-muted">Automatic refund re-allocation or seller payout release.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Technical Summary & Carrier Status -->
+<div class="p-4 bg-porcelain">
+<div class="font-label-sm text-label-sm uppercase font-bold text-ink-muted mb-2">Claim &amp; Inspection Technical Summary</div>
+<div class="bg-surface-container-lowest p-3 rounded-lg shadow-sm mb-3">
+<p class="font-body-sm text-body-sm text-ink leading-relaxed">
+<strong class="text-ink">Buyer Statement:</strong> "Buyer reported potential specification variance (battery performance) vs catalog claim. Item held in transit at Bhiwandi sorting hub for return verification."
+          </p>
+<div class="mt-2.5 flex items-center gap-2 text-ink-muted font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">warehouse</span>
+<span>Inspection Status: Scheduled at FC-04 QA Bay upon arrival.</span>
+</div>
+</div>
+<!-- Evidence Checklist -->
+<div class="font-label-sm text-label-sm uppercase font-bold text-ink-muted mb-2">Evidence &amp; Artifact Verification</div>
+<div class="space-y-2">
+<label class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-sm hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<input checked="" class="accent-electric-violet w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-ink">Order Invoice &amp; Manifest (#OMZ-ORD-260184 • PDF 142 KB)</span>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Verified
+            </span>
+</label>
+<label class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-sm hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<input checked="" class="accent-electric-violet w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-ink">Carrier Tracking Log (FastX Inbound Scan Oct 30, 14:10)</span>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Verified
+            </span>
+</label>
+<label class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-sm hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<input checked="" class="accent-electric-violet w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-ink">Seller Statement &amp; Batch QA Certificate (ApexTech India)</span>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> Verified
+            </span>
+</label>
+<label class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-sm hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<input class="accent-electric-violet w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-ink-muted">FC-04 Physical Inspection Report (Awaiting Dock Arrival)</span>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-warning font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">pending</span> Pending
+            </span>
+</label>
+<label class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest shadow-sm hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<input class="accent-electric-violet w-4 h-4 rounded cursor-pointer" type="checkbox"/>
+<span class="font-label-md text-label-md text-ink-muted">Decision Rationale &amp; Escrow Re-allocation Form</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-subtle font-semibold">Draft</span>
+</label>
+</div>
+</div>
+<!-- Operational Decision Controls (Privileged Actions) -->
+<div class="p-4 bg-surface-container-lowest">
+<div class="font-label-sm text-label-sm uppercase font-bold text-ink mb-2 flex items-center justify-between">
+<span>Privileged Operations Decision Desk</span>
+<span class="text-semantic-warning font-mono text-[11px]">ROLE: SUPER_ADMIN</span>
+</div>
+<button class="w-full py-2.5 px-4 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-label-md text-label-md font-bold shadow-md transition-all flex items-center justify-center gap-2 active:scale-95" onclick="alert('Simulation: Dispute resolved. Re-allocating escrow of ₹4,999.00 to Buyer account (OMZ-BUY-1042).')">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+          Resolve Dispute (Simulated)
+        </button>
+<div class="grid grid-cols-2 gap-2 mt-2.5">
+<button class="py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors flex items-center justify-center gap-1.5" onclick="alert('Action Simulated: Return Approved.')">
+<span class="material-symbols-outlined text-[16px] text-semantic-success">check_circle</span>
+            Approve Return
+          </button>
+<button class="py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors flex items-center justify-center gap-1.5" onclick="alert('Action Simulated: Requested 48h supplementary logs from merchant.')">
+<span class="material-symbols-outlined text-[16px] text-electric-violet">contact_support</span>
+            Request Evidence
+          </button>
+<button class="py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors flex items-center justify-center gap-1.5" onclick="alert('Action Simulated: Case flagged for Legal Review queue.')">
+<span class="material-symbols-outlined text-[16px] text-semantic-warning">warning</span>
+            Escalate to Legal
+          </button>
+<button class="py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors flex items-center justify-center gap-1.5" onclick="alert('Action Simulated: Chargeback Defense Pack compiled into PDF archive.')">
+<span class="material-symbols-outlined text-[16px] text-tertiary">folder_zip</span>
+            Chargeback Pack
+          </button>
+</div>
+<div class="flex items-center justify-between mt-3 pt-3 font-label-sm text-label-sm">
+<button class="text-electric-violet hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">edit_note</span> Add Note
+          </button>
+<button class="text-ink-muted hover:text-ink flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">person_add</span> Reassign Case
+          </button>
+<button class="text-semantic-error hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">pause_circle</span> Hold Payout Batch
+          </button>
+</div>
+<div class="mt-3 p-2 rounded bg-porcelain font-label-sm text-label-sm text-ink-subtle text-center">
+          Demo Action — No backend mutations or financial ledger adjustments executed in sandbox mode.
+        </div>
+</div>
+<!-- ISO 27001 Audit Trail Accordion -->
+<div class="p-4 bg-porcelain">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-ink-muted">history</span>
+<span class="font-label-sm text-label-sm uppercase font-bold text-ink">ISO 27001 Staged Audit Trail</span>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted font-mono">SEC-LOG-4410</span>
+</div>
+<div class="space-y-2 font-mono text-[11px] text-ink-muted leading-tight">
+<div class="p-2 rounded bg-surface-container-lowest shadow-sm flex items-start gap-2">
+<span class="text-electric-violet font-semibold">14:10 IST</span>
+<div>Automated Case OMZ-CASE-9921 initiated via Buyer Support webhook.</div>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest shadow-sm flex items-start gap-2">
+<span class="text-electric-violet font-semibold">15:30 IST</span>
+<div>Assigned to Vikram Sethi by Siddharth Rao (Super Admin).</div>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest shadow-sm flex items-start gap-2">
+<span class="text-electric-violet font-semibold">11:20 IST</span>
+<div>ApexTech India uploaded Batch QC #BT-88201.</div>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest shadow-sm flex items-start gap-2">
+<span class="text-electric-violet font-semibold">14:35 IST</span>
+<div>Carrier FastX logged hub transition at Bhiwandi Central FC-04.</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

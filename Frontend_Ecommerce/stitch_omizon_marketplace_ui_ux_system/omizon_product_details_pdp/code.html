@@ -1,0 +1,835 @@
+<!DOCTYPE html><html lang="en" style="width: 1280px; height: 3051px; overflow: hidden; position: relative;"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Space+Grotesk:wght@100..900&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet" class=""><style>body, button, input, select, textarea { font-family: 'Manrope', 'DM Sans', sans-serif !important; }</style><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={"darkMode":"class","theme":{"extend":{"colors":{"on-tertiary-container":"#e3daff","inverse-primary":"#d1bcff","tertiary-fixed":"#e6deff","on-primary-container":"#e7d9ff","on-tertiary-fixed-variant":"#493e78","surface-container-low":"#f7f1ff","surface-tint":"#7228ee","inverse-on-surface":"#f5eeff","on-secondary-fixed":"#1a0063","outline":"#7b7487","surface-dim":"#ded6f2","on-tertiary-fixed":"#1d104a","surface-container-lowest":"#ffffff","surface-container-high":"#ece4ff","primary":"#5c00d2","primary-fixed-dim":"#d1bcff","on-primary-fixed-variant":"#5800c8","on-primary-fixed":"#24005b","error-container":"#ffdad6","surface-container-highest":"#e6defa","on-error":"#ffffff","on-secondary-fixed-variant":"#451fc4","inverse-surface":"#322e42","secondary-fixed":"#e5deff","surface-container":"#f2ebff","primary-fixed":"#eaddff","secondary":"#5b3eda","surface-bright":"#fdf7ff","tertiary-container":"#655a96","secondary-fixed-dim":"#c9bfff","on-surface":"#1d192d","background":"#fdf7ff","on-surface-variant":"#4a4456","surface-variant":"#e6defa","on-tertiary":"#ffffff","on-background":"#1d192d","on-primary":"#ffffff","surface":"#fdf7ff","error":"#ba1a1a","on-secondary":"#ffffff","outline-variant":"#ccc3d9","secondary-container":"#745af4","primary-container":"#762ff2","on-secondary-container":"#fffbff","tertiary-fixed-dim":"#cbbeff","tertiary":"#4d427c","on-error-container":"#93000a"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"gutter-mobile":"0.75rem","space-md":"1rem","margin-mobile":"1rem","space-xs":"0.25rem","margin":"2rem","gutter":"1.5rem","space-lg":"1.5rem","space-xl":"2.5rem","space-sm":"0.5rem"},"fontFamily":{"headline-md":["Space Grotesk"],"price-card":["Inter"],"headline-lg":["Space Grotesk"],"headline-sm":["Space Grotesk"],"title-lg":["Inter"],"title-md":["Inter"],"body-md":["Inter"],"price-hero":["Inter"],"title-sm":["Inter"],"label-sm":["Inter"],"headline-lg-mobile":["Space Grotesk"],"body-lg":["Inter"],"display-hero":["Space Grotesk"],"body-sm":["Inter"],"label-md":["Inter"],"display-hero-mobile":["Space Grotesk"]},"fontSize":{"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"price-card":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"700"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"price-hero":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}]}}}};</script><style id="omizon-typography-override">
+html, body, body *:not(.material-symbols-outlined):not(.material-symbols):not([class*="material-symbols"]) {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+h1, h2, h3, h4, h5, h6, [class*="font-bold"], [class*="font-semibold"], [class*="font-extrabold"] {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  letter-spacing: -0.02em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.material-symbols-outlined, .material-symbols {
+  font-family: 'Material Symbols Outlined' !important;
+  font-style: normal;
+}
+</style></head><body class="bg-background font-body-md text-on-surface antialiased" style="font-family: &quot;Plus Jakarta Sans&quot;, -apple-system, BlinkMacSystemFont, sans-serif !important;"><header class="fixed top-0 left-0 w-full z-50 shadow-[0_1px_8px_rgba(25,11,70,0.06)]"><div class="bg-inverse-surface text-inverse-on-surface h-9 px-margin flex items-center justify-between text-body-sm"><div class="flex items-center gap-2 whitespace-nowrap"><span class="material-symbols-outlined text-[16px] text-primary-fixed shrink-0">location_on</span><span class="font-label-md text-inverse-on-surface">Deliver to <strong class="font-semibold text-surface-container-lowest">Mumbai 400001</strong></span><span class="hidden sm:inline text-outline-variant">•</span><span class="hidden sm:inline text-on-surface-variant font-body-sm">Fast 2-Day Delivery Guaranteed</span><button class="ml-1 text-primary-fixed hover:text-surface-container-lowest underline font-label-sm uppercase tracking-wider transition-colors inline-flex items-center" type="button">Change</button></div><div class="flex items-center gap-space-md"><a class="hidden md:inline font-body-sm text-inverse-on-surface hover:text-primary-fixed transition-colors" data-path="seller-portal" href="#">Sell on OMIZON</a><a class="hidden md:inline font-body-sm text-inverse-on-surface hover:text-primary-fixed transition-colors" data-path="customer-care" href="#">Customer Care</a><a class="hidden lg:inline font-body-sm text-inverse-on-surface hover:text-primary-fixed transition-colors" data-path="order-tracking" href="#">Track Order</a><div class="flex items-center gap-1 font-label-md cursor-pointer hover:text-primary-fixed"><span class="material-symbols-outlined text-[15px]">language</span><span class="">INR (₹) / EN</span><span class="material-symbols-outlined text-[14px]">expand_more</span></div></div></div><div class="bg-surface-container-lowest h-20 px-margin flex items-center justify-between gap-space-lg"><div class="flex items-center gap-space-md shrink-0"><a class="flex items-center gap-space-xs" data-path="home" href="#"><img alt="OMIZON" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1W6UDv75lZR1fRtHof5oAabRt87m_5Fbu08ufLNlA_IJrkqZelfAVVlvKDHc5ZBF64GeTB3rQvrWV20nNIwZKlZSABM-aSxnyFe46lYwa-838f3kWNQdyWM9YbA3mRPk7goWbFvst7xvUvYmO09NM4GtUWSCjDN4ZipFYHBFU6fxaarplbOX7lz2B53I6XpAnAtU-r0X_oxkeZiHLEwnICH3LKac-Ml2sygiN_OvL1rgIfWqeYihNkTaEOv"></a></div><div class="flex-1 max-w-3xl hidden md:flex items-center"><div class="w-full flex items-center bg-surface-container-low rounded-lg h-11 px-space-xs focus-within:ring-2 focus-within:ring-primary focus-within:bg-surface-container-lowest transition-all"><button class="flex items-center gap-1 px-space-sm py-1 rounded text-on-surface-variant hover:text-on-surface font-label-md shrink-0" type="button"><span class="">All Categories</span><span class="material-symbols-outlined text-[16px]">expand_more</span></button><div class="h-5 w-[1px] bg-outline-variant mx-space-xs"></div><input class="w-full bg-transparent border-0 outline-none px-space-xs font-body-md text-on-surface placeholder:text-outline" placeholder="Search electronics, luxury fashion, daily groceries, brands..." type="text"><button class="p-1 text-outline hover:text-on-surface transition-colors" title="Search by Voice" type="button"><span class="material-symbols-outlined text-[20px]">mic</span></button><button class="p-1 text-outline hover:text-on-surface transition-colors" title="Visual Search" type="button"><span class="material-symbols-outlined text-[20px]">photo_camera</span></button><button class="ml-space-xs bg-primary hover:bg-secondary text-on-primary h-9 px-space-md rounded-md flex items-center justify-center transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">search</span></button></div></div><div class="flex items-center gap-space-md shrink-0"><a class="flex items-center gap-space-xs p-1 rounded-lg hover:bg-surface-container-low transition-colors" data-path="account" href="#"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSLDoLVV-esICWgftOC8qO_vu3IxcA9LuYrzkLPmY6pIyycTxZSkn6D0CnPNNROeivapYvHG1QcniYbRnkRyZ2VlFNdh46Yzit3OoH7WnVB8jUU2y_t4hJZRRKypu9H0RhxMKXaS4iMLrLhaIkXN7wr_v6Hh9PYDt2t57QTWua5kfD-cDL-FPAtj95ysmYTGh4Z6q46Hu5aqriN7DKlAqveDT_OAY5P9iHXZVD3ZIONLZM5sVE6U9bww"><div class="hidden xl:flex flex-col text-left"><span class="font-label-sm text-outline uppercase">Hello, Priya</span><span class="font-title-sm text-on-surface leading-none">Account &amp; Lists</span></div></a><a class="hidden lg:flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors p-space-xs" data-path="orders" href="#"><span class="material-symbols-outlined text-[22px]">local_shipping</span><span class="font-label-md">Orders</span></a><a class="relative flex items-center justify-center p-space-xs text-on-surface-variant hover:text-primary transition-colors" data-path="wishlist" href="#"><span class="material-symbols-outlined text-[24px]">favorite_border</span><span class="absolute -top-1 -right-1 bg-primary text-on-primary font-label-sm text-[10px] w-4 h-4 rounded-full flex items-center justify-center leading-none">4</span></a><a class="flex items-center gap-space-xs bg-surface-container-low hover:bg-surface-container px-space-sm py-1.5 rounded-lg transition-colors" data-path="cart" href="#"><div class="relative flex items-center justify-center text-primary"><span class="material-symbols-outlined text-[24px]">shopping_bag</span><span class="absolute -top-1.5 -right-2 bg-secondary text-on-secondary font-label-sm text-[10px] w-4 h-4 rounded-full flex items-center justify-center leading-none">3</span></div><div class="hidden sm:flex flex-col text-left"><span class="font-label-sm text-outline uppercase">Subtotal</span><span class="font-price-card text-[15px] leading-tight text-on-surface">₹4,899</span></div></a><button class="p-space-xs text-on-surface-variant hover:text-on-surface rounded-full transition-colors" title="Toggle Appearance" type="button"><span class="material-symbols-outlined text-[20px]">dark_mode</span></button></div></div><div class="bg-surface-container-lowest h-11 px-margin flex items-center justify-between overflow-x-auto shadow-[0_1px_4px_rgba(25,11,70,0.03)]"><div class="flex items-center gap-space-lg shrink-0"><button class="flex items-center gap-space-xs font-title-sm text-primary hover:text-secondary py-1 transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">menu</span><span class="">All Categories</span></button><nav class="flex items-center gap-space-md" data-active-classes="text-primary font-bold"><a aria-current="page" class="transition-colors whitespace-nowrap text-primary font-bold" data-path="electronics" href="#">Electronics &amp; computing</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="home-living" href="#">Home &amp; living</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="grocery" href="#">Grocery &amp; essentials</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="beauty" href="#">Beauty &amp; personal care</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="fashion" href="#">Fashion &amp; apparel</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="sports" href="#">Sports &amp; outdoors</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="books" href="#">Books &amp; hobbies</a><a class="font-body-md text-on-surface-variant hover:text-on-surface transition-colors whitespace-nowrap" data-path="deals" href="#">Daily deals &amp; offers</a></nav></div></div></header><main class="w-full pt-40 bg-surface min-h-[calc(100vh-160px)]"><div class="flex flex-col w-full">
+<!-- Sticky Quick-Buy Header Bar (Appears on Scroll) -->
+<div class="fixed top-20 left-0 w-full z-40 bg-surface-container-lowest/95 backdrop-blur-md shadow-md transition-transform duration-300 -translate-y-full px-margin py-space-sm hidden md:flex items-center justify-between" id="sticky-pdp-bar">
+<div class="max-w-7xl w-full mx-auto flex items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm min-w-0">
+<img class="w-11 h-11 rounded-lg object-cover shrink-0 shadow-sm" data-alt="Compact thumbnail of SoundPulse Studio Pro Wireless ANC Headphones in Midnight Violet resting on crisp minimal gradient studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6qAZlht_pSeHLq0HLag1Kw416viq5oDq8gAaBkfRsNTVLex5XMvP17MCmAhLaRgCh2LKqI_D5WZ8oC4mQnJdOPXVSKrkqbxgBmjLFJcionWaN-LgVT1d0hbMrot5R921zSkZkiFTwK6fR5ndfHnI2Dd5SLG_-hi92a2WMwuiK9NYS1qICeWGDPxNp33Iq2bp5w5kcV1ven8je8gBE7n5Jf4V0N1nqTi_4d1fU-ZtfpYXL93xVUkC9PQ">
+<div class="flex flex-col min-w-0">
+<span class="font-title-sm text-on-surface truncate">SoundPulse Studio Pro Wireless Over-Ear ANC Headphones</span>
+<span class="font-body-sm text-on-surface-variant flex items-center gap-2">
+<span class="text-primary font-semibold">Midnight Violet</span> • Standard ANC Edition
+          </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md shrink-0">
+<div class="flex flex-col text-right">
+<span class="font-price-card text-on-surface">₹14,999</span>
+<span class="font-body-sm text-outline line-through text-[12px]">M.R.P. ₹22,999</span>
+</div>
+<button class="bg-primary hover:bg-secondary active:scale-[0.985] text-on-primary font-title-sm px-space-lg py-2.5 rounded-lg shadow-sm transition-all flex items-center gap-1.5" onclick="triggerCartFlyout()" type="button">
+<span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+<span class="">Add to Cart</span>
+</button>
+<button class="bg-inverse-surface hover:bg-on-surface text-inverse-on-surface font-title-sm px-space-md py-2.5 rounded-lg shadow-sm transition-all hidden lg:block" type="button">
+          Buy Now
+        </button>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto w-full px-margin pb-space-xl">
+<!-- Breadcrumbs Navigation -->
+<nav aria-label="Breadcrumb" class="py-space-md">
+<ol class="flex items-center flex-wrap gap-2 text-on-surface-variant font-body-sm">
+<li class=""><a class="hover:text-primary transition-colors" href="#">Home</a></li>
+<li><span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Electronics</a></li>
+<li><span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Audio &amp; Headphones</a></li>
+<li><span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span></li>
+<li class=""><a class="hover:text-primary transition-colors" href="#">Over-Ear</a></li>
+<li><span class="material-symbols-outlined text-[14px] text-outline">chevron_right</span></li>
+<li class="font-semibold text-on-surface truncate max-w-xs md:max-w-md">SoundPulse Studio Pro</li>
+</ol>
+</nav>
+<!-- Hybrid Two-Column PDP Hero Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl mb-space-xl">
+<!-- LEFT COLUMN: Product Visual Studio (5 cols on lg) -->
+<div class="lg:col-span-6 xl:col-span-5 flex flex-col-reverse md:flex-row gap-space-md">
+<!-- Vertical Thumbnails Rail -->
+<div class="flex md:flex-col gap-space-xs overflow-x-auto md:overflow-visible shrink-0 pb-2 md:pb-0" id="gallery-thumbs">
+<button class="thumb-btn active-thumb w-16 h-16 rounded-lg overflow-hidden bg-surface-container-low transition-all relative shrink-0 shadow-sm ring-2 ring-primary" onclick="swapMainImage(0)" type="button">
+<img class="w-full h-full object-cover" data-alt="SoundPulse Studio Pro Wireless ANC Headphones in Midnight Violet front studio frontal view floating with soft purple aura" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsi3Q56BuqkVxQ4CPdkPVgHzdzjibGO3d1og60yJr2I6RP1NuKGqZsB3mrp54JFpHDxuNIqfme27MivqqR5FGO90HFLDsIq6A4E9jRhTcQhfdHBQehGwXmpZhkCCLeA0z-l6QDRiJAhyKuNZST8TqBAsRZDd11B7gLNEzb4EzDwyNbKII1jF1d83DK0NyKnMyWz8tV0wiGGUxxbNuCPxeLm40L6kxT6Sa3lO51VBwBoDiD9VlVZWugJw">
+</button>
+<button class="thumb-btn w-16 h-16 rounded-lg overflow-hidden bg-surface-container-low transition-all relative shrink-0 hover:opacity-90" onclick="swapMainImage(1)" type="button">
+<img class="w-full h-full object-cover" data-alt="SoundPulse Studio Pro foldable mechanism detail angled hinge view on clean violet pedestal" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6qzP3zWmIFqS250onY-MHcEaqc-OSfW_7uEjx7CRgZ-Y2yHSKHihUb6g_angcT4gJKx8RYEQ6I_gMMkZlr24cdc_mD4kSk4Luya0lRWqPIpQT2uzDn03fxbI_YGbZTx5ceT3DOuijAhoPNON7htXrfAG40x52nDk9zQPabi-Jo6HQcR3f2nA9siQ3cArmB4vuivCxKfYSQGQknhlZP2DlaoATfC4bVt94Q08XjBpRooE_-f6rNXb7AQ">
+</button>
+<button class="thumb-btn w-16 h-16 rounded-lg overflow-hidden bg-surface-container-low transition-all relative shrink-0 hover:opacity-90" onclick="swapMainImage(2)" type="button">
+<img class="w-full h-full object-cover" data-alt="Modern stylish female music producer wearing SoundPulse Studio Pro headphones in an urban architectural audio studio" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzNNe_tX-D5oF-9TPxxV0WmAAEBIc2oAsBk7To1JHkJjn_fdyWiAWDJqakkt747Abna_lCYJ_BPvByMIS76SAYLTuK9zno2zb8xRIy4eMghtmP0f_5koXQdeIfAb97C6ZUjv9IMQDq9g-Ia3jh3t5T6y3S6cJU_EAeQpIcCRpNCBUfBPJi7NzXc6VLY3ce1cXRYWxr7KPw0NIPCpwvKC-8Mh9D3YYy9s6rEeXjCuSaMikAHWWItkOSbw">
+</button>
+<button class="thumb-btn w-16 h-16 rounded-lg overflow-hidden bg-surface-container-low transition-all relative shrink-0 hover:opacity-90" onclick="swapMainImage(3)" type="button">
+<img class="w-full h-full object-cover" data-alt="Macro close-up shot of plush memory foam ear cup texture with custom acoustic mesh knit fabric in midnight tone" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzZdzes8rtkFZQlMSiDWANcUCbm4xmv14R2OfwASf1Q8ZBAedLtgTwkg_wBKERILcNcWQXRhORZZc8AJYJGORl4COSSTqHacLNbS4z5oFthQADDGzS5w84IX19DJkoWtWYPiH3l-fxSIBKfAzx2ZdyPN6-BkriJ4YIkpFfqkCFOCrsz5pEtBu96-shPa-A0AIrdyne2eX-h3KkNmpcTy3MMZBxmyOMoH00mUNA8Gti16X9S4HzQPnufA">
+</button>
+<button class="thumb-btn w-16 h-16 rounded-lg overflow-hidden bg-surface-container-low transition-all relative shrink-0 hover:opacity-90" onclick="swapMainImage(4)" type="button">
+<img class="w-full h-full object-cover" data-alt="SoundPulse hard-shell carrying case with magnetic cable accessories pack neatly arranged on oak wood work desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2PcAHvh1Md_ZDzeNLhyXMXCnkFC0CJFdyG0fE-Fz_3WfZ7QQvW6xO_bvyjRWO3gC9LF4Y91eUytK-wDg9cZO3R0Y_U1Xtf0Q0WBjEhJb7DZG7LdatTnAv4gNhAOAyR_dLp1SdPioBnv8FAgu1V5dtNl8DTy1khxkCPDFverd4wrYJ4Ij4yzmvUcfDq52T8Qi307lVJBCt8z_y86_Lha1TTuJiWtADCCwR29I3eemZEN8s7LHE83wvOA">
+</button>
+</div>
+<!-- Primary High-Resolution Viewport -->
+<div class="flex-1 flex flex-col relative">
+<div class="relative w-full aspect-square bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm flex items-center justify-center group cursor-crosshair">
+<!-- Badges -->
+<div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
+<span class="bg-primary text-on-primary font-label-sm uppercase px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+                OMIZON Choice
+              </span>
+<span class="bg-surface-container-highest text-on-surface font-label-sm px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary">360</span>
+                360° Interactive View
+              </span>
+</div>
+<!-- Wishlist Heart Toggle -->
+<button class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm text-outline hover:text-error flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95" onclick="toggleWishlist(this)" title="Add to Wishlist" type="button">
+<span class="material-symbols-outlined text-[22px]">favorite_border</span>
+</button>
+<!-- Main Dynamic Image Display -->
+<img class="w-full h-full object-contain p-6 transition-transform duration-500 group-hover:scale-105" data-alt="High resolution detailed studio shot of SoundPulse Studio Pro Wireless ANC Headphones in Midnight Violet hovering in atmospheric diffused lighting" id="main-product-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPXhK-ejxViMnA_YYKuRyQbqmrgM7qq8kXbo1FLDz1prk6nkcNv2BvcPk52hVmW0TreETVslB4WaiOJCKyNqKKMKZTOdWGxk6U_MOd1VAtSes3vTU3gGNc3wGLWe577mP5AX5JAaOVysmbfmcmdXsU3ToAJSLLQ2V1KJMd-AUfqWKjnXXhT71flYHKtHM3AS_XO0w_SfoDfmFd5xlYNlo0CqSLr73zFV_rpe2jKFDMaJvBb3v4F-vlPQ">
+<!-- Zoom Hint Overlay -->
+<div class="absolute bottom-4 right-4 bg-inverse-surface/80 text-inverse-on-surface text-label-sm font-label-sm px-3 py-1.5 rounded-full backdrop-blur-sm flex items-center gap-1.5 opacity-80 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[16px]">zoom_in</span>
+<span class="">Roll over image to inspect</span>
+</div>
+</div>
+<!-- Feature Pills Under Gallery -->
+<div class="grid grid-cols-2 gap-space-xs mt-space-md">
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">hearing</span>
+<div class="flex flex-col">
+<span class="font-title-sm text-on-surface text-[13px] leading-tight">Hybrid ANC 45dB</span>
+<span class="font-body-sm text-on-surface-variant text-[11px]">Dynamic adaptive isolation</span>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[22px]">battery_charging_full</span>
+<div class="flex flex-col">
+<span class="font-title-sm text-on-surface text-[13px] leading-tight">60h Extended Battery</span>
+<span class="font-body-sm text-on-surface-variant text-[11px]">10 min quick charge = 5h</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Product Intelligence & Checkout Config (7 cols on lg) -->
+<div class="lg:col-span-6 xl:col-span-7 flex flex-col">
+<!-- Store / Brand Verified Header -->
+<div class="flex items-center justify-between gap-space-xs mb-space-xs">
+<div class="flex items-center gap-space-xs">
+<a class="font-label-md text-primary font-semibold hover:underline" href="#">SoundPulse Official Flagship Store</a>
+<span class="bg-secondary-fixed text-on-secondary-fixed text-label-sm font-label-sm px-2 py-0.5 rounded-full flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.9★
+            </span>
+</div>
+<span class="text-body-sm font-body-sm text-outline hidden sm:inline">98% Positive Feedback</span>
+</div>
+<!-- Product Title -->
+<h1 class="font-headline-md text-on-surface tracking-tight mb-space-xs font-bold">
+          SoundPulse Studio Pro Wireless Over-Ear Active Noise-Cancelling Headphones with Spatial Audio &amp; 60h Battery
+        </h1>
+<!-- Ratings & QA Meta Line -->
+<div class="flex items-center flex-wrap gap-space-sm pb-space-sm mb-space-md">
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-0.5 rounded-md">
+<span class="font-title-sm text-on-surface text-[13px]">4.8</span>
+<div class="flex text-amber-500">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+</div>
+<a class="font-body-sm text-primary hover:underline" href="#reviews-section">4,829 verified ratings</a>
+<span class="text-outline-variant">•</span>
+<a class="font-body-sm text-on-surface-variant hover:text-primary" href="#qa-section">840 answered questions</a>
+</div>
+<!-- Pricing Banner Box -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm mb-space-md relative overflow-hidden border-surface-container-highest/20">
+<div class="absolute -right-6 -bottom-6 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-baseline gap-space-sm flex-wrap">
+<span class="font-price-hero text-on-surface">₹14,999</span>
+<span class="font-body-lg text-outline line-through">₹22,999</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed font-title-sm px-2.5 py-0.5 rounded-full">
+              Save ₹8,000 (35% OFF)
+            </span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs mt-space-xs pt-space-xs">
+<p class="font-body-sm text-on-surface-variant">Inclusive of all taxes. EMI starts at <strong>₹727/month</strong>.</p>
+<button class="text-primary hover:underline font-label-md text-left sm:text-right" type="button">View EMI &amp; Bank Offers</button>
+</div>
+<!-- Highlight Bank Promo Tag -->
+<div class="mt-space-sm p-space-xs bg-surface-container-low rounded-lg flex items-center gap-space-xs text-on-surface-variant font-body-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">credit_card</span>
+<span class="">Flat ₹1,500 Instant Discount on HDFC &amp; ICICI Bank Credit Cards.</span>
+</div>
+</div>
+<!-- Variant Swatches Selector -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm mb-space-md flex flex-col gap-space-md">
+<!-- Color Picker -->
+<div>
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-title-sm text-on-surface">Colorway: <span class="text-primary font-semibold" id="color-label">Midnight Violet</span></span>
+<span class="font-label-sm text-outline uppercase tracking-wider">4 Available</span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-xs" id="color-options">
+<button class="color-btn p-2 rounded-lg bg-surface-container-low flex items-center gap-2 text-left shadow-sm ring-2 ring-primary" onclick="selectColor('Midnight Violet', this)" type="button">
+<span class="w-5 h-5 rounded-full bg-primary shrink-0 shadow-inner"></span>
+<span class="font-body-sm text-on-surface font-semibold text-[13px] truncate">Midnight Violet</span>
+</button>
+<button class="color-btn p-2 rounded-lg bg-surface-container-low flex items-center gap-2 text-left shadow-sm hover:bg-surface-container" onclick="selectColor('Matte Black', this)" type="button">
+<span class="w-5 h-5 rounded-full bg-inverse-surface shrink-0 shadow-inner"></span>
+<span class="font-body-sm text-on-surface font-medium text-[13px] truncate">Matte Black</span>
+</button>
+<button class="color-btn p-2 rounded-lg bg-surface-container-low flex items-center gap-2 text-left shadow-sm hover:bg-surface-container" onclick="selectColor('Platinum Silver', this)" type="button">
+<span class="w-5 h-5 rounded-full bg-slate-300 shrink-0 shadow-inner"></span>
+<span class="font-body-sm text-on-surface font-medium text-[13px] truncate">Platinum Silver</span>
+</button>
+<button class="color-btn p-2 rounded-lg bg-surface-container-low flex items-center gap-2 text-left shadow-sm hover:bg-surface-container" onclick="selectColor('Sandstone Beige', this)" type="button">
+<span class="w-5 h-5 rounded-full bg-amber-100 shrink-0 shadow-inner"></span>
+<span class="font-body-sm text-on-surface font-medium text-[13px] truncate">Sandstone Beige</span>
+</button>
+</div>
+</div>
+<!-- Model Edition Selector -->
+<div>
+<span class="font-title-sm text-on-surface block mb-space-xs">Model Configuration:</span>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-xs">
+<label class="edition-option cursor-pointer p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-xs ring-2 ring-primary">
+<input checked="" class="mt-1 accent-primary" name="edition" type="radio">
+<div class="flex flex-col">
+<span class="font-title-sm text-on-surface text-[14px]">Standard ANC Edition</span>
+<span class="font-body-sm text-outline text-[12px]">Wireless Bluetooth 5.3 + Aux Cable</span>
+<span class="font-price-card text-primary text-[15px] mt-1">₹14,999</span>
+</div>
+</label>
+<label class="edition-option cursor-pointer p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-xs hover:bg-surface-container transition-colors">
+<input class="mt-1 accent-primary" name="edition" type="radio">
+<div class="flex flex-col">
+<span class="font-title-sm text-on-surface text-[14px]">Studio Pro + Lossless DAC Cable</span>
+<span class="font-body-sm text-outline text-[12px]">Includes 32-bit Audiophile USB-C DAC</span>
+<span class="font-price-card text-on-surface text-[15px] mt-1">₹17,499</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Inventory Status & Delivery Estimator -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm mb-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="font-title-sm text-emerald-800 text-[14px]">In Stock: Only 14 units remaining</span>
+</div>
+<span class="font-body-sm text-outline text-[12px]">Order within <strong>3 hrs 24 mins</strong></span>
+</div>
+<!-- Postal Code Check -->
+<div class="p-space-xs bg-surface-container-low rounded-lg flex items-center justify-between gap-space-xs"><div class="flex items-center gap-space-xs min-w-0"><span class="material-symbols-outlined text-primary text-[20px] shrink-0">location_on</span><span class="font-body-md text-on-surface font-medium truncate">Deliver to: <strong id="delivery-pincode">400001 - Mumbai</strong></span></div><div class="flex items-center gap-2 shrink-0"><span class="font-label-md text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded text-[11px] font-bold shrink-0">FREE Delivery</span><button class="text-primary hover:text-secondary font-label-sm uppercase font-semibold shrink-0" onclick="editPinCode()" type="button">Change</button></div></div>
+<p class="font-body-sm text-on-surface-variant flex items-center gap-1.5 text-[13px]">
+<span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+            Fast Delivery guaranteed by <strong>Tomorrow 2:00 PM</strong> with OMIZON Priority.
+          </p>
+</div>
+<!-- Quantity & Primary CTA Strip -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm mb-space-md">
+<!-- Quantity Stepper -->
+<div class="h-12 bg-surface-container-low rounded-lg px-2 flex items-center justify-between gap-3 shadow-sm shrink-0">
+<button class="w-8 h-8 rounded-md hover:bg-surface-container flex items-center justify-center text-on-surface transition-colors" onclick="updateQty(-1)" title="Decrease" type="button">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-price-card text-[16px] text-on-surface w-6 text-center tabular-nums" id="qty-display">1</span>
+<button class="w-8 h-8 rounded-md hover:bg-surface-container flex items-center justify-center text-on-surface transition-colors" onclick="updateQty(1)" title="Increase" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<!-- Add to Cart (Electric Violet) -->
+<button class="flex-1 h-12 bg-primary hover:bg-secondary active:scale-[0.985] text-on-primary font-title-md rounded-lg shadow-md transition-all flex items-center justify-center gap-2" onclick="triggerCartFlyout()" type="button">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+<span class="">Add to Cart</span>
+</button>
+<!-- Buy Now (Midnight Violet / Inverse Surface) -->
+<button class="flex-1 h-12 bg-inverse-surface hover:bg-on-surface active:scale-[0.985] text-inverse-on-surface font-title-md rounded-lg shadow-md transition-all flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[20px]">bolt</span>
+<span class="">Buy Now with 1-Click</span>
+</button>
+</div>
+<!-- Trust Badges Strip -->
+<div class="grid grid-cols-3 gap-space-xs p-space-sm bg-surface-container-lowest rounded-xl shadow-sm">
+<div class="flex flex-col items-center text-center p-1">
+<span class="material-symbols-outlined text-primary text-[24px] mb-1">sync</span>
+<span class="font-title-sm text-on-surface text-[12px] leading-tight">7 Days Replacement</span>
+<span class="font-body-sm text-outline text-[11px]">Hassle-free reverse pickup</span>
+</div>
+<div class="flex flex-col items-center text-center p-1">
+<span class="material-symbols-outlined text-primary text-[24px] mb-1">sync</span>
+<span class="font-title-sm text-on-surface text-[12px] leading-tight">1 Year Warranty</span>
+<span class="font-body-sm text-outline text-[11px]">Direct brand coverage</span>
+</div>
+<div class="flex flex-col items-center text-center p-1">
+<span class="material-symbols-outlined text-primary text-[24px] mb-1">sync</span>
+<span class="font-title-sm text-on-surface text-[12px] leading-tight">Fulfilled by OMIZON</span>
+<span class="font-body-sm text-outline text-[11px]">Quality audited &amp; secured</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Frequently Bought Together Bundle Module -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-xl">
+<div class="flex items-center gap-space-xs mb-space-md">
+<span class="material-symbols-outlined text-primary text-[24px]">dataset</span>
+<h2 class="font-headline-sm text-on-surface">Frequently Bought Together</h2>
+</div>
+<div class="flex flex-col lg:flex-row items-center justify-between gap-space-lg">
+<div class="flex flex-wrap items-center justify-center lg:justify-start gap-space-md flex-1">
+<!-- Item 1: Primary Headphone -->
+<div class="flex flex-col items-center text-center w-36">
+<div class="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2">
+<img class="w-full h-full object-contain" data-alt="SoundPulse Studio Pro Headphones miniature front view icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJAH6E404AO13ueEAwv5hkoUxPh6iuJVnDwp5BUe91oboRUaul8JGCuyo-4fLn-ctTJLTPnVTYMtfyyVWQROzRZ_ygC1M3PwNok5J0NKm8co3-zU30EDCP0xlxeY5ZUNixq1_vwxnQaa4w0zvt7DGOLRFA6RSHG9NmZ9o2AA-zwPTrS3eTnt91iIm_0qiexEFL4UBE31G51mhSQmI00MWOFKZyncf_hEVEMu5mVeUC2o5Fl2r57SpCHQ">
+<span class="absolute top-1 left-1 bg-primary text-on-primary text-[9px] font-bold px-1 rounded">THIS ITEM</span>
+</div>
+<span class="font-title-sm text-on-surface text-[12px] line-clamp-2">SoundPulse Studio Pro</span>
+<span class="font-price-card text-[14px] text-primary">₹14,999</span>
+</div>
+<span class="material-symbols-outlined text-[24px] text-outline font-bold">add</span>
+<!-- Item 2: Hard Shell Travel Case -->
+<div class="flex flex-col items-center text-center w-36">
+<div class="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2">
+<img class="w-full h-full object-cover rounded" data-alt="Rugged EVA waterproof protective hard travel case for over ear headphones with carabiner clip" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABoMePG7clcHXZVCWijwJwf3sVgD3Gy0owe9tJRRLaCiYI37Zi86ptnXuifOi6_2pdrSml-haXNQexAPPPVIovqaFlUmL0gwY6VPawCNtmUmtYm1BaWRirSyirM6YaSEooY-xonvSR9d4JBz1E7gjSagDdkFOOETpSzNNsvcULRgULr3LvLU3LDUFOCghHwS2v-ZTuFj1wUOFaxhRYH5LR9VEzuzIFxFtfFoQN0weOTCDfYsA1AG6QXg">
+</div>
+<span class="font-title-sm text-on-surface text-[12px] line-clamp-2">Aegis Hard Travel Case</span>
+<span class="font-price-card text-[14px] text-on-surface">₹999</span>
+</div>
+<span class="material-symbols-outlined text-[24px] text-outline font-bold">add</span>
+<!-- Item 3: Fast GaN Charger -->
+<div class="flex flex-col items-center text-center w-36">
+<div class="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2">
+<img class="w-full h-full object-cover rounded" data-alt="Ultra compact 45W Dual USB-C GaN fast wall charger adapter in matte black finish" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBi9VnX6KOGVmPmUW5eenPj4JclS9lNE0gvazKlLapj5a9om3la3xUPX3V73NziobWEprga1IuJwOPyhoJ6RDSNJDpHHEv6SGBoLEwmGcaGSGhQBCvB_oGwQaC8gtAuTCmCj-V-JTpTA2JqvcW5AhU_qlov5KAogHdQry5IWWeWzc8M-UqqR2xxyjF-AjxsLcQFfhYYDqO5O4zWuGIJZIgeBcaRYTQBufpEr5VLUVxG5uQWdXt9WvJoA">
+</div>
+<span class="font-title-sm text-on-surface text-[12px] line-clamp-2">Volta 45W GaN Dual Charger</span>
+<span class="font-price-card text-[14px] text-on-surface">₹1,199</span>
+</div>
+</div>
+<!-- Bundle Pricing & Action -->
+<div class="flex flex-col items-center lg:items-end text-center lg:text-right bg-surface-container-low p-space-md rounded-xl w-full lg:w-72 shrink-0">
+<span class="font-body-sm text-outline">Bundle Price for all 3:</span>
+<div class="flex items-baseline gap-2 mb-1">
+<span class="font-price-hero text-[26px] text-on-surface">₹16,499</span>
+<span class="font-body-sm text-outline line-through">₹17,197</span>
+</div>
+<span class="font-label-sm text-secondary font-semibold bg-secondary-fixed px-2 py-0.5 rounded-full mb-space-sm">Extra ₹698 Bundle Savings</span>
+<button class="w-full bg-primary hover:bg-secondary active:scale-[0.985] text-on-primary font-title-sm py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+<span class="">Add all 3 to Cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Comprehensive Tabbed Specifications Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm mb-space-xl overflow-hidden">
+<!-- Tab Headers Rail -->
+<div class="flex items-center gap-space-xs overflow-x-auto bg-surface-container-low px-space-md pt-space-xs scrollbar-none" id="specs-tabs">
+<button class="spec-tab active-spec-tab px-space-md py-3 font-title-sm text-primary relative whitespace-nowrap" onclick="switchTab('overview', this)" type="button">
+<span class="">Overview &amp; Features</span>
+<span class="tab-indicator absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full"></span>
+</button>
+<button class="spec-tab px-space-md py-3 font-title-sm text-on-surface-variant hover:text-on-surface relative whitespace-nowrap" onclick="switchTab('techspecs', this)" type="button">
+<span class="">Technical Specifications</span>
+<span class="tab-indicator hidden absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full"></span>
+</button>
+<button class="spec-tab px-space-md py-3 font-title-sm text-on-surface-variant hover:text-on-surface relative whitespace-nowrap" onclick="switchTab('box', this)" type="button">
+<span class="">What's in the Box</span>
+<span class="tab-indicator hidden absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full"></span>
+</button>
+<button class="spec-tab px-space-md py-3 font-title-sm text-on-surface-variant hover:text-on-surface relative whitespace-nowrap" onclick="switchTab('reviews', this)" type="button">
+<span class="">Customer Reviews &amp; Ratings (4,829)</span>
+<span class="tab-indicator hidden absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full"></span>
+</button>
+<button class="spec-tab px-space-md py-3 font-title-sm text-on-surface-variant hover:text-on-surface relative whitespace-nowrap" onclick="switchTab('qa', this)" type="button">
+<span class="">Q&amp;A (840)</span>
+<span class="tab-indicator hidden absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full"></span>
+</button>
+</div>
+<!-- Tab Content Panels -->
+<div class="p-space-lg">
+<!-- TAB 1: Overview & Features -->
+<div class="tab-panel flex flex-col gap-space-lg" id="tab-overview">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg items-center">
+<div class="flex flex-col gap-space-sm">
+<span class="font-label-sm uppercase tracking-wider text-primary font-bold">Acoustic Architecture</span>
+<h3 class="font-headline-sm text-on-surface">Precision Master Tuning with Custom 40mm Beryllium Drivers</h3>
+<p class="font-body-md text-on-surface-variant">
+                Crafted for pristine transparency, the SoundPulse Studio Pro features ultra-stiff Beryllium-coated diaphragm drivers delivering zero harmonic distortion across frequencies from 10Hz to 40,000Hz. Experience punchy sub-bass, transparent mids, and airy highs engineered in partnership with top German audio engineers.
+              </p>
+<div class="flex items-center gap-space-md mt-space-xs">
+<div class="flex flex-col">
+<span class="font-headline-sm text-primary">0.05%</span>
+<span class="font-body-sm text-outline">Total Harmonic Distortion</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-primary">40kHz</span>
+<span class="font-body-sm text-outline">Hi-Res Certified Ceiling</span>
+</div>
+</div>
+</div>
+<div class="rounded-xl overflow-hidden shadow-sm bg-surface-container-low h-64 md:h-72">
+<img class="w-full h-full object-cover" data-alt="Technical exploded diagram visualization of 40mm Beryllium headphone driver components and acoustic chamber airflow in studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpn9W7cD6LdLmxoiFSeY-DlZ7_eDx8BRLnK1LtLYJE_SwLNEvPwwrOyt9r_-ytDtv4JzDVQIF4fxBDODcbUELkccnmaAkK001GWZtHZEJzhup9DFTR6QpZ0Hm9QI8Lw-gjLtOAsNSI_qh0IfLjICFc-fX1hTQZV7G13eix5zwqdU1_pPWMEPxXaVJ5jKn8yRGlnmu0w03TaDc-kFWAHE1hL9azO1RyhM7ZBuRRlCRfN0dyJAffd_kT1g">
+</div>
+</div>
+<!-- Feature Grid 3 Bento -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-md">
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+<span class="material-symbols-outlined text-primary text-[28px]">graphic_eq</span>
+<h4 class="font-title-sm text-on-surface">Spatial Audio &amp; Head Tracking</h4>
+<p class="font-body-sm text-on-surface-variant">Dynamic gyroscope-powered orientation anchors instruments around you, providing a cinema-like soundfield for Dolby Atmos and lossless music.</p>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+<span class="material-symbols-outlined text-primary text-[28px]">network_intelligence</span>
+<h4 class="font-title-sm text-on-surface">Multipoint Connectivity</h4>
+<p class="font-body-sm text-on-surface-variant">Pair simultaneously with your MacBook and smartphone. Seamlessly answer incoming calls without manual bluetooth swapping.</p>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+<span class="material-symbols-outlined text-primary text-[28px]">mic_double</span>
+<h4 class="font-title-sm text-on-surface">AI Beamforming Clear Calls</h4>
+<p class="font-body-sm text-on-surface-variant">6 discrete MEMS microphones isolate your vocal cord frequency while canceling heavy cafe ambiance, wind noise, and traffic.</p>
+</div>
+</div>
+</div>
+<!-- TAB 2: Technical Specifications -->
+<div class="tab-panel hidden" id="tab-techspecs">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-xs font-body-md">
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Driver Size &amp; Type</span>
+<span class="font-semibold text-on-surface">40mm Custom Beryllium Dynamic</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Frequency Response</span>
+<span class="font-semibold text-on-surface">10 Hz – 40,000 Hz</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Bluetooth Standard</span>
+<span class="font-semibold text-on-surface">v5.3 with LE Audio Support</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Supported Codecs</span>
+<span class="font-semibold text-on-surface">LDAC, aptX Adaptive, AAC, SBC</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Noise Cancellation Depth</span>
+<span class="font-semibold text-on-surface">Up to 45dB Hybrid ANC</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Battery Playtime (ANC ON)</span>
+<span class="font-semibold text-on-surface">45 Hours (Continuous)</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Battery Playtime (ANC OFF)</span>
+<span class="font-semibold text-on-surface">60 Hours</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Weight</span>
+<span class="font-semibold text-on-surface">248 grams (Ultra-lightweight)</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Charging Connector</span>
+<span class="font-semibold text-on-surface">USB Type-C (5V / 2A)</span>
+</div>
+<div class="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+<span class="text-on-surface-variant">Water &amp; Sweat Resistance</span>
+<span class="font-semibold text-on-surface">IPX4 Splashproof Rating</span>
+</div>
+</div>
+</div>
+<!-- TAB 3: What's in the Box -->
+<div class="tab-panel hidden" id="tab-box">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-md">
+<div class="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-[40px] text-primary mb-2">headphones</span>
+<span class="font-title-sm text-on-surface">SoundPulse Studio Pro</span>
+<span class="font-body-sm text-outline">Main unit in Midnight Violet</span>
+</div>
+<div class="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-[40px] text-primary mb-2">cases</span>
+<span class="font-title-sm text-on-surface">Ballistic Nylon Travel Case</span>
+<span class="font-body-sm text-outline">With internal cable organizer</span>
+</div>
+<div class="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-[40px] text-primary mb-2">cable</span>
+<span class="font-title-sm text-on-surface">Braided Audio Cables</span>
+<span class="font-body-sm text-outline">3.5mm Aux + USB-C Quick Charge</span>
+</div>
+<div class="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+<span class="material-symbols-outlined text-[40px] text-primary mb-2">flight</span>
+<span class="font-title-sm text-on-surface">Airplane Adapter &amp; Manual</span>
+<span class="font-body-sm text-outline">2-Prong Flight Plug + Warranty card</span>
+</div>
+</div>
+</div>
+<!-- TAB 4: Customer Reviews & Ratings -->
+<div class="tab-panel hidden" id="tab-reviews">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+<!-- Review Summary Breakdown (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="flex flex-col">
+<span class="font-display-hero text-on-surface leading-none">4.8</span>
+<div class="flex text-amber-500 my-1">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+<span class="font-body-sm text-outline">4,829 Global Customer Ratings</span>
+</div>
+</div>
+<!-- Bar distributions -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-body-sm">
+<span class="w-12 text-on-surface">5 Star</span>
+<div class="flex-1 h-3 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 78%;"></div>
+</div>
+<span class="w-10 text-right text-outline">78%</span>
+</div>
+<div class="flex items-center gap-2 text-body-sm">
+<span class="w-12 text-on-surface">4 Star</span>
+<div class="flex-1 h-3 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary/80 rounded-full" style="width: 15%;"></div>
+</div>
+<span class="w-10 text-right text-outline">15%</span>
+</div>
+<div class="flex items-center gap-2 text-body-sm">
+<span class="w-12 text-on-surface">3 Star</span>
+<div class="flex-1 h-3 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary/60 rounded-full" style="width: 4%;"></div>
+</div>
+<span class="w-10 text-right text-outline">4%</span>
+</div>
+<div class="flex items-center gap-2 text-body-sm">
+<span class="w-12 text-on-surface">2 Star</span>
+<div class="flex-1 h-3 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full" style="width: 2%;"></div>
+</div>
+<span class="w-10 text-right text-outline">2%</span>
+</div>
+<div class="flex items-center gap-2 text-body-sm">
+<span class="w-12 text-on-surface">1 Star</span>
+<div class="flex-1 h-3 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary/20 rounded-full" style="width: 1%;"></div>
+</div>
+<span class="w-10 text-right text-outline">1%</span>
+</div>
+</div>
+<!-- Customer Photos Reel -->
+<div class="mt-space-sm">
+<span class="font-title-sm text-on-surface block mb-2">Customer Photos (342)</span>
+<div class="grid grid-cols-4 gap-2">
+<div class="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Customer real unboxing photo showing SoundPulse headphones on clean wooden coffee table" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVlsUqJYoXAM7DDEHdlmV8GqFinfkdswXagBzFLPP2b4OsFsn1rtFDfMQEkzAkgBmr0cZzTqxzGkMHhV3iLVU_7762BmuKNCUIS0Gw1KgC2DEonEFq2hv7YrEcPAMwwNbaAJsUsiY-7NHEa3X9hJvdi9VrOCClU577_ZeTiNW5rkdWsx5zoZrfp60N0reobzL0V_rPYaX6FZACWfdhjNqIp9MLX0yYnmp_bVNu2Fg-0zgoQNLpJ0rdJg">
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up photo of the midnight violet headphones ear cushion texture on user desk setup" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAva9_smw0Qrs_bSgmugXtIWoi8WMNM6E7-Jf-ldxrqIbJ1DyJU4eTeMHzg-noX96aQQhIavy9ukVMbqOfeKJN307ZoChQHluvz0tCdfD3Rtvm9iwsqfhMw1SA6kr8YKBqVQHqQiGiFkthYjh2V2zutgfsdy3aif97e6scsrHihiakth9mZ00T-fHVvy6sRmII3lxOP5JdWRpCNhYn35UbKf4N1d4ONTbrHW4D2pV1CrUJUcB1b2pEMag">
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="SoundPulse Studio headphones connected to a laptop running digital audio workstation software" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo4NuMi1tfxKX0R625t9vs4Jj8_IlV57uu0BDcWUZA_-T5NiGaCVTNb6TionZLdcUuBj6cynxXjc6htPxaJxBpavG9KJgOpm5KVEfCi7vN14szHmcFhiuQv1lMFqM_h0KfVLjLRUZ2eoW5M1hOb7KBPtWTH08yqYhmo_GU06LH5ndauVDwGvjhyJjbQ8hWVBJPAE9MAHWvt9vO1oKF6P5_LIXz6B9uOjwe5u1lvtDTAF9GGVL0d0OFjQ">
+</div>
+<div class="aspect-square rounded-lg bg-surface-container-high flex items-center justify-center font-label-md text-primary font-bold cursor-pointer hover:bg-surface-container-highest">
+                    +339
+                  </div>
+</div>
+</div>
+</div>
+<!-- Verified Reviews List (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-md">
+<!-- Review Item 1 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-sm">
+                      AK
+                    </div>
+<div class="flex flex-col">
+<span class="font-title-sm text-on-surface">Arun K.</span>
+<span class="font-body-sm text-emerald-700 flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Verified Buyer • Mumbai
+                      </span>
+</div>
+</div>
+<span class="font-body-sm text-outline text-[12px]">2 days ago</span>
+</div>
+<div class="flex items-center gap-1 text-amber-500">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-title-sm text-on-surface text-[14px] ml-1">ANC punches way above its price point</span>
+</div>
+<p class="font-body-md text-on-surface-variant">
+                  I commute daily on Mumbai local trains. The 45dB active noise canceling completely eliminates the heavy railway engine roar. The memory foam is extremely breathable, zero ear-fatigue after a full 4-hour editing session.
+                </p>
+<div class="flex items-center gap-4 text-outline font-body-sm text-[12px] pt-1">
+<span class="">Color: Midnight Violet</span>
+<span class="">•</span>
+<span class="">142 people found this helpful</span>
+</div>
+</div>
+<!-- Review Item 2 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-sm">
+                      RM
+                    </div>
+<div class="flex flex-col">
+<span class="font-title-sm text-on-surface">Rhea Menon</span>
+<span class="font-body-sm text-emerald-700 flex items-center gap-1 text-[11px]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> Verified Buyer • Bengaluru
+                      </span>
+</div>
+</div>
+<span class="font-body-sm text-outline text-[12px]">1 week ago</span>
+</div>
+<div class="flex items-center gap-1 text-amber-500">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-title-sm text-on-surface text-[14px] ml-1">Sublime instrument separation</span>
+</div>
+<p class="font-body-md text-on-surface-variant">
+                  Listening to lossless jazz with LDAC codec enabled via Android gave me goosebumps. The Midnight Violet tone has a very subtle anodized sheen that looks ultra-luxury in person. Battery hasn't dropped past 50% after a week.
+                </p>
+<div class="flex items-center gap-4 text-outline font-body-sm text-[12px] pt-1">
+<span class="">Color: Midnight Violet</span>
+<span class="">•</span>
+<span class="">89 people found this helpful</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- TAB 5: Q&A -->
+<div class="tab-panel hidden flex flex-col gap-space-md" id="tab-qa">
+<div class="bg-surface-container-low p-space-sm rounded-lg flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-outline text-[20px]">search</span>
+<input class="bg-transparent border-0 outline-none font-body-md text-on-surface placeholder:text-outline w-full" placeholder="Have a question? Search answers, specs, topics..." type="text">
+</div>
+<div class="flex flex-col gap-space-md">
+<div class="flex flex-col gap-1">
+<span class="font-title-sm text-on-surface flex items-start gap-2">
+<span class="font-bold text-primary">Q:</span> Does it support simultaneous connection to both an iPhone and a Windows PC?
+              </span>
+<p class="font-body-md text-on-surface-variant pl-6">
+<strong class="text-on-surface">A:</strong> Yes! The SoundPulse Studio Pro supports Bluetooth 5.3 Multipoint. It can remain paired with two devices at the same time and intelligently pauses audio on your laptop when a call comes in on your smartphone.
+                <span class="block text-body-sm text-outline mt-1">— SoundPulse Official Seller, 3 weeks ago</span>
+</p>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-title-sm text-on-surface flex items-start gap-2">
+<span class="font-bold text-primary">Q:</span> Can I use active noise cancellation while using the 3.5mm wired audio cable?
+              </span>
+<p class="font-body-md text-on-surface-variant pl-6">
+<strong class="text-on-surface">A:</strong> Yes, as long as the internal battery has power, you can toggle ANC and Spatial Audio on even in wired AUX mode for latency-free gaming and monitoring.
+                <span class="block text-body-sm text-outline mt-1">— Verified Buyer Support, 1 month ago</span>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- "Customers Also Viewed" Recommendations Carousel -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between"><div class="flex flex-col"><span class="font-label-sm uppercase tracking-wider text-primary font-bold">RECOMMENDED FOR YOU</span><h2 class="font-headline-sm text-on-surface font-bold tracking-tight">Customers Also Viewed</h2></div><div class="flex items-center gap-2"><button class="w-9 h-9 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors" type="button" aria-label="Previous"><span class="material-symbols-outlined text-[20px]">chevron_left</span></button><button class="w-9 h-9 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface flex items-center justify-center transition-colors" type="button" aria-label="Next"><span class="material-symbols-outlined text-[20px]">chevron_right</span></button></div></div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-space-md">
+<!-- Rec Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm hover:shadow-md transition-all flex flex-col group">
+<div class="aspect-square bg-surface-container-low rounded-lg mb-space-xs overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Premium sleek over ear wireless headphones in Matte Obsidian with rose gold pivots on clean neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-D60utsDbDpBsw8sZMhJPQQtiNtTYy21Xp2TBQQpznlSM25qqIi1n_pN_AfQQJARfquOpkHWvgk2lzJ2CvLGxvd6PY22HqivilixI2JihCCeeG1SR_P_mN-37Q1MzEE8dDxKgABQtoZoJFmge0S5ksKICLTEz7w_Zglzy_F_VbBLaKgN9XuHhRTgnxfpnbHRbI_usRjsSo8suYrOJWxuUgROMia-ypCJ9ZSQtxeGhP7Np9vx0vzWgKA">
+<span class="absolute top-2 left-2 bg-surface-container-highest text-on-surface text-[10px] font-bold px-2 py-0.5 rounded-full">Top Seller</span>
+</div>
+<span class="font-body-sm text-outline text-[12px]">Bose SoundLink Pro</span>
+<h4 class="font-title-sm text-on-surface text-[13px] line-clamp-2 mb-1">QuietComfort Ultra Wireless Noise Cancelling</h4>
+<div class="flex items-center gap-1 text-amber-500 text-[12px] mb-2">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold text-on-surface">4.7</span>
+<span class="text-outline">(3.1k)</span>
+</div>
+<div class="mt-auto flex items-baseline justify-between">
+<span class="font-price-card text-[16px] text-on-surface">₹24,900</span>
+<button class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Rec Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm hover:shadow-md transition-all flex flex-col group">
+<div class="aspect-square bg-surface-container-low rounded-lg mb-space-xs overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Sony flagship wireless headphones in silver grey resting elegantly on marble stand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdKBKpKxhYl_TU2hqUYyTFNAwOOMAaccuebxJkkbd-h6nIF57NeHHaTzdJdgzpl8vnkCX52XTZ7LCbMuB6AuUqrReboWrkIebNcFnwWB_J2eWpCGNSGzvk7P6lbyoSLXpeieVCz-8MTLiZspyhmgbXDOwh8_hmwxvqsvLJ3yRuADw84DHpLLz0KKAQL_lsrMv_q6WBTXtp623H4TgZzfMTE6vYxrV49iKq0KH34_PwK3ohPkPQRBWUtg">
+<span class="absolute top-2 left-2 bg-secondary-fixed text-on-secondary-fixed text-[10px] font-bold px-2 py-0.5 rounded-full">22% OFF</span>
+</div>
+<span class="font-body-sm text-outline text-[12px]">Sony</span>
+<h4 class="font-title-sm text-on-surface text-[13px] line-clamp-2 mb-1">WH-1000XM5 Wireless Industry Leading ANC</h4>
+<div class="flex items-center gap-1 text-amber-500 text-[12px] mb-2">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold text-on-surface">4.9</span>
+<span class="text-outline">(12.8k)</span>
+</div>
+<div class="mt-auto flex items-baseline justify-between">
+<span class="font-price-card text-[16px] text-on-surface">₹26,990</span>
+<button class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+<!-- Rec Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm hover:shadow-md transition-all flex flex-col group"><div class="aspect-square bg-surface-container-low rounded-lg mb-space-xs overflow-hidden relative"><img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Sennheiser Momentum wireless headphones in dark graphite with fabric headband accent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD92viOk12UP5xLvEoFNz5kqN-Xg27kcwzoBt3pJG-oc6k6NNllqK_J3RGotlecXf70xVodUheBCO9vJlpgvFwP5fIng6bLFeItuv-TLz9Hbf052d1sRoUycLuCB1nww9ufhb5s2I0m0LmaCgRlToVFEHRJlNz4mLc83mSU5mRWIr1UcAqWpO4ZWUcUs34cawnNuELH_hXFB_4MQaQfZVzoPD7DbPFWwZYQSgMjNaYYDbty6MlagqM1EA"><span class="absolute top-2 left-2 bg-surface-container-highest text-on-surface text-[10px] font-bold px-2 py-0.5 rounded-full">Audiophile Choice</span></div><span class="font-body-sm text-outline text-[12px]">Sennheiser</span><h4 class="font-title-sm text-on-surface text-[13px] line-clamp-2 mb-1">Momentum 4 Wireless Audiophile Over-Ear</h4><div class="flex items-center gap-1 text-amber-500 text-[12px] mb-2"><span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span><span class="font-semibold text-on-surface">4.6</span><span class="text-outline">(2.4k)</span></div><div class="mt-auto flex items-baseline justify-between"><span class="font-price-card text-[16px] text-on-surface">₹18,990</span><button class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary flex items-center justify-center transition-colors" type="button" aria-label="Add to Cart"><span class="material-symbols-outlined text-[18px]">add_shopping_cart</span></button></div></div>
+<!-- Rec Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm hover:shadow-md transition-all flex flex-col group">
+<div class="aspect-square bg-surface-container-low rounded-lg mb-space-xs overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" data-alt="Minimalist modern wireless ear-cups headphones with polished metallic accents on gradient purple background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnrEbDXGIk8yDSTIlxAR5XVcraQ32ARXns70nKKEe-6ts9QPMnKAgeEiJG9bXeTrDlBGItrLTPPYZY7rgM8KdmgpTRBzZIISawXvUq-pSPUNcT79XwPKrAAepvgLTK-UTdBgcegZl5zu4cZceYJgpjXzdLzDlMhPzdhkuFHlDoaeGnSDVdmvlL7_V6EQ-So9Np8okgdV3fMUF-MZxOTFGg2F34GDD7EXsz2e_aQDPzINQ6cDOePog1oA">
+<span class="absolute top-2 left-2 bg-primary text-on-primary text-[10px] font-bold px-2 py-0.5 rounded-full">New Launch</span>
+</div>
+<span class="font-body-sm text-outline text-[12px]">SoundPulse</span>
+<h4 class="font-title-sm text-on-surface text-[13px] line-clamp-2 mb-1">AeroWave Wireless Open-Fit Ergonomic</h4>
+<div class="flex items-center gap-1 text-amber-500 text-[12px] mb-2">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-semibold text-on-surface">4.8</span>
+<span class="text-outline">(520)</span>
+</div>
+<div class="mt-auto flex items-baseline justify-between">
+<span class="font-price-card text-[16px] text-on-surface">₹9,999</span>
+<button class="w-8 h-8 rounded-full bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-Interactions JavaScript -->
+<script>
+    // Gallery Thumb Switching
+    function swapMainImage(index) {
+      const thumbs = document.querySelectorAll('#gallery-thumbs .thumb-btn');
+      thumbs.forEach((t, i) => {
+        if (i === index) {
+          t.classList.add('ring-2', 'ring-primary');
+        } else {
+          t.classList.remove('ring-2', 'ring-primary');
+        }
+      });
+      const mainImg = document.getElementById('main-product-img');
+      mainImg.style.opacity = '0.5';
+      setTimeout(() => {
+        mainImg.style.opacity = '1';
+      }, 150);
+    }
+
+    // Color Swatch Selection
+    function selectColor(colorName, btnElement) {
+      document.getElementById('color-label').innerText = colorName;
+      document.querySelectorAll('#color-options .color-btn').forEach(btn => {
+        btn.classList.remove('ring-2', 'ring-primary');
+      });
+      btnElement.classList.add('ring-2', 'ring-primary');
+    }
+
+    // Quantity Stepper
+    let quantity = 1;
+    function updateQty(delta) {
+      quantity = Math.max(1, Math.min(10, quantity + delta));
+      document.getElementById('qty-display').innerText = quantity;
+    }
+
+    // Wishlist Toggle Animation
+    function toggleWishlist(btn) {
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon.innerText === 'favorite_border') {
+        icon.innerText = 'favorite';
+        icon.style.fontVariationSettings = "'FILL' 1";
+        btn.classList.add('text-error');
+      } else {
+        icon.innerText = 'favorite_border';
+        icon.style.fontVariationSettings = "'FILL' 0";
+        btn.classList.remove('text-error');
+      }
+    }
+
+    // Edit PinCode Prompt
+    function editPinCode() {
+      const pin = prompt('Enter your 6-digit delivery pincode:', '400001');
+      if (pin && pin.trim().length === 6) {
+        document.getElementById('delivery-pincode').innerText = pin + ' - Verified City';
+      }
+    }
+
+    // Specification Tab Switcher
+    function switchTab(tabKey, tabBtn) {
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.add('hidden'));
+      const targetPanel = document.getElementById('tab-' + tabKey);
+      if (targetPanel) targetPanel.classList.remove('hidden');
+
+      document.querySelectorAll('.spec-tab').forEach(b => {
+        b.classList.remove('text-primary');
+        b.classList.add('text-on-surface-variant');
+        const ind = b.querySelector('.tab-indicator');
+        if (ind) ind.classList.add('hidden');
+      });
+
+      tabBtn.classList.remove('text-on-surface-variant');
+      tabBtn.classList.add('text-primary');
+      const activeInd = tabBtn.querySelector('.tab-indicator');
+      if (activeInd) activeInd.classList.remove('hidden');
+    }
+
+    // Sticky Header Observer on Scroll
+    window.addEventListener('scroll', () => {
+      const stickyBar = document.getElementById('sticky-pdp-bar');
+      if (window.scrollY > 480) {
+        stickyBar.classList.remove('-translate-y-full');
+        stickyBar.classList.add('translate-y-0');
+      } else {
+        stickyBar.classList.add('-translate-y-full');
+        stickyBar.classList.remove('translate-y-0');
+      }
+    });
+
+    // Cart Flyout Feedback
+    function triggerCartFlyout() {
+      const originalText = event.currentTarget.innerHTML;
+      const btn = event.currentTarget;
+      btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">done</span><span>Added to Basket</span>`;
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+      }, 1800);
+    }
+  </script>
+</div></main><footer class="w-full bg-inverse-surface text-inverse-on-surface pt-space-xl pb-space-lg"><div class="max-w-7xl mx-auto px-margin"><div class="mb-space-xl pb-space-lg border-b border-surface-container-highest/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md"><div class="flex items-center gap-space-xs"><img alt="OMIZON" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1WRn3K1zfKXGux9v6zgjQ78wfZDiS3xlUEZcz_h_xSJ65lctSuvK88_jgiOpd3b4SI5rC6nIoAG6QzDP_dTV0yvT5hTPZnXetMbt4OIKWd9U81u9zbpMWfNLayq4JJyhsh_IsxakVma-H_6C0JSLh6CDRJoVyEEeirFlTiOh4ya-53ylDsy6Ceq-WOV5xg7vkCu-pkoGJv9IOhdjMKaLB7GZdhsSYSAWHtWQjgC_v22lUF6d98Jhc4tppBW"></div><p class="font-body-md text-inverse-on-surface/80 max-w-2xl">OMIZON — Everything customers need, brought together in one destination. International multi-category commerce engineered for quality.</p></div><div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-space-xl mb-space-xl"><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">About OMIZON</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Our Story</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Careers</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Sustainability</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Press Center</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Investor Relations</li></ul></div><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Shop Categories</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Electronics</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Home Living</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Fresh Grocery</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Beauty</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Fashion</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Daily Steals</li></ul></div><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Customer Service</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Help Center</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Track Your Order</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Shipping &amp; Delivery</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Return Policy</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Payment Options</li></ul></div><div class="flex flex-col gap-space-sm"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Sell with Us</h4><ul class="flex flex-col gap-space-xs font-body-md text-inverse-on-surface/75"><li class="hover:text-primary-fixed cursor-pointer transition-colors">Sell on OMIZON</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Seller Hub</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Fulfilled by OMIZON</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Seller University</li><li class="hover:text-primary-fixed cursor-pointer transition-colors">Advertise</li></ul></div><div class="flex flex-col gap-space-sm col-span-2 md:col-span-1"><h4 class="font-title-sm text-surface-container-lowest tracking-wide uppercase">Stay Connected</h4><p class="font-body-sm text-inverse-on-surface/75">Subscribe for VIP offers, launches &amp; flash sales.</p><div class="flex items-center bg-surface-container-lowest/10 rounded-lg p-1"><input class="bg-transparent border-0 outline-none text-surface-container-lowest placeholder:text-outline font-body-sm px-space-xs w-full" placeholder="Your email address" type="email"><button class="bg-primary hover:bg-secondary text-on-primary px-space-sm py-1.5 rounded font-label-md transition-colors shrink-0" type="button">Join</button></div><div class="mt-space-sm flex flex-col gap-space-xs"><span class="font-label-sm text-outline uppercase">Secure Payment Methods</span><div class="flex flex-wrap gap-space-xs text-surface-container-lowest/80"><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">UPI</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">RuPay</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">Visa</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">Mastercard</span><span class="bg-surface-container-lowest/10 px-2 py-1 rounded text-label-sm font-label-sm font-semibold">NetBanking</span></div></div></div></div><div class="pt-space-lg border-t border-surface-container-highest/20 flex flex-col sm:flex-row items-center justify-between gap-space-sm text-body-sm text-inverse-on-surface/60"><p class="">© 2025 OMIZON Marketplace Inc. All rights reserved.</p><div class="flex flex-wrap items-center gap-space-md"><a class="hover:text-surface-container-lowest transition-colors" href="#">Privacy Policy</a><span class="">•</span><a class="hover:text-surface-container-lowest transition-colors" href="#">Terms &amp; Conditions</a><span class="">•</span><a class="hover:text-surface-container-lowest transition-colors" href="#">Cookie Settings</a><span class="">•</span><a class="hover:text-surface-container-lowest transition-colors" href="#">Security</a></div></div></div></footer>
+
+
+
+
+
+
+
+
+
+
+
+<div id="snapdom-sandbox" data-snapdom-sandbox="true" aria-hidden="true" style="position: absolute; left: -9999px; top: -9999px; width: 0px; height: 0px; overflow: hidden;"></div>
+
+</body></html>

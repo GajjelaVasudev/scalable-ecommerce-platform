@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-fixed-variant":"#5800c8","lavender-mist":"#E8E6F0","ink":"#211D31","ink-muted":"#655E7A","inverse-on-surface":"#f0f0f4","on-primary-fixed":"#24005b","error":"#ba1a1a","surface-container-lowest":"#ffffff","obsidian-border":"#382B54","secondary-fixed":"#e5deff","text-dark-secondary":"#C3BCD7","text-dark-muted":"#A49ABF","on-surface-variant":"#4a4456","text-dark-primary":"#F7F5FF","semantic-success":"#00875A","on-tertiary-fixed":"#1d104a","outline":"#7b7487","on-secondary-container":"#fffbff","surface-container":"#ededf1","error-container":"#ffdad6","on-secondary-fixed":"#1a0063","background":"#f9f9fd","on-error":"#ffffff","surface-bright":"#f9f9fd","surface":"#f9f9fd","semantic-warning":"#E27300","inverse-primary":"#d1bcff","on-secondary-fixed-variant":"#451fc4","on-background":"#1a1c1f","surface-container-highest":"#e2e2e6","surface-container-low":"#f3f3f7","surface-container-high":"#e8e8ec","on-surface":"#1a1c1f","secondary-fixed-dim":"#c9bfff","on-error-container":"#93000a","ink-subtle":"#928B9F","midnight-violet":"#190B46","royal-purple":"#4C2ACB","on-primary":"#ffffff","primary-container":"#762ff2","porcelain":"#F7F7FB","semantic-error":"#D92D20","tertiary-fixed-dim":"#cbbeff","tertiary-fixed":"#e6deff","obsidian-surface-2":"#211735","on-secondary":"#ffffff","tertiary":"#4d427c","obsidian-surface-1":"#1D1537","surface-variant":"#e2e2e6","surface-tint":"#7228ee","secondary":"#5b3eda","outline-variant":"#ccc3d9","primary-fixed-dim":"#d1bcff","inverse-surface":"#2e3034","secondary-container":"#745af4","primary":"#5c00d2","on-tertiary-container":"#e3daff","tertiary-container":"#655a96","on-primary-container":"#e7d9ff","surface-dim":"#d9dade","primary-fixed":"#eaddff","obsidian-violet":"#100A25","on-tertiary-fixed-variant":"#493e78","electric-violet":"#762FF2","on-tertiary":"#ffffff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","space-lg":"1.5rem","gutter-mobile":"0.75rem","margin-mobile":"1rem","space-md":"1rem","space-sm":"0.5rem","gutter":"1.5rem","space-xl":"2.5rem","margin":"2rem"},"fontFamily":{"body-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"]},"fontSize":{"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}],"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"price-hero":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.05em","fontWeight":"600"}],"price-card":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"700"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}]}}}}</script></head><body class="bg-porcelain font-body-md text-body-md text-ink min-h-screen"><aside class="fixed left-0 top-0 h-full w-72 bg-midnight-violet text-text-dark-primary z-50 flex flex-col justify-between shadow-[0_16px_36px_-8px_rgba(25,11,70,0.12)]"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md flex items-center gap-space-sm bg-obsidian-violet"><img alt="OMIZON Official Brand Logo for dark surfaces with white geometric wordmark and glowing purple infinity ribbon symbol" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UdlrUM8hyyFfQVS5dmLaEh62kAxW_rStX2OO5j_r1zHJphPs6pfdXHGfDL0SS-LW_BEeUrp7vsEjrLyFXnOBWfDYjrJlJcEEjcpNp4AnrHV4cy5bOVYu_KnI5jBuFr0EY-AzNwLKSQsH8hazC472Fa85bIN2voQfI0bYSYwAKVWSoY3Vix0yMPgECasdbSABNB3UZKOz0aICgQ9rG4blKonaeUmeoPR3z_qtI2AgAbUBQj4TNVvepFFRw"/><div class="flex flex-col ml-space-xs"><span class="font-title-sm text-title-sm text-text-dark-primary tracking-tight leading-none">OMIZON</span><span class="font-label-sm text-label-sm text-text-dark-muted tracking-wider uppercase leading-none mt-1">Global Ops</span></div><span class="ml-auto bg-electric-violet/20 text-text-dark-primary px-2 py-0.5 rounded font-label-sm text-label-sm uppercase tracking-wide">Admin</span></div><div class="flex-1 overflow-y-auto px-space-md py-space-md space-y-space-md"><nav class="space-y-space-md" data-active-classes="bg-primary-container text-on-primary font-bold shadow-[0_2px_6px_-1px_rgba(25,11,70,0.2)]"><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Core Operations</div><div class="space-y-1"><a aria-current="page" class="flex items-center justify-between px-space-sm py-2 rounded-lg transition-colors bg-primary-container text-on-primary font-bold shadow-[0_2px_6px_-1px_rgba(25,11,70,0.2)]" data-path="overview" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">grid_view</span>Overview</span><span class="w-2 h-2 rounded-full bg-electric-violet"></span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="seller-applications" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">how_to_reg</span>Seller Applications</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">14 New</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="sellers" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">storefront</span>Sellers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="buyers" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">group</span>Buyers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="catalog-governance" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">fact_check</span>Catalog Governance</span><span class="bg-semantic-warning text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">9 Flagged</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Commerce &amp; Fulfillment</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="all-orders" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">local_shipping</span>All Orders</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="payments-and-settlements" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">payments</span>Payments &amp; Settlements</span><span class="bg-error text-on-error font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">3 Hold</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="returns-and-disputes" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">assignment_return</span>Returns &amp; Disputes</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.2 rounded-full">5 Open</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="promotions" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">loyalty</span>Promotions</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Intelligence &amp; Security</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="reports-and-analytics" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">insights</span>Reports &amp; Analytics</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="risk-and-fraud" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">shield</span>Risk &amp; Fraud</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="audit-logs" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">terminal</span>Audit Logs</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="platform-settings" href="#"><span class="flex items-center gap-space-sm font-label-md text-label-md"><span class="material-symbols-outlined text-[18px]">settings</span>Platform Settings</span></a></div></div></nav></div></div><div class="p-space-md bg-obsidian-surface-1"><div class="flex items-center justify-between mb-1"><span class="font-label-sm text-label-sm text-text-dark-muted">OMIZON Core v4.12.0-demo</span><span class="inline-block w-2 h-2 rounded-full bg-semantic-success"></span></div><div class="font-body-sm text-body-sm text-text-dark-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-electric-violet">science</span>Simulated Sandbox Mode</div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(25,11,70,0.04)] z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="hidden xl:flex items-center gap-2 px-space-sm py-1 rounded bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>Scope: Platform-Wide (Simulated Demo Environment)</div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Global search merchants, orders (#OMZ-), products, or buyers (⌘K)..." type="text"/><kbd class="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-container-lowest shadow-[0_1px_2px_rgba(25,11,70,0.06)] px-1.5 py-0.5 rounded font-label-sm text-label-sm text-ink-muted">⌘K</kbd></div></div><div class="flex items-center gap-space-md"><button class="hidden lg:flex items-center gap-2 h-10 px-space-sm rounded-lg bg-porcelain hover:bg-surface-container transition-colors text-ink font-label-md text-label-md"><span class="material-symbols-outlined text-[18px] text-ink-muted">calendar_today</span>Last 30 Days: Oct 01 - Oct 30, 2023</button><div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-electric-violet"></span>Services: Simulated Demo</div><button class="relative p-2 rounded-lg hover:bg-porcelain text-ink transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-semantic-error rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="h-6 w-px bg-lavender-mist"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-sm text-title-sm text-ink leading-tight">Siddharth Rao</span><span class="font-label-sm text-label-sm text-ink-muted leading-tight">Super Admin / Platform Lead</span></div></div></div></header><main class="relative pt-16 bg-porcelain min-h-screen w-full px-space-lg py-space-lg"><div class="flex flex-col w-full space-y-space-lg">
+<!-- Top Operational Bar -->
+<section class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="space-y-1">
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-ink-muted uppercase tracking-wider">
+<span>Platform Console</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Operations Overview</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-electric-violet font-semibold">Executive Control Center</span>
+</div>
+<div class="flex items-center gap-space-sm pt-0.5">
+<h1 class="font-headline-md text-headline-md text-ink">Platform Admin Dashboard</h1>
+<span class="bg-primary/10 text-primary px-2.5 py-0.5 rounded-full font-label-sm text-label-sm font-semibold tracking-wide">Pan-India Operations</span>
+</div>
+<p class="font-body-md text-body-md text-ink-muted max-w-3xl">
+        Real-time orchestration across multi-merchant supply, customer demand, financial settlements, and operational risk.
+        <span class="text-ink-subtle font-medium">[Illustrative Prototype Aggregations]</span>
+</p>
+</div>
+<!-- Right Controls -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<!-- Country/Region Filter -->
+<div class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-low text-ink font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">public</span>
+<span>All Regions (India Default)</span>
+<span class="material-symbols-outlined text-[16px] text-ink-muted">expand_more</span>
+</div>
+<!-- Date Preset Pill -->
+<div class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-low text-ink font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">event</span>
+<span>Oct 01 – Oct 30, 2023</span>
+</div>
+<!-- Currency Normalized -->
+<div class="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-surface-container-low text-ink font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px] text-semantic-success">currency_rupee</span>
+<span>INR ₹ Normalized</span>
+</div>
+<!-- Export Executive Brief Button -->
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-label-md text-label-md transition-all shadow-sm" onclick="window.alert('Generating compiled executive snapshot for period: Oct 01 - Oct 30, 2023.')">
+<span class="material-symbols-outlined text-[18px]">sim_card_download</span>
+<span>Export Executive Brief</span>
+</button>
+</div>
+</section>
+<!-- KPI Cards Grid (8 Marketplace Operational KPIs) -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Card 1: Gross Merchandise Value -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Gross Merchandise Value (GMV)</span>
+<div class="p-2 rounded-lg bg-primary/10 text-electric-violet">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">₹48.62 Cr</span>
+<span class="flex items-center text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> +18.4%
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">Total transaction volume across all categories before returns &amp; discounts</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>Prev 30d: ₹41.06 Cr</span>
+<span class="text-electric-violet font-semibold">Track Pace</span>
+</div>
+</div>
+<!-- Card 2: Platform Net Revenue -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Platform Net Revenue</span>
+<div class="p-2 rounded-lg bg-semantic-success/10 text-semantic-success">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">₹4.12 Cr</span>
+<span class="flex items-center text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> +14.2%
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">Commission take-rate (avg 8.47%) + FastX logistics take + ad revenue</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>Blended Take: 8.47%</span>
+<span class="text-semantic-success font-semibold">+42 bps</span>
+</div>
+</div>
+<!-- Card 3: Total Marketplace Orders -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Total Marketplace Orders</span>
+<div class="p-2 rounded-lg bg-electric-violet/10 text-electric-violet">
+<span class="material-symbols-outlined text-[20px]">local_shipping</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">1,42,850</span>
+<span class="flex items-center text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> +11.6%
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">98.7% SLA fulfillment compliance rate nationwide</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>Daily Run-rate: 4,761</span>
+<span class="text-ink font-semibold">FastX 74%</span>
+</div>
+</div>
+<!-- Card 4: Active Buyers (30D) -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Active Buyers (30D)</span>
+<div class="p-2 rounded-lg bg-midnight-violet/10 text-midnight-violet">
+<span class="material-symbols-outlined text-[20px]">group</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">8,92,400</span>
+<span class="flex items-center text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> +22.1%
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">34.2% Repeat order rate across active multi-category cohorts</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>New Cohorts: +1,62,400</span>
+<span class="text-electric-violet font-semibold">Surge</span>
+</div>
+</div>
+<!-- Card 5: Active Verified Sellers -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Active Verified Sellers</span>
+<div class="p-2 rounded-lg bg-surface-container text-ink">
+<span class="material-symbols-outlined text-[20px]">storefront</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">4,280</span>
+<span class="flex items-center text-semantic-success font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-[16px]">arrow_upward</span> +6.5%
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">Top 5% Tier-1 merchants generate 48% marketplace GMV</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>Tier-1 Power: 214 sellers</span>
+<span class="text-ink font-semibold">99.1% In-Stock</span>
+</div>
+</div>
+<!-- Card 6: Pending Seller Applications -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Pending Seller Applications</span>
+<div class="p-2 rounded-lg bg-semantic-warning/10 text-semantic-warning">
+<span class="material-symbols-outlined text-[20px]">pending_actions</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">14</span>
+<span class="px-2 py-0.5 rounded-full bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-semibold">
+            Needs Review
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">4 applications with missing GSTIN/bank documents (Avg SLA 4.2h)</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>Oldest Queue: 6h 12m</span>
+<span class="text-semantic-warning font-semibold">Priority</span>
+</div>
+</div>
+<!-- Card 7: Payments Requiring Review -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Payments Requiring Review</span>
+<div class="p-2 rounded-lg bg-error-container text-semantic-error">
+<span class="material-symbols-outlined text-[20px]">credit_card_off</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">₹18.45 L</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-semantic-error font-label-sm text-label-sm font-semibold">
+            6 Exceptions
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">3 gateway timeout mismatches, 3 high-value hold queues</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>RuPay / UPI Timeout: 3</span>
+<span class="text-semantic-error font-semibold">Auto-Reconcile</span>
+</div>
+</div>
+<!-- Card 8: Open Disputes & Chargebacks -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<span class="font-label-md text-label-md text-ink-muted">Open Disputes &amp; Chargebacks</span>
+<div class="p-2 rounded-lg bg-midnight-violet/10 text-midnight-violet">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+</div>
+</div>
+<div class="mt-3">
+<div class="flex items-baseline gap-2">
+<span class="font-price-hero text-price-hero text-ink tracking-tight">28</span>
+<span class="font-label-sm text-label-sm text-ink-muted font-medium">
+            (Dispute Rate 0.02%)
+          </span>
+</div>
+<p class="font-body-sm text-body-sm text-ink-subtle mt-1 leading-snug">5 escalated cases require supervisor intervention within SLA</p>
+</div>
+<div class="mt-3 pt-2 bg-surface-container-low/60 -mx-space-md -mb-space-md px-space-md pb-2 rounded-b-xl flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span>5 High-Priority</span>
+<span class="text-electric-violet font-semibold">Arbitration</span>
+</div>
+</div>
+</section>
+<!-- Two-Column Analytics & Performance Section -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Panel: Marketplace Trajectory (60%) -->
+<div class="lg:col-span-7 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-md">
+<div>
+<h2 class="font-title-lg text-title-lg text-ink">Marketplace Performance Trajectory</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">GMV momentum alongside platform take-rate realization over 30 days</p>
+</div>
+<!-- Metric switcher tabs -->
+<div class="inline-flex p-1 rounded-lg bg-surface-container-low text-ink-muted font-label-md text-label-md">
+<button class="px-3 py-1 rounded bg-surface-container-lowest text-electric-violet font-semibold shadow-sm">GMV &amp; Take Rate</button>
+<button class="px-3 py-1 rounded hover:text-ink transition-colors">Net Revenue</button>
+<button class="px-3 py-1 rounded hover:text-ink transition-colors">Category Volume</button>
+</div>
+</div>
+<!-- Legend indicators -->
+<div class="flex flex-wrap items-center gap-space-md mb-space-md font-label-sm text-label-sm text-ink-muted">
+<span class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-electric-violet"></span>
+            Current GMV (₹ Cr)
+          </span>
+<span class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded-full bg-outline-variant"></span>
+            Prior 30D Baseline (Dotted)
+          </span>
+<span class="flex items-center gap-1.5">
+<span class="w-3 h-3 rounded bg-semantic-success"></span>
+            Net Take Revenue (₹ Lakhs)
+          </span>
+</div>
+<!-- Chart Visualization Container -->
+<div class="relative w-full h-72 bg-gradient-to-b from-surface-container-low/40 to-transparent rounded-lg p-space-sm flex items-end">
+<!-- Festive Surge Callout (Interactive Popover) -->
+<div class="absolute top-6 left-[68%] -translate-x-1/2 bg-midnight-violet text-on-primary p-3 rounded-xl shadow-xl z-20 pointer-events-none max-w-xs">
+<div class="flex items-center justify-between gap-2 border-b border-obsidian-border pb-1.5 mb-1.5">
+<span class="font-label-sm text-label-sm text-electric-violet uppercase font-bold tracking-wider">Festive Surge Peak</span>
+<span class="font-label-sm text-label-sm text-text-dark-muted">Oct 24</span>
+</div>
+<div class="space-y-1 font-body-sm text-body-sm">
+<div class="flex justify-between gap-4">
+<span class="text-text-dark-secondary">Day GMV:</span>
+<span class="font-bold text-on-primary">₹2.84 Cr</span>
+</div>
+<div class="flex justify-between gap-4">
+<span class="text-text-dark-secondary">Platform Revenue:</span>
+<span class="font-bold text-semantic-success">₹24.1 L</span>
+</div>
+<div class="flex justify-between gap-4">
+<span class="text-text-dark-secondary">Total Orders:</span>
+<span class="font-bold text-text-dark-primary">8,420 orders</span>
+</div>
+</div>
+</div>
+<!-- Inline SVG Multi-Line & Bar Chart -->
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 600 240">
+<defs>
+<lineargradient id="gmvAreaGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#762FF2" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#762FF2" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Grid Lines -->
+<line stroke="#E8E6F0" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="600" y1="40" y2="40"></line>
+<line stroke="#E8E6F0" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="600" y1="100" y2="100"></line>
+<line stroke="#E8E6F0" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="600" y1="160" y2="160"></line>
+<line stroke="#E8E6F0" stroke-width="1" x1="0" x2="600" y1="220" y2="220"></line>
+<!-- Revenue Bars (Take-Rate realization) -->
+<rect fill="#00875A" height="40" opacity="0.45" rx="2" width="10" x="25" y="180"></rect>
+<rect fill="#00875A" height="55" opacity="0.45" rx="2" width="10" x="85" y="165"></rect>
+<rect fill="#00875A" height="70" opacity="0.45" rx="2" width="10" x="145" y="150"></rect>
+<rect fill="#00875A" height="80" opacity="0.45" rx="2" width="10" x="205" y="140"></rect>
+<rect fill="#00875A" height="90" opacity="0.45" rx="2" width="10" x="265" y="130"></rect>
+<rect fill="#00875A" height="105" opacity="0.55" rx="2" width="10" x="325" y="115"></rect>
+<rect fill="#00875A" height="150" opacity="0.85" rx="2" width="12" x="385" y="70"></rect>
+<rect fill="#00875A" height="125" opacity="0.55" rx="2" width="10" x="445" y="95"></rect>
+<rect fill="#00875A" height="110" opacity="0.55" rx="2" width="10" x="505" y="110"></rect>
+<rect fill="#00875A" height="115" opacity="0.55" rx="2" width="10" x="565" y="105"></rect>
+<!-- Prior Baseline (Dotted) -->
+<path d="M 10 190 Q 150 170, 300 150 T 400 130 T 590 120" fill="none" stroke="#ccc3d9" stroke-dasharray="4 4" stroke-width="2"></path>
+<!-- Current GMV Area & Line -->
+<path d="M 10 185 Q 120 160, 240 145 T 392 50 T 480 110 T 590 85 L 590 220 L 10 220 Z" fill="url(#gmvAreaGrad)"></path>
+<path d="M 10 185 Q 120 160, 240 145 T 392 50 T 480 110 T 590 85" fill="none" stroke="#762FF2" stroke-width="3"></path>
+<!-- Peak Marker Point -->
+<circle cx="392" cy="50" fill="#762FF2" r="5"></circle>
+<circle cx="392" cy="50" fill="none" opacity="0.6" r="9" stroke="#762FF2" stroke-width="2"></circle>
+<line stroke="#762FF2" stroke-dasharray="2 2" stroke-width="1.5" x1="392" x2="392" y1="50" y2="220"></line>
+</svg>
+</div>
+<!-- Date timeline anchors -->
+<div class="flex justify-between font-label-sm text-label-sm text-ink-subtle mt-2 px-1">
+<span>Oct 01</span>
+<span>Oct 07</span>
+<span>Oct 14</span>
+<span>Oct 21 (Diwali Prep)</span>
+<span class="text-electric-violet font-semibold">Oct 24 (Peak Surge)</span>
+<span>Oct 30</span>
+</div>
+</div>
+<div class="mt-space-md pt-3 bg-surface-container-low/40 rounded-lg px-3 py-2 flex items-center justify-between text-ink-muted font-body-sm text-body-sm">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-electric-violet">info</span>
+          All metrics represent simulated prototype aggregations. Times normalized to IST.
+        </span>
+<button class="font-label-sm text-label-sm text-electric-violet hover:underline font-semibold">View Raw Ledger</button>
+</div>
+</div>
+<!-- Right Panel: Order Lifecycle & Fulfillment Distribution (40%) -->
+<div class="lg:col-span-5 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div>
+<h2 class="font-title-lg text-title-lg text-ink">Order Lifecycle &amp; Fulfillment</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Active pipeline distribution across 1,42,850 orders</p>
+</div>
+<span class="px-2.5 py-1 rounded bg-semantic-success/10 text-semantic-success font-label-sm text-label-sm font-semibold">
+            FastX 98.7% On-Time
+          </span>
+</div>
+<!-- Funnel Multi-Status Breakdown -->
+<div class="space-y-3">
+<!-- Delivered -->
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="flex items-center gap-1.5 text-ink">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+                Delivered Successfully
+              </span>
+<span class="font-semibold text-ink">1,18,420 <span class="text-ink-muted font-normal">(82.9%)</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-low overflow-hidden">
+<div class="h-full bg-semantic-success rounded-full" style="width: 82.9%"></div>
+</div>
+</div>
+<!-- Shipped / In-Transit -->
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="flex items-center gap-1.5 text-ink">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+                Shipped / In-Transit (FastX Express)
+              </span>
+<span class="font-semibold text-ink">14,250 <span class="text-ink-muted font-normal">(10.0%)</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-low overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 10.0%"></div>
+</div>
+</div>
+<!-- Processing / Packing -->
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="flex items-center gap-1.5 text-ink">
+<span class="w-2.5 h-2.5 rounded-full bg-electric-violet"></span>
+                Merchant Processing &amp; Packing
+              </span>
+<span class="font-semibold text-ink">6,420 <span class="text-ink-muted font-normal">(4.5%)</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-low overflow-hidden">
+<div class="h-full bg-electric-violet rounded-full" style="width: 4.5%"></div>
+</div>
+</div>
+<!-- Pending Payment / Confirmation -->
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="flex items-center gap-1.5 text-ink">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-warning"></span>
+                Pending Payment / Confirmation
+              </span>
+<span class="font-semibold text-ink">1,940 <span class="text-ink-muted font-normal">(1.4%)</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-low overflow-hidden">
+<div class="h-full bg-semantic-warning rounded-full" style="width: 1.4%"></div>
+</div>
+</div>
+<!-- Exceptions / Delayed -->
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="flex items-center gap-1.5 text-semantic-error font-medium">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-error"></span>
+                Fulfillment Exceptions / Logistics Delayed
+              </span>
+<span class="font-semibold text-semantic-error">980 <span class="text-ink-muted font-normal">(0.7%)</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-low overflow-hidden">
+<div class="h-full bg-semantic-error rounded-full" style="width: 0.7%"></div>
+</div>
+</div>
+<!-- Cancelled / RTO -->
+<div>
+<div class="flex justify-between font-label-md text-label-md mb-1">
+<span class="flex items-center gap-1.5 text-ink-muted">
+<span class="w-2.5 h-2.5 rounded-full bg-outline"></span>
+                Cancelled / Return to Origin (RTO)
+              </span>
+<span class="font-semibold text-ink-muted">840 <span class="text-ink-muted font-normal">(0.5%)</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container-low overflow-hidden">
+<div class="h-full bg-outline rounded-full" style="width: 0.5%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- FastX Logistics Delivery Benchmark Box -->
+<div class="mt-space-md p-space-md rounded-xl bg-midnight-violet text-on-primary">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-sm text-label-sm text-electric-violet uppercase tracking-wide font-bold">FastX Logistics Network Benchmark</span>
+<span class="material-symbols-outlined text-[18px] text-semantic-success">verified</span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<span class="font-headline-sm text-headline-sm font-bold">1.9 Days</span>
+<p class="font-body-sm text-body-sm text-text-dark-secondary">Avg delivery time nationwide</p>
+</div>
+<div class="text-right">
+<span class="font-headline-sm text-headline-sm font-bold text-semantic-success">1.2%</span>
+<p class="font-body-sm text-body-sm text-text-dark-secondary">RTO Rate (Benchmark &lt;2.5%)</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Mid-Section Operational Grids (2 Columns) -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Column 1: Seller Applications Verification Queue -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="p-2 rounded-lg bg-electric-violet/10 text-electric-violet">
+<span class="material-symbols-outlined text-[20px]">how_to_reg</span>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg text-ink">Seller Applications Verification Queue</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Onboarding compliance &amp; regulatory clearance</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-electric-violet text-on-primary font-label-sm text-label-sm font-bold">
+            14 In Review
+          </span>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low font-label-sm text-label-sm text-ink-muted uppercase tracking-wider">
+<th class="py-2.5 px-3 rounded-l-lg">Seller / Entity</th>
+<th class="py-2.5 px-3">Category</th>
+<th class="py-2.5 px-3">Stage</th>
+<th class="py-2.5 px-3">Missing Docs</th>
+<th class="py-2.5 px-3 rounded-r-lg text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-lavender-mist font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-title-sm text-title-sm text-ink leading-tight">NovaCraft Audio Ltd</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Oct 29, 2023 • BLR-KA</div>
+</td>
+<td class="py-3 px-3 text-ink">Electronics</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm">Tax &amp; GSTIN Audit</span>
+</td>
+<td class="py-3 px-3">
+<span class="text-semantic-success flex items-center gap-1 font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">check_circle</span> None (All Verified)
+                  </span>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-electric-violet text-on-primary hover:bg-royal-purple font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Opening simulated compliance verification review for NovaCraft Audio Ltd.')">
+                    Review
+                  </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-title-sm text-title-sm text-ink leading-tight">Zenith Home Goods</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Oct 28, 2023 • BOM-MH</div>
+</td>
+<td class="py-3 px-3 text-ink">Home &amp; Living</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-semantic-warning/10 text-semantic-warning font-label-sm text-label-sm">Bank Mandate</span>
+</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-medium">Cancelled Cheque Blurred</span>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Notification dispatched: Request re-upload sent to Zenith Home Goods.')">
+                    Re-upload
+                  </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-title-sm text-title-sm text-ink leading-tight">UrbanRoots Organic</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Oct 27, 2023 • DEL-DL</div>
+</td>
+<td class="py-3 px-3 text-ink">Groceries</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm">FSSAI License</span>
+</td>
+<td class="py-3 px-3">
+<span class="text-ink-muted font-label-sm text-label-sm">FSSAI Expiry Pending</span>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-electric-violet text-on-primary hover:bg-royal-purple font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Opening FSSAI regulatory compliance verification modal.')">
+                    Review
+                  </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-title-sm text-title-sm text-ink leading-tight">Prism Apparel Studio</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Oct 26, 2023 • SUR-GJ</div>
+</td>
+<td class="py-3 px-3 text-ink">Fashion</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary font-label-sm text-label-sm">Trademark Auth</span>
+</td>
+<td class="py-3 px-3">
+<span class="text-ink-muted font-label-sm text-label-sm">Brand Authorization</span>
+</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-electric-violet text-on-primary hover:bg-royal-purple font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Opening Brand Trademark Authorization modal.')">
+                    Review
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="mt-space-md pt-3 bg-surface-container-low/40 rounded-lg px-3 py-2 flex items-center justify-between text-ink-muted font-body-sm text-body-sm">
+<span class="text-ink-subtle">Review action opens simulated compliance modal. Approvals require multi-signature check.</span>
+<button class="font-label-sm text-label-sm text-electric-violet font-semibold hover:underline">View All 14</button>
+</div>
+</div>
+<!-- Column 2: Payments, Settlements & Refund Exceptions -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="p-2 rounded-lg bg-error-container text-semantic-error">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg text-ink">Payments &amp; Settlement Exceptions</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Escrow reconciliation &amp; merchant payout holds</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-semantic-error text-on-error font-label-sm text-label-sm font-bold">
+            6 Pending • ₹18.45 L
+          </span>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low font-label-sm text-label-sm text-ink-muted uppercase tracking-wider">
+<th class="py-2.5 px-3 rounded-l-lg">Exception Ref</th>
+<th class="py-2.5 px-3">Merchant / Payout</th>
+<th class="py-2.5 px-3">Amount</th>
+<th class="py-2.5 px-3">Cause / SLA</th>
+<th class="py-2.5 px-3 rounded-r-lg text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-lavender-mist font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<span class="font-mono text-ink font-semibold">#PAY-EX-9921</span>
+<div class="font-label-sm text-label-sm text-semantic-success">SLA Met (24h)</div>
+</td>
+<td class="py-3 px-3 text-ink">ApexTech India</td>
+<td class="py-3 px-3 font-semibold text-ink">₹1,12,952.00</td>
+<td class="py-3 px-3 text-ink-muted">Clearing Batch Rec.</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Investigating batch settlement hold #PAY-EX-9921.')">
+                    Investigate
+                  </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<span class="font-mono text-ink font-semibold">#PAY-EX-9884</span>
+<div class="font-label-sm text-label-sm text-semantic-error">Escalated (2h)</div>
+</td>
+<td class="py-3 px-3 text-ink">RuPay / #OMZ-994821</td>
+<td class="py-3 px-3 font-semibold text-ink">₹14,299.00</td>
+<td class="py-3 px-3 text-semantic-error font-medium">Bank Debited, Webhook Dropped</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-semantic-error text-on-error hover:bg-red-700 font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Simulating auto-reconciliation webhook replay for order #OMZ-994821.')">
+                    Reconcile
+                  </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<span class="font-mono text-ink font-semibold">#PAY-EX-9840</span>
+<div class="font-label-sm text-label-sm text-ink-subtle">Age: 5h</div>
+</td>
+<td class="py-3 px-3 text-ink">HDFC NetBanking</td>
+<td class="py-3 px-3 font-semibold text-ink">₹38,500.00</td>
+<td class="py-3 px-3 text-ink-muted">Double Debit Reversal</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Opening double-debit ledger audit trace.')">
+                    View Ledger
+                  </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<span class="font-mono text-ink font-semibold">#PAY-EX-9799</span>
+<div class="font-label-sm text-label-sm text-semantic-warning">Hold (48h)</div>
+</td>
+<td class="py-3 px-3 text-ink">KwikCart (COD)</td>
+<td class="py-3 px-3 font-semibold text-ink">₹4,22,100.00</td>
+<td class="py-3 px-3 text-semantic-warning">Handover Discrepancy</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-semantic-warning text-on-primary hover:bg-amber-700 font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Flagged for logistics audit: KwikCart COD escrow locked.')">
+                    Flag Risk
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="mt-space-md pt-3 bg-surface-container-low/40 rounded-lg px-3 py-2 flex items-center justify-between text-ink-muted font-body-sm text-body-sm">
+<span class="text-ink-subtle">Automated nodal escrow settlements release twice daily (11:00 AM &amp; 5:00 PM IST).</span>
+<button class="font-label-sm text-label-sm text-electric-violet font-semibold hover:underline">Reconcile All</button>
+</div>
+</div>
+</section>
+<!-- Lower Operational Grids (2 Columns) -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Column 1: Escalated Returns & Buyer/Seller Disputes -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="p-2 rounded-lg bg-midnight-violet/10 text-midnight-violet">
+<span class="material-symbols-outlined text-[20px]">assignment_late</span>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg text-ink">Escalated Disputes &amp; Chargebacks</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Buyer claims, damaged merchandise, and counterfeit flags</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-semantic-error text-on-error font-label-sm text-label-sm font-bold">
+            5 High-Priority Cases
+          </span>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low font-label-sm text-label-sm text-ink-muted uppercase tracking-wider">
+<th class="py-2.5 px-3 rounded-l-lg">Case ID</th>
+<th class="py-2.5 px-3">Order / Item</th>
+<th class="py-2.5 px-3">Priority / SLA</th>
+<th class="py-2.5 px-3">Operator</th>
+<th class="py-2.5 px-3 rounded-r-lg text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-lavender-mist font-body-sm text-body-sm">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-mono text-ink font-semibold">#DSP-4019</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Buyer vs ApexTech</div>
+</td>
+<td class="py-3 px-3">
+<div class="text-ink font-medium">ApexSound ANC Headset</div>
+<div class="font-label-sm text-label-sm text-ink-muted">M. Sharma (Defect Claim)</div>
+</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-error-container text-semantic-error font-label-sm text-label-sm font-semibold">High • 1h 45m</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Priya N. (Tier 2)</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-electric-violet text-on-primary hover:bg-royal-purple font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Opening arbitration console for #DSP-4019 (ApexTech dispute).')">
+                    Mediate
+                  </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-mono text-ink font-semibold">#DSP-4012</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Buyer vs OpticalIndia</div>
+</td>
+<td class="py-3 px-3">
+<div class="text-ink font-medium">Sony Alpha 7 IV Lens</div>
+<div class="font-label-sm text-label-sm text-ink-muted">K. Verma (Missing Seal)</div>
+</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-semantic-error text-on-error font-label-sm text-label-sm font-semibold">Critical • 42m</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Rahul S. (Risk Ops)</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-semantic-error text-on-error hover:bg-red-700 font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('CRITICAL: Opening Risk Ops override panel for Sony lens dispute.')">
+                    Mediate
+                  </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-mono text-ink font-semibold">#DSP-3998</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Buyer vs ApexTech</div>
+</td>
+<td class="py-3 px-3">
+<div class="text-ink font-medium">AuraGlow Lamp</div>
+<div class="font-label-sm text-label-sm text-ink-muted">D. Patel (Transit Damage)</div>
+</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-semibold">Medium • 4h 10m</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Siddharth R.</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Opening standard transit damage review.')">
+                    Mediate
+                  </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-3 px-3">
+<div class="font-mono text-ink font-semibold">#DSP-3974</div>
+<div class="font-label-sm text-label-sm text-ink-subtle">Buyer vs VastraCorp</div>
+</td>
+<td class="py-3 px-3">
+<div class="text-ink font-medium">Kashmir Silk Saree</div>
+<div class="font-label-sm text-label-sm text-ink-muted">S. Roy (Fabric Mismatch)</div>
+</td>
+<td class="py-3 px-3">
+<span class="px-2 py-0.5 rounded bg-surface-container text-ink-muted font-label-sm text-label-sm">Low • 12h left</span>
+</td>
+<td class="py-3 px-3 text-ink-muted">Auto-Arbitration</td>
+<td class="py-3 px-3 text-right">
+<button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-ink font-label-sm text-label-sm font-semibold transition-colors" onclick="window.alert('Reviewing auto-arbitration evidence docket.')">
+                    Review
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="mt-space-md pt-3 bg-surface-container-low/40 rounded-lg px-3 py-2 flex items-center justify-between text-ink-muted font-body-sm text-body-sm">
+<span class="text-ink-subtle">FastX automated damage inspection triggers on all claims exceeding ₹5,000.</span>
+<button class="font-label-sm text-label-sm text-electric-violet font-semibold hover:underline">Dispute Center</button>
+</div>
+</div>
+<!-- Column 2: Marketplace Infrastructure & Integration Health -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="p-2 rounded-lg bg-semantic-success/10 text-semantic-success">
+<span class="material-symbols-outlined text-[20px]">dns</span>
+</div>
+<div>
+<h2 class="font-title-lg text-title-lg text-ink">Infrastructure &amp; Service Mesh</h2>
+<p class="font-body-sm text-body-sm text-ink-muted">Telemetry across microservices, gateways, and sync queues</p>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-semantic-success/15 text-semantic-success font-label-sm text-label-sm font-bold flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-semantic-success animate-pulse"></span>
+            All 5 Nodes Active
+          </span>
+</div>
+<!-- Node Health Cards -->
+<div class="space-y-2.5">
+<!-- OMS Pipeline -->
+<div class="p-3 rounded-lg bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<span class="font-title-sm text-title-sm text-ink">OMS Order Processing Pipeline</span>
+<p class="font-body-sm text-body-sm text-ink-muted">2,400 orders/min throughput • Latency: 42ms</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-ink font-label-sm text-label-sm font-medium">99.99% Uptime</span>
+</div>
+<!-- Payment Gateway -->
+<div class="p-3 rounded-lg bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<span class="font-title-sm text-title-sm text-ink">Payment Gateway Aggregators</span>
+<p class="font-body-sm text-body-sm text-ink-muted">UPI/RuPay: Healthy (99.94%) • HDFC/ICICI: 99.88%</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-ink font-label-sm text-label-sm font-medium">Dual Redundant</span>
+</div>
+<!-- Automated Inventory Sync -->
+<div class="p-3 rounded-lg bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<span class="font-title-sm text-title-sm text-ink">Automated Inventory Sync Workers</span>
+<p class="font-body-sm text-body-sm text-ink-muted">14,200 SKU syncs/min • Backlog: 0 messages</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-ink font-label-sm text-label-sm font-medium">Synced</span>
+</div>
+<!-- Risk & Fraud Heuristics Engine -->
+<div class="p-3 rounded-lg bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<span class="font-title-sm text-title-sm text-ink">Risk &amp; Fraud Heuristics Engine</span>
+<p class="font-body-sm text-body-sm text-ink-muted">0.01% anomaly trigger rate • ML Scoring v4.8</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-ink font-label-sm text-label-sm font-medium">Monitoring</span>
+</div>
+<!-- Real-time Notifications & Webhooks -->
+<div class="p-3 rounded-lg bg-surface-container-low/60 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-semantic-success"></span>
+<div>
+<span class="font-title-sm text-title-sm text-ink">Notifications &amp; Merchant Webhooks</span>
+<p class="font-body-sm text-body-sm text-ink-muted">Webhook delivery success rate 99.98% across 4,280 sellers</p>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-ink font-label-sm text-label-sm font-medium">Operational</span>
+</div>
+</div>
+</div>
+<!-- Environment Telemetry Banner -->
+<div class="mt-space-md p-3 rounded-lg bg-primary/5 text-primary flex items-center gap-2 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px]">science</span>
+<span>Environment Note: Infrastructure indicators represent simulated operational telemetry in sandbox mode.</span>
+</div>
+</div>
+</section>
+<!-- Platform Operational Summary Footer Bar -->
+<footer class="p-space-md rounded-xl bg-midnight-violet text-text-dark-primary flex flex-col md:flex-row items-center justify-between gap-space-md shadow-md">
+<div class="flex flex-wrap items-center gap-space-md text-text-dark-secondary font-label-sm text-label-sm">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-semantic-success"></span>
+<span class="text-text-dark-primary font-semibold">OMIZON Platform Admin Console</span>
+</div>
+<span>•</span>
+<span>Node: ap-south-1 (Mumbai Core)</span>
+<span>•</span>
+<span class="text-text-dark-muted">Global Status: Simulated Demo Mode</span>
+<span>•</span>
+<span>Security Standard: Zero-Trust RBAC Enforced</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="px-3 py-1.5 rounded-lg bg-obsidian-surface-1 hover:bg-obsidian-surface-2 text-text-dark-primary font-label-sm text-label-sm transition-colors flex items-center gap-1.5" onclick="window.alert('Displaying 1,842 audit log transactions from past 24 hours.')">
+<span class="material-symbols-outlined text-[16px] text-electric-violet">terminal</span>
+<span>Audit Logs (24h: 1,842 events)</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-electric-violet hover:bg-royal-purple text-on-primary font-label-sm text-label-sm transition-colors font-semibold flex items-center gap-1.5" onclick="window.alert('Snapshot generated: OMIZON-Snapshot-2023-10-30.json')">
+<span class="material-symbols-outlined text-[16px]">camera</span>
+<span>Generate Snapshot</span>
+</button>
+</div>
+</footer>
+</div></main></div></body></html>

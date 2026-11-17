@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-primary-fixed-variant":"#5800c8","lavender-mist":"#E8E6F0","ink":"#211D31","ink-muted":"#655E7A","inverse-on-surface":"#f0f0f4","on-primary-fixed":"#24005b","error":"#ba1a1a","surface-container-lowest":"#ffffff","obsidian-border":"#382B54","secondary-fixed":"#e5deff","text-dark-secondary":"#C3BCD7","text-dark-muted":"#A49ABF","on-surface-variant":"#4a4456","text-dark-primary":"#F7F5FF","semantic-success":"#00875A","on-tertiary-fixed":"#1d104a","outline":"#7b7487","on-secondary-container":"#fffbff","surface-container":"#ededf1","error-container":"#ffdad6","on-secondary-fixed":"#1a0063","background":"#f9f9fd","on-error":"#ffffff","surface-bright":"#f9f9fd","surface":"#f9f9fd","semantic-warning":"#E27300","inverse-primary":"#d1bcff","on-secondary-fixed-variant":"#451fc4","on-background":"#1a1c1f","surface-container-highest":"#e2e2e6","surface-container-low":"#f3f3f7","surface-container-high":"#e8e8ec","on-surface":"#1a1c1f","secondary-fixed-dim":"#c9bfff","on-error-container":"#93000a","ink-subtle":"#928B9F","midnight-violet":"#190B46","royal-purple":"#4C2ACB","on-primary":"#ffffff","primary-container":"#762ff2","porcelain":"#F7F7FB","semantic-error":"#D92D20","tertiary-fixed-dim":"#cbbeff","tertiary-fixed":"#e6deff","obsidian-surface-2":"#211735","on-secondary":"#ffffff","tertiary":"#4d427c","obsidian-surface-1":"#1D1537","surface-variant":"#e2e2e6","surface-tint":"#7228ee","secondary":"#5b3eda","outline-variant":"#ccc3d9","primary-fixed-dim":"#d1bcff","inverse-surface":"#2e3034","secondary-container":"#745af4","primary":"#5c00d2","on-tertiary-container":"#e3daff","tertiary-container":"#655a96","on-primary-container":"#e7d9ff","surface-dim":"#d9dade","primary-fixed":"#eaddff","obsidian-violet":"#100A25","on-tertiary-fixed-variant":"#493e78","electric-violet":"#762FF2","on-tertiary":"#ffffff"},"borderRadius":{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},"spacing":{"space-xs":"0.25rem","space-lg":"1.5rem","gutter-mobile":"0.75rem","margin-mobile":"1rem","space-md":"1rem","space-sm":"0.5rem","gutter":"1.5rem","space-xl":"2.5rem","margin":"2rem"},"fontFamily":{"body-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"title-sm":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"price-hero":["Plus Jakarta Sans"],"title-lg":["Plus Jakarta Sans"],"price-card":["Plus Jakarta Sans"],"display-hero-mobile":["Plus Jakarta Sans"],"display-hero":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"label-sm":["Plus Jakarta Sans"],"title-md":["Plus Jakarta Sans"]},"fontSize":{"body-md":["14px",{"lineHeight":"22px","fontWeight":"400"}],"headline-sm":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["40px",{"lineHeight":"48px","letterSpacing":"-0.02em","fontWeight":"600"}],"title-sm":["14px",{"lineHeight":"20px","fontWeight":"600"}],"headline-md":["28px",{"lineHeight":"36px","letterSpacing":"-0.015em","fontWeight":"600"}],"label-md":["13px",{"lineHeight":"18px","fontWeight":"500"}],"body-lg":["16px",{"lineHeight":"26px","fontWeight":"400"}],"headline-lg-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"600"}],"price-hero":["32px",{"lineHeight":"38px","letterSpacing":"-0.02em","fontWeight":"700"}],"title-lg":["18px",{"lineHeight":"26px","letterSpacing":"-0.005em","fontWeight":"600"}],"price-card":["20px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"700"}],"display-hero-mobile":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"display-hero":["56px",{"lineHeight":"64px","letterSpacing":"-0.03em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"18px","fontWeight":"400"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"title-md":["16px",{"lineHeight":"24px","fontWeight":"600"}]}}}}</script></head><body class="bg-porcelain font-body-md text-body-md text-ink min-h-screen"><aside class="fixed left-0 top-0 h-full w-72 bg-midnight-violet text-text-dark-primary z-50 flex flex-col justify-between shadow-[0_16px_36px_-8px_rgba(25,11,70,0.12)]"><div class="flex flex-col flex-1 min-h-0"><div class="h-16 px-space-md flex items-center gap-space-sm bg-obsidian-violet"><img alt="OMIZON Official Brand Logo for dark surfaces with white geometric wordmark and glowing purple infinity ribbon symbol" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UdlrUM8hyyFfQVS5dmLaEh62kAxW_rStX2OO5j_r1zHJphPs6pfdXHGfDL0SS-LW_BEeUrp7vsEjrLyFXnOBWfDYjrJlJcEEjcpNp4AnrHV4cy5bOVYu_KnI5jBuFr0EY-AzNwLKSQsH8hazC472Fa85bIN2voQfI0bYSYwAKVWSoY3Vix0yMPgECasdbSABNB3UZKOz0aICgQ9rG4blKonaeUmeoPR3z_qtI2AgAbUBQj4TNVvepFFRw"/><div class="flex flex-col ml-space-xs"><span class="font-title-sm text-title-sm text-text-dark-primary tracking-tight leading-none">OMIZON</span><span class="font-label-sm text-label-sm text-text-dark-muted tracking-wider uppercase leading-none mt-1">Platform Console</span></div><span class="ml-auto bg-electric-violet/20 text-text-dark-primary px-2 py-0.5 rounded font-label-sm text-label-sm uppercase tracking-wide">Admin</span></div><div class="flex-1 overflow-y-auto px-space-md py-space-md space-y-space-md"><nav class="space-y-space-md" data-active-classes="bg-primary-container text-on-primary font-bold shadow-[0_2px_6px_-1px_rgba(25,11,70,0.2)]"><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Core Operations</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="overview" href="#"><span class="font-label-md text-label-md">Overview</span><span class="w-2 h-2 rounded-full bg-electric-violet"></span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="seller-applications-and-verification" href="#"><span class="font-label-md text-label-md">Seller Applications</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.5 rounded-full font-bold">14 New</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="sellers" href="#"><span class="font-label-md text-label-md">Sellers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="buyers" href="#"><span class="font-label-md text-label-md">Buyers</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="catalog-governance" href="#"><span class="font-label-md text-label-md">Catalog Governance</span><span class="bg-semantic-warning text-on-primary font-label-sm text-label-sm px-1.5 py-0.5 rounded-full font-bold">9 Flagged</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Commerce &amp; Fulfillment</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="all-orders" href="#"><span class="font-label-md text-label-md">All Orders</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="payments-and-settlements" href="#"><span class="font-label-md text-label-md">Payments &amp; Settlements</span><span class="bg-error text-on-error font-label-sm text-label-sm px-1.5 py-0.5 rounded-full font-bold">3 Hold</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="returns-and-disputes" href="#"><span class="font-label-md text-label-md">Returns &amp; Disputes</span><span class="bg-electric-violet text-on-primary font-label-sm text-label-sm px-1.5 py-0.5 rounded-full font-bold">5 Open</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="promotions" href="#"><span class="font-label-md text-label-md">Promotions</span></a></div></div><div><div class="px-space-sm mb-space-xs font-label-sm text-label-sm uppercase tracking-wider text-text-dark-muted">Intelligence &amp; Security</div><div class="space-y-1"><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="reports-and-analytics" href="#"><span class="font-label-md text-label-md">Reports &amp; Analytics</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="risk-and-fraud" href="#"><span class="font-label-md text-label-md">Risk &amp; Fraud</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="audit-logs" href="#"><span class="font-label-md text-label-md">Audit Logs</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-text-dark-secondary hover:bg-obsidian-surface-1 hover:text-on-primary transition-colors" data-path="platform-settings" href="#"><span class="font-label-md text-label-md">Platform Settings</span></a></div></div></nav></div></div><div class="p-space-md bg-obsidian-surface-1"><div class="flex items-center justify-between mb-1"><span class="font-label-sm text-label-sm text-text-dark-muted">OMIZON Core v4.12.0-demo</span><span class="inline-block w-2 h-2 rounded-full bg-semantic-success"></span></div><div class="font-body-sm text-body-sm text-text-dark-secondary flex items-center gap-1"><span class="material-symbols-outlined text-[14px] text-electric-violet">science</span>Simulated Sandbox Mode</div></div></aside><div class="pl-72"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(25,11,70,0.04)] z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md flex-1 max-w-2xl"><div class="hidden xl:flex items-center gap-2 px-space-sm py-1 rounded bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm"><span class="w-1.5 h-1.5 rounded-full bg-semantic-success"></span>Scope: Platform-Wide (Simulated Demo Environment)</div><div class="relative flex-1"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span><input class="w-full h-10 pl-10 pr-12 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Global search merchants, orders (#OMZ-), products, or buyers (⌘K)..." type="text"/><kbd class="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-container-lowest shadow-[0_1px_2px_rgba(25,11,70,0.06)] px-1.5 py-0.5 rounded font-label-sm text-label-sm text-ink-muted">⌘K</kbd></div></div><div class="flex items-center gap-space-md"><button class="hidden lg:flex items-center gap-2 h-10 px-space-sm rounded-lg bg-porcelain hover:bg-surface-container transition-colors text-ink font-label-md text-label-md"><span class="material-symbols-outlined text-[18px] text-ink-muted">calendar_today</span>System Date: Oct 01 – Oct 30, 2023</button><div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-electric-violet"></span>Services: Simulated Demo</div><button class="relative p-2 rounded-lg hover:bg-porcelain text-ink transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 bg-semantic-error rounded-full ring-2 ring-surface-container-lowest"></span></button><div class="h-6 w-px bg-lavender-mist"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-title-sm text-title-sm text-ink leading-tight">Siddharth Rao</span><span class="font-label-sm text-label-sm text-ink-muted leading-tight">Super Admin / Platform Lead</span></div></div></div></header><main class="relative pt-16 bg-porcelain min-h-screen w-full px-space-lg py-space-lg"><div class="flex flex-col w-full space-y-space-lg">
+<!-- Top Breadcrumbs & Page Action Bar -->
+<div class="flex flex-col xl:flex-row xl:items-center justify-between gap-space-md">
+<div class="flex flex-col space-y-1">
+<div class="flex items-center gap-2 font-label-sm text-label-sm text-ink-muted">
+<span class="hover:text-primary cursor-pointer transition-colors">Platform Console</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="hover:text-primary cursor-pointer transition-colors">Core Operations</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-electric-violet font-title-sm">Seller Applications &amp; Verification</span>
+</div>
+<div class="flex flex-wrap items-center gap-3 pt-1">
+<h1 class="font-headline-md text-headline-md text-ink tracking-tight font-bold">
+          Seller Applications &amp; Verification
+        </h1>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-midnight-violet text-text-dark-primary font-label-sm text-label-sm shadow-sm">
+<span class="w-2 h-2 rounded-full bg-semantic-success animate-pulse"></span>
+          Platform-Wide — Simulated Demo Environment
+        </span>
+</div>
+<p class="font-body-md text-body-md text-ink-muted max-w-3xl">
+        Review incoming merchant registrations, audit identity and tax documentation, log verification findings, and orchestrate onboarding stage transitions.
+      </p>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex items-center gap-space-sm flex-shrink-0">
+<button class="inline-flex items-center gap-2 px-space-md py-2.5 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container font-label-md text-label-md shadow-sm transition-all" onclick="handleNotification('Queue exported as CSV successfully (Demo Mode)')">
+<span class="material-symbols-outlined text-[18px] text-ink-muted">file_download</span>
+        Batch Export Queue (CSV)
+      </button>
+<button class="inline-flex items-center gap-2 px-space-md py-2.5 rounded-lg bg-electric-violet text-on-primary hover:bg-royal-purple font-label-md text-label-md shadow-sm active:scale-95 transition-all" onclick="handleNotification('Opening Reviewer Assignment Matrix')">
+<span class="material-symbols-outlined text-[18px]">group_work</span>
+        Reviewer Assignment Matrix
+      </button>
+</div>
+</div>
+<!-- KPI Metrics Grid (6 Balanced Metric Tiles) -->
+<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-space-md">
+<!-- New Applications -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-ink-muted">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">New Applications</span>
+<span class="material-symbols-outlined text-[18px] text-electric-violet">inbox</span>
+</div>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-ink font-bold leading-none">14</span>
+</div>
+<div class="flex items-center justify-between text-ink-muted font-body-sm text-body-sm">
+<span class="text-semantic-error font-title-sm font-semibold">Oldest: 6h 12m</span>
+<span>SLA: 98.4%</span>
+</div>
+</div>
+<!-- In Review -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-ink-muted">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">In Active Review</span>
+<span class="material-symbols-outlined text-[18px] text-royal-purple">pending_actions</span>
+</div>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-royal-purple font-bold leading-none">6</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted truncate">
+        Compliance tier 2 desk
+      </div>
+</div>
+<!-- Awaiting Docs -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-semantic-warning">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold text-ink-muted">Awaiting Docs</span>
+<span class="material-symbols-outlined text-[18px]">warning</span>
+</div>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-semantic-warning font-bold leading-none">4</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">
+        Re-upload requested
+      </div>
+</div>
+<!-- Approved (30D) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-semantic-success">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold text-ink-muted">Approved (30D)</span>
+<span class="material-symbols-outlined text-[18px]">verified</span>
+</div>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-semantic-success font-bold leading-none">142</span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-semantic-success font-semibold">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span>+18.2% vs prev Mo</span>
+</div>
+</div>
+<!-- Rejected (30D) -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-semantic-error">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold text-ink-muted">Rejected (30D)</span>
+<span class="material-symbols-outlined text-[18px]">block</span>
+</div>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-semantic-error font-bold leading-none">12</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">
+        Fraud &amp; policy breach
+      </div>
+</div>
+<!-- Avg Review Speed -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between hover:shadow-md transition-all">
+<div class="flex items-center justify-between text-ink-muted">
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Avg Turnaround</span>
+<span class="material-symbols-outlined text-[18px] text-electric-violet">timer</span>
+</div>
+<div class="my-2">
+<span class="font-headline-lg text-headline-lg text-ink font-bold leading-none">4.2<span class="text-title-md font-semibold text-ink-muted">h</span></span>
+</div>
+<div class="flex items-center gap-1 font-body-sm text-body-sm text-semantic-success">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Under 6.0h Target</span>
+</div>
+</div>
+</div>
+<!-- Search & Filter Ribbon Bar -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-3">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+<!-- Search Input -->
+<div class="md:col-span-4 relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-muted text-[18px]">search</span>
+<input class="w-full h-10 pl-10 pr-3 rounded-lg bg-porcelain font-body-md text-body-md text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none transition-all shadow-inner" id="searchInput" oninput="filterApplicants()" placeholder="Search applicant, #APP ID, GSTIN, phone, or email..." type="text"/>
+</div>
+<!-- Filters -->
+<div class="md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-2">
+<select class="h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:bg-surface-container-lowest focus:outline-none cursor-pointer" id="statusFilter" onchange="filterApplicants()">
+<option value="all">Status: All (14)</option>
+<option value="in_review">In Review</option>
+<option value="awaiting_docs">Awaiting Docs</option>
+<option value="legal_review">Under Legal Review</option>
+<option value="ready">Ready for Decision</option>
+</select>
+<select class="h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:bg-surface-container-lowest focus:outline-none cursor-pointer" id="categoryFilter" onchange="filterApplicants()">
+<option value="all">Category: All</option>
+<option value="Electronics">Electronics</option>
+<option value="Home &amp; Living">Home &amp; Living</option>
+<option value="Groceries">Groceries</option>
+<option value="Fashion">Fashion</option>
+<option value="Footwear">Footwear</option>
+</select>
+<select class="h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:bg-surface-container-lowest focus:outline-none cursor-pointer">
+<option value="all">Stage: All Checks</option>
+<option value="tax">Tax &amp; GSTIN</option>
+<option value="bank">Bank Mandate</option>
+<option value="brand">Brand Auth</option>
+<option value="fssai">FSSAI License</option>
+</select>
+<select class="h-10 px-3 rounded-lg bg-porcelain font-label-md text-label-md text-ink focus:bg-surface-container-lowest focus:outline-none cursor-pointer">
+<option value="all">Reviewer: All</option>
+<option value="siddharth">Siddharth Rao</option>
+<option value="priya">Priya N.</option>
+<option value="rahul">Rahul S.</option>
+</select>
+</div>
+</div>
+<!-- Active Filter Tags Ribbon -->
+<div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+<div class="flex flex-wrap items-center gap-2">
+<span class="font-label-sm text-label-sm text-ink-muted uppercase tracking-wider">Active Filters:</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-porcelain text-ink font-label-sm text-label-sm">
+          Region: India (PAN-India)
+          <span class="material-symbols-outlined text-[14px] cursor-pointer text-ink-muted hover:text-ink">close</span>
+</span>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-electric-violet/10 text-royal-purple font-label-sm text-label-sm font-semibold">
+          Queue: Active Intake (Pending Decisions)
+          <span class="material-symbols-outlined text-[14px] cursor-pointer text-royal-purple hover:text-electric-violet">close</span>
+</span>
+<button class="text-royal-purple hover:underline font-label-sm text-label-sm ml-2" onclick="clearAllFilters()">Clear Filters</button>
+</div>
+<div class="font-label-sm text-label-sm text-ink-muted font-medium" id="applicantCountDisplay">
+        Showing 5 of 14 pending applicants in current view
+      </div>
+</div>
+</div>
+<!-- Master-Detail Content Workspace -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: Application Queue Table (~60% / 7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col">
+<!-- Table Header Status Bar -->
+<div class="px-space-md py-3 bg-midnight-violet text-text-dark-primary flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-electric-violet text-[20px]">assignment_turned_in</span>
+<span class="font-title-sm text-title-sm font-semibold tracking-wide">Verification Intake Queue</span>
+</div>
+<div class="flex items-center gap-3 font-label-sm text-label-sm text-text-dark-muted">
+<span>Sort: SLA Urgency</span>
+<button class="hover:text-text-dark-primary text-text-dark-secondary transition-colors">
+<span class="material-symbols-outlined text-[16px]">swap_vert</span>
+</button>
+</div>
+</div>
+<!-- Applications Table -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-porcelain text-ink-muted font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-space-md font-semibold">Application</th>
+<th class="py-3 px-space-md font-semibold">Business &amp; Category</th>
+<th class="py-3 px-space-md font-semibold">SLA / Timeline</th>
+<th class="py-3 px-space-md font-semibold">Audit Check</th>
+<th class="py-3 px-space-md font-semibold">Status</th>
+<th class="py-3 px-space-md font-semibold text-right">Reviewer</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-lavender-mist font-body-md text-body-md" id="queueTableBody">
+<!-- Row 1: NovaCraft Audio -->
+<tr class="applicant-row cursor-pointer transition-colors hover:bg-porcelain" id="row-APP-9482" onclick="selectApplicant('APP-9482')">
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-bold text-ink">#APP-9482</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Private Ltd</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-semibold text-ink">NovaCraft Audio Ltd</div>
+<div class="font-body-sm text-body-sm text-ink-muted flex items-center gap-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-semantic-success"></span>
+                  Bengaluru, KA • Electronics
+                </div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-label-sm text-label-sm font-semibold text-semantic-warning flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 4h SLA Rem.
+                </div>
+<div class="font-body-sm text-body-sm text-ink-muted">Oct 29, 2023</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-16 h-2 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-semantic-success" style="width: 100%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold">5/5</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Ready for Decision</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-semantic-success/10 text-semantic-success font-label-sm text-label-sm font-semibold">
+                  Decision Ready
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-label-md text-label-md font-medium text-ink">Siddharth R.</span>
+</td>
+</tr>
+<!-- Row 2: Zenith Home Goods (SELECTED BY DEFAULT) -->
+<tr class="applicant-row cursor-pointer transition-colors bg-electric-violet/5 shadow-[inset_3px_0_0_0_#762FF2]" id="row-APP-9478" onclick="selectApplicant('APP-9478')">
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-bold text-electric-violet">#APP-9478</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Sole Proprietor</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-bold text-ink">Zenith Home Goods</div>
+<div class="font-body-sm text-body-sm text-ink-muted flex items-center gap-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-semantic-warning"></span>
+                  Mumbai, MH • Home &amp; Living
+                </div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-label-sm text-label-sm font-semibold text-semantic-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span> 1h SLA Escalated
+                </div>
+<div class="font-body-sm text-body-sm text-ink-muted">Oct 28, 2023</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-16 h-2 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-semantic-warning" style="width: 60%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-warning font-semibold">3/5</span>
+</div>
+<div class="font-body-sm text-body-sm text-semantic-warning truncate max-w-[120px]">Cheque Blurry</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-semantic-warning/15 text-semantic-warning font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[12px]">warning</span> Docs Needed
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-label-md text-label-md font-bold text-electric-violet">Priya N.</span>
+</td>
+</tr>
+<!-- Row 3: UrbanRoots Organic -->
+<tr class="applicant-row cursor-pointer transition-colors hover:bg-porcelain" id="row-APP-9465" onclick="selectApplicant('APP-9465')">
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-bold text-ink">#APP-9465</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Partnership</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-semibold text-ink">UrbanRoots Organic</div>
+<div class="font-body-sm text-body-sm text-ink-muted flex items-center gap-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-semantic-warning"></span>
+                  New Delhi, DL • Groceries
+                </div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-label-sm text-label-sm font-medium text-ink-muted flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">pause_circle</span> On Hold (Docs)
+                </div>
+<div class="font-body-sm text-body-sm text-ink-muted">Oct 27, 2023</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-16 h-2 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-semantic-warning" style="width: 50%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-warning font-semibold">2/5</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted truncate max-w-[120px]">FSSAI Expired</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-semantic-warning/10 text-semantic-warning font-label-sm text-label-sm font-semibold">
+                  Awaiting FSSAI
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-label-md text-label-md font-medium text-ink">Rahul S.</span>
+</td>
+</tr>
+<!-- Row 4: Prism Apparel Studio -->
+<tr class="applicant-row cursor-pointer transition-colors hover:bg-porcelain" id="row-APP-9450" onclick="selectApplicant('APP-9450')">
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-bold text-ink">#APP-9450</div>
+<div class="font-body-sm text-body-sm text-ink-muted">LLP</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-semibold text-ink">Prism Apparel Studio</div>
+<div class="font-body-sm text-body-sm text-ink-muted flex items-center gap-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-primary"></span>
+                  Surat, GJ • Fashion
+                </div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-label-sm text-label-sm font-semibold text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">gavel</span> Legal Desk
+                </div>
+<div class="font-body-sm text-body-sm text-ink-muted">Oct 26, 2023</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-16 h-2 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-primary" style="width: 75%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-semibold">3/4</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted truncate max-w-[120px]">TM Auth Review</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-royal-purple/10 text-royal-purple font-label-sm text-label-sm font-semibold">
+                  Legal Review
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-label-md text-label-md font-medium text-ink">Siddharth R.</span>
+</td>
+</tr>
+<!-- Row 5: NexaWear Footwear -->
+<tr class="applicant-row cursor-pointer transition-colors hover:bg-porcelain" id="row-APP-9433" onclick="selectApplicant('APP-9433')">
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-bold text-ink">#APP-9433</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Private Ltd</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-title-sm text-title-sm font-semibold text-ink">NexaWear Footwear</div>
+<div class="font-body-sm text-body-sm text-ink-muted flex items-center gap-1">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-electric-violet"></span>
+                  Agra, UP • Footwear
+                </div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="font-label-sm text-label-sm font-semibold text-semantic-warning flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span> 12h SLA Rem.
+                </div>
+<div class="font-body-sm text-body-sm text-ink-muted">Oct 25, 2023</div>
+</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-16 h-2 rounded-full bg-lavender-mist overflow-hidden">
+<div class="h-full bg-electric-violet" style="width: 80%;"></div>
+</div>
+<span class="font-label-sm text-label-sm text-electric-violet font-semibold">4/5</span>
+</div>
+<div class="font-body-sm text-body-sm text-ink-muted truncate max-w-[120px]">Bank Verification</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-electric-violet/10 text-royal-purple font-label-sm text-label-sm font-semibold">
+                  In Review
+                </span>
+</td>
+<td class="py-3.5 px-space-md text-right">
+<span class="font-label-md text-label-md font-medium text-ink">Priya N.</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination & Queue Footer -->
+<div class="p-space-md bg-porcelain flex items-center justify-between text-ink-muted font-body-sm text-body-sm">
+<span>Displaying page 1 of 3 (14 queue entries)</span>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest text-ink flex items-center justify-center hover:bg-surface-container disabled:opacity-40" disabled="">
+<span class="material-symbols-outlined text-[16px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-electric-violet text-on-primary font-title-sm text-title-sm flex items-center justify-center">1</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container flex items-center justify-center">2</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest text-ink hover:bg-surface-container flex items-center justify-center">3</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest text-ink flex items-center justify-center hover:bg-surface-container">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Application Detail Review Panel (~40% / 5 cols) -->
+<div class="lg:col-span-5 flex flex-col space-y-space-md sticky top-20">
+<!-- Card Container -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex flex-col">
+<!-- Header Banner -->
+<div class="p-space-md bg-obsidian-surface-1 text-text-dark-primary flex flex-col gap-2">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm font-bold text-text-dark-primary" id="detailBusinessName">Zenith Home Goods</span>
+<span class="bg-semantic-warning/20 text-semantic-warning font-label-sm text-label-sm px-2 py-0.5 rounded-full font-bold">Needs Correction</span>
+</div>
+<p class="font-body-sm text-body-sm text-text-dark-muted mt-0.5" id="detailSubMeta">
+                Sole Proprietorship • Home &amp; Living • Ref: <span class="text-electric-violet font-semibold">#APP-9478</span>
+</p>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-text-dark-muted block">Assigned Lead</span>
+<span class="font-title-sm text-title-sm text-text-dark-primary font-semibold">Priya N.</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-text-dark-muted font-label-sm text-label-sm pt-2 bg-obsidian-surface-2 -mx-space-md -mb-space-md px-space-md py-2">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-electric-violet">history</span>
+              Submitted: Oct 28, 2023 • 14:32 IST
+            </span>
+<span class="text-semantic-warning font-semibold">1h 14m SLA Remaining</span>
+</div>
+</div>
+<div class="p-space-md space-y-space-md max-h-[calc(100vh-14rem)] overflow-y-auto">
+<!-- SECTION 1: Business & Contact Profile -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-bold text-ink flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">domain</span>
+                Business &amp; Contact Profile
+              </span>
+<span class="text-semantic-success font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">verified</span> 2/2 Contacts Verified
+              </span>
+</div>
+<div class="bg-porcelain rounded-lg p-3 grid grid-cols-2 gap-x-4 gap-y-2 text-ink">
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted block">Legal Entity Name</span>
+<span class="font-body-md text-body-md font-semibold">Rajeshwar K. Sharma</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted block">Trade Name</span>
+<span class="font-body-md text-body-md font-semibold">Zenith Home Goods</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted block">Official Email</span>
+<span class="font-body-sm text-body-sm font-medium text-ink flex items-center gap-1">
+                  compliance@zenithhome.in
+                  <span class="material-symbols-outlined text-semantic-success text-[14px]">check</span>
+</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-ink-muted block">Contact Phone</span>
+<span class="font-body-sm text-body-sm font-medium text-ink flex items-center gap-1">
+                  +91 98201 44290
+                  <span class="material-symbols-outlined text-semantic-success text-[14px]">check</span>
+</span>
+</div>
+<div class="col-span-2 pt-1">
+<span class="font-label-sm text-label-sm text-ink-muted block">Registered Address</span>
+<span class="font-body-sm text-body-sm text-ink">Gala 14, Industrial Estate, Sakinaka, Andheri East, Mumbai, MH - 400072</span>
+</div>
+<div class="col-span-2 pt-1">
+<span class="font-label-sm text-label-sm text-ink-muted block">Proposed Fulfillment Hub</span>
+<span class="font-body-sm text-body-sm font-semibold text-royal-purple flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">warehouse</span>
+                  Bhiwandi Central FC-04 (West Regional Hub)
+                </span>
+</div>
+</div>
+</div>
+<!-- SECTION 2: Verification Checklist (Interactive Status Items) -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-bold text-ink flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">checklist</span>
+                Mandatory Verification Checklist
+              </span>
+<span class="font-label-sm text-label-sm text-semantic-warning font-semibold">4 / 6 Cleared</span>
+</div>
+<div class="space-y-2">
+<!-- Item 1: PAN -->
+<div class="p-2.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-semantic-success/15 text-semantic-success flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-semibold text-ink">Identity &amp; PAN Card</div>
+<div class="font-body-sm text-body-sm text-ink-muted">AABPS7821K • NSDL Instant Match OK</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold px-2 py-0.5 rounded bg-semantic-success/10">Verified</span>
+</div>
+<!-- Item 2: GSTIN -->
+<div class="p-2.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-semantic-success/15 text-semantic-success flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-semibold text-ink">Tax Registration (GSTIN)</div>
+<div class="font-body-sm text-body-sm text-ink-muted">27AABPS7821K1Z5 • Active CBIC Status</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold px-2 py-0.5 rounded bg-semantic-success/10">Verified</span>
+</div>
+<!-- Item 3: Bank Mandate (NEEDS CORRECTION) -->
+<div class="p-2.5 rounded-lg bg-semantic-warning/10 shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-semantic-warning text-on-primary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-bold text-ink">Bank Account &amp; Mandate</div>
+<div class="font-body-sm text-body-sm text-semantic-warning font-semibold">Cancelled Cheque IFSC Unreadable</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-warning font-bold px-2 py-0.5 rounded bg-semantic-warning/20">Needs Correction</span>
+</div>
+<!-- Item 4: Address Proof -->
+<div class="p-2.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-semantic-success/15 text-semantic-success flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-semibold text-ink">Operating Address Proof</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Electricity Bill (Aug 2023) Matches Sakinaka</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold px-2 py-0.5 rounded bg-semantic-success/10">Verified</span>
+</div>
+<!-- Item 5: Trademark -->
+<div class="p-2.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between opacity-80">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-porcelain text-ink-muted flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-semibold text-ink">Brand / Trademark Auth</div>
+<div class="font-body-sm text-body-sm text-ink-muted">N/A (Generic Unbranded Home Category)</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-ink-muted font-medium px-2 py-0.5 rounded bg-porcelain">N/A</span>
+</div>
+<!-- Item 6: Marketplace Terms -->
+<div class="p-2.5 rounded-lg bg-surface-container-lowest shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-full bg-semantic-success/15 text-semantic-success flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div>
+<div class="font-title-sm text-title-sm font-semibold text-ink">Seller Agreement v4.2</div>
+<div class="font-body-sm text-body-sm text-ink-muted">Digitally Signed • Aadhaar eSign OK</div>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-semantic-success font-semibold px-2 py-0.5 rounded bg-semantic-success/10">Signed</span>
+</div>
+</div>
+</div>
+<!-- SECTION 3: Document Inspection Preview Module -->
+<div class="space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-title-sm text-title-sm font-bold text-ink flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">visibility</span>
+                Document Inspection: Flagged Item
+              </span>
+<span class="font-label-sm text-label-sm text-ink-muted">File: 840 KB • PNG</span>
+</div>
+<div class="rounded-xl overflow-hidden bg-porcelain shadow-sm">
+<div class="p-2.5 bg-obsidian-surface-2 text-text-dark-primary flex items-center justify-between">
+<div class="flex items-center gap-2 text-body-sm font-mono text-text-dark-secondary">
+<span class="material-symbols-outlined text-[16px] text-semantic-warning">image</span>
+                  HDFC_Cancelled_Cheque_Oct23.png
+                </div>
+<button class="text-electric-violet hover:underline font-label-sm text-label-sm flex items-center gap-0.5" onclick="handleNotification('Opening full size inspector')">
+<span class="material-symbols-outlined text-[14px]">fullscreen</span> Expand
+                </button>
+</div>
+<!-- Visual Document Sample Inspection Canvas -->
+<div class="relative bg-surface-container p-4 flex flex-col items-center justify-center min-h-[140px]">
+<div class="w-full max-w-sm bg-surface-container-lowest rounded shadow-md p-3 relative overflow-hidden">
+<div class="flex justify-between items-start mb-2">
+<div class="font-bold text-[12px] text-ink">HDFC BANK LTD</div>
+<div class="text-[10px] text-ink-muted">ANDHERI SAKINAKA BR</div>
+</div>
+<div class="h-6 flex items-center justify-center font-bold text-semantic-error/40 text-[18px] tracking-widest uppercase rotate-[-8deg] select-none pointer-events-none">
+                    CANCELLED
+                  </div>
+<div class="mt-2 pt-2 flex justify-between items-center text-[10px] text-ink font-mono bg-porcelain px-2 py-1 rounded">
+<span>A/C: 50200088914410</span>
+<span class="bg-semantic-warning/30 px-1 text-semantic-error font-bold blur-[0.6px]">IFSC: HDFC000????</span>
+</div>
+<!-- Overlay Defect Stamp -->
+<div class="absolute bottom-1 right-1 bg-midnight-violet/85 text-on-primary text-[9px] px-1.5 py-0.5 rounded font-mono">
+                    DEFECT: MICR / IFSC ILLEGIBLE
+                  </div>
+</div>
+<div class="mt-2 text-center text-semantic-warning font-label-sm text-label-sm flex items-center gap-1 font-semibold">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                  MICR code strip obscured by shadow in uploaded scan.
+                </div>
+</div>
+<!-- Action Bar inside Document Card -->
+<div class="p-2.5 bg-surface-container-lowest flex items-center justify-between gap-2">
+<button class="text-ink hover:text-royal-purple font-label-md text-label-md inline-flex items-center gap-1" onclick="handleNotification('Sample preview downloaded (Demo)')">
+<span class="material-symbols-outlined text-[16px]">download</span> Download File
+                </button>
+<button class="px-3 py-1.5 rounded-lg bg-semantic-warning text-on-primary font-label-md text-label-md hover:bg-semantic-warning/90 transition-all inline-flex items-center gap-1 shadow-sm font-semibold" onclick="handleNotification('Seller alert triggered via SMS/Email portal')">
+<span class="material-symbols-outlined text-[16px]">outgoing_mail</span>
+                  Request High-Res Re-upload
+                </button>
+</div>
+</div>
+</div>
+<!-- SECTION 4: Internal Review Notes & Thread -->
+<div class="space-y-2">
+<span class="font-title-sm text-title-sm font-bold text-ink flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">comment</span>
+              Internal Auditor Notes Thread
+            </span>
+<div class="bg-porcelain rounded-lg p-3 space-y-2 text-body-sm text-body-sm">
+<div class="flex items-center justify-between text-ink-muted font-label-sm text-label-sm">
+<span class="font-bold text-ink">Priya N. (Tier 2 Verification Lead)</span>
+<span>Oct 28, 16:15 IST</span>
+</div>
+<p class="text-ink">
+                GSTIN verified active on portal. Cheque leaf has corner shadow obscuring branch IFSC digits. Marked for document rectification; applicant pinged via vendor dashboard.
+              </p>
+</div>
+<!-- New Note Textarea -->
+<div class="relative">
+<textarea class="w-full p-2.5 rounded-lg bg-porcelain font-body-sm text-body-sm text-ink placeholder-ink-subtle focus:bg-surface-container-lowest focus:outline-none transition-all resize-none shadow-inner" id="auditorNoteInput" placeholder="Add confidential compliance note or audit remarks..." rows="2"></textarea>
+<button class="absolute right-2 bottom-2.5 px-3 py-1 bg-midnight-violet text-on-primary rounded text-label-sm font-semibold hover:bg-obsidian-surface-1 transition-colors" onclick="saveAuditorNote()">
+                Save Note
+              </button>
+</div>
+</div>
+<!-- SECTION 5: Decision Controls -->
+<div class="pt-2 flex flex-col gap-2">
+<div class="p-2.5 rounded-lg bg-surface-container text-ink font-label-sm text-label-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-electric-violet">verified_user</span>
+<span>All decisions trigger automated merchant portal webhooks &amp; audit trails.</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<!-- Re-upload Trigger -->
+<button class="w-full py-2.5 px-space-md rounded-lg bg-semantic-warning/15 text-semantic-warning font-label-md text-label-md font-bold hover:bg-semantic-warning/25 transition-all flex items-center justify-center gap-1.5" onclick="triggerReuploadModal()">
+<span class="material-symbols-outlined text-[18px]">cached</span>
+                Defect / Re-upload
+              </button>
+<!-- Reject Trigger -->
+<button class="w-full py-2.5 px-space-md rounded-lg bg-error-container text-error font-label-md text-label-md font-bold hover:bg-error hover:text-on-error transition-all flex items-center justify-center gap-1.5" onclick="triggerRejectModal()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+                Reject Seller
+              </button>
+</div>
+<!-- Primary Approve (Conditional) -->
+<button class="w-full py-3 px-space-md rounded-lg bg-semantic-success text-on-primary font-title-sm text-title-sm font-bold shadow-md hover:opacity-95 transition-all flex items-center justify-center gap-2 active:scale-98" id="approveBtn" onclick="handleApproveApplication()">
+<span class="material-symbols-outlined text-[20px]">task_alt</span>
+              Approve Seller Application (#APP-9478)
+            </button>
+</div>
+</div>
+<!-- Footer Audit Meta -->
+<div class="p-3 bg-porcelain font-label-sm text-label-sm text-ink-muted text-center">
+          Simulated Sandbox Mode • Recorded by Siddharth Rao (Super Admin) • No live mutations
+        </div>
+</div>
+</div>
+</div>
+<!-- Notification Toast Container -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none" id="toastNotification">
+<div class="bg-midnight-violet text-on-primary px-4 py-3 rounded-xl shadow-xl flex items-center gap-3">
+<span class="material-symbols-outlined text-electric-violet" id="toastIcon">check_circle</span>
+<span class="font-body-md text-body-md" id="toastMessage">Notification message</span>
+</div>
+</div>
+</div>
+<!-- Client-Side Micro Interactions & Simulated Sandbox Scripts -->
+<script>
+  // Simulated Applicant Database
+  const applicantsData = {
+    'APP-9482': {
+      name: 'NovaCraft Audio Ltd',
+      type: 'Private Ltd',
+      category: 'Electronics',
+      status: 'Decision Ready',
+      statusColor: 'semantic-success',
+      sla: '4h SLA Rem.',
+      submitted: 'Oct 29, 2023 • 10:14 IST',
+      lead: 'Siddharth R.',
+      legalName: 'NovaCraft Technologies Pvt Ltd',
+      tradeName: 'NovaCraft Audio',
+      email: 'legal@novacraftaudio.com',
+      phone: '+91 99002 11094',
+      address: 'Plot 42, Electronics City Phase 1, Bengaluru, KA - 560100',
+      hub: 'Bengaluru East FC-01',
+      clearedChecks: '5 / 5 Cleared',
+      flagged: false,
+      flagReason: 'None (All audited)',
+      docName: 'GST_Certificate_NovaCraft_2023.pdf',
+      docNote: 'Verified 100% compliant via NSDL & GST APIs.'
+    },
+    'APP-9478': {
+      name: 'Zenith Home Goods',
+      type: 'Sole Proprietorship',
+      category: 'Home & Living',
+      status: 'Needs Correction',
+      statusColor: 'semantic-warning',
+      sla: '1h SLA Escalated',
+      submitted: 'Oct 28, 2023 • 14:32 IST',
+      lead: 'Priya N.',
+      legalName: 'Rajeshwar K. Sharma',
+      tradeName: 'Zenith Home Goods',
+      email: 'compliance@zenithhome.in',
+      phone: '+91 98201 44290',
+      address: 'Gala 14, Industrial Estate, Sakinaka, Andheri East, Mumbai, MH - 400072',
+      hub: 'Bhiwandi Central FC-04 (West Regional Hub)',
+      clearedChecks: '4 / 6 Cleared',
+      flagged: true,
+      flagReason: 'Cancelled Cheque IFSC Unreadable',
+      docName: 'HDFC_Cancelled_Cheque_Oct23.png',
+      docNote: 'Cheque leaf has corner shadow obscuring branch IFSC digits.'
+    },
+    'APP-9465': {
+      name: 'UrbanRoots Organic',
+      type: 'Partnership Firm',
+      category: 'Groceries',
+      status: 'Awaiting FSSAI',
+      statusColor: 'semantic-warning',
+      sla: 'On Hold (Docs)',
+      submitted: 'Oct 27, 2023 • 11:20 IST',
+      lead: 'Rahul S.',
+      legalName: 'UrbanRoots Farm Partnership',
+      tradeName: 'UrbanRoots Organic',
+      email: 'support@urbanrootsfarm.in',
+      phone: '+91 98114 99012',
+      address: 'Khasra 44, Mehrauli-Gurugram Road, New Delhi, DL - 110030',
+      hub: 'Kundli North FC-02',
+      clearedChecks: '2 / 5 Cleared',
+      flagged: true,
+      flagReason: 'FSSAI License Expired in Sept 2023',
+      docName: 'FSSAI_Certificate_Scan.pdf',
+      docNote: 'Annual renewal certificate pending verification from applicant.'
+    },
+    'APP-9450': {
+      name: 'Prism Apparel Studio',
+      type: 'LLP',
+      category: 'Fashion',
+      status: 'Legal Review',
+      statusColor: 'royal-purple',
+      sla: 'Under Legal Review',
+      submitted: 'Oct 26, 2023 • 16:45 IST',
+      lead: 'Siddharth R.',
+      legalName: 'Prism Creative Ventures LLP',
+      tradeName: 'Prism Apparel Studio',
+      email: 'compliance@prismapparel.in',
+      phone: '+91 97223 88145',
+      address: 'Ring Road Textile Market, Tower B, Surat, GJ - 395002',
+      hub: 'Bhiwandi Central FC-04',
+      clearedChecks: '3 / 4 Cleared',
+      flagged: false,
+      flagReason: 'Trademark authorization under examination',
+      docName: 'Trademark_Form_TM-M.pdf',
+      docNote: 'Awaiting NOC endorsement from brand holding entity.'
+    },
+    'APP-9433': {
+      name: 'NexaWear Footwear',
+      type: 'Private Ltd',
+      category: 'Footwear',
+      status: 'In Review',
+      statusColor: 'electric-violet',
+      sla: '12h SLA Rem.',
+      submitted: 'Oct 25, 2023 • 09:30 IST',
+      lead: 'Priya N.',
+      legalName: 'NexaWear Industries Pvt Ltd',
+      tradeName: 'NexaWear Footwear',
+      email: 'vendor@nexawearfootwear.com',
+      phone: '+91 94120 77319',
+      address: 'Foundry Nagar Industrial Area, Agra, UP - 282006',
+      hub: 'Noida Hub FC-03',
+      clearedChecks: '4 / 5 Cleared',
+      flagged: false,
+      flagReason: 'Bank penny-drop verification underway',
+      docName: 'Incorporation_COI_NexaWear.pdf',
+      docNote: 'CIN confirmed on MCA portal; penny-drop bank match 99% confident.'
+    }
+  };
+
+  let currentSelectedId = 'APP-9478';
+
+  function selectApplicant(id) {
+    currentSelectedId = id;
+    const data = applicantsData[id];
+    if (!data) return;
+
+    // Highlight row
+    document.querySelectorAll('.applicant-row').forEach(row => {
+      row.classList.remove('bg-electric-violet/5', 'shadow-[inset_3px_0_0_0_#762FF2]');
+    });
+    const selectedRow = document.getElementById(`row-${id}`);
+    if (selectedRow) {
+      selectedRow.classList.add('bg-electric-violet/5', 'shadow-[inset_3px_0_0_0_#762FF2]');
+    }
+
+    // Populate Right Panel
+    const nameEl = document.getElementById('detailBusinessName');
+    const metaEl = document.getElementById('detailSubMeta');
+    const approveBtn = document.getElementById('approveBtn');
+
+    if (nameEl) nameEl.textContent = data.name;
+    if (metaEl) {
+      metaEl.innerHTML = `${data.type} &bull; ${data.category} &bull; Ref: <span class="text-electric-violet font-semibold">#${id}</span>`;
+    }
+
+    if (approveBtn) {
+      approveBtn.innerHTML = `<span class="material-symbols-outlined text-[20px]">task_alt</span> Approve Seller Application (#${id})`;
+    }
+
+    handleNotification(`Selected ${data.name} (#${id})`);
+  }
+
+  function handleNotification(msg) {
+    const toast = document.getElementById('toastNotification');
+    const msgEl = document.getElementById('toastMessage');
+    if (!toast || !msgEl) return;
+
+    msgEl.textContent = msg;
+    toast.classList.remove('translate-y-24', 'opacity-0');
+    toast.classList.add('translate-y-0', 'opacity-100');
+
+    setTimeout(() => {
+      toast.classList.remove('translate-y-0', 'opacity-100');
+      toast.classList.add('translate-y-24', 'opacity-0');
+    }, 2800);
+  }
+
+  function saveAuditorNote() {
+    const textarea = document.getElementById('auditorNoteInput');
+    if (!textarea || !textarea.value.trim()) {
+      handleNotification('Please type a note before saving.');
+      return;
+    }
+    handleNotification('Auditor note saved to immutable compliance log.');
+    textarea.value = '';
+  }
+
+  function triggerReuploadModal() {
+    handleNotification('Re-upload requested & notification dispatched to merchant.');
+  }
+
+  function triggerRejectModal() {
+    handleNotification('Application marked as Rejected. Rejection reason form logged.');
+  }
+
+  function handleApproveApplication() {
+    handleNotification(`Approved #${currentSelectedId}! Onboarding catalog pipeline triggered.`);
+  }
+
+  function clearAllFilters() {
+    const sInput = document.getElementById('searchInput');
+    const sFilter = document.getElementById('statusFilter');
+    const cFilter = document.getElementById('categoryFilter');
+    if (sInput) sInput.value = '';
+    if (sFilter) sFilter.value = 'all';
+    if (cFilter) cFilter.value = 'all';
+    filterApplicants();
+    handleNotification('All queue filters reset.');
+  }
+
+  function filterApplicants() {
+    const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
+    const rows = document.querySelectorAll('.applicant-row');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      if (text.includes(query)) {
+        row.style.display = '';
+        visibleCount++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    const countDisplay = document.getElementById('applicantCountDisplay');
+    if (countDisplay) {
+      countDisplay.textContent = `Showing ${visibleCount} of 14 pending applicants in current view`;
+    }
+  }
+</script></main></div></body></html>
