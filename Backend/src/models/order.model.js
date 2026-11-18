@@ -40,13 +40,38 @@ const orderSchema = new mongoose.Schema({
     },
     deliveryStatus: {
         type: String,
-        enum: ['pending', 'shipped', 'delivered', 'cancelled'],
+        enum: ['pending', 'shipped', 'delivered', 'cancelled', 'returned'],
         default: 'pending'
     },
     paymentStatus: {
         type: String,
         enum: ['paid', 'unpaid', 'pending', 'refunded'],
         default: 'unpaid'
+    },
+    trackingNumber: {
+        type: String,
+        default: ''
+    },
+    paymentMethod: {
+        type: String,
+        default: 'UPI'
+    },
+    cancellationReason: {
+        type: String,
+        default: ''
+    },
+    returnReason: {
+        type: String,
+        default: ''
+    },
+    refundStatus: {
+        type: String,
+        enum: ['none', 'pending', 'completed', 'failed'],
+        default: 'none'
+    },
+    refundAmount: {
+        type: Number,
+        default: 0
     },
     shippingAddress: {
     fullName: {

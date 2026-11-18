@@ -106,6 +106,11 @@ async function createOrder(req, res) {
             }
 
             // Create order document
+            const trackingNumber = `FX-IN-${Math.floor(1000000 + Math.random() * 9000000)}`;
+            const paymentMethod = typeof req.body.paymentMethod === 'string' && req.body.paymentMethod.trim()
+                ? req.body.paymentMethod.trim()
+                : 'UPI';
+
             const orderDocData = {
                 user: userId,
                 items: orderItems,
@@ -119,7 +124,9 @@ async function createOrder(req, res) {
                     postalCode: shippingAddress.postalCode.trim(),
                     country: shippingAddress.country.trim()
                 },
-                paymentStatus: 'pending'
+                paymentStatus: 'pending',
+                trackingNumber,
+                paymentMethod
             };
 
             let createdOrder;
@@ -210,15 +217,48 @@ async function getUserOrders(req, res) {
         const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 10));
         const skip = (page - 1) * limit;
 
-        const filter = req.user.role === 'admin' && req.query.all === 'true'
-            ? {}
-            : { user: userId };
+        let filter = {};
+        if (req.user.role === 'admin' && req.query.all === 'true') {
+            filter = {};
+        } else if (req.user.role === 'seller') {
+            const sellerProducts = await Product.find({ seller: userId }).select('_id');
+            const productIds = sellerProducts.map(p => p._id);
+            if (req.query.scope === 'buyer') {
+                filter = { user: userId };
+            } else {
+                filter = { 'items.product': { $in: productIds } };
+            }
+        } else {
+            filter = { user: userId };
+        }
+
+        if (req.query.status && req.query.status !== 'all') {
+            if (req.query.status === 'transit') {
+                filter.deliveryStatus = { $in: ['shipped', 'pending'] };
+            } else if (req.query.status === 'returns') {
+                filter.deliveryStatus = 'returned';
+            } else {
+                filter.deliveryStatus = req.query.status;
+            }
+        }
+
+        if (req.query.search && typeof req.query.search === 'string' && req.query.search.trim()) {
+            const s = req.query.search.trim();
+            filter.$or = [
+                { 'items.name': { $regex: s, $options: 'i' } },
+                { trackingNumber: { $regex: s, $options: 'i' } }
+            ];
+            if (mongoose.isValidObjectId(s)) {
+                filter.$or.push({ _id: s });
+            }
+        }
 
         const [orders, total] = await Promise.all([
             Order.find(filter)
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit)
+                .populate('user', 'username email')
                 .lean(),
             Order.countDocuments(filter)
         ]);
@@ -252,8 +292,17 @@ async function getOrderById(req, res) {
             return res.status(404).json({ message: 'Order not found' });
         }
 
-        if (order.user.toString() !== req.user.id && req.user.role !== 'admin') {
-            return res.status(403).json({ message: 'Forbidden' });
+        const orderOwnerId = order.user?._id ? order.user._id.toString() : order.user.toString();
+        if (orderOwnerId !== req.user.id && req.user.role !== 'admin') {
+            if (req.user.role === 'seller') {
+                const productIds = (order.items || []).map(i => i.product);
+                const sellerProduct = await Product.findOne({ _id: { $in: productIds }, seller: req.user.id });
+                if (!sellerProduct) {
+                    return res.status(403).json({ message: 'Forbidden' });
+                }
+            } else {
+                return res.status(403).json({ message: 'Forbidden' });
+            }
         }
 
         return res.status(200).json({
@@ -269,6 +318,7 @@ async function getOrderById(req, res) {
 async function cancelOrder(req, res) {
     try {
         const { id } = req.params;
+        const { reason } = req.body || {};
 
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({ message: 'Invalid order ID' });
@@ -323,6 +373,9 @@ async function cancelOrder(req, res) {
         }
 
         order.deliveryStatus = 'cancelled';
+        if (reason) {
+            order.cancellationReason = reason;
+        }
         await order.save();
 
         return res.status(200).json({
@@ -335,16 +388,55 @@ async function cancelOrder(req, res) {
     }
 }
 
-async function updateOrderStatus(req, res) {
+async function requestReturn(req, res) {
     try {
         const { id } = req.params;
-        const { deliveryStatus } = req.body;
+        const { reason } = req.body || {};
 
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({ message: 'Invalid order ID' });
         }
 
-        const validStatuses = ['pending', 'shipped', 'delivered', 'cancelled'];
+        const order = await Order.findById(id);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        if (order.user.toString() !== req.user.id && req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'Forbidden' });
+        }
+
+        if (order.deliveryStatus !== 'delivered') {
+            return res.status(400).json({ message: 'Returns can only be requested for delivered orders' });
+        }
+
+        order.deliveryStatus = 'returned';
+        order.paymentStatus = 'refunded';
+        order.refundStatus = 'completed';
+        order.refundAmount = order.totalAmount;
+        order.returnReason = reason || 'Customer requested return';
+        await order.save();
+
+        return res.status(200).json({
+            message: 'Return request processed and refund credited to original payment method',
+            order
+        });
+    } catch (error) {
+        console.error('requestReturn error:', error.message);
+        return res.status(500).json({ message: 'Failed to process return request' });
+    }
+}
+
+async function updateOrderStatus(req, res) {
+    try {
+        const { id } = req.params;
+        const { deliveryStatus, trackingNumber } = req.body;
+
+        if (!mongoose.isValidObjectId(id)) {
+            return res.status(400).json({ message: 'Invalid order ID' });
+        }
+
+        const validStatuses = ['pending', 'shipped', 'delivered', 'cancelled', 'returned'];
         if (!validStatuses.includes(deliveryStatus)) {
             return res.status(400).json({
                 message: `Invalid delivery status. Must be one of: ${validStatuses.join(', ')}`
@@ -354,6 +446,10 @@ async function updateOrderStatus(req, res) {
         const order = await Order.findById(id);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
+        }
+
+        if (req.user.role !== 'admin' && req.user.role !== 'seller') {
+            return res.status(403).json({ message: 'Forbidden' });
         }
 
         // If transitioning to cancelled, release any lingering reservations
@@ -388,6 +484,12 @@ async function updateOrderStatus(req, res) {
         }
 
         order.deliveryStatus = deliveryStatus;
+        if (trackingNumber) {
+            order.trackingNumber = trackingNumber;
+        } else if (deliveryStatus === 'shipped' && !order.trackingNumber) {
+            order.trackingNumber = `FX-IN-${Math.floor(1000000 + Math.random() * 9000000)}`;
+        }
+
         await order.save();
 
         return res.status(200).json({
@@ -405,5 +507,6 @@ module.exports = {
     getUserOrders,
     getOrderById,
     cancelOrder,
+    requestReturn,
     updateOrderStatus
 };

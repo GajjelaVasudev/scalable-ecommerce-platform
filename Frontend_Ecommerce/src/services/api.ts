@@ -95,6 +95,25 @@ export const api = {
       request<{ message: string }>('/auth/logout', {
         method: 'POST',
       }),
+    getMe: () =>
+      request<{ user: User }>('/auth/me', {
+        method: 'GET',
+      }),
+    updateProfile: (body: { username?: string; email?: string; currentPassword?: string; newPassword?: string }) =>
+      request<{ message: string; user: User }>('/auth/profile', {
+        method: 'PUT',
+        body: JSON.stringify(body),
+      }),
+    getUsers: (params?: { page?: number; limit?: number; role?: string; search?: string }) =>
+      request<{ message: string; users: User[]; pagination: any }>('/auth/users', {
+        method: 'GET',
+        params,
+      }),
+    updateUserRole: (id: string, role: string) =>
+      request<{ message: string; user: User }>(`/auth/users/${id}/role`, {
+        method: 'PATCH',
+        body: JSON.stringify({ role }),
+      }),
   },
 
   // Products
@@ -196,12 +215,12 @@ export const api = {
 
   // Orders
   orders: {
-    create: (shippingAddress: ShippingAddress) =>
+    create: (shippingAddress: ShippingAddress, paymentMethod?: string) =>
       request<{ message: string; order: Order }>('/order/create', {
         method: 'POST',
-        body: JSON.stringify({ shippingAddress }),
+        body: JSON.stringify({ shippingAddress, paymentMethod }),
       }),
-    list: (params?: { page?: number; limit?: number; all?: boolean }) =>
+    list: (params?: { page?: number; limit?: number; all?: boolean; status?: string; search?: string; scope?: string }) =>
       request<OrderListResponse>('/order', {
         method: 'GET',
         params,
@@ -210,14 +229,20 @@ export const api = {
       request<{ message: string; order: Order }>(`/order/${id}`, {
         method: 'GET',
       }),
-    cancel: (id: string) =>
+    cancel: (id: string, reason?: string) =>
       request<{ message: string; order: Order }>(`/order/${id}/cancel`, {
         method: 'PATCH',
+        body: JSON.stringify({ reason }),
       }),
-    updateStatus: (id: string, deliveryStatus: string) =>
+    requestReturn: (id: string, reason?: string) =>
+      request<{ message: string; order: Order }>(`/order/${id}/return`, {
+        method: 'POST',
+        body: JSON.stringify({ reason }),
+      }),
+    updateStatus: (id: string, deliveryStatus: string, trackingNumber?: string) =>
       request<{ message: string; order: Order }>(`/order/${id}/status`, {
         method: 'PATCH',
-        body: JSON.stringify({ deliveryStatus }),
+        body: JSON.stringify({ deliveryStatus, trackingNumber }),
       }),
   },
 
