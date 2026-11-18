@@ -19,6 +19,7 @@ import { OrderConfirmationPage } from './pages/marketplace/OrderConfirmationPage
 import { OrdersPage } from './pages/marketplace/OrdersPage';
 import { OrderDetailsPage } from './pages/marketplace/OrderDetailsPage';
 import { AccountPage } from './pages/marketplace/AccountPage';
+import { PersonalInfoPage } from './pages/marketplace/PersonalInfoPage';
 import { WishlistPage } from './pages/marketplace/WishlistPage';
 import { AddressBookPage } from './pages/marketplace/AddressBookPage';
 import { AccountSettingsPage } from './pages/marketplace/AccountSettingsPage';
@@ -26,6 +27,7 @@ import { AccountSettingsPage } from './pages/marketplace/AccountSettingsPage';
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
+import { ProtectedRoute } from './components/common/ProtectedRoute';
 
 // Seller Pages
 import { SellerDashboardPage } from './pages/seller/SellerDashboardPage';
@@ -69,16 +71,87 @@ export function App() {
                 <Route path="products" element={<ShopAllPage />} />
                 <Route path="products/:id" element={<ProductDetailPage />} />
                 <Route path="cart" element={<CartPage />} />
-                <Route path="checkout" element={<CheckoutPage />} />
+                <Route
+                  path="checkout"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <CheckoutPage />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="order-confirmation/:orderId" element={<OrderConfirmationPage />} />
-                <Route path="orders" element={<OrdersPage />} />
-                <Route path="orders/:id" element={<OrderDetailsPage />} />
-                <Route path="account" element={<AccountPage />} />
-                <Route path="account/orders" element={<OrdersPage />} />
-                <Route path="account/orders/:id" element={<OrderDetailsPage />} />
-                <Route path="account/wishlist" element={<WishlistPage />} />
-                <Route path="account/addresses" element={<AddressBookPage />} />
-                <Route path="account/settings" element={<AccountSettingsPage />} />
+                <Route
+                  path="orders"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <OrdersPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="orders/:id"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <OrderDetailsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <AccountPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/personal-info"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <PersonalInfoPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/orders"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <OrdersPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/orders/:id"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <OrderDetailsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/wishlist"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <WishlistPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/addresses"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <AddressBookPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/settings"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <AccountSettingsPage />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
 
@@ -87,7 +160,14 @@ export function App() {
               <Route path="/register" element={<RegisterPage />} />
 
               {/* Seller Center Routes */}
-              <Route path="/seller" element={<SellerLayout />}>
+              <Route
+                path="/seller"
+                element={
+                  <ProtectedRoute allowedRoles={['seller', 'admin']}>
+                    <SellerLayout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route index element={<Navigate to="/seller/dashboard" replace />} />
                 <Route path="dashboard" element={<SellerDashboardPage />} />
                 <Route path="products" element={<SellerProductsPage />} />
@@ -104,7 +184,14 @@ export function App() {
               </Route>
 
               {/* Admin Platform Routes */}
-              <Route path="/admin" element={<AdminLayout />}>
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminLayout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route index element={<Navigate to="/admin/dashboard" replace />} />
                 <Route path="dashboard" element={<AdminDashboardPage />} />
                 <Route path="products" element={<AdminProductsPage />} />

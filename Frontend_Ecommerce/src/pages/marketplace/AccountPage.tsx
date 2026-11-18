@@ -28,11 +28,17 @@ export const AccountPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const [profileName, setProfileName] = useState(
-    user?.username === 'priya_sharma' ? 'Priya Sharma' : user?.username || 'Priya Sharma'
-  );
+  const rawUsername = user?.username || '';
+  const formattedUsername = rawUsername
+    ? rawUsername
+        .split(/[_\s-]/)
+        .filter(Boolean)
+        .map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+        .join(' ')
+    : 'Valued Customer';
+  const [profileName, setProfileName] = useState(formattedUsername);
   const [profilePhone, setProfilePhone] = useState('+91 98200 44912');
-  const [profileEmail, setProfileEmail] = useState(user?.email || 'priya.sharma@example.com');
+  const [profileEmail, setProfileEmail] = useState(user?.email || 'buyer@omizon.in');
   const [saveFeedback, setSaveFeedback] = useState(false);
 
   const handleSaveProfile = (e: React.FormEvent) => {

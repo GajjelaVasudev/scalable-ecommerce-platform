@@ -1,187 +1,277 @@
-import React from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import {
-  LayoutDashboard,
-  Package,
-  Heart,
-  MapPin,
-  CreditCard,
-  ShieldCheck,
-  Headphones,
-  LogOut,
-  Sparkles,
-  ChevronRight,
-  Crown,
-  Check,
-} from 'lucide-react';
+
+export type AccountNavKey =
+  | 'overview'
+  | 'personal-info'
+  | 'orders'
+  | 'wishlist'
+  | 'addresses'
+  | 'settings';
 
 interface AccountLayoutProps {
   children: React.ReactNode;
-  activeKey: 'overview' | 'orders' | 'wishlist' | 'addresses' | 'settings';
+  activeKey: AccountNavKey;
 }
+
+interface NavItem {
+  key: AccountNavKey;
+  label: string;
+  path: string;
+  symbol: string;
+  dataPath: string;
+}
+
+const ACCOUNT_NAV_ITEMS: NavItem[] = [
+  {
+    key: 'overview',
+    label: 'Overview',
+    path: '/account',
+    symbol: 'dashboard',
+    dataPath: 'account-overview',
+  },
+  {
+    key: 'personal-info',
+    label: 'Personal Information',
+    path: '/account/personal-info',
+    symbol: 'person',
+    dataPath: 'personal-information',
+  },
+  {
+    key: 'orders',
+    label: 'My Orders',
+    path: '/account/orders',
+    symbol: 'package_2',
+    dataPath: 'my-orders',
+  },
+  {
+    key: 'wishlist',
+    label: 'My Wishlist',
+    path: '/account/wishlist',
+    symbol: 'favorite',
+    dataPath: 'my-wishlist',
+  },
+  {
+    key: 'addresses',
+    label: 'Saved Addresses',
+    path: '/account/addresses',
+    symbol: 'home_pin',
+    dataPath: 'saved-addresses',
+  },
+  {
+    key: 'settings',
+    label: 'Account Settings',
+    path: '/account/settings',
+    symbol: 'settings',
+    dataPath: 'account-settings',
+  },
+];
+
+interface SupportItem {
+  label: string;
+  path: string;
+  symbol: string;
+  dataPath: string;
+}
+
+const SUPPORT_NAV_ITEMS: SupportItem[] = [
+  {
+    label: 'Help Centre',
+    path: '#help',
+    symbol: 'help',
+    dataPath: 'help-centre',
+  },
+  {
+    label: 'Contact Support',
+    path: '#support',
+    symbol: 'support_agent',
+    dataPath: 'contact-support',
+  },
+  {
+    label: 'Returns & Refunds',
+    path: '/account/orders?filter=returns',
+    symbol: 'replay',
+    dataPath: 'returns-and-refunds',
+  },
+];
 
 export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKey }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [supportToast, setSupportToast] = useState<string | null>(null);
 
-  const displayName = user?.username === 'priya_sharma' ? 'Priya Sharma' : user?.username || 'Priya Sharma';
-  const displayEmail = user?.email || 'priya.sharma@example.com';
+  // Compute dynamic user name from authenticated state without hardcoded demo customer data
+  const rawUsername = user?.username || '';
+  const formattedName = rawUsername
+    ? rawUsername
+        .split(/[_\s-]/)
+        .filter(Boolean)
+        .map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
+        .join(' ')
+    : 'Account User';
 
-  const navItems = [
-    {
-      key: 'overview',
-      label: 'Overview & Dashboard',
-      path: '/account',
-      icon: <LayoutDashboard className="w-5 h-5" />,
-      badge: null,
-    },
-    {
-      key: 'orders',
-      label: 'Your Orders & Buys',
-      path: '/account/orders',
-      icon: <Package className="w-5 h-5" />,
-      badge: '2 Active',
-    },
-    {
-      key: 'wishlist',
-      label: 'Wishlist & Collections',
-      path: '/account/wishlist',
-      icon: <Heart className="w-5 h-5" />,
-      badge: '14 items',
-    },
-    {
-      key: 'addresses',
-      label: 'Saved Addresses',
-      path: '/account/addresses',
-      icon: <MapPin className="w-5 h-5" />,
-      badge: '3 saved',
-    },
-    {
-      key: 'settings',
-      label: 'Login & Security',
-      path: '/account/settings',
-      icon: <ShieldCheck className="w-5 h-5" />,
-      badge: null,
-    },
-  ];
+  const userInitial = (formattedName.charAt(0) || 'U').toUpperCase();
+  const userEmail = user?.email || 'buyer@omizon.in';
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+
+  const handleSupportClick = (item: SupportItem, e: React.MouseEvent) => {
+    if (item.path.startsWith('#')) {
+      e.preventDefault();
+      setSupportToast(`${item.label}: 24/7 concierge support is available via support@omizon.in or 1800-266-4966.`);
+      setTimeout(() => setSupportToast(null), 4000);
+    }
+  };
 
   return (
-    <div className="w-full bg-surface min-h-[calc(100vh-160px)] py-8 px-margin-mobile md:px-margin">
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
-        {/* Top Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-on-surface-variant font-body-sm text-xs">
-          <Link to="/" className="hover:text-primary transition-colors">Home</Link>
-          <span className="text-outline-variant">/</span>
-          <span className="text-on-surface font-semibold">Account Hub</span>
-        </nav>
+    <div className="w-full bg-surface min-h-[calc(100vh-160px)] pb-16 px-margin-mobile md:px-margin">
+      {/* Toast Feedback for Support Links */}
+      {supportToast && (
+        <div className="fixed bottom-8 right-8 z-50 animate-fade-in max-w-md">
+          <div className="bg-ink text-text-dark-primary px-space-md py-space-sm rounded-lg shadow-xl flex items-center gap-space-sm font-label-md text-label-md">
+            <span className="material-symbols-outlined text-primary text-[20px]">support_agent</span>
+            <span>{supportToast}</span>
+          </div>
+        </div>
+      )}
 
-        {/* 12-Column Account Hub Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          {/* LEFT SIDEBAR: 4 cols on lg, 3 cols on xl */}
-          <aside className="lg:col-span-4 xl:col-span-3 flex flex-col gap-4 sticky top-24">
-            {/* Member Profile Hero Card */}
-            <div className="bg-surface-container-lowest rounded-2xl p-5 border border-outline-variant/20 shadow-sm relative overflow-hidden">
-              <div className="absolute -top-10 -right-10 w-28 h-28 bg-primary/10 rounded-full blur-2xl pointer-events-none" />
-
-              <div className="flex items-center gap-3.5 mb-4 relative">
-                <div className="relative shrink-0">
-                  <div className="w-14 h-14 rounded-full ring-2 ring-primary/20 bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-white font-bold text-xl shadow-sm">
-                    {displayName[0]?.toUpperCase() || 'P'}
-                  </div>
-                  <span className="absolute bottom-0 right-0 bg-primary text-white w-4 h-4 rounded-full flex items-center justify-center text-[10px] shadow">
-                    ✓
-                  </span>
-                </div>
-
-                <div className="flex flex-col min-w-0">
-                  <h3 className="font-title-md text-on-surface font-bold text-base truncate">
-                    {displayName}
-                  </h3>
-                  <span className="font-body-sm text-outline text-xs truncate">
-                    {displayEmail}
-                  </span>
-                  <div className="mt-1 flex items-center gap-1.5">
-                    <span className="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full inline-flex items-center gap-1">
-                      <Sparkles className="w-3 h-3" />
-                      VIP Elite
-                    </span>
-                    <span className="font-body-sm text-outline text-[11px]">Since 2023</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* VIP Perks Micro Gauge */}
-              <div className="bg-surface-container-low rounded-xl p-3 flex items-center justify-between border border-outline-variant/10">
-                <div className="flex flex-col">
-                  <span className="font-label-sm text-outline uppercase tracking-wider text-[10px] font-bold">
-                    OMIZON Prime+
-                  </span>
-                  <span className="font-title-sm text-on-surface font-semibold text-xs">
-                    Auto-renews Oct 2025
-                  </span>
-                </div>
-                <Crown className="w-5 h-5 text-primary" />
-              </div>
-            </div>
-
-            {/* Account Hub Navigation Deck */}
-            <nav className="bg-surface-container-lowest rounded-2xl p-2 border border-outline-variant/20 shadow-sm flex flex-col gap-1 font-title-sm">
-              {navItems.map((item) => {
-                const isActive = activeKey === item.key;
-                return (
-                  <Link
-                    key={item.key}
-                    to={item.path}
-                    className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all ${
-                      isActive
-                        ? 'bg-primary text-white shadow-sm'
-                        : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low'
+      <div className="max-w-[1320px] mx-auto">
+        {/* Mobile Navigation Strip (< md) */}
+        <div className="md:hidden w-full overflow-x-auto no-scrollbar pb-3 mb-6 -mx-margin-mobile px-margin-mobile border-b border-lavender-mist">
+          <div className="flex items-center gap-1.5 min-w-max px-1">
+            {ACCOUNT_NAV_ITEMS.map((item) => {
+              const isActive = activeKey === item.key;
+              return (
+                <Link
+                  key={item.key}
+                  to={item.path}
+                  data-path={item.dataPath}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
+                    isActive
+                      ? 'bg-surface-container text-ink shadow-sm'
+                      : 'text-ink-muted bg-surface-container-lowest hover:text-ink hover:bg-surface-container-low border border-lavender-mist/60'
+                  }`}
+                >
+                  <span
+                    className={`material-symbols-outlined text-[18px] ${
+                      isActive ? 'text-primary' : 'text-ink-muted'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      {item.icon}
-                      <span>{item.label}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      {item.badge && (
-                        <span
-                          className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                            isActive
-                              ? 'bg-white/20 text-white'
-                              : 'bg-surface-container-high text-on-surface-variant'
-                          }`}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
-                      <ChevronRight className="w-3.5 h-3.5 opacity-60" />
-                    </div>
-                  </Link>
-                );
-              })}
+                    {item.symbol}
+                  </span>
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
 
-              <div className="h-px bg-outline-variant/15 my-1" />
+        {/* Main 2-Column Responsive Layout Matching Google Stitch */}
+        <div className="flex flex-col md:flex-row gap-gutter py-space-md">
+          {/* Desktop Left Sticky Aside Navigation (260px) */}
+          <aside className="w-full md:w-[260px] flex-shrink-0">
+            <div className="sticky top-28 flex flex-col gap-1">
+              {/* Authenticated User Micro Pill */}
+              <div className="bg-surface-container-lowest border border-lavender-mist rounded-xl p-space-sm mb-space-sm flex items-center gap-space-sm shadow-sm">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-royal-purple text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
+                  {userInitial}
+                </div>
+                <div className="flex flex-col min-w-0">
+                  <span className="font-title-sm text-title-sm text-ink font-semibold truncate">
+                    {formattedName}
+                  </span>
+                  <span className="font-label-sm text-label-sm text-ink-subtle truncate">
+                    {userEmail}
+                  </span>
+                </div>
+              </div>
+
+              {/* Section 1: My Account */}
+              <div className="px-space-sm pb-space-sm pt-space-xs">
+                <h2 className="font-title-sm text-title-sm text-ink-subtle uppercase tracking-wider font-semibold">
+                  My Account
+                </h2>
+              </div>
+              <nav className="flex flex-col gap-1" data-active-classes="bg-surface-container text-ink font-semibold rounded-lg">
+                {ACCOUNT_NAV_ITEMS.map((item) => {
+                  const isActive = activeKey === item.key;
+                  return (
+                    <Link
+                      key={item.key}
+                      to={item.path}
+                      data-path={item.dataPath}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={`flex items-center gap-space-sm px-space-sm py-2 rounded-lg transition-colors font-body-md text-body-md ${
+                        isActive
+                          ? 'bg-surface-container text-ink font-semibold'
+                          : 'text-ink-muted hover:text-ink hover:bg-surface-container-low'
+                      }`}
+                    >
+                      <span
+                        className={`material-symbols-outlined text-[18px] transition-colors ${
+                          isActive ? 'text-primary' : 'text-ink-muted'
+                        }`}
+                        style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                      >
+                        {item.symbol}
+                      </span>
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              {/* Lavender Mist Divider */}
+              <div className="my-space-md h-px bg-lavender-mist mx-space-sm" />
+
+              {/* Section 2: Support */}
+              <div className="px-space-sm pb-space-sm">
+                <h2 className="font-title-sm text-title-sm text-ink-subtle uppercase tracking-wider font-semibold">
+                  Support
+                </h2>
+              </div>
+              <nav className="flex flex-col gap-1" data-active-classes="bg-surface-container text-ink font-semibold rounded-lg">
+                {SUPPORT_NAV_ITEMS.map((item) => (
+                  <Link
+                    key={item.dataPath}
+                    to={item.path}
+                    data-path={item.dataPath}
+                    onClick={(e) => handleSupportClick(item, e)}
+                    className="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-ink-muted hover:text-ink hover:bg-surface-container-low transition-colors font-body-md text-body-md"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">
+                      {item.symbol}
+                    </span>
+                    <span>{item.label}</span>
+                  </Link>
+                ))}
+              </nav>
+
+              {/* Lavender Mist Divider */}
+              <div className="my-space-md h-px bg-lavender-mist mx-space-sm" />
 
               {/* Sign Out Action */}
-              <button
-                type="button"
-                onClick={() => {
-                  logout();
-                  navigate('/login');
-                }}
-                className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all text-left"
-              >
-                <div className="flex items-center gap-3">
-                  <LogOut className="w-5 h-5" />
+              <div className="px-space-sm">
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-semantic-error hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors font-body-md text-body-md text-left font-medium"
+                >
+                  <span className="material-symbols-outlined text-[18px] text-semantic-error">
+                    logout
+                  </span>
                   <span>Sign Out</span>
-                </div>
-              </button>
-            </nav>
+                </button>
+              </div>
+            </div>
           </aside>
 
-          {/* MAIN CONTENT AREA: 8 cols on lg, 9 cols on xl */}
-          <main className="lg:col-span-8 xl:col-span-9 flex flex-col gap-6">
+          {/* Main Account View Content Area */}
+          <main className="flex-1 min-w-0 bg-surface">
             {children}
           </main>
         </div>
@@ -191,4 +281,3 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
 };
 
 export default AccountLayout;
-
