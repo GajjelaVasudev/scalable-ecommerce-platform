@@ -4,6 +4,12 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { api, ApiError } from '../../services/api';
 import { Order, ShippingAddress } from '../../types';
+import {
+  getStableUserId,
+  isDemoUser,
+  getAccountAddresses,
+  setAccountLastOrder,
+} from '../../utils/accountStorage';
 
 // Checkout Components
 import { CheckoutStepper } from '../../components/checkout/CheckoutStepper';
@@ -34,12 +40,22 @@ export const CheckoutPage: React.FC = () => {
   // Stepper state: 1: Cart, 2: Address, 3: Delivery, 4: Payment, 5: Review
   const [currentStep, setCurrentStep] = useState<number>(2);
 
-  // Address State (prefilled from user if available)
-  const [selectedAddress, setSelectedAddress] = useState<SavedAddressItem>(() => {
-    if (user?.username) {
+  const userId = getStableUserId(user);
+  const isDemo = isDemoUser(user);
+
+  // Address State:
+  // - If user has account-scoped saved addresses, preselect their default (or first).
+  // - If explicitly in demo environment (e.g. demo buyer), allow demo address fallback.
+  // - Real authenticated customers with NO saved addresses start with null (empty address state).
+  const [selectedAddress, setSelectedAddress] = useState<SavedAddressItem | null>(() => {
+    const saved = getAccountAddresses(userId);
+    if (saved && saved.length > 0) {
+      return saved.find((a) => a.isDefault) || saved[0];
+    }
+    if (isDemo && user?.username === 'priya_sharma') {
       return {
-        id: 'addr_user',
-        fullName: user.username === 'priya_sharma' ? 'Priya Sharma' : user.username,
+        id: 'addr_demo_priya',
+        fullName: 'Priya Sharma (Demo)',
         phone: '+91 98201 23456',
         addressLine: 'Flat 402, Highmont Residences, Senapati Bapat Marg, Lower Parel',
         city: 'Mumbai',
@@ -50,8 +66,31 @@ export const CheckoutPage: React.FC = () => {
         isDefault: true,
       };
     }
-    return INITIAL_SAVED_ADDRESSES[0];
+    return null;
   });
+
+  // Synchronize address selection when the active user changes
+  React.useEffect(() => {
+    const saved = getAccountAddresses(userId);
+    if (saved && saved.length > 0) {
+      setSelectedAddress(saved.find((a) => a.isDefault) || saved[0]);
+    } else if (isDemo && user?.username === 'priya_sharma') {
+      setSelectedAddress({
+        id: 'addr_demo_priya',
+        fullName: 'Priya Sharma (Demo)',
+        phone: '+91 98201 23456',
+        addressLine: 'Flat 402, Highmont Residences, Senapati Bapat Marg, Lower Parel',
+        city: 'Mumbai',
+        state: 'Maharashtra',
+        postalCode: '400013',
+        country: 'India',
+        tag: 'HOME',
+        isDefault: true,
+      });
+    } else {
+      setSelectedAddress(null);
+    }
+  }, [userId, isDemo]);
 
   // Delivery Speed State
   const [selectedSpeed, setSelectedSpeed] = useState<DeliverySpeedOption>('fastx');
@@ -127,8 +166,9 @@ export const CheckoutPage: React.FC = () => {
     setErrorMessage('');
 
     try {
-      // 1. Validation check
+      // 1. Validation check: fail closed if no address has been added or selected
       if (
+        !selectedAddress ||
         !selectedAddress.fullName?.trim() ||
         !selectedAddress.phone?.trim() ||
         !selectedAddress.addressLine?.trim() ||
@@ -136,7 +176,7 @@ export const CheckoutPage: React.FC = () => {
         !selectedAddress.state?.trim() ||
         !selectedAddress.postalCode?.trim()
       ) {
-        setErrorMessage('Please ensure your delivery address contains all required fields.');
+        setErrorMessage('Please add and select a delivery address before placing your order.');
         setIsSubmitting(false);
         return;
       }
@@ -223,7 +263,7 @@ export const CheckoutPage: React.FC = () => {
       // 3. Clear cart, cache order, and route to order confirmation
       await clearCart();
       try {
-        sessionStorage.setItem('omizon_last_order', JSON.stringify(orderResult));
+        setAccountLastOrder(userId, orderResult);
         sessionStorage.setItem(`omizon_order_${orderResult._id}`, JSON.stringify(orderResult));
       } catch {}
 

@@ -1,6 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { AccountLayout } from '../../components/account/AccountLayout';
 import { SavedAddressItem, INITIAL_SAVED_ADDRESSES } from '../../components/checkout/DeliveryAddressSection';
+import {
+  getStableUserId,
+  isDemoUser,
+  getAccountAddresses,
+  setAccountAddresses,
+} from '../../utils/accountStorage';
 import {
   MapPin,
   Plus,
@@ -17,13 +24,27 @@ import {
 import { Button } from '../../components/ui/Button';
 
 export const AddressBookPage: React.FC = () => {
+  const { user } = useAuth();
+  const userId = getStableUserId(user);
+  const isDemo = isDemoUser(user);
+
   const [addresses, setAddresses] = useState<SavedAddressItem[]>(() => {
-    try {
-      const cached = localStorage.getItem('omizon_saved_addresses');
-      if (cached) return JSON.parse(cached);
-    } catch {}
-    return INITIAL_SAVED_ADDRESSES;
+    const cached = getAccountAddresses(userId);
+    if (cached && cached.length > 0) return cached;
+    if (isDemo) return INITIAL_SAVED_ADDRESSES;
+    return [];
   });
+
+  useEffect(() => {
+    const cached = getAccountAddresses(userId);
+    if (cached && cached.length > 0) {
+      setAddresses(cached);
+    } else if (isDemo) {
+      setAddresses(INITIAL_SAVED_ADDRESSES);
+    } else {
+      setAddresses([]);
+    }
+  }, [userId, isDemo]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
@@ -48,9 +69,7 @@ export const AddressBookPage: React.FC = () => {
 
   const persistAddresses = (updated: SavedAddressItem[]) => {
     setAddresses(updated);
-    try {
-      localStorage.setItem('omizon_saved_addresses', JSON.stringify(updated));
-    } catch {}
+    setAccountAddresses(userId, updated);
   };
 
   const openAddModal = () => {

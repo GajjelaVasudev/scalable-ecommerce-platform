@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, UserRole } from '../types';
 import { api, ApiError } from '../services/api';
+import { clearAccountOrders } from '../utils/accountStorage';
 
 interface AuthContextType {
   user: User | null;
@@ -98,10 +99,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setToken(null);
       localStorage.removeItem('omizon_user');
       localStorage.removeItem('omizon_token');
+      clearAccountOrders();
     }
   };
 
   const switchRoleDemo = (role: UserRole) => {
+    clearAccountOrders();
     const demoUser = DEMO_USERS[role];
     setUser(demoUser);
     setToken(`demo_token_${role}_${Date.now()}`);

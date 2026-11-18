@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AccountLayout } from '../../components/account/AccountLayout';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import {
+  getStableUserId,
+  getAccountWishlist,
+  setAccountWishlist,
+} from '../../utils/accountStorage';
 import { formatCurrency, calculateDiscount } from '../../utils/format';
 import {
   Heart,
@@ -86,9 +92,25 @@ const INITIAL_WISHLIST: WishlistItem[] = [
 
 export const WishlistPage: React.FC = () => {
   const { addItem } = useCart();
+  const { user } = useAuth();
+  const userId = getStableUserId(user);
   const navigate = useNavigate();
 
-  const [wishlist, setWishlist] = useState<WishlistItem[]>(INITIAL_WISHLIST);
+  const [wishlist, setWishlist] = useState<WishlistItem[]>(() => {
+    const saved = getAccountWishlist(userId);
+    if (saved && saved.length > 0) return saved;
+    return INITIAL_WISHLIST;
+  });
+
+  useEffect(() => {
+    const saved = getAccountWishlist(userId);
+    if (saved && saved.length > 0) {
+      setWishlist(saved);
+    } else {
+      setWishlist(INITIAL_WISHLIST);
+    }
+  }, [userId]);
+
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = (msg: string) => {
@@ -97,7 +119,9 @@ export const WishlistPage: React.FC = () => {
   };
 
   const handleRemove = (id: string, name: string) => {
-    setWishlist(wishlist.filter((w) => w.id !== id));
+    const updated = wishlist.filter((w) => w.id !== id);
+    setWishlist(updated);
+    setAccountWishlist(userId, updated);
     showToast(`Removed "${name}" from your wishlist.`);
   };
 
@@ -119,7 +143,9 @@ export const WishlistPage: React.FC = () => {
       },
       1
     );
-    setWishlist(wishlist.filter((w) => w.id !== item.id));
+    const updated = wishlist.filter((w) => w.id !== item.id);
+    setWishlist(updated);
+    setAccountWishlist(userId, updated);
     showToast(`Moved "${item.name}" to shopping cart!`);
   };
 
