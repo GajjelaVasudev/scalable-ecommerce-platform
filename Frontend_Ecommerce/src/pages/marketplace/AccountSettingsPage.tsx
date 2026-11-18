@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { AccountLayout } from '../../components/account/AccountLayout';
+import { api } from '../../services/api';
 import {
   ShieldCheck,
   KeyRound,
@@ -29,6 +30,7 @@ export const AccountSettingsPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [passwordFeedback, setPasswordFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
 
   // Notification Preferences
   const [smsOrders, setSmsOrders] = useState(true);
@@ -51,7 +53,7 @@ export const AccountSettingsPage: React.FC = () => {
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const handlePasswordChange = (e: React.FormEvent) => {
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordFeedback(null);
 
@@ -59,8 +61,8 @@ export const AccountSettingsPage: React.FC = () => {
       setPasswordFeedback({ type: 'error', message: 'Please enter your current password.' });
       return;
     }
-    if (newPassword.length < 8) {
-      setPasswordFeedback({ type: 'error', message: 'New password must be at least 8 characters.' });
+    if (newPassword.length < 6) {
+      setPasswordFeedback({ type: 'error', message: 'New password must be at least 6 characters long.' });
       return;
     }
     if (newPassword !== confirmPassword) {
@@ -68,15 +70,25 @@ export const AccountSettingsPage: React.FC = () => {
       return;
     }
 
-    // Success simulation
-    setPasswordFeedback({
-      type: 'success',
-      message: 'Password successfully updated! All active sessions remain secure.',
-    });
-    setCurrentPassword('');
-    setNewPassword('');
-    setConfirmPassword('');
-    showToast('Password updated successfully.');
+    setIsUpdatingPassword(true);
+    try {
+      await api.auth.updateProfile({ currentPassword, newPassword });
+      setPasswordFeedback({
+        type: 'success',
+        message: 'Password successfully updated on server! All active sessions remain secure.',
+      });
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      showToast('Password updated successfully.');
+    } catch (err: any) {
+      setPasswordFeedback({
+        type: 'error',
+        message: err.message || 'Failed to update password. Please check your current password.',
+      });
+    } finally {
+      setIsUpdatingPassword(false);
+    }
   };
 
   const handleDeleteAccount = () => {
@@ -190,13 +202,13 @@ export const AccountSettingsPage: React.FC = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              minLength={8}
+              minLength={6}
               className="w-full h-10 px-3 bg-surface-container-low text-on-surface text-sm rounded-xl border border-outline-variant/30 focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
 
           <div className="sm:col-span-3 flex justify-end pt-1">
-            <Button type="submit" variant="primary" size="sm">
+            <Button type="submit" variant="primary" size="sm" isLoading={isUpdatingPassword}>
               Update Password
             </Button>
           </div>

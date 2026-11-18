@@ -5,6 +5,7 @@ import { useCart } from '../../context/CartContext';
 import { api } from '../../services/api';
 import { Order } from '../../types';
 import { formatCurrency, formatDate } from '../../utils/format';
+import { getStableUserId, isDemoUser, getAccountLastOrder } from '../../utils/accountStorage';
 import {
   Package,
   Search,
@@ -163,7 +164,12 @@ export const OrdersPage: React.FC = () => {
   // Interactive Modal / Drawer / Toast states
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [trackingModalOrder, setTrackingModalOrder] = useState<Order | null>(null);
-  const [selectedDrawerOrder, setSelectedDrawerOrder] = useState<Order | null>(null);
+  const [cancelModalOrder, setCancelModalOrder] = useState<Order | null>(null);
+  const [cancelReason, setCancelReason] = useState('Accidental purchase / placed by mistake');
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [returnModalOrder, setReturnModalOrder] = useState<Order | null>(null);
+  const [returnReason, setReturnReason] = useState('Item defective / not functioning as expected');
+  const [isReturning, setIsReturning] = useState(false);
   const [activePopoverId, setActivePopoverId] = useState<string | null>(null);
 
   // Trigger toast feedback
@@ -176,14 +182,9 @@ export const OrdersPage: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    // Check session storage first for any freshly placed order
-    let cachedPlacedOrders: Order[] = [];
-    try {
-      const last = sessionStorage.getItem('omizon_last_order');
-      if (last) {
-        cachedPlacedOrders.push(JSON.parse(last));
-      }
-    } catch {}
+    const last = getAccountLastOrder(getStableUserId(user));
+    const cachedPlacedOrders: Order[] = last ? [last] : [];
+    const isDemo = isDemoUser(user);
 
     api.orders
       .list()
@@ -197,31 +198,77 @@ export const OrdersPage: React.FC = () => {
             }
           });
           setOrders(merged);
+        } else if (cachedPlacedOrders.length > 0) {
+          setOrders(cachedPlacedOrders);
+        } else if (isDemo) {
+          setOrders(STITCH_DEMO_ORDERS);
         } else {
-          // Use Stitch demo catalog orders
-          const merged = [...cachedPlacedOrders];
-          STITCH_DEMO_ORDERS.forEach((s) => {
-            if (!merged.some((m) => m._id === s._id)) {
-              merged.push(s);
-            }
-          });
-          setOrders(merged);
+          setOrders([]);
         }
       })
       .catch((err) => {
-        console.warn('Orders fetch error, displaying Stitch orders:', err.message);
-        const merged = [...cachedPlacedOrders];
-        STITCH_DEMO_ORDERS.forEach((s) => {
-          if (!merged.some((m) => m._id === s._id)) {
-            merged.push(s);
-          }
-        });
-        setOrders(merged);
+        console.warn('Orders fetch error:', err.message);
+        if (cachedPlacedOrders.length > 0) {
+          setOrders(cachedPlacedOrders);
+        } else if (isDemo) {
+          setOrders(STITCH_DEMO_ORDERS);
+        } else {
+          setOrders([]);
+        }
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, []);
+  }, [user]);
+
+  const handleConfirmCancel = async () => {
+    if (!cancelModalOrder) return;
+    setIsCancelling(true);
+    try {
+      await api.orders.cancel(cancelModalOrder._id, cancelReason);
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id === cancelModalOrder._id
+            ? { ...o, deliveryStatus: 'cancelled', cancellationReason: cancelReason }
+            : o
+        )
+      );
+      showToast(`Order #${cancelModalOrder._id} cancelled. Reserved stock released.`);
+      setCancelModalOrder(null);
+    } catch (err: any) {
+      showToast(err.message || 'Failed to cancel order.');
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
+  const handleConfirmReturn = async () => {
+    if (!returnModalOrder) return;
+    setIsReturning(true);
+    try {
+      await api.orders.requestReturn(returnModalOrder._id, returnReason);
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id === returnModalOrder._id
+            ? {
+                ...o,
+                deliveryStatus: 'returned',
+                returnReason,
+                paymentStatus: 'refunded',
+                refundStatus: 'completed',
+                refundAmount: o.totalAmount
+              }
+            : o
+        )
+      );
+      showToast(`Return requested for #${returnModalOrder._id}. Instant refund initiated.`);
+      setReturnModalOrder(null);
+    } catch (err: any) {
+      showToast(err.message || 'Failed to submit return request.');
+    } finally {
+      setIsReturning(false);
+    }
+  };
 
   // Filtered orders computation
   const filteredOrders = useMemo(() => {
@@ -234,7 +281,7 @@ export const OrdersPage: React.FC = () => {
       } else if (activeTab === 'cancelled') {
         if (order.deliveryStatus !== 'cancelled') return false;
       } else if (activeTab === 'returns') {
-        if (order.deliveryStatus !== 'cancelled') return false;
+        if (order.deliveryStatus !== 'returned') return false;
       }
 
       // Search query filter
@@ -701,14 +748,39 @@ export const OrdersPage: React.FC = () => {
                           {/* Item quick action buttons */}
                           <div className="flex flex-wrap items-center gap-2 self-stretch md:self-auto justify-end">
                             {inTransit && (
+                              <>
+                                <Button
+                                  variant="primary"
+                                  size="sm"
+                                  onClick={() => setTrackingModalOrder(order)}
+                                  icon={<Truck className="w-3.5 h-3.5" />}
+                                >
+                                  Track Package
+                                </Button>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => setCancelModalOrder(order)}
+                                  className="text-rose-600 dark:text-rose-400 hover:border-rose-400"
+                                >
+                                  Cancel Order
+                                </Button>
+                              </>
+                            )}
+                            {isDelivered && (
                               <Button
-                                variant="primary"
+                                variant="outline"
                                 size="sm"
-                                onClick={() => setTrackingModalOrder(order)}
-                                icon={<Truck className="w-3.5 h-3.5" />}
+                                onClick={() => setReturnModalOrder(order)}
+                                icon={<RotateCcw className="w-3.5 h-3.5" />}
                               >
-                                Track Package
+                                Return Item
                               </Button>
+                            )}
+                            {order.deliveryStatus === 'returned' && (
+                              <span className="text-xs font-semibold text-emerald-600 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+                                Refund Credited ({formatCurrency(order.totalAmount)})
+                              </span>
                             )}
                             <Button
                               variant="outline"
@@ -829,6 +901,134 @@ export const OrdersPage: React.FC = () => {
                 className="w-full justify-center"
               >
                 Close Live Tracker
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Order Modal */}
+      {cancelModalOrder && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-surface-container-lowest w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-outline-variant/20 p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-outline-variant/15 mb-4">
+              <h3 className="font-headline-sm text-lg font-bold text-on-surface">
+                Cancel Order #{cancelModalOrder._id}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setCancelModalOrder(null)}
+                className="text-outline hover:text-on-surface"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="font-body-md text-sm text-on-surface-variant mb-4">
+              Are you sure you want to cancel this order? Once cancelled, reserved inventory will be released and any charged amount will be refunded.
+            </p>
+
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-on-surface-variant uppercase mb-1.5">
+                Reason for Cancellation
+              </label>
+              <select
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                className="w-full h-11 px-3 bg-surface-container-low text-on-surface rounded-xl border border-outline-variant/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Accidental purchase / placed by mistake">Accidental purchase / placed by mistake</option>
+                <option value="Found a better price elsewhere">Found a better price elsewhere</option>
+                <option value="Delivery timeframe is too long">Delivery timeframe is too long</option>
+                <option value="Need to change delivery address or phone">Need to change delivery address or phone</option>
+                <option value="Other / changed my mind">Other / changed my mind</option>
+              </select>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCancelModalOrder(null)}
+                disabled={isCancelling}
+              >
+                Keep Order
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleConfirmCancel}
+                disabled={isCancelling}
+                className="bg-rose-600 hover:bg-rose-700 text-white"
+              >
+                {isCancelling ? 'Cancelling...' : 'Confirm Cancellation'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Return Request Modal */}
+      {returnModalOrder && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-surface-container-lowest w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-outline-variant/20 p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-outline-variant/15 mb-4">
+              <div className="flex items-center gap-2">
+                <RotateCcw className="w-5 h-5 text-primary" />
+                <h3 className="font-headline-sm text-lg font-bold text-on-surface">
+                  Request Return & Refund
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setReturnModalOrder(null)}
+                className="text-outline hover:text-on-surface"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="font-body-md text-sm text-on-surface-variant mb-4">
+              Submit a return request for Order #{returnModalOrder._id}. Our FastX logistics executive will pick up the package from your doorstep.
+            </p>
+
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-on-surface-variant uppercase mb-1.5">
+                Reason for Return
+              </label>
+              <select
+                value={returnReason}
+                onChange={(e) => setReturnReason(e.target.value)}
+                className="w-full h-11 px-3 bg-surface-container-low text-on-surface rounded-xl border border-outline-variant/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Item defective / not functioning as expected">Item defective / not functioning as expected</option>
+                <option value="Received damaged outer carton or product">Received damaged outer carton or product</option>
+                <option value="Item different from catalog description">Item different from catalog description</option>
+                <option value="Size, fit, or color not as expected">Size, fit, or color not as expected</option>
+                <option value="Missing parts or accessories in box">Missing parts or accessories in box</option>
+              </select>
+            </div>
+
+            <div className="p-3 bg-primary/10 border border-primary/20 rounded-xl text-xs text-primary mb-4">
+              Refund of <strong>{formatCurrency(returnModalOrder.totalAmount)}</strong> will be credited to your original payment method immediately upon courier doorstep scan.
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setReturnModalOrder(null)}
+                disabled={isReturning}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleConfirmReturn}
+                disabled={isReturning}
+              >
+                {isReturning ? 'Processing...' : 'Submit Return Request'}
               </Button>
             </div>
           </div>
