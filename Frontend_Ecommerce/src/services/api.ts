@@ -230,6 +230,26 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ shippingAddress, paymentMethod }),
       }),
+    createGuest: (body: {
+      shippingAddress: ShippingAddress;
+      items: Array<{ product: string; quantity: number; variant?: string }>;
+      paymentMethod?: string;
+    }) =>
+      request<{ message: string; order: Order; guestAccessToken: string }>('/order/guest', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    getGuestById: (id: string, guestToken: string) =>
+      request<{ message: string; order: Order }>(`/order/guest/${id}`, {
+        method: 'GET',
+        headers: { 'x-guest-token': guestToken },
+      }),
+    cancelGuest: (id: string, guestToken: string, reason?: string) =>
+      request<{ message: string; order: Order }>(`/order/guest/${id}/cancel`, {
+        method: 'PATCH',
+        headers: { 'x-guest-token': guestToken },
+        body: JSON.stringify({ reason }),
+      }),
     list: (params?: { page?: number; limit?: number; all?: boolean; status?: string; search?: string; scope?: string }) =>
       request<OrderListResponse>('/order', {
         method: 'GET',
@@ -284,6 +304,16 @@ export const api = {
         keyId: string;
       }>(`/payments/${orderId}`, {
         method: 'POST',
+      }),
+    createGuestAttempt: (orderId: string, guestToken: string) =>
+      request<{
+        message: string;
+        payment: any;
+        razorpayOrderId: string;
+        keyId: string;
+      }>(`/payments/guest/${orderId}`, {
+        method: 'POST',
+        headers: { 'x-guest-token': guestToken },
       }),
     getReconciliation: () =>
       request<{ message: string; issues: PaymentIssue[] }>('/payments/reconciliation', {

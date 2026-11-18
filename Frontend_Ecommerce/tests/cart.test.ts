@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { STITCH_DEFAULT_CART_ITEMS, getInitialGuestCart, LOCAL_CART_KEY } from '../src/context/CartContext';
+import { STITCH_DEFAULT_CART_ITEMS, getInitialGuestCart, LOCAL_CART_KEY, reconcileCart } from '../src/context/CartContext';
 import { INITIAL_SAVED_ITEMS } from '../src/components/cart/SavedForLaterSection';
 
 describe('Cart Pricing & Stitch Catalog Data Integrity', () => {
@@ -136,6 +136,184 @@ describe('Guest Cart Initialization & Isolation', () => {
 
   test('LOCAL_CART_KEY is standard omizon_guest_cart', () => {
     assert.equal(LOCAL_CART_KEY, 'omizon_guest_cart');
+  });
+});
+
+describe('Cart Hydration & Server Reconciliation Regression Tests', () => {
+  const sampleLocalItem = {
+    product: {
+      _id: 'prod_local_123',
+      name: 'Smart Noise-Cancelling Earbuds',
+      description: 'Wireless earbuds',
+      price: 4999,
+      stock: 25,
+      category: { _id: 'cat_1', name: 'Electronics', slug: 'electronics' },
+      image: 'https://example.com/earbuds.jpg',
+      seller: { _id: 'seller_1', username: 'AudioPrime' },
+      status: 'active',
+      rating: 4.7,
+      reviewCount: 45,
+    },
+    quantity: 1,
+    price: 4999,
+    variant: 'default',
+  };
+
+  test('Cart hydration does not erase valid local items when server cart returns empty', () => {
+    const currentCart = { items: [sampleLocalItem] };
+    const emptyServerCart = { items: [] };
+
+    const { nextCart, itemsToSync } = reconcileCart(currentCart as any, emptyServerCart as any);
+
+    assert.equal(nextCart.items.length, 1, 'Local items must be preserved');
+    assert.equal(nextCart.items[0].product.name, 'Smart Noise-Cancelling Earbuds');
+    assert.equal(itemsToSync.length, 1, 'Local item must be queued for server synchronization');
+  });
+
+  test('Cart hydration merges local items when server cart already contains other items', () => {
+    const currentCart = { items: [sampleLocalItem] };
+    const serverCart = {
+      items: [
+        {
+          product: {
+            _id: 'prod_server_456',
+            name: 'Mechanical Gaming Keyboard',
+            price: 7999,
+          },
+          quantity: 2,
+          price: 7999,
+          variant: 'default',
+        },
+      ],
+    };
+
+    const { nextCart, itemsToSync } = reconcileCart(currentCart as any, serverCart as any);
+
+    assert.equal(nextCart.items.length, 2, 'Both server and local items must be present');
+    assert.equal(itemsToSync.length, 1, 'Local item must be synced to server');
+  });
+
+  test('Cart hydration accepts server cart when local cart is genuinely empty', () => {
+    const currentCart = { items: [] };
+    const serverCart = {
+      items: [
+        {
+          product: { _id: 'prod_server_456', name: 'Keyboard', price: 7999 },
+          quantity: 1,
+          price: 7999,
+          variant: 'default',
+        },
+      ],
+    };
+
+    const { nextCart, itemsToSync } = reconcileCart(currentCart as any, serverCart as any);
+
+    assert.equal(nextCart.items.length, 1);
+    assert.equal(itemsToSync.length, 0);
+  });
+
+  test('Cart hydration remains empty when both local and server carts are empty', () => {
+    const currentCart = { items: [] };
+    const emptyServerCart = { items: [] };
+
+    const { nextCart, itemsToSync } = reconcileCart(currentCart as any, emptyServerCart as any);
+
+    assert.equal(nextCart.items.length, 0);
+    assert.equal(itemsToSync.length, 0);
+  });
+
+  test('Refreshing the page preserves cart items in localStorage without break', () => {
+    const serialized = JSON.stringify({ items: [sampleLocalItem] });
+    const restored = getInitialGuestCart(serialized, false);
+
+    assert.equal(restored.items.length, 1);
+    assert.equal(restored.items[0].product.name, 'Smart Noise-Cancelling Earbuds');
+    assert.equal(restored.items[0].price, 4999);
+  });
+
+  test('Cart reconciliation combines duplicate item quantities without losing units', () => {
+    const currentCart = {
+      items: [
+        {
+          product: { _id: 'prod_dup_1', name: 'USB-C Cable', stock: 10, status: 'active' },
+          quantity: 2,
+          variant: 'default',
+          price: 499,
+        },
+      ],
+    };
+    const serverCart = {
+      items: [
+        {
+          product: { _id: 'prod_dup_1', name: 'USB-C Cable', stock: 10, status: 'active' },
+          quantity: 3,
+          variant: 'default',
+          price: 499,
+        },
+      ],
+    };
+
+    const { nextCart, itemsToSync } = reconcileCart(currentCart as any, serverCart as any);
+
+    assert.equal(nextCart.items.length, 1);
+    assert.equal(nextCart.items[0].quantity, 5, 'Merged quantity must be the sum (2 + 3 = 5)');
+    assert.equal(itemsToSync.length, 1);
+    assert.equal(itemsToSync[0].action, 'update');
+    assert.equal(itemsToSync[0].quantity, 5);
+  });
+
+  test('Cart reconciliation caps merged quantity at available product stock', () => {
+    const currentCart = {
+      items: [
+        {
+          product: { _id: 'prod_limited_1', name: 'Limited Edition Watch', stock: 4, status: 'active' },
+          quantity: 3,
+          variant: 'default',
+          price: 14999,
+        },
+      ],
+    };
+    const serverCart = {
+      items: [
+        {
+          product: { _id: 'prod_limited_1', name: 'Limited Edition Watch', stock: 4, status: 'active' },
+          quantity: 2,
+          variant: 'default',
+          price: 14999,
+        },
+      ],
+    };
+
+    const { nextCart, itemsToSync } = reconcileCart(currentCart as any, serverCart as any);
+
+    assert.equal(nextCart.items.length, 1);
+    assert.equal(nextCart.items[0].quantity, 4, 'Merged quantity must be capped at stock (4)');
+    assert.equal(itemsToSync[0].quantity, 4);
+  });
+
+  test('Cart reconciliation removes inactive or deleted products', () => {
+    const currentCart = {
+      items: [
+        {
+          product: { _id: 'prod_active', name: 'Active Prod', stock: 5, status: 'active' },
+          quantity: 1,
+          variant: 'default',
+          price: 999,
+        },
+        {
+          product: { _id: 'prod_inactive', name: 'Inactive Prod', stock: 5, status: 'inactive' },
+          quantity: 1,
+          variant: 'default',
+          price: 999,
+        },
+      ],
+    };
+    const serverCart = { items: [] };
+
+    const { nextCart } = reconcileCart(currentCart as any, serverCart as any);
+
+    assert.equal(nextCart.items.length, 1);
+    assert.equal(nextCart.items[0].product.name, 'Active Prod');
   });
 });
 

@@ -90,6 +90,98 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const LOCAL_CART_KEY = 'omizon_guest_cart';
 
+export interface ReconcileResult {
+  nextCart: Cart;
+  itemsToSync: Array<{ product: string; quantity: number; variant: string; action: 'add' | 'update' }>;
+}
+
+export function reconcileCart(
+  currentCart: Cart,
+  serverCart: Cart | null | undefined
+): ReconcileResult {
+  const localItems = (currentCart?.items || []).filter((item) => {
+    // Filter deleted / missing products or zero quantities
+    if (!item || !item.product || item.quantity <= 0) return false;
+    if (typeof item.product === 'object' && item.product.status && item.product.status !== 'active') return false;
+    return true;
+  });
+
+  const serverItems = (serverCart?.items || []).filter((item) => {
+    if (!item || !item.product || item.quantity <= 0) return false;
+    if (typeof item.product === 'object' && item.product.status && item.product.status !== 'active') return false;
+    return true;
+  });
+
+  const itemsToSync: Array<{ product: string; quantity: number; variant: string; action: 'add' | 'update' }> = [];
+  const mergedMap = new Map<string, CartItem>();
+
+  // 1. Populate map with valid server items
+  for (const sItem of serverItems) {
+    const sId = typeof sItem.product === 'object' ? sItem.product._id : sItem.product;
+    const variant = sItem.variant || 'default';
+    const key = `${sId}:::${variant}`;
+    const stock = typeof sItem.product === 'object' && Number.isFinite(sItem.product.stock) ? sItem.product.stock : Infinity;
+    const cappedQty = Math.max(1, Math.min(stock, sItem.quantity));
+
+    mergedMap.set(key, {
+      ...sItem,
+      variant,
+      quantity: cappedQty,
+    });
+  }
+
+  // 2. Merge local guest items with duplicate quantity preservation and stock validation
+  for (const lItem of localItems) {
+    const lId = typeof lItem.product === 'object' ? lItem.product._id : lItem.product;
+    const variant = lItem.variant || 'default';
+    const key = `${lId}:::${variant}`;
+    const localStock = typeof lItem.product === 'object' && Number.isFinite(lItem.product.stock) ? lItem.product.stock : Infinity;
+
+    if (mergedMap.has(key)) {
+      // Duplicate item in both carts: combine quantities up to available stock
+      const existing = mergedMap.get(key)!;
+      const combinedStock = typeof existing.product === 'object' && Number.isFinite(existing.product.stock)
+        ? existing.product.stock
+        : localStock;
+
+      const combinedQuantity = Math.min(combinedStock, existing.quantity + lItem.quantity);
+      if (combinedQuantity !== existing.quantity) {
+        mergedMap.set(key, {
+          ...existing,
+          quantity: combinedQuantity,
+        });
+        itemsToSync.push({
+          product: lId,
+          quantity: combinedQuantity,
+          variant,
+          action: 'update',
+        });
+      }
+    } else {
+      // Local item not present on server: validate stock and append
+      if (localStock <= 0) continue; // Skip out of stock items
+      const validQty = Math.max(1, Math.min(localStock, lItem.quantity));
+      const newItem: CartItem = {
+        ...lItem,
+        variant,
+        quantity: validQty,
+      };
+      mergedMap.set(key, newItem);
+      itemsToSync.push({
+        product: lId,
+        quantity: validQty,
+        variant,
+        action: 'add',
+      });
+    }
+  }
+
+  return {
+    nextCart: { items: Array.from(mergedMap.values()) },
+    itemsToSync,
+  };
+}
+
 export function getInitialGuestCart(
   savedCartJson: string | null,
   isExplicitDemo: boolean = false
@@ -115,6 +207,7 @@ export function getInitialGuestCart(
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
+  const cartVersionRef = React.useRef(0);
   const [cart, setCart] = useState<Cart>(() => {
     const saved = typeof window !== 'undefined' ? localStorage.getItem(LOCAL_CART_KEY) : null;
     const isExplicitDemo =
@@ -132,14 +225,45 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem(LOCAL_CART_KEY, JSON.stringify(cart));
   }, [cart]);
 
-  // Fetch from backend when user logs in
+  // Fetch from backend when user logs in and reconcile with local items
   const refreshCart = useCallback(async () => {
     if (!user || user.role !== 'buyer') return;
+    const versionAtStart = cartVersionRef.current;
     try {
       setIsLoading(true);
       const res = await api.cart.get();
+      if (cartVersionRef.current !== versionAtStart) return;
+
       if (res?.cart) {
-        setCart(res.cart);
+        let itemsToSync: ReconcileResult['itemsToSync'] = [];
+        setCart((currentCart) => {
+          if (cartVersionRef.current !== versionAtStart) return currentCart;
+          const result = reconcileCart(currentCart, res.cart);
+          itemsToSync = result.itemsToSync;
+          return result.nextCart;
+        });
+
+        // Asynchronously sync any un-synced local items or merged updates to the server
+        if (itemsToSync.length > 0) {
+          for (const item of itemsToSync) {
+            try {
+              if (item.action === 'update') {
+                await api.cart.updateItem(item.product, {
+                  quantity: item.quantity,
+                  variant: item.variant,
+                });
+              } else {
+                await api.cart.addItem({
+                  product: item.product,
+                  quantity: item.quantity,
+                  variant: item.variant,
+                });
+              }
+            } catch (err) {
+              console.warn('Sync item to backend cart notice:', err);
+            }
+          }
+        }
       }
     } catch (e) {
       console.warn('Failed to fetch user cart from backend:', e);
@@ -157,6 +281,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const toggleDrawer = () => setIsDrawerOpen((prev) => !prev);
 
   const addItem = async (product: Product, quantity: number = 1, variant: string = 'default') => {
+    cartVersionRef.current++;
     // Optimistic local update
     setCart((prev) => {
       const existingIndex = prev.items.findIndex(
@@ -194,6 +319,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const updateQuantity = async (productId: string, quantity: number, variant: string = 'default') => {
+    cartVersionRef.current++;
     if (quantity <= 0) {
       await removeItem(productId, variant);
       return;
@@ -220,6 +346,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeItem = async (productId: string, variant: string = 'default') => {
+    cartVersionRef.current++;
     setCart((prev) => ({
       ...prev,
       items: prev.items.filter((item) => {
@@ -238,6 +365,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const clearCart = async () => {
+    cartVersionRef.current++;
     setCart({ items: [] });
     if (user && user.role === 'buyer') {
       try {

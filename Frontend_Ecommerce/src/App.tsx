@@ -71,14 +71,7 @@ export function App() {
                 <Route path="products" element={<ShopAllPage />} />
                 <Route path="products/:id" element={<ProductDetailPage />} />
                 <Route path="cart" element={<CartPage />} />
-                <Route
-                  path="checkout"
-                  element={
-                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
-                      <CheckoutPage />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="checkout" element={<CheckoutPage />} />
                 <Route path="order-confirmation/:orderId" element={<OrderConfirmationPage />} />
                 <Route
                   path="orders"

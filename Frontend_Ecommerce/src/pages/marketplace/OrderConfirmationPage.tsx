@@ -48,9 +48,17 @@ export const OrderConfirmationPage: React.FC = () => {
   useEffect(() => {
     if (order || !orderId) return;
 
+    const storedToken = typeof window !== 'undefined'
+      ? sessionStorage.getItem(`omizon_guest_token_${orderId}`) || localStorage.getItem(`omizon_guest_token_${orderId}`)
+      : null;
+    const guestToken = (location.state as any)?.guestAccessToken || storedToken;
+
     setIsLoading(true);
-    api.orders
-      .getById(orderId)
+    const fetchPromise = guestToken
+      ? api.orders.getGuestById(orderId, guestToken)
+      : api.orders.getById(orderId);
+
+    fetchPromise
       .then((res) => {
         if (res?.order) {
           setOrder(res.order);

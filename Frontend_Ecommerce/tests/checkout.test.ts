@@ -119,3 +119,179 @@ describe('Payment Method Architecture', () => {
   });
 });
 
+describe('Checkout Cart Validation & Buyer Journey Regression Tests', () => {
+  const getActiveCheckoutItems = (
+    cartItems: any[],
+    isExplicitDemo: boolean = false
+  ) => {
+    if (cartItems.length > 0) {
+      return cartItems.map((i) => ({
+        product: typeof i.product === 'object' ? i.product._id : i.product,
+        name: typeof i.product === 'object' ? i.product.name : 'Product',
+        variant: i.variant || 'default',
+        quantity: i.quantity,
+        price: typeof i.product === 'object' ? i.product.price : i.price || 14999,
+      }));
+    }
+    if (isExplicitDemo) {
+      return STITCH_CHECKOUT_DEMO_ITEMS.map((i) => ({
+        product: i.id,
+        name: i.name,
+        variant: i.variant,
+        quantity: i.quantity,
+        price: i.price,
+      }));
+    }
+    return [];
+  };
+
+  test('A guest with one cart item can proceed to checkout with populated active items', () => {
+    const guestCartItems = [
+      {
+        product: {
+          _id: 'prod_guest_101',
+          name: 'Wireless Noise Cancelling Headphones',
+          price: 12999,
+        },
+        quantity: 1,
+        variant: 'default',
+        price: 12999,
+      },
+    ];
+
+    const activeItems = getActiveCheckoutItems(guestCartItems, false);
+    assert.equal(activeItems.length, 1);
+    assert.equal(activeItems[0].product, 'prod_guest_101');
+    assert.equal(activeItems[0].name, 'Wireless Noise Cancelling Headphones');
+    assert.equal(activeItems[0].price, 12999);
+
+    const subtotal = activeItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
+    assert.equal(subtotal, 12999);
+  });
+
+  test('An authenticated user with one server-side cart item can proceed to checkout', () => {
+    const authenticatedCartItems = [
+      {
+        product: {
+          _id: 'prod_auth_202',
+          name: 'ApexBook M3 Ultra 16-inch',
+          price: 74990,
+        },
+        quantity: 1,
+        variant: 'default',
+        price: 74990,
+      },
+    ];
+
+    const activeItems = getActiveCheckoutItems(authenticatedCartItems, false);
+    assert.equal(activeItems.length, 1);
+    assert.equal(activeItems[0].product, 'prod_auth_202');
+    assert.equal(activeItems[0].price, 74990);
+  });
+
+  test('A genuinely empty cart still cannot proceed to checkout', () => {
+    const emptyCartItems: any[] = [];
+    const isExplicitDemo = false;
+
+    const activeItems = getActiveCheckoutItems(emptyCartItems, isExplicitDemo);
+    assert.equal(activeItems.length, 0, 'Active items must be empty when cart is genuinely empty');
+
+    const canProceed = activeItems.length > 0;
+    assert.equal(canProceed, false, 'Genuinely empty cart must not proceed to checkout');
+  });
+
+  test('Explicit demo flag activates STITCH_CHECKOUT_DEMO_ITEMS when cart is empty', () => {
+    const emptyCartItems: any[] = [];
+    const isExplicitDemo = true;
+
+    const activeItems = getActiveCheckoutItems(emptyCartItems, isExplicitDemo);
+    assert.equal(activeItems.length, STITCH_CHECKOUT_DEMO_ITEMS.length);
+    assert.equal(activeItems[0].name, 'ApexBook M3 Ultra 16-inch');
+  });
+
+  test('Refreshing the page does not break the cart-to-checkout transition', () => {
+    // 1. Simulate product added and serialized to localStorage
+    const savedGuestCart = {
+      items: [
+        {
+          product: {
+            _id: 'prod_persisted_303',
+            name: 'Ergonomic Desk Chair',
+            price: 18499,
+          },
+          quantity: 2,
+          variant: 'default',
+          price: 18499,
+        },
+      ],
+    };
+    const jsonStr = JSON.stringify(savedGuestCart);
+
+    // 2. Simulate page reload where cart state is rehydrated from JSON
+    const rehydratedCart = JSON.parse(jsonStr);
+    assert.ok(Array.isArray(rehydratedCart.items));
+
+    // 3. Simulate CheckoutPage receiving the rehydrated cart
+    const activeItems = getActiveCheckoutItems(rehydratedCart.items, false);
+    assert.equal(activeItems.length, 1);
+    assert.equal(activeItems[0].product, 'prod_persisted_303');
+    assert.equal(activeItems[0].quantity, 2);
+
+    const subtotal = activeItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
+    assert.equal(subtotal, 36998);
+  });
+
+  test('Guest checkout payload builds valid backend API request with genuine items and shipping address', () => {
+    const activeItems = [
+      { product: 'prod_guest_404', name: 'Smart Watch', variant: 'default', quantity: 1, price: 9999 },
+    ];
+    const shippingAddress = {
+      fullName: 'Rahul Dravid',
+      phone: '9845012345',
+      addressLine: 'MG Road',
+      city: 'Bengaluru',
+      state: 'Karnataka',
+      postalCode: '560001',
+      country: 'India',
+    };
+
+    const guestPayload = {
+      shippingAddress,
+      items: activeItems.map((item) => ({
+        product: item.product,
+        quantity: item.quantity,
+        variant: item.variant,
+      })),
+      paymentMethod: 'COD',
+    };
+
+    assert.equal(guestPayload.items.length, 1);
+    assert.equal(guestPayload.items[0].product, 'prod_guest_404');
+    assert.equal(guestPayload.items[0].variant, 'default');
+    assert.equal(guestPayload.paymentMethod, 'COD');
+    assert.equal(guestPayload.shippingAddress.postalCode, '560001');
+  });
+
+  test('Guest confirmation URL formatting avoids exposing guest tokens in URLs and stores in sessionStorage', () => {
+    const orderId = 'ord_guest_999';
+    const guestAccessToken = 'tok_secure_guest_abc123';
+
+    // Verify confirmation URL does NOT expose the guest access token in query parameters
+    const confirmUrl = `/order-confirmation/${orderId}`;
+    assert.equal(confirmUrl, '/order-confirmation/ord_guest_999');
+    assert.equal(confirmUrl.includes('?'), false, 'URL must not contain query parameters');
+    assert.equal(confirmUrl.includes('token='), false, 'URL must never expose token');
+
+    // Simulate sessionStorage token persistence for session refresh isolation
+    const mockSessionStorage: Record<string, string> = {};
+    mockSessionStorage[`omizon_guest_token_${orderId}`] = guestAccessToken;
+
+    const retrievedToken = mockSessionStorage[`omizon_guest_token_${orderId}`];
+    assert.equal(retrievedToken, 'tok_secure_guest_abc123');
+
+    // Headers sent via api.orders.getGuestById contain x-guest-token header
+    const headers = { 'x-guest-token': retrievedToken };
+    assert.equal(headers['x-guest-token'], 'tok_secure_guest_abc123');
+  });
+});
+

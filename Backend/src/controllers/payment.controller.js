@@ -209,6 +209,120 @@ async function createPayment(req, res) {
     }
 }
 
+async function createGuestPayment(req, res) {
+    try {
+        const { orderId } = req.params;
+        const guestToken = req.headers['x-guest-token'] || req.body?.guestAccessToken;
+
+        if (!mongoose.isValidObjectId(orderId)) {
+            return res.status(400).json({ message: 'Invalid order ID' });
+        }
+
+        if (!guestToken || typeof guestToken !== 'string') {
+            return res.status(403).json({ message: 'Guest access token is required' });
+        }
+
+        const order = await Order.findOne({
+            _id: orderId,
+            isGuest: true
+        }).select('+guestAccessTokenHash');
+
+        if (!order || !order.guestAccessTokenHash) {
+            return res.status(404).json({ message: 'Guest order not found or access denied' });
+        }
+
+        const incomingHash = crypto.createHash('sha256').update(guestToken).digest('hex');
+        const storedBuffer = Buffer.from(order.guestAccessTokenHash, 'hex');
+        const incomingBuffer = Buffer.from(incomingHash, 'hex');
+
+        if (storedBuffer.length !== incomingBuffer.length || !crypto.timingSafeEqual(storedBuffer, incomingBuffer)) {
+            return res.status(403).json({ message: 'Forbidden: invalid guest access token' });
+        }
+
+        if (order.paymentStatus === 'paid') {
+            return res.status(400).json({ message: 'Order is already paid' });
+        }
+
+        if (order.paymentMethod === 'COD') {
+            return res.status(400).json({ message: 'Payment attempts cannot be created for Cash on Delivery (COD) orders' });
+        }
+
+        if (!Number.isFinite(Number(order.totalAmount)) || Number(order.totalAmount) <= 0) {
+            return res.status(400).json({ message: 'Order amount is invalid' });
+        }
+
+        const reservations = await Reservation.find({
+            order: order._id,
+            status: 'reserved',
+            expiresAt: { $gt: new Date() }
+        });
+
+        if (!reservations || reservations.length === 0) {
+            return res.status(409).json({ message: 'Inventory reservation expired. Please review your order.' });
+        }
+
+        const amountInPaise = Math.round(order.totalAmount * 100);
+        let razorpayOrder;
+
+        if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET && process.env.RAZORPAY_KEY_SECRET !== 'mock_secret') {
+            try {
+                razorpayOrder = await razorpay.orders.create({
+                    amount: amountInPaise,
+                    currency: 'INR',
+                    receipt: `rcpt_${order._id.toString().slice(-8)}`,
+                    notes: { orderId: order._id.toString(), isGuest: 'true' }
+                });
+            } catch (rzpErr) {
+                console.warn('Razorpay live guest order create warning:', rzpErr.message);
+                razorpayOrder = { id: `order_rzp_mock_${Date.now()}` };
+            }
+        } else {
+            razorpayOrder = { id: `order_rzp_mock_${Date.now()}` };
+        }
+
+        let payment;
+        try {
+            payment = await Payment.create({
+                order: order._id,
+                user: null,
+                amount: order.totalAmount,
+                currency: 'INR',
+                provider: 'razorpay',
+                providerOrderId: razorpayOrder.id,
+                status: 'created',
+                activeAttempt: true
+            });
+        } catch (dbErr) {
+            if (dbErr.code === 11000) {
+                const existingPayment = await Payment.findOne({
+                    order: order._id,
+                    activeAttempt: true
+                }).sort({ createdAt: -1 });
+
+                if (existingPayment) {
+                    return res.status(200).json({
+                        message: 'Payment attempt already exists',
+                        payment: existingPayment,
+                        razorpayOrderId: existingPayment.providerOrderId,
+                        keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_mock'
+                    });
+                }
+            }
+            throw dbErr;
+        }
+
+        return res.status(201).json({
+            message: 'Payment attempt created successfully',
+            payment,
+            razorpayOrderId: razorpayOrder.id,
+            keyId: process.env.RAZORPAY_KEY_ID || 'rzp_test_mock'
+        });
+    } catch (error) {
+        console.error('Create guest payment error:', error.message);
+        return res.status(500).json({ message: 'Failed to create guest payment attempt' });
+    }
+}
+
 // RAZORPAY WEBHOOK
 async function handleWebhook(req, res) {
     const signature = req.headers['x-razorpay-signature'];
@@ -554,6 +668,7 @@ async function resolvePaymentIssue(req, res) {
 
 module.exports = {
     createPayment,
+    createGuestPayment,
     handleWebhook,
     listPaymentIssues,
     resolvePaymentIssue

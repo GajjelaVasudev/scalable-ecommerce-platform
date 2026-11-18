@@ -65,7 +65,12 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
   const [couponInput, setCouponInput] = useState('');
   const [couponError, setCouponError] = useState('');
 
-  // Use real cart items if available, or fall back to canonical Stitch preview items
+  const isExplicitDemo =
+    typeof window !== 'undefined' &&
+    (localStorage.getItem('omizon_demo_cart') === 'true' ||
+      new URLSearchParams(window.location.search).get('demo') === 'cart');
+
+  // Use real cart items if available, or fall back to canonical Stitch preview items only when explicitly in demo mode
   const displayItems: CheckoutSummaryProduct[] =
     cartItems.length > 0
       ? cartItems.map((item, idx) => {
@@ -87,7 +92,9 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
             image: pImg,
           };
         })
-      : STITCH_CHECKOUT_DEMO_ITEMS;
+      : isExplicitDemo
+      ? STITCH_CHECKOUT_DEMO_ITEMS
+      : [];
 
   const totalItemsCount = displayItems.reduce((acc, curr) => acc + curr.quantity, 0);
   const itemsSubtotal = displayItems.reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
@@ -126,30 +133,34 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
 
         {/* Products Preview */}
         <div className="flex flex-col gap-3 py-1 max-h-72 overflow-y-auto pr-1">
-          {displayItems.map((prod) => (
-            <div key={prod.id} className="flex items-center gap-3">
-              <div className="w-14 h-14 rounded-lg bg-surface-container-low flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-xs">
-                <img
-                  className="w-full h-full object-cover rounded-md"
-                  alt={prod.name}
-                  src={prod.image}
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-title-sm text-on-surface truncate font-semibold">
-                  {prod.name}
-                </p>
-                <div className="flex items-center justify-between text-body-sm text-on-surface-variant mt-0.5">
-                  <span>
-                    Qty: {prod.quantity} • {prod.variant}
-                  </span>
-                  <span className="font-title-sm text-on-surface font-semibold">
-                    {formatInr(prod.price * prod.quantity)}
-                  </span>
+          {displayItems.length > 0 ? (
+            displayItems.map((prod) => (
+              <div key={prod.id} className="flex items-center gap-3">
+                <div className="w-14 h-14 rounded-lg bg-surface-container-low flex items-center justify-center p-1 shrink-0 overflow-hidden shadow-xs">
+                  <img
+                    className="w-full h-full object-cover rounded-md"
+                    alt={prod.name}
+                    src={prod.image}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-title-sm text-on-surface truncate font-semibold">
+                    {prod.name}
+                  </p>
+                  <div className="flex items-center justify-between text-body-sm text-on-surface-variant mt-0.5">
+                    <span>
+                      Qty: {prod.quantity} • {prod.variant}
+                    </span>
+                    <span className="font-title-sm text-on-surface font-semibold">
+                      {formatInr(prod.price * prod.quantity)}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-body-sm text-outline py-4 text-center">Your checkout cart is empty</p>
+          )}
         </div>
 
         {/* Promo Code Module */}
@@ -267,7 +278,7 @@ export const CheckoutOrderSummary: React.FC<CheckoutOrderSummaryProps> = ({
           id="place-order-btn"
           type="button"
           onClick={onPlaceOrder}
-          disabled={isSubmitting}
+          disabled={isSubmitting || displayItems.length === 0}
           className="w-full h-12 bg-primary hover:bg-secondary active:scale-[0.99] text-on-primary font-title-md rounded-lg font-bold flex items-center justify-center gap-2 shadow-md shadow-primary/20 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {isSubmitting ? (

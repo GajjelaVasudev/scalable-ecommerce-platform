@@ -259,7 +259,7 @@ export const ProductDetailsPage: React.FC = () => {
     ? selectedVariant
     : isSoundPulseHeadphones
     ? `${selectedColor.name} • ${selectedEdition.name}`
-    : 'Standard';
+    : 'default';
 
   // Add to cart
   const handleAddToCart = () => {
