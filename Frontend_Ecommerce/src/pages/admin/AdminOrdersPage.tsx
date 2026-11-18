@@ -122,6 +122,7 @@ export const AdminOrdersPage: React.FC = () => {
             <option value="shipped">Shipped</option>
             <option value="delivered">Delivered</option>
             <option value="cancelled">Cancelled</option>
+            <option value="returned">Returned / Refunded</option>
           </select>
         </div>
       ),
