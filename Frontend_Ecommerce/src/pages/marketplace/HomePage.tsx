@@ -1,30 +1,64 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { api } from '../../services/api';
 import { Product } from '../../types';
 import { formatCurrency, calculateDiscount } from '../../utils/format';
+import { getStableUserId, getAccountLastOrder, getAccountWishlist, setAccountWishlist } from '../../utils/accountStorage';
 
 export const HomePage: React.FC = () => {
+  const { user, isAuthenticated } = useAuth();
   const { addItem } = useCart();
   const navigate = useNavigate();
 
-  // Live Catalog State
+  const userId = getStableUserId(user);
+  const firstName = user?.username ? user.username.split(/[\s_]+/)[0] : 'Customer';
+  const lastOrder = getAccountLastOrder(userId);
+
+  // Live Catalog State from Backend
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [dealProducts, setDealProducts] = useState<Product[]>([]);
-  const [groceryProducts, setGroceryProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Wishlist state
+  const [wishlistIds, setWishlistIds] = useState<string[]>(() => {
+    const list = getAccountWishlist(userId);
+    return list ? list.map((item: any) => item._id || item.id) : [];
+  });
+
+  const toggleWishlist = (productId: string, productName: string, price: number, image: string, category: string) => {
+    const current = getAccountWishlist(userId) || [];
+    let updated: any[];
+    if (wishlistIds.includes(productId)) {
+      updated = current.filter((item: any) => (item._id || item.id) !== productId);
+      setWishlistIds((prev) => prev.filter((id) => id !== productId));
+    } else {
+      updated = [
+        ...current,
+        {
+          id: productId,
+          name: productName,
+          price,
+          image,
+          category,
+          specs: 'Verified OMIZON SKU',
+        },
+      ];
+      setWishlistIds((prev) => [...prev, productId]);
+    }
+    setAccountWishlist(userId, updated);
+  };
 
   // Fetch live products for homepage sections from MongoDB-backed public API
   const fetchHomeData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const [featuredRes, dealsRes, groceryRes] = await Promise.all([
+      const [featuredRes, dealsRes] = await Promise.all([
         api.products.list({ featured: true, limit: 8 }),
-        api.products.list({ limit: 4, sort: 'price_desc' }),
-        api.products.list({ category: 'grocery & essentials', limit: 4 }),
+        api.products.list({ limit: 5, sort: 'price_desc' }),
       ]);
 
       if (featuredRes?.products && Array.isArray(featuredRes.products)) {
@@ -32,9 +66,6 @@ export const HomePage: React.FC = () => {
       }
       if (dealsRes?.products && Array.isArray(dealsRes.products)) {
         setDealProducts(dealsRes.products);
-      }
-      if (groceryRes?.products && Array.isArray(groceryRes.products)) {
-        setGroceryProducts(groceryRes.products);
       }
     } catch (err: any) {
       console.error('Failed to load homepage catalog data:', err);
@@ -51,15 +82,15 @@ export const HomePage: React.FC = () => {
     fetchHomeData();
   }, [fetchHomeData]);
 
-  // Countdown Timer Micro-Interaction
+  // Live Countdown Timer for Flash Reductions
   const [timeLeft, setTimeLeft] = useState({
     hours: 4,
-    minutes: 13,
-    seconds: 46,
+    minutes: 36,
+    seconds: 57,
   });
 
   useEffect(() => {
-    let totalSeconds = 4 * 3600 + 13 * 60 + 46;
+    let totalSeconds = 4 * 3600 + 36 * 60 + 57;
     const interval = setInterval(() => {
       if (totalSeconds <= 0) {
         totalSeconds = 12 * 3600;
@@ -75,23 +106,28 @@ export const HomePage: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const [activeCategoryTab, setActiveCategoryTab] = useState<'mac' | 'displays' | 'ergonomics'>('mac');
+  // Filter tab states for Recommendations & Trending
+  const [recommendationFilter, setRecommendationFilter] = useState<'all' | 'workspace' | 'sound'>('all');
+  const [trendingTab, setTrendingTab] = useState<'top5' | 'electronics' | 'home' | 'coffee' | 'beauty'>('top5');
 
+  // Quick add to cart
   const handleQuickAdd = (
     id: string,
     name: string,
     price: number,
     image: string,
-    category: string
+    category: string,
+    originalPrice?: number
   ) => {
     addItem({
       _id: id,
-      name: name,
+      name,
       description: name,
-      price: price,
+      price,
+      originalPrice: originalPrice || Math.round(price * 1.25),
       stock: 25,
-      category: category,
-      image: image,
+      category,
+      image,
       images: [image],
       rating: 4.8,
       reviewCount: 120,
@@ -100,37 +136,72 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full">
-      {/* 1. Slim Announcement Banner */}
-      <section className="w-full bg-surface-container-high/80 border-b border-outline-variant/20 px-4 sm:px-6 lg:px-8 py-2">
-        <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="bg-primary text-on-primary font-bold text-[10px] uppercase px-2 py-0.5 rounded-full tracking-wide">
-              Spring Festival
+    <div className="flex flex-col w-full bg-surface">
+      {/* 1. Live Order Dispatch Ticker & Personalized Welcome Ribbon */}
+      <section className="w-full bg-surface-container-low py-space-sm px-margin-mobile md:px-margin border-b border-lavender-mist/40">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-space-sm">
+          <div className="flex items-center gap-space-sm min-w-0">
+            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed shrink-0 shadow-xs">
+              <span className="material-symbols-outlined text-[16px]">waving_hand</span>
             </span>
-            <p className="text-on-surface">
-              Save up to <strong className="font-semibold">50%</strong> across Tech, Living &amp; Beauty + Instant{' '}
-              <span className="text-primary font-semibold">₹500 off</span> with UPI checkout.
-            </p>
+            <div className="truncate">
+              <span className="font-title-sm text-title-sm text-ink font-semibold">
+                {isAuthenticated && user?.username ? `Welcome back, ${firstName}` : 'Welcome to OMIZON'}
+              </span>
+              <span className="font-body-sm text-body-sm text-ink-muted ml-1.5 hidden sm:inline">
+                • Pick up where you left off in Bandra West
+              </span>
+            </div>
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <span className="font-mono text-[11px] text-outline font-medium hidden md:inline">
-              Code: FESTIVAL500
-            </span>
-            <a
-              className="font-semibold text-primary hover:text-secondary flex items-center gap-0.5 transition-colors"
-              href="#flash-deals"
+
+          {/* Live Delivery Tracker Badge */}
+          {lastOrder ? (
+            <Link
+              to={`/account/orders/${lastOrder._id}`}
+              className="group flex items-center gap-space-xs bg-surface-container-lowest px-3 py-1.5 rounded-full shadow-sm hover:shadow-md transition-all shrink-0"
+              data-path="order-history"
             >
-              <span>Claim Offer</span>
-              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
-            </a>
-          </div>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-semantic-success opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-semantic-success" />
+              </span>
+              <span className="font-label-sm text-label-sm font-semibold text-ink">
+                Order #{lastOrder._id.slice(-8)} ({lastOrder.items[0]?.name || 'OMIZON Shipment'}):
+              </span>
+              <span className="font-label-sm text-label-sm text-semantic-success font-bold capitalize">
+                {lastOrder.deliveryStatus === 'shipped' ? 'Out for Delivery by 2:00 PM' : lastOrder.deliveryStatus}
+              </span>
+              <span className="material-symbols-outlined text-[16px] text-ink-muted group-hover:translate-x-0.5 group-hover:text-primary transition-all">
+                chevron_right
+              </span>
+            </Link>
+          ) : (
+            <Link
+              to="/account/orders"
+              className="group flex items-center gap-space-xs bg-surface-container-lowest px-3 py-1.5 rounded-full shadow-sm hover:shadow-md transition-all shrink-0"
+              data-path="order-history"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-semantic-success opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-semantic-success" />
+              </span>
+              <span className="font-label-sm text-label-sm font-semibold text-ink">
+                FastX Express Nationwide Delivery Active:
+              </span>
+              <span className="font-label-sm text-label-sm text-semantic-success font-bold">
+                Guaranteed 1-Day Fulfillment
+              </span>
+              <span className="material-symbols-outlined text-[16px] text-ink-muted group-hover:translate-x-0.5 group-hover:text-primary transition-all">
+                chevron_right
+              </span>
+            </Link>
+          )}
         </div>
       </section>
 
-      {/* Catalog Load Error Alert */}
+      {/* Catalog Load Error Alert if any */}
       {error && (
-        <div className="w-full bg-error/10 border-y border-error/20 px-4 sm:px-6 lg:px-8 py-3">
+        <div className="w-full bg-error/10 border-y border-error/20 px-margin-mobile md:px-margin py-3">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-error">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-[20px]">warning</span>
@@ -146,965 +217,1442 @@ export const HomePage: React.FC = () => {
         </div>
       )}
 
-      {/* 2. Hero Section */}
-      <section className="w-full px-4 sm:px-6 lg:px-8 py-8 lg:py-12 bg-surface">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
-          {/* Left Editorial Pitch */}
-          <div className="lg:col-span-6 flex flex-col gap-5 lg:gap-6">
-            <div className="inline-flex items-center gap-2 bg-surface-container-low px-3 py-1 rounded-full w-fit border border-outline-variant/30">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-outline">
-                Omnichannel Commerce Platform
-              </span>
+      {/*
+        CRITICAL STITCH REQUIREMENT:
+        The four-widget section (Continue Shopping, Buy it Again, Wishlist Price Drops, Prime Hub)
+        is completely removed. The next content moves naturally upward into Today's Featured Deals!
+      */}
+
+      {/* 2. Contextual Today's Featured Deals & Flash Reductions */}
+      <section className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-md" id="flash-deals">
+        <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm border border-lavender-mist/50">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-lg">
+            <div className="flex items-center gap-space-md flex-wrap">
+              <h2 className="font-headline-sm text-headline-sm text-ink font-bold">
+                Today's Featured Deals &amp; Flash Reductions
+              </h2>
+              {/* Live Countdown Timer */}
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold shadow-xs">
+                <span className="material-symbols-outlined text-[16px] animate-pulse">timer</span>
+                <span>
+                  Ends in{' '}
+                  <span className="tabular-nums font-mono">
+                    {String(timeLeft.hours).padStart(2, '0')}h : {String(timeLeft.minutes).padStart(2, '0')}m :{' '}
+                    {String(timeLeft.seconds).padStart(2, '0')}s
+                  </span>
+                </span>
+              </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tight leading-[1.12]">
-              Everything You Need, Brought Together in One Destination.
-            </h1>
-            <p className="text-sm sm:text-base text-on-surface-variant max-w-xl leading-relaxed">
-              Curated electronics, artisan home living, pantry essentials, and trending beauty — delivered with precision straight to your doorstep.
+            <Link
+              to="/products?deals=true"
+              className="inline-flex items-center gap-1 font-label-md text-label-md text-primary font-semibold hover:text-royal-purple transition-colors"
+              data-path="todays-deals"
+            >
+              <span>Explore all 480+ deals</span>
+              <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </Link>
+          </div>
+
+          {/* Horizontal 5-card responsive carousel/grid matching Stitch */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-space-md">
+            {/* Deal Card 1: Electronics */}
+            <div className="bg-porcelain rounded-xl p-space-sm flex flex-col justify-between hover:shadow-md transition-all group">
+              <div className="relative w-full aspect-square rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEWVUdeZ9f41qlhJ-XYarUUJ9CahEO4KsyN1yT8IhCRVi3_qHhd0Nv-MrwXCAmd5qD6TpsZWaqmwj-nUQpxf83J0xM7FfNHbTr0qvUEP28UjiWOcSKwkfA7Mm3VlaZAAvntS-AVD4NwqZP9k2BWog2l3TjcVjO9Zl3tGD7Wv5L2xkCTC8u-AVdEuCT1XRYVuTPihItVZhVerxe5OS3gQ4VQXK6GSRQFd7LPfYOZCRm"
+                  alt="Sony WH-1000XM5 Wireless ANC Headphones"
+                />
+                <span className="absolute top-2 left-2 px-2 py-0.5 bg-semantic-error text-on-error font-label-sm text-label-sm rounded-full font-bold shadow-sm">
+                  17% OFF
+                </span>
+                <button
+                  aria-label="Add to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'deal-01',
+                      'Sony WH-1000XM5 Wireless ANC Headphones',
+                      24990,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBEWVUdeZ9f41qlhJ-XYarUUJ9CahEO4KsyN1yT8IhCRVi3_qHhd0Nv-MrwXCAmd5qD6TpsZWaqmwj-nUQpxf83J0xM7FfNHbTr0qvUEP28UjiWOcSKwkfA7Mm3VlaZAAvntS-AVD4NwqZP9k2BWog2l3TjcVjO9Zl3tGD7Wv5L2xkCTC8u-AVdEuCT1XRYVuTPihItVZhVerxe5OS3gQ4VQXK6GSRQFd7LPfYOZCRm',
+                      'Electronics'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[16px] ${
+                      wishlistIds.includes('deal-01') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-primary font-semibold uppercase tracking-wider">
+                  Deal of the Day
+                </span>
+                <Link to="/products">
+                  <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                    Sony WH-1000XM5 Wireless ANC Headphones
+                  </h3>
+                </Link>
+                <div className="flex items-center gap-1 text-semantic-warning mt-1">
+                  <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="font-label-sm text-label-sm font-bold text-ink">4.8</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted">(2.4k)</span>
+                </div>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-price-card text-price-card text-ink font-bold">₹24,990</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted line-through">₹29,990</span>
+                </div>
+                <p className="font-label-sm text-label-sm text-semantic-success font-semibold mt-0.5">
+                  Fast 1-day delivery
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'deal-01',
+                    'Sony WH-1000XM5 Wireless ANC Headphones',
+                    24990,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuBEWVUdeZ9f41qlhJ-XYarUUJ9CahEO4KsyN1yT8IhCRVi3_qHhd0Nv-MrwXCAmd5qD6TpsZWaqmwj-nUQpxf83J0xM7FfNHbTr0qvUEP28UjiWOcSKwkfA7Mm3VlaZAAvntS-AVD4NwqZP9k2BWog2l3TjcVjO9Zl3tGD7Wv5L2xkCTC8u-AVdEuCT1XRYVuTPihItVZhVerxe5OS3gQ4VQXK6GSRQFd7LPfYOZCRm',
+                    'Electronics',
+                    29990
+                  )
+                }
+                className="w-full mt-space-sm py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-md text-label-md rounded-lg shadow-xs transition-colors font-medium cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            {/* Deal Card 2: Home & Kitchen (Lightning Deal) */}
+            <div className="bg-porcelain rounded-xl p-space-sm flex flex-col justify-between hover:shadow-md transition-all group">
+              <div className="relative w-full aspect-square rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXzkcLqnYJcQ7-WYujuWJoO4_V2sAGJcI68zYpd5ZpANAfgEJMSGsWj1eXOQPcq8g1b-J7vPzJoAM-iPdeXcQUbjNLG8qsk0tKkM73zCh2EOnOQDac8CMtiW9tLA2l7kNoLx73NhHFZ9QaTAMGkCDHt-ZUycYR_QGUKh-4OxkDytRd-Nu8bRzJn-eHwnblB0KyhJL2J9V07QvYfqfGJRDnVA04cGaYjntoQdXpbDZU"
+                  alt="Aura Ceramic Pour-Over & Kettle Set"
+                />
+                <span className="absolute top-2 left-2 px-2 py-0.5 bg-semantic-error text-on-error font-label-sm text-label-sm rounded-full font-bold shadow-sm">
+                  24% OFF
+                </span>
+                <button
+                  aria-label="Add to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'deal-02',
+                      'Aura Ceramic Pour-Over & Kettle Set',
+                      2890,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuCXzkcLqnYJcQ7-WYujuWJoO4_V2sAGJcI68zYpd5ZpANAfgEJMSGsWj1eXOQPcq8g1b-J7vPzJoAM-iPdeXcQUbjNLG8qsk0tKkM73zCh2EOnOQDac8CMtiW9tLA2l7kNoLx73NhHFZ9QaTAMGkCDHt-ZUycYR_QGUKh-4OxkDytRd-Nu8bRzJn-eHwnblB0KyhJL2J9V07QvYfqfGJRDnVA04cGaYjntoQdXpbDZU',
+                      'Home & Living'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[16px] ${
+                      wishlistIds.includes('deal-02') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+              </div>
+              <div>
+                <div className="flex items-center justify-between text-semantic-warning">
+                  <span className="font-label-sm text-label-sm font-bold">⚡ Lightning Deal</span>
+                  <span className="font-label-sm text-label-sm text-ink-muted">72% Claimed</span>
+                </div>
+                <div className="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden mt-1">
+                  <div className="bg-semantic-warning h-full w-[72%] rounded-full" />
+                </div>
+                <Link to="/products">
+                  <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1.5 hover:text-primary transition-colors">
+                    Aura Ceramic Pour-Over &amp; Kettle Set
+                  </h3>
+                </Link>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-price-card text-price-card text-ink font-bold">₹2,890</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted line-through">₹3,800</span>
+                </div>
+                <p className="font-label-sm text-label-sm text-semantic-success font-semibold mt-0.5">
+                  Limited deal price
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'deal-02',
+                    'Aura Ceramic Pour-Over & Kettle Set',
+                    2890,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuCXzkcLqnYJcQ7-WYujuWJoO4_V2sAGJcI68zYpd5ZpANAfgEJMSGsWj1eXOQPcq8g1b-J7vPzJoAM-iPdeXcQUbjNLG8qsk0tKkM73zCh2EOnOQDac8CMtiW9tLA2l7kNoLx73NhHFZ9QaTAMGkCDHt-ZUycYR_QGUKh-4OxkDytRd-Nu8bRzJn-eHwnblB0KyhJL2J9V07QvYfqfGJRDnVA04cGaYjntoQdXpbDZU',
+                    'Home & Living',
+                    3800
+                  )
+                }
+                className="w-full mt-space-sm py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-md text-label-md rounded-lg shadow-xs transition-colors font-medium cursor-pointer"
+                type="button"
+              >
+                Claim Deal
+              </button>
+            </div>
+
+            {/* Deal Card 3: Personal Care & Beauty */}
+            <div className="bg-porcelain rounded-xl p-space-sm flex flex-col justify-between hover:shadow-md transition-all group">
+              <div className="relative w-full aspect-square rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3qn7Dv0EOpD8jZEMCsKneJ0DB_p4l7_S7RshzTG60vlZ4_j_MKRnWVCF7NmdPyhU5H9bpRDKs00t699IHf9VIOz5iFWzwHDBz-TgzQktPM0bfX3PeNtPtuxfK51vTQ5GzO3s3G_yOh5_L_xiYdsSI8QX4kI7cJ4b99hA62Nkx0ZfUVyvzsSrNxOYzfp9S4s5PsvH9_aNKF-MIqIrEtuEHNzDhjtx-cNDtdZX7ENht"
+                  alt="GlowBiome Pro-Peptide Restorative Kit"
+                />
+                <span className="absolute top-2 left-2 px-2 py-0.5 bg-semantic-error text-on-error font-label-sm text-label-sm rounded-full font-bold shadow-sm">
+                  30% OFF
+                </span>
+                <button
+                  aria-label="Add to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'deal-03',
+                      'GlowBiome Pro-Peptide Restorative Kit',
+                      1690,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuC3qn7Dv0EOpD8jZEMCsKneJ0DB_p4l7_S7RshzTG60vlZ4_j_MKRnWVCF7NmdPyhU5H9bpRDKs00t699IHf9VIOz5iFWzwHDBz-TgzQktPM0bfX3PeNtPtuxfK51vTQ5GzO3s3G_yOh5_L_xiYdsSI8QX4kI7cJ4b99hA62Nkx0ZfUVyvzsSrNxOYzfp9S4s5PsvH9_aNKF-MIqIrEtuEHNzDhjtx-cNDtdZX7ENht',
+                      'Beauty & Personal Care'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[16px] ${
+                      wishlistIds.includes('deal-03') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-ink-muted font-semibold uppercase tracking-wider">
+                  Beauty &amp; Wellness
+                </span>
+                <Link to="/products">
+                  <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                    GlowBiome Pro-Peptide Restorative Kit
+                  </h3>
+                </Link>
+                <div className="flex items-center gap-1 text-semantic-warning mt-1">
+                  <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="font-label-sm text-label-sm font-bold text-ink">4.8</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted">(840+)</span>
+                </div>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-price-card text-price-card text-ink font-bold">₹1,690</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted line-through">₹2,400</span>
+                </div>
+                <p className="font-label-sm text-label-sm text-semantic-success font-semibold mt-0.5">Fast Next-Day</p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'deal-03',
+                    'GlowBiome Pro-Peptide Restorative Kit',
+                    1690,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuC3qn7Dv0EOpD8jZEMCsKneJ0DB_p4l7_S7RshzTG60vlZ4_j_MKRnWVCF7NmdPyhU5H9bpRDKs00t699IHf9VIOz5iFWzwHDBz-TgzQktPM0bfX3PeNtPtuxfK51vTQ5GzO3s3G_yOh5_L_xiYdsSI8QX4kI7cJ4b99hA62Nkx0ZfUVyvzsSrNxOYzfp9S4s5PsvH9_aNKF-MIqIrEtuEHNzDhjtx-cNDtdZX7ENht',
+                    'Beauty & Personal Care',
+                    2400
+                  )
+                }
+                className="w-full mt-space-sm py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-md text-label-md rounded-lg shadow-xs transition-colors font-medium cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            {/* Deal Card 4: Computing & Workspace */}
+            <div className="bg-porcelain rounded-xl p-space-sm flex flex-col justify-between hover:shadow-md transition-all group">
+              <div className="relative w-full aspect-square rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjPO6uzz9ii4-y13CvXbzHi11hBZZjMCJa3UDBGnhwrWKuPaLxypXDcjapsBc18Q_BhErfWwy3Wb59Ul5NBpYVPFChRy2DCItFtohiuJG_F7j9gRXTwhFfg3mtCNuYo7MWkHvCJtKVy_l52Pv3YG9ewwt1yyVT2h38EPLzdwwJw4OGWyP-dTGcEUu4Qa5phRSw8Qv7v6yIVY_NKoNEYbV2ubxzPAmlGVoEoV0xHuhc"
+                  alt="KeyForge Wireless Numpad & Wristrest"
+                />
+                <span className="absolute top-2 left-2 px-2 py-0.5 bg-semantic-error text-on-error font-label-sm text-label-sm rounded-full font-bold shadow-sm">
+                  27% OFF
+                </span>
+                <button
+                  aria-label="Add to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'deal-04',
+                      'KeyForge Wireless Numpad & Wristrest',
+                      2190,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBjPO6uzz9ii4-y13CvXbzHi11hBZZjMCJa3UDBGnhwrWKuPaLxypXDcjapsBc18Q_BhErfWwy3Wb59Ul5NBpYVPFChRy2DCItFtohiuJG_F7j9gRXTwhFfg3mtCNuYo7MWkHvCJtKVy_l52Pv3YG9ewwt1yyVT2h38EPLzdwwJw4OGWyP-dTGcEUu4Qa5phRSw8Qv7v6yIVY_NKoNEYbV2ubxzPAmlGVoEoV0xHuhc',
+                      'Electronics'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[16px] ${
+                      wishlistIds.includes('deal-04') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-ink-muted font-semibold uppercase tracking-wider">
+                  Workspace Tech
+                </span>
+                <Link to="/products">
+                  <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                    KeyForge Wireless Numpad &amp; Wristrest
+                  </h3>
+                </Link>
+                <div className="flex items-center gap-1 text-semantic-warning mt-1">
+                  <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="font-label-sm text-label-sm font-bold text-ink">4.9</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted">(412)</span>
+                </div>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-price-card text-price-card text-ink font-bold">₹2,190</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted line-through">₹2,999</span>
+                </div>
+                <p className="font-label-sm text-label-sm text-semantic-success font-semibold mt-0.5">
+                  Fast 1-day delivery
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'deal-04',
+                    'KeyForge Wireless Numpad & Wristrest',
+                    2190,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuBjPO6uzz9ii4-y13CvXbzHi11hBZZjMCJa3UDBGnhwrWKuPaLxypXDcjapsBc18Q_BhErfWwy3Wb59Ul5NBpYVPFChRy2DCItFtohiuJG_F7j9gRXTwhFfg3mtCNuYo7MWkHvCJtKVy_l52Pv3YG9ewwt1yyVT2h38EPLzdwwJw4OGWyP-dTGcEUu4Qa5phRSw8Qv7v6yIVY_NKoNEYbV2ubxzPAmlGVoEoV0xHuhc',
+                    'Electronics',
+                    2999
+                  )
+                }
+                className="w-full mt-space-sm py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-md text-label-md rounded-lg shadow-xs transition-colors font-medium cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            {/* Deal Card 5: Sports & Wellness */}
+            <div className="bg-porcelain rounded-xl p-space-sm flex flex-col justify-between hover:shadow-md transition-all group col-span-2 sm:col-span-1 md:col-span-1">
+              <div className="relative w-full aspect-square rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU_pBpOhl8t0afLSaDPPDCUZtx4GuX-xAA-v36MAx6y_uLOZjd3fl6ELkKykfDPLb8zIDpIBczxcKNfuEh13pZqUQyuFmyVv_CB6-2EnYDTq08L7EnkmKOtSuRQdlbJ6VYrxJOwaPcPQ_jqLheLWCbGKsAvCaqkPqA3fpfaCFp0YpKuHJzbJKyWyfv-3O9wxvwj5-dvzGX_MuZi6i0fZFTU_FrFhGnS1DjUn-aM8e2"
+                  alt="AeroGrip Stainless Thermal Hydro Flask 1L"
+                />
+                <span className="absolute top-2 left-2 px-2 py-0.5 bg-semantic-error text-on-error font-label-sm text-label-sm rounded-full font-bold shadow-sm">
+                  29% OFF
+                </span>
+                <button
+                  aria-label="Add to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'deal-05',
+                      'AeroGrip Stainless Thermal Hydro Flask 1L',
+                      1199,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuAU_pBpOhl8t0afLSaDPPDCUZtx4GuX-xAA-v36MAx6y_uLOZjd3fl6ELkKykfDPLb8zIDpIBczxcKNfuEh13pZqUQyuFmyVv_CB6-2EnYDTq08L7EnkmKOtSuRQdlbJ6VYrxJOwaPcPQ_jqLheLWCbGKsAvCaqkPqA3fpfaCFp0YpKuHJzbJKyWyfv-3O9wxvwj5-dvzGX_MuZi6i0fZFTU_FrFhGnS1DjUn-aM8e2',
+                      'Sports & Outdoors'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-7 h-7 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[16px] ${
+                      wishlistIds.includes('deal-05') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-semantic-warning font-semibold uppercase tracking-wider">
+                  Limited Quantity
+                </span>
+                <Link to="/products">
+                  <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                    AeroGrip Stainless Thermal Hydro Flask 1L
+                  </h3>
+                </Link>
+                <div className="flex items-center gap-1 text-semantic-warning mt-1">
+                  <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="font-label-sm text-label-sm font-bold text-ink">4.7</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted">(1.9k)</span>
+                </div>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className="font-price-card text-price-card text-ink font-bold">₹1,199</span>
+                  <span className="font-body-sm text-body-sm text-ink-muted line-through">₹1,699</span>
+                </div>
+                <p className="font-label-sm text-label-sm text-semantic-success font-semibold mt-0.5">
+                  Fast 1-day delivery
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'deal-05',
+                    'AeroGrip Stainless Thermal Hydro Flask 1L',
+                    1199,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuAU_pBpOhl8t0afLSaDPPDCUZtx4GuX-xAA-v36MAx6y_uLOZjd3fl6ELkKykfDPLb8zIDpIBczxcKNfuEh13pZqUQyuFmyVv_CB6-2EnYDTq08L7EnkmKOtSuRQdlbJ6VYrxJOwaPcPQ_jqLheLWCbGKsAvCaqkPqA3fpfaCFp0YpKuHJzbJKyWyfv-3O9wxvwj5-dvzGX_MuZi6i0fZFTU_FrFhGnS1DjUn-aM8e2',
+                    'Sports & Outdoors',
+                    1699
+                  )
+                }
+                className="w-full mt-space-sm py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-md text-label-md rounded-lg shadow-xs transition-colors font-medium cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. Editorial Multi-Category Discovery Grids */}
+      <section className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-md">
+        <div className="flex items-center justify-between mb-space-md">
+          <div>
+            <h2 className="font-headline-sm text-headline-sm text-ink font-bold">
+              Explore by Category &amp; Curated Edits
+            </h2>
+            <p className="font-body-sm text-body-sm text-ink-muted">
+              Hand-selected departments with verified quality guarantees
             </p>
-            <div className="flex flex-wrap items-center gap-3.5 pt-1">
-              <a
-                className="bg-primary hover:bg-secondary text-on-primary h-11 sm:h-12 px-6 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-sm shadow-primary/25"
-                href="#flash-deals"
+          </div>
+          <Link
+            to="/products"
+            className="font-label-md text-label-md text-primary font-semibold hover:text-royal-purple hidden sm:inline-flex items-center gap-1 transition-colors"
+          >
+            <span>Browse full directory</span>
+            <span className="material-symbols-outlined text-[16px]">chevron_right</span>
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-space-md">
+          {/* Category 1 */}
+          <Link
+            to="/products?category=Electronics"
+            className="group bg-surface-container-lowest p-space-sm rounded-xl shadow-xs hover:shadow-md transition-all text-center flex flex-col items-center border border-lavender-mist/40"
+          >
+            <div className="w-full aspect-square rounded-lg bg-surface-container-low overflow-hidden mb-space-xs">
+              <img
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoOADdHtELRxhXVetptInXIUS0GTZpAyqPi_iK_nxK5HoHrBqKj0f-vRIm5UufgvFnD23Yd_ItuUt5Uqugai7yZcQa2_N-FMcipdZRMEtZK4-B4YBBb8R06fJSr-BHrvqDlQhBZEfL2R3sZxZFhWm70AUdiScFpcnxg51o_3eAY9aVv4F_cOBwECVFRjQa3LhABoiXLTT2jnVQzol8nRge5qCUXKeQs8V3jyFLjpgA"
+                alt="Tech & Precision Audio"
+              />
+            </div>
+            <span className="font-title-sm text-title-sm text-ink font-semibold group-hover:text-primary transition-colors line-clamp-1">
+              Tech &amp; Precision Audio
+            </span>
+            <span className="font-label-sm text-label-sm text-ink-muted mt-0.5">840+ new items</span>
+          </Link>
+
+          {/* Category 2 */}
+          <Link
+            to="/products?category=Home+%26+Living"
+            className="group bg-surface-container-lowest p-space-sm rounded-xl shadow-xs hover:shadow-md transition-all text-center flex flex-col items-center border border-lavender-mist/40"
+          >
+            <div className="w-full aspect-square rounded-lg bg-surface-container-low overflow-hidden mb-space-xs">
+              <img
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcL1G0fqQA6VznxTinQk2Dmw3w_dnR5dqHOpyO5IIt6B8uiXNddCwcgTf5PnIQeQDmR4qubXhrY_Kx_UX4IMFgyfidTfmI8H589s7wXCZHm_iIOHJHvSaE91JQYR2prKwbRNVkpIyt405L7tnaWOcEJ-uJGJu0X__aFuLo1KotLfL7eGQWVoMQvpbcIRv-inai10Q_8yvskY9iM5R4cW7q9M66_ZYudRffuqMcfwVT"
+                alt="Scandinavian Living"
+              />
+            </div>
+            <span className="font-title-sm text-title-sm text-ink font-semibold group-hover:text-primary transition-colors line-clamp-1">
+              Scandinavian Living
+            </span>
+            <span className="font-label-sm text-label-sm text-ink-muted mt-0.5">1,200+ curated</span>
+          </Link>
+
+          {/* Category 3 */}
+          <Link
+            to="/products?category=Grocery+%26+Essentials"
+            className="group bg-surface-container-lowest p-space-sm rounded-xl shadow-xs hover:shadow-md transition-all text-center flex flex-col items-center border border-lavender-mist/40"
+          >
+            <div className="w-full aspect-square rounded-lg bg-surface-container-low overflow-hidden mb-space-xs">
+              <img
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKBRAOVkgKOrX9CBzkth3RHLlAjbk0gmpN6Tghc_pHdazjDokoU1xysseyBouzTjtJ5d_ujV7dlikbX039c38ZQNdAwVUEtGaz2xz7CiyCx9_8C_BBuuuAIY1DcMwQu6sKosSWbU4JGd5LBQD4ZK9QcLnckLxNH0s4rBHnRsFEzMVmbKXVsu_xue-iRgXb8IT8XxXXG1nogNb1wR8sRBQutzWk7TW7LaNLioQH0aV8"
+                alt="Artisan Coffee & Pantry"
+              />
+            </div>
+            <span className="font-title-sm text-title-sm text-ink font-semibold group-hover:text-primary transition-colors line-clamp-1">
+              Artisan Coffee &amp; Pantry
+            </span>
+            <span className="font-label-sm text-label-sm text-ink-muted mt-0.5">450+ items</span>
+          </Link>
+
+          {/* Category 4 */}
+          <Link
+            to="/products?category=Beauty+%26+Personal+Care"
+            className="group bg-surface-container-lowest p-space-sm rounded-xl shadow-xs hover:shadow-md transition-all text-center flex flex-col items-center border border-lavender-mist/40"
+          >
+            <div className="w-full aspect-square rounded-lg bg-surface-container-low overflow-hidden mb-space-xs">
+              <img
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_dboOigaHkyR0tqomywlMx4WSHS8MA4dNol8cITAtBywMiLgyqoOhTsbgOM14UW_veQHDhPafHkCgLNKjR78ILGpJTaCndTpUrsRySzTS6_Jay0soSeTZM88xrbAzVzgDFpg6NENNj1ZopIUeSuStbnHHN8NH47EgA_mX33OI3_oWFX1cC70zMFo560_yJzWI-retFCEsuZwYsa2aBpTMBl2ficFDCUxmvJlmHtsx"
+                alt="Clinical Skincare"
+              />
+            </div>
+            <span className="font-title-sm text-title-sm text-ink font-semibold group-hover:text-primary transition-colors line-clamp-1">
+              Clinical Skincare
+            </span>
+            <span className="font-label-sm text-label-sm text-ink-muted mt-0.5">620+ items</span>
+          </Link>
+
+          {/* Category 5 */}
+          <Link
+            to="/products?category=Sports+%26+Outdoors"
+            className="group bg-surface-container-lowest p-space-sm rounded-xl shadow-xs hover:shadow-md transition-all text-center flex flex-col items-center border border-lavender-mist/40"
+          >
+            <div className="w-full aspect-square rounded-lg bg-surface-container-low overflow-hidden mb-space-xs">
+              <img
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVFmw7SMZKFdT8ZN989zSSqHJOt67aXfBxrEcRVTW-acQFVmliAafPNgEPdJH7J-tZCMOGLlXSo6QcNrDEwqM1sOOzaVofxOJPv5PBXCLQV9bfLQHEykfa175ruospJBAZ55ViGcSbcw101UcjSt92Br9OCkGzLD1J7xhwqskEq8C97He44cTO3cffCFBl6Z9tLpPMlUf5AsbSDEY-KVU5lvrc5Ffturqy3A0-zt-z"
+                alt="Active & Ergonomics"
+              />
+            </div>
+            <span className="font-title-sm text-title-sm text-ink font-semibold group-hover:text-primary transition-colors line-clamp-1">
+              Active &amp; Ergonomics
+            </span>
+            <span className="font-label-sm text-label-sm text-ink-muted mt-0.5">310+ items</span>
+          </Link>
+
+          {/* Category 6 */}
+          <Link
+            to="/products?category=Books"
+            className="group bg-surface-container-lowest p-space-sm rounded-xl shadow-xs hover:shadow-md transition-all text-center flex flex-col items-center border border-lavender-mist/40"
+          >
+            <div className="w-full aspect-square rounded-lg bg-surface-container-low overflow-hidden mb-space-xs">
+              <img
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAH7jJ8ysaZkRi_pS-EpEk237xeEeLunvypJFYEuFFKWiPYTk1h5_D6rmz5pf5gg6gD8MX2fkETSc7uNETorYxJvrIutLWY_O0m7Lfgct47jZDsCRARN7IzbcJNHN3Bn7jykR6bb5jktNW_h4p5MLlzNBMjD5bXr1ynut08IgOm1cjctS686GxhyF-ePldLEsjCb8FNDZabxH9yK17UaNA790Ycsm9VtaWSszytGJed"
+                alt="Books & Stationery"
+              />
+            </div>
+            <span className="font-title-sm text-title-sm text-ink font-semibold group-hover:text-primary transition-colors line-clamp-1">
+              Books &amp; Stationery
+            </span>
+            <span className="font-label-sm text-label-sm text-ink-muted mt-0.5">180+ editions</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* 4. Personalized Recommendations for Active Buyer */}
+      <section className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-md">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs mb-space-md">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-electric-violet text-[22px]">auto_awesome</span>
+              <h2 className="font-headline-sm text-headline-sm text-ink font-bold">
+                Recommended for You, {firstName}
+              </h2>
+            </div>
+            <p className="font-body-sm text-body-sm text-ink-muted mt-0.5">
+              Based on your recent interest in Ergonomic Workspaces &amp; Precision Audio
+            </p>
+          </div>
+          <div className="flex items-center gap-space-xs">
+            <button
+              onClick={() => setRecommendationFilter('all')}
+              className={`px-3 py-1 rounded-full font-label-md text-label-md font-medium transition-colors cursor-pointer ${
+                recommendationFilter === 'all'
+                  ? 'bg-midnight-violet text-on-primary'
+                  : 'bg-surface-container-low text-ink hover:bg-surface-container'
+              }`}
+              type="button"
+            >
+              All Recommendations
+            </button>
+            <button
+              onClick={() => setRecommendationFilter('workspace')}
+              className={`px-3 py-1 rounded-full font-label-md text-label-md font-medium transition-colors cursor-pointer ${
+                recommendationFilter === 'workspace'
+                  ? 'bg-midnight-violet text-on-primary'
+                  : 'bg-surface-container-low text-ink hover:bg-surface-container'
+              }`}
+              type="button"
+            >
+              Workspace
+            </button>
+            <button
+              onClick={() => setRecommendationFilter('sound')}
+              className={`px-3 py-1 rounded-full font-label-md text-label-md font-medium transition-colors cursor-pointer ${
+                recommendationFilter === 'sound'
+                  ? 'bg-midnight-violet text-on-primary'
+                  : 'bg-surface-container-low text-ink hover:bg-surface-container'
+              }`}
+              type="button"
+            >
+              Sound
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
+          {/* Rec 1 */}
+          <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group border border-lavender-mist/40">
+            <div>
+              <div className="relative w-full aspect-square rounded-lg bg-porcelain overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBj5AjiXaF76mZFXY5ROQ8zoyyRenOoeAqjOSNgP_pJFPoR8l34TTiPzj2c19jE3J8K4Y2RFloQf5gaOFg7TZ9Q2iugonsDu5PJzFyhUWvzDTXJkBO2_8fyKZhVGbZd69o4ZWPoqjP2sypSlTrbn8G3r8oKsfX9CcUGS5nLc6xSvKDPsIqBPycviTjsi1jYzz7e2YTIf2YFVNYGeNVJUF-BdnnGLeqdOaOym3GrID4K"
+                  alt="UltraFine 32 inch 4K Colorist Display Stand"
+                />
+                <button
+                  aria-label="Save to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'rec-01',
+                      'UltraFine 32" 4K Colorist Display Stand & Hub Mount',
+                      12499,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuBj5AjiXaF76mZFXY5ROQ8zoyyRenOoeAqjOSNgP_pJFPoR8l34TTiPzj2c19jE3J8K4Y2RFloQf5gaOFg7TZ9Q2iugonsDu5PJzFyhUWvzDTXJkBO2_8fyKZhVGbZd69o4ZWPoqjP2sypSlTrbn8G3r8oKsfX9CcUGS5nLc6xSvKDPsIqBPycviTjsi1jYzz7e2YTIf2YFVNYGeNVJUF-BdnnGLeqdOaOym3GrID4K',
+                      'Electronics'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[18px] ${
+                      wishlistIds.includes('rec-01') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+                <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-surface-container-lowest/90 text-ink font-label-sm text-label-sm font-semibold shadow-xs">
+                  Top Rated
+                </span>
+              </div>
+              <p className="font-body-sm text-body-sm text-ink-muted">ErgoDesk Studio</p>
+              <Link to="/products">
+                <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                  UltraFine 32" 4K Colorist Display Stand &amp; Hub Mount
+                </h3>
+              </Link>
+              <div className="flex items-center gap-1.5 text-semantic-warning mt-1.5">
+                <div className="flex text-[14px]">
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star_half
+                  </span>
+                </div>
+                <span className="font-label-sm text-label-sm font-bold text-ink">4.9</span>
+                <span className="font-body-sm text-body-sm text-ink-muted">(1,420)</span>
+              </div>
+              <div className="mt-2">
+                <span className="font-price-card text-price-card text-ink font-bold">₹12,499</span>
+                <span className="font-body-sm text-body-sm text-ink-muted line-through ml-1.5">₹15,000</span>
+              </div>
+              <p className="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-1 mt-1">
+                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <span>Fast 1-Day Delivery to 400050</span>
+              </p>
+            </div>
+            <button
+              onClick={() =>
+                handleQuickAdd(
+                  'rec-01',
+                  'UltraFine 32" 4K Colorist Display Stand & Hub Mount',
+                  12499,
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuBj5AjiXaF76mZFXY5ROQ8zoyyRenOoeAqjOSNgP_pJFPoR8l34TTiPzj2c19jE3J8K4Y2RFloQf5gaOFg7TZ9Q2iugonsDu5PJzFyhUWvzDTXJkBO2_8fyKZhVGbZd69o4ZWPoqjP2sypSlTrbn8G3r8oKsfX9CcUGS5nLc6xSvKDPsIqBPycviTjsi1jYzz7e2YTIf2YFVNYGeNVJUF-BdnnGLeqdOaOym3GrID4K',
+                  'Electronics',
+                  15000
+                )
+              }
+              className="w-full mt-space-md py-2 bg-electric-violet hover:bg-royal-purple text-on-primary font-title-sm text-title-sm rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          {/* Rec 2 */}
+          <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group border border-lavender-mist/40">
+            <div>
+              <div className="relative w-full aspect-square rounded-lg bg-porcelain overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXLmDegnf9HjirVUsmG2ZI4_4nNjmlRe8lSneJSzXvJWrlAcF3pPNilWXvoGWdemWeh7FSg-ddH6tld1VJlq4HwURlJ1wwBhl27Gi0tKRSVz7M0iNIw4mVxifxhpksMXW7CrZGGAZ8z0fn7LM3n-uhNU0SaBWkaE12OeIHwIN4muIN0DkAJIyOzbsdQi1o9p91zaub27hs_y3IgY0g4ewYx5Z5Z6IU-cJHeYGHDeBm"
+                  alt="Orbit Soundbar Pro Spatial Audio with Dolby Atmos"
+                />
+                <button
+                  aria-label="Save to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'rec-02',
+                      'Orbit Soundbar Pro Spatial Audio with Dolby Atmos',
+                      14990,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuCXLmDegnf9HjirVUsmG2ZI4_4nNjmlRe8lSneJSzXvJWrlAcF3pPNilWXvoGWdemWeh7FSg-ddH6tld1VJlq4HwURlJ1wwBhl27Gi0tKRSVz7M0iNIw4mVxifxhpksMXW7CrZGGAZ8z0fn7LM3n-uhNU0SaBWkaE12OeIHwIN4muIN0DkAJIyOzbsdQi1o9p91zaub27hs_y3IgY0g4ewYx5Z5Z6IU-cJHeYGHDeBm',
+                      'Electronics'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[18px] ${
+                      wishlistIds.includes('rec-02') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+                <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-semantic-success text-on-primary font-label-sm text-label-sm font-semibold shadow-xs">
+                  Save ₹1,000 Coupon
+                </span>
+              </div>
+              <p className="font-body-sm text-body-sm text-ink-muted">Orbit Acoustics</p>
+              <Link to="/products">
+                <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                  Orbit Soundbar Pro Spatial Audio with Dolby Atmos
+                </h3>
+              </Link>
+              <div className="flex items-center gap-1.5 text-semantic-warning mt-1.5">
+                <div className="flex text-[14px]">
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                </div>
+                <span className="font-label-sm text-label-sm font-bold text-ink">5.0</span>
+                <span className="font-body-sm text-body-sm text-ink-muted">(620)</span>
+              </div>
+              <div className="mt-2">
+                <span className="font-price-card text-price-card text-ink font-bold">₹14,990</span>
+                <span className="font-body-sm text-body-sm text-ink-muted line-through ml-1.5">₹18,500</span>
+              </div>
+              <div className="mt-1 flex items-center gap-1.5">
+                <input defaultChecked className="rounded accent-electric-violet" id="coupon-1" type="checkbox" />
+                <label className="font-label-sm text-label-sm text-ink font-medium" htmlFor="coupon-1">
+                  Apply ₹1,000 coupon
+                </label>
+              </div>
+            </div>
+            <button
+              onClick={() =>
+                handleQuickAdd(
+                  'rec-02',
+                  'Orbit Soundbar Pro Spatial Audio with Dolby Atmos',
+                  14990,
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuCXLmDegnf9HjirVUsmG2ZI4_4nNjmlRe8lSneJSzXvJWrlAcF3pPNilWXvoGWdemWeh7FSg-ddH6tld1VJlq4HwURlJ1wwBhl27Gi0tKRSVz7M0iNIw4mVxifxhpksMXW7CrZGGAZ8z0fn7LM3n-uhNU0SaBWkaE12OeIHwIN4muIN0DkAJIyOzbsdQi1o9p91zaub27hs_y3IgY0g4ewYx5Z5Z6IU-cJHeYGHDeBm',
+                  'Electronics',
+                  18500
+                )
+              }
+              className="w-full mt-space-md py-2 bg-electric-violet hover:bg-royal-purple text-on-primary font-title-sm text-title-sm rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          {/* Rec 3 */}
+          <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group border border-lavender-mist/40">
+            <div>
+              <div className="relative w-full aspect-square rounded-lg bg-porcelain overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAm6erlXlcZ2UnzADnkxLTUXRn13_9VXJdajmnwSTkKJyq211_s5Gs1rhzcmIAqCRfoqZhGW25aQKWlA7fBccR0fBx-WhkjbeIOJ5YQO9fsjMHr1CVuntnL93TpFy7YdC7JME-UXFcmLK6XZGkSoi2rgdyUaqOJj7emdlOvz-mAkX8y0_zww6ODph9ETI2yU42EsDINt0epyIcv3-Ab6v2gbAGM659jFEJ0BfPAixcH"
+                  alt="Walnut Solid Wood Dual Monitor Riser"
+                />
+                <button
+                  aria-label="Save to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'rec-03',
+                      'Walnut Solid Wood Dual Monitor Riser with Cable Duct',
+                      4890,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuAm6erlXlcZ2UnzADnkxLTUXRn13_9VXJdajmnwSTkKJyq211_s5Gs1rhzcmIAqCRfoqZhGW25aQKWlA7fBccR0fBx-WhkjbeIOJ5YQO9fsjMHr1CVuntnL93TpFy7YdC7JME-UXFcmLK6XZGkSoi2rgdyUaqOJj7emdlOvz-mAkX8y0_zww6ODph9ETI2yU42EsDINt0epyIcv3-Ab6v2gbAGM659jFEJ0BfPAixcH',
+                      'Home & Living'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[18px] ${
+                      wishlistIds.includes('rec-03') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+                <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-surface-container-lowest/90 text-ink font-label-sm text-label-sm font-semibold shadow-xs">
+                  Artisan Made
+                </span>
+              </div>
+              <p className="font-body-sm text-body-sm text-ink-muted">Nordic Woodcrafts</p>
+              <Link to="/products">
+                <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                  Walnut Solid Wood Dual Monitor Riser with Cable Duct
+                </h3>
+              </Link>
+              <div className="flex items-center gap-1.5 text-semantic-warning mt-1.5">
+                <div className="flex text-[14px]">
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star_half
+                  </span>
+                </div>
+                <span className="font-label-sm text-label-sm font-bold text-ink">4.7</span>
+                <span className="font-body-sm text-body-sm text-ink-muted">(950)</span>
+              </div>
+              <div className="mt-2">
+                <span className="font-price-card text-price-card text-ink font-bold">₹4,890</span>
+                <span className="font-body-sm text-body-sm text-ink-muted line-through ml-1.5">₹6,200</span>
+              </div>
+              <p className="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-1 mt-1">
+                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <span>Fast 1-Day Delivery</span>
+              </p>
+            </div>
+            <button
+              onClick={() =>
+                handleQuickAdd(
+                  'rec-03',
+                  'Walnut Solid Wood Dual Monitor Riser with Cable Duct',
+                  4890,
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuAm6erlXlcZ2UnzADnkxLTUXRn13_9VXJdajmnwSTkKJyq211_s5Gs1rhzcmIAqCRfoqZhGW25aQKWlA7fBccR0fBx-WhkjbeIOJ5YQO9fsjMHr1CVuntnL93TpFy7YdC7JME-UXFcmLK6XZGkSoi2rgdyUaqOJj7emdlOvz-mAkX8y0_zww6ODph9ETI2yU42EsDINt0epyIcv3-Ab6v2gbAGM659jFEJ0BfPAixcH',
+                  'Home & Living',
+                  6200
+                )
+              }
+              className="w-full mt-space-md py-2 bg-electric-violet hover:bg-royal-purple text-on-primary font-title-sm text-title-sm rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+
+          {/* Rec 4 */}
+          <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group border border-lavender-mist/40">
+            <div>
+              <div className="relative w-full aspect-square rounded-lg bg-porcelain overflow-hidden mb-space-sm">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWJO3jQc8Iv-RZbaCNV-pyrpnsor2wTUeMBuDm6I1fHyv4M6r0b4SK9ElXLNifygJeUq8jfMGdZwYC165kTgnNecaLQWIE9KTN00foX8oeJ1Ooz5QK_yYFLTWEuuF0GNauV4OJd4M7UuvDT8uYyAkxiWsz4CuT8AtMslzX38BMZALqbbe5T5u7PjXrPDkU0HxuEMv0bGuKydFDBN3jUMqmdPWOUGoo-mgx2qCrNrWy"
+                  alt="StudioPulse Desk Mic & Boom Arm Broadcast Kit"
+                />
+                <button
+                  aria-label="Save to Wishlist"
+                  onClick={() =>
+                    toggleWishlist(
+                      'rec-04',
+                      'StudioPulse Desk Mic & Boom Arm Broadcast Kit',
+                      6290,
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuDWJO3jQc8Iv-RZbaCNV-pyrpnsor2wTUeMBuDm6I1fHyv4M6r0b4SK9ElXLNifygJeUq8jfMGdZwYC165kTgnNecaLQWIE9KTN00foX8oeJ1Ooz5QK_yYFLTWEuuF0GNauV4OJd4M7UuvDT8uYyAkxiWsz4CuT8AtMslzX38BMZALqbbe5T5u7PjXrPDkU0HxuEMv0bGuKydFDBN3jUMqmdPWOUGoo-mgx2qCrNrWy',
+                      'Electronics'
+                    )
+                  }
+                  className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/90 text-ink-muted hover:text-semantic-error flex items-center justify-center shadow-xs cursor-pointer"
+                  type="button"
+                >
+                  <span
+                    className={`material-symbols-outlined text-[18px] ${
+                      wishlistIds.includes('rec-04') ? 'text-semantic-error fill-current' : ''
+                    }`}
+                  >
+                    favorite
+                  </span>
+                </button>
+                <span className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-semantic-warning text-on-error font-label-sm text-label-sm font-bold shadow-xs">
+                  #1 Best Seller
+                </span>
+              </div>
+              <p className="font-body-sm text-body-sm text-ink-muted">StudioPulse Lab</p>
+              <Link to="/products">
+                <h3 className="font-title-sm text-title-sm text-ink font-semibold line-clamp-2 mt-1 hover:text-primary transition-colors">
+                  StudioPulse Desk Mic &amp; Boom Arm Broadcast Kit
+                </h3>
+              </Link>
+              <div className="flex items-center gap-1.5 text-semantic-warning mt-1.5">
+                <div className="flex text-[14px]">
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                  <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    star
+                  </span>
+                </div>
+                <span className="font-label-sm text-label-sm font-bold text-ink">4.9</span>
+                <span className="font-body-sm text-body-sm text-ink-muted">(2,180)</span>
+              </div>
+              <div className="mt-2">
+                <span className="font-price-card text-price-card text-ink font-bold">₹6,290</span>
+                <span className="font-body-sm text-body-sm text-ink-muted line-through ml-1.5">₹7,999</span>
+              </div>
+              <p className="font-label-sm text-label-sm text-semantic-success font-semibold flex items-center gap-1 mt-1">
+                <span className="material-symbols-outlined text-[16px]">verified</span>
+                <span>Fast 1-Day Delivery</span>
+              </p>
+            </div>
+            <button
+              onClick={() =>
+                handleQuickAdd(
+                  'rec-04',
+                  'StudioPulse Desk Mic & Boom Arm Broadcast Kit',
+                  6290,
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuDWJO3jQc8Iv-RZbaCNV-pyrpnsor2wTUeMBuDm6I1fHyv4M6r0b4SK9ElXLNifygJeUq8jfMGdZwYC165kTgnNecaLQWIE9KTN00foX8oeJ1Ooz5QK_yYFLTWEuuF0GNauV4OJd4M7UuvDT8uYyAkxiWsz4CuT8AtMslzX38BMZALqbbe5T5u7PjXrPDkU0HxuEMv0bGuKydFDBN3jUMqmdPWOUGoo-mgx2qCrNrWy',
+                  'Electronics',
+                  7999
+                )
+              }
+              className="w-full mt-space-md py-2 bg-electric-violet hover:bg-royal-purple text-on-primary font-title-sm text-title-sm rounded-lg font-medium shadow-sm transition-colors flex items-center justify-center gap-2 cursor-pointer"
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Trending & Best Sellers Across India */}
+      <section className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-md">
+        <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm border border-lavender-mist/50">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-space-sm mb-space-md">
+            <div>
+              <h2 className="font-headline-sm text-headline-sm text-ink font-bold">
+                Trending &amp; Best Sellers Across India
+              </h2>
+              <p className="font-body-sm text-body-sm text-ink-muted">
+                Updated hourly based on buyer velocity and authenticated reviews
+              </p>
+            </div>
+            {/* Category Tab Switcher */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+              <button
+                onClick={() => setTrendingTab('top5')}
+                className={`px-3 py-1.5 rounded-lg font-label-md text-label-md font-semibold shrink-0 transition-colors cursor-pointer ${
+                  trendingTab === 'top5'
+                    ? 'bg-midnight-violet text-on-primary'
+                    : 'bg-surface-container-low hover:bg-surface-container text-ink'
+                }`}
+                type="button"
               >
-                <span>Explore Today's Deals</span>
-                <span className="material-symbols-outlined text-[18px]">bolt</span>
-              </a>
+                Overall Top 5
+              </button>
+              <button
+                onClick={() => setTrendingTab('electronics')}
+                className={`px-3 py-1.5 rounded-lg font-label-md text-label-md font-medium shrink-0 transition-colors cursor-pointer ${
+                  trendingTab === 'electronics'
+                    ? 'bg-midnight-violet text-on-primary'
+                    : 'bg-surface-container-low hover:bg-surface-container text-ink'
+                }`}
+                type="button"
+              >
+                Electronics
+              </button>
+              <button
+                onClick={() => setTrendingTab('home')}
+                className={`px-3 py-1.5 rounded-lg font-label-md text-label-md font-medium shrink-0 transition-colors cursor-pointer ${
+                  trendingTab === 'home'
+                    ? 'bg-midnight-violet text-on-primary'
+                    : 'bg-surface-container-low hover:bg-surface-container text-ink'
+                }`}
+                type="button"
+              >
+                Home &amp; Living
+              </button>
+              <button
+                onClick={() => setTrendingTab('coffee')}
+                className={`px-3 py-1.5 rounded-lg font-label-md text-label-md font-medium shrink-0 transition-colors cursor-pointer ${
+                  trendingTab === 'coffee'
+                    ? 'bg-midnight-violet text-on-primary'
+                    : 'bg-surface-container-low hover:bg-surface-container text-ink'
+                }`}
+                type="button"
+              >
+                Gourmet Coffee
+              </button>
+              <button
+                onClick={() => setTrendingTab('beauty')}
+                className={`px-3 py-1.5 rounded-lg font-label-md text-label-md font-medium shrink-0 transition-colors cursor-pointer ${
+                  trendingTab === 'beauty'
+                    ? 'bg-midnight-violet text-on-primary'
+                    : 'bg-surface-container-low hover:bg-surface-container text-ink'
+                }`}
+                type="button"
+              >
+                Beauty
+              </button>
+            </div>
+          </div>
+
+          {/* Numbered Ranked Horizontal Strip (#1 through #5) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-space-md">
+            {/* Rank #1 */}
+            <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors relative flex flex-col justify-between group">
+              <span className="absolute top-2 left-2 w-7 h-7 rounded-full bg-semantic-warning text-on-error font-title-sm text-title-sm font-bold flex items-center justify-center shadow-xs">
+                #1
+              </span>
+              <div className="aspect-square w-full rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm mt-3">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwv3B3z_CnEfsgubQe9xdgbhOwvkhvrhV7MCE5s2WSO407t7mqFMBYfK4PkhWNXtk6TciUlNQ_TcLgWjHK61yFanM8iL477270ZAm_mirk0SMMMQg1DxEnGcsXafFqU-7WhBIX6h7BBDTXvlAHwOUrhSBUugx9UlVrdqLF8fKCCIvUv7kBbs_-uNfcB3rTsF8CQV7EpeJOpr5cg3k5bq4hzaaabveW_zA_pLPWqJaN"
+                  alt="ApexBook M3 Ultra 32GB"
+                />
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-ink-muted">Computers</span>
+                <Link to="/products">
+                  <h4 className="font-title-sm text-title-sm text-ink font-bold line-clamp-1 hover:text-primary transition-colors">
+                    ApexBook M3 Ultra 32GB
+                  </h4>
+                </Link>
+                <p className="font-body-sm text-body-sm text-ink-muted">4,120 sold this week</p>
+                <p className="font-title-sm text-title-sm text-ink font-bold mt-1">₹1,89,990</p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'rank-01',
+                    'ApexBook M3 Ultra 32GB',
+                    189990,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuAwv3B3z_CnEfsgubQe9xdgbhOwvkhvrhV7MCE5s2WSO407t7mqFMBYfK4PkhWNXtk6TciUlNQ_TcLgWjHK61yFanM8iL477270ZAm_mirk0SMMMQg1DxEnGcsXafFqU-7WhBIX6h7BBDTXvlAHwOUrhSBUugx9UlVrdqLF8fKCCIvUv7kBbs_-uNfcB3rTsF8CQV7EpeJOpr5cg3k5bq4hzaaabveW_zA_pLPWqJaN',
+                    'Electronics'
+                  )
+                }
+                className="w-full mt-2 py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-sm text-label-sm rounded font-semibold shadow-xs transition-colors cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            {/* Rank #2 */}
+            <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors relative flex flex-col justify-between group">
+              <span className="absolute top-2 left-2 w-7 h-7 rounded-full bg-outline-variant text-ink font-title-sm text-title-sm font-bold flex items-center justify-center shadow-xs">
+                #2
+              </span>
+              <div className="aspect-square w-full rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm mt-3">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBj_x2xGHLidtdJplkmGGNEO-vMgSN5H8sioq9_V1kB4drLXweuTtyY4wsHb1jTYBO7vOCMdPdhddUcpcLQzPiyRCVReftmJlQ0XbqP6rTDfBae6R-on-8vRI9nhfNBDXE6-5pDZCfn0IBUM7_qus7C4jLKTmUlODEBOGL0Z-ogQYNqhGuw9xp9exTxVdL_R6De79lPgMAQPZUurjXNaoV4vvG9BhXozh9bW-6rdMY"
+                  alt="Roaster's Choice Filter 500g"
+                />
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-ink-muted">Pantry</span>
+                <Link to="/products">
+                  <h4 className="font-title-sm text-title-sm text-ink font-bold line-clamp-1 hover:text-primary transition-colors">
+                    Roaster's Choice Filter 500g
+                  </h4>
+                </Link>
+                <p className="font-body-sm text-body-sm text-ink-muted">3,890 sold this week</p>
+                <p className="font-title-sm text-title-sm text-ink font-bold mt-1">₹890</p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'rank-02',
+                    "Roaster's Choice Filter 500g",
+                    890,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuCBj_x2xGHLidtdJplkmGGNEO-vMgSN5H8sioq9_V1kB4drLXweuTtyY4wsHb1jTYBO7vOCMdPdhddUcpcLQzPiyRCVReftmJlQ0XbqP6rTDfBae6R-on-8vRI9nhfNBDXE6-5pDZCfn0IBUM7_qus7C4jLKTmUlODEBOGL0Z-ogQYNqhGuw9xp9exTxVdL_R6De79lPgMAQPZUurjXNaoV4vvG9BhXozh9bW-6rdMY',
+                    'Grocery & Essentials'
+                  )
+                }
+                className="w-full mt-2 py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-sm text-label-sm rounded font-semibold shadow-xs transition-colors cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            {/* Rank #3 */}
+            <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors relative flex flex-col justify-between group">
+              <span className="absolute top-2 left-2 w-7 h-7 rounded-full bg-outline-variant text-ink font-title-sm text-title-sm font-bold flex items-center justify-center shadow-xs">
+                #3
+              </span>
+              <div className="aspect-square w-full rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm mt-3">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFVl0tp-2lCRn4wfF5qudb92XFpZdtK9mMIljUcrDyFJL2k0dIBhryitVVcMQ4V3GKc3dSe4RqHr0V6jhxSYJVrDBi4-YIlQwH6M92VkLjBUvfmdZKn2IdjuJVAJ-nEMJFT0gYUo5xW20WaL7FKzFqRqW_DS7jiSS2hu4RUE3fLNzHSGv90FTwWPpOuGYNcuMFVfMS69gv1Cz6MJsJpyqySLgC1CNgOxkG9scGLIDP"
+                  alt="Nordic Linen Duvet Set"
+                />
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-ink-muted">Home Bedding</span>
+                <Link to="/products">
+                  <h4 className="font-title-sm text-title-sm text-ink font-bold line-clamp-1 hover:text-primary transition-colors">
+                    Nordic Linen Duvet Set
+                  </h4>
+                </Link>
+                <p className="font-body-sm text-body-sm text-ink-muted">2,410 sold this week</p>
+                <p className="font-title-sm text-title-sm text-ink font-bold mt-1">₹4,250</p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'rank-03',
+                    'Nordic Linen Duvet Set',
+                    4250,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuDFVl0tp-2lCRn4wfF5qudb92XFpZdtK9mMIljUcrDyFJL2k0dIBhryitVVcMQ4V3GKc3dSe4RqHr0V6jhxSYJVrDBi4-YIlQwH6M92VkLjBUvfmdZKn2IdjuJVAJ-nEMJFT0gYUo5xW20WaL7FKzFqRqW_DS7jiSS2hu4RUE3fLNzHSGv90FTwWPpOuGYNcuMFVfMS69gv1Cz6MJsJpyqySLgC1CNgOxkG9scGLIDP',
+                    'Home & Living'
+                  )
+                }
+                className="w-full mt-2 py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-sm text-label-sm rounded font-semibold shadow-xs transition-colors cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            {/* Rank #4 */}
+            <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors relative flex flex-col justify-between group">
+              <span className="absolute top-2 left-2 w-7 h-7 rounded-full bg-outline-variant text-ink font-title-sm text-title-sm font-bold flex items-center justify-center shadow-xs">
+                #4
+              </span>
+              <div className="aspect-square w-full rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm mt-3">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfNPId-85ux-tEqLj-HGc49lIPIOmODgtnFtpugMAOvQzaFyZmtALN8vCHKrs93r2JdbPTwcNEFZgr5xjHZcjIw5-ciAd9lonv0zKN3Yb2D_c0Lqc2fIitGW0fWzN8g6CHqQgeBTHQHNp7wTOCEYy8A4FOR-qwhCrPeiZQf3sjEABQI0nB4NmThLIdHjJCVFtgMthAJzux3dkO6eBQjV17gMYKGMRUwIfyeilQrfHY"
+                  alt="KeyForge Retro Botanical PBT"
+                />
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-ink-muted">Keyboards</span>
+                <Link to="/products">
+                  <h4 className="font-title-sm text-title-sm text-ink font-bold line-clamp-1 hover:text-primary transition-colors">
+                    KeyForge Retro Botanical PBT
+                  </h4>
+                </Link>
+                <p className="font-body-sm text-body-sm text-ink-muted">1,940 sold this week</p>
+                <p className="font-title-sm text-title-sm text-ink font-bold mt-1">₹3,190</p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'rank-04',
+                    'KeyForge Retro Botanical PBT',
+                    3190,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuAfNPId-85ux-tEqLj-HGc49lIPIOmODgtnFtpugMAOvQzaFyZmtALN8vCHKrs93r2JdbPTwcNEFZgr5xjHZcjIw5-ciAd9lonv0zKN3Yb2D_c0Lqc2fIitGW0fWzN8g6CHqQgeBTHQHNp7wTOCEYy8A4FOR-qwhCrPeiZQf3sjEABQI0nB4NmThLIdHjJCVFtgMthAJzux3dkO6eBQjV17gMYKGMRUwIfyeilQrfHY',
+                    'Electronics'
+                  )
+                }
+                className="w-full mt-2 py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-sm text-label-sm rounded font-semibold shadow-xs transition-colors cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+
+            {/* Rank #5 */}
+            <div className="p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors relative flex flex-col justify-between group">
+              <span className="absolute top-2 left-2 w-7 h-7 rounded-full bg-outline-variant text-ink font-title-sm text-title-sm font-bold flex items-center justify-center shadow-xs">
+                #5
+              </span>
+              <div className="aspect-square w-full rounded-lg bg-surface-container-lowest overflow-hidden mb-space-sm mt-3">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCu3cmggXVvIL-hTjYYIfCY-t5nTpE6dK8_zNXG9xF9jzcEhR0PG7bqpytooZUI7Z4Q9ikdm5bkkH48kPAaIRwqaKAWI3Ntrkbf9JBtGhiv1E-IY-eBPqmienJtRui5PKCa6LUIvy3yXHL-QEuHSkj4W9MCVKANdQ_DMXF8ZPMXduwaD7s6uX35W6EjH5PgKRdu90uuhfBCIO8SpxJNoyc9TefszGsURXYr6EqDWhEz"
+                  alt="HydraBoost Liposomal Drops"
+                />
+              </div>
+              <div>
+                <span className="font-label-sm text-label-sm text-ink-muted">Skincare</span>
+                <Link to="/products">
+                  <h4 className="font-title-sm text-title-sm text-ink font-bold line-clamp-1 hover:text-primary transition-colors">
+                    HydraBoost Liposomal Drops
+                  </h4>
+                </Link>
+                <p className="font-body-sm text-body-sm text-ink-muted">1,780 sold this week</p>
+                <p className="font-title-sm text-title-sm text-ink font-bold mt-1">₹1,450</p>
+              </div>
+              <button
+                onClick={() =>
+                  handleQuickAdd(
+                    'rank-05',
+                    'HydraBoost Liposomal Drops',
+                    1450,
+                    'https://lh3.googleusercontent.com/aida-public/AB6AXuCu3cmggXVvIL-hTjYYIfCY-t5nTpE6dK8_zNXG9xF9jzcEhR0PG7bqpytooZUI7Z4Q9ikdm5bkkH48kPAaIRwqaKAWI3Ntrkbf9JBtGhiv1E-IY-eBPqmienJtRui5PKCa6LUIvy3yXHL-QEuHSkj4W9MCVKANdQ_DMXF8ZPMXduwaD7s6uX35W6EjH5PgKRdu90uuhfBCIO8SpxJNoyc9TefszGsURXYr6EqDWhEz',
+                    'Beauty & Personal Care'
+                  )
+                }
+                className="w-full mt-2 py-1.5 bg-surface-container-lowest hover:bg-electric-violet hover:text-on-primary text-ink font-label-sm text-label-sm rounded font-semibold shadow-xs transition-colors cursor-pointer"
+                type="button"
+              >
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Seasonal / Editorial Marketplace Spotlight (Asymmetric 2-Column Grid) */}
+      <section className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-md">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+          {/* Left Column: The Modern Creative's Setup (7 Columns) */}
+          <div className="lg:col-span-7 bg-midnight-violet text-text-dark-primary rounded-2xl p-space-lg md:p-space-xl flex flex-col justify-between relative overflow-hidden shadow-md">
+            <div className="absolute -right-20 -top-20 w-72 h-72 rounded-full bg-royal-purple/30 blur-3xl pointer-events-none" />
+            <div className="relative z-10">
+              <span className="px-2.5 py-1 rounded-full bg-electric-violet/30 text-white font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                OMIZON Editorial Edit
+              </span>
+              <h3 className="font-headline-md text-headline-md text-text-dark-primary font-bold mt-space-sm max-w-lg">
+                The Modern Creative's Desk: Tools Crafted for Deep Work
+              </h3>
+              <p className="font-body-lg text-body-lg text-text-dark-muted mt-space-xs max-w-md">
+                Discover ultra-precise mechanical input, acoustic shielding, and posture-calibrated hardware assembled by our design curators.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-3 gap-space-sm my-space-lg relative z-10">
+              <div className="bg-obsidian-surface-1 p-2 rounded-xl border border-obsidian-border/50">
+                <div className="aspect-square rounded-lg bg-obsidian-surface-2 overflow-hidden mb-1.5">
+                  <img
+                    className="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFgj2sS8d-5zMBadwAW3t4X1OaQKzD8a6tuLqxI-qQx7Jr2y8Hiu7W6-6Bsb6Bt5Lwg-70NTIRFl0lIrY7fY1p8dQw74lnXapdduHXaHBrGRhS91gkK9JfWKZ5n9cKRy_K6fhjlzKyhBQWCrO90cy8tkbelgx3bpD3igrOTrvbCimqbFD6JVQS8AMFl4tXHh7jG4UXkRZXXJKZd7nBEORIWEXxsVs7jWOQrBNDfwdw"
+                    alt="KeyForge Brass Keyboard"
+                  />
+                </div>
+                <p className="font-label-sm text-label-sm text-text-dark-primary font-semibold truncate">KeyForge Brass</p>
+                <p className="font-label-sm text-label-sm text-text-dark-muted">₹8,990</p>
+              </div>
+
+              <div className="bg-obsidian-surface-1 p-2 rounded-xl border border-obsidian-border/50">
+                <div className="aspect-square rounded-lg bg-obsidian-surface-2 overflow-hidden mb-1.5">
+                  <img
+                    className="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmFKmhD1YmDYGiRb-fLSb8WRN044VkuW9Yq5TqMTVYkQk40p3JIOOY44ckWJbLOV7vgiEiUWn1HlrAtHylnLZfp8CIg18cEjWgDNWNYympyEiNcIOVmu_QMPZV9u0iWBi5Tg7pijb2pTwmhrGq0dY1fFodE5wWCwcY9aGTHVULQgNuOtkEgWER3-ZUYY1bplncsrhZeIACHkyU3JvFNZe4ALISxzV2WK4MGYDoidAE"
+                    alt="Lumen Task Lamp"
+                  />
+                </div>
+                <p className="font-label-sm text-label-sm text-text-dark-primary font-semibold truncate">Lumen Task Lamp</p>
+                <p className="font-label-sm text-label-sm text-text-dark-muted">₹3,450</p>
+              </div>
+
+              <div className="bg-obsidian-surface-1 p-2 rounded-xl border border-obsidian-border/50">
+                <div className="aspect-square rounded-lg bg-obsidian-surface-2 overflow-hidden mb-1.5">
+                  <img
+                    className="w-full h-full object-cover"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuC72FXvPHaSoMZ9nJvoSHgnhX9rm_Ax-oiPgY5iaJBQP22qt7Iir9ceH4nzzfy4CH6l-1cZTb_kaQ7iPMFkdsqT4EnmgAC4LgHLzW7XwKWfRRCEMACy2zvyt_1eCco2NCUhyCc-V-8y_MDY0I3RKrEOgkWJt32Pm6l5l-0O2aJns1f54XCJNWKSMRk-cTnNW-XS343D2QMZOA42iubpfAFxs9fbn2AahVWzf5sNx16f"
+                    alt="Felt Desk Mat"
+                  />
+                </div>
+                <p className="font-label-sm text-label-sm text-text-dark-primary font-semibold truncate">Felt Desk Mat</p>
+                <p className="font-label-sm text-label-sm text-text-dark-muted">₹1,290</p>
+              </div>
+            </div>
+
+            <div className="relative z-10">
               <Link
-                to="/products"
-                className="bg-surface-container-lowest hover:bg-surface-container-low text-on-surface border border-outline-variant/40 h-11 sm:h-12 px-5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
+                to="/products?category=Electronics"
+                className="inline-flex items-center gap-space-xs px-space-md py-2.5 bg-electric-violet hover:bg-royal-purple text-on-primary rounded-lg font-title-sm text-title-sm font-semibold transition-colors shadow-sm cursor-pointer"
               >
-                <span>Browse Multi-Category Catalog</span>
-                <span className="material-symbols-outlined text-[18px]">north_east</span>
+                <span>Explore the Guide &amp; Shop the Look</span>
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
               </Link>
             </div>
-            {/* Quick Metrics Grid */}
-            <div className="grid grid-cols-3 gap-3 pt-2 bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
-              <div className="flex flex-col">
-                <span className="text-lg sm:text-xl text-primary font-extrabold">120K+</span>
-                <span className="text-xs text-outline font-medium">Verified SKUs</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg sm:text-xl text-on-surface font-extrabold">2.4 Hrs</span>
-                <span className="text-xs text-outline font-medium">Metro Delivery</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg sm:text-xl text-on-surface font-extrabold">4.9/5.0</span>
-                <span className="text-xs text-outline font-medium">Trustpilot Score</span>
-              </div>
-            </div>
           </div>
 
-          {/* Right Visual Multi-Category Showcase: Balanced Even 2x2 Grid */}
-          <div className="lg:col-span-6 grid grid-cols-2 gap-4 sm:gap-5">
-            {isLoading ? (
-              // 4 Shimmer Skeletons for Hero Mosaic
-              [0, 1, 2, 3].map((idx) => (
-                <div
-                  key={idx}
-                  className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between animate-pulse"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="h-4 w-16 bg-surface-container-high rounded-full" />
-                    <div className="h-3 w-12 bg-surface-container-high rounded" />
-                  </div>
-                  <div className="h-36 w-full my-3 rounded-lg bg-surface-container-high" />
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-col gap-1 w-2/3">
-                      <div className="h-4 w-full bg-surface-container-high rounded" />
-                      <div className="h-4 w-16 bg-surface-container-high rounded" />
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-surface-container-high shrink-0" />
-                  </div>
-                </div>
-              ))
-            ) : featuredProducts.length > 0 ? (
-              featuredProducts.slice(0, 4).map((item) => {
-                const catName =
-                  typeof item.category === 'object' && item.category !== null
-                    ? (item.category as any).name
-                    : item.category || 'Featured';
-                return (
-                  <div
-                    key={item._id}
-                    className="group bg-surface-container-lowest rounded-xl p-3.5 sm:p-4 shadow-sm hover:shadow-md border border-outline-variant/30 transition-all flex flex-col justify-between"
-                  >
-                    <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="bg-surface-container-high text-primary font-medium text-[10px] uppercase px-2 py-0.5 rounded-full truncate max-w-[110px]">
-                        {catName}
-                      </span>
-                      <span className="text-[11px] text-outline">{item.badge || 'Curated'}</span>
-                    </div>
-                    <Link
-                      to={`/products/${item._id}`}
-                      className="h-36 sm:h-40 w-full my-2 flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low"
-                    >
-                      <img
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        src={item.image}
-                        alt={item.name}
-                      />
-                    </Link>
-                    <div className="flex items-center justify-between pt-1">
-                      <Link to={`/products/${item._id}`} className="min-w-0 pr-2">
-                        <p className="text-xs sm:text-sm font-semibold text-on-surface hover:text-primary transition-colors truncate">
-                          {item.name}
-                        </p>
-                        <p className="text-sm sm:text-base font-bold text-primary mt-0.5">
-                          {formatCurrency(item.price)}
-                        </p>
-                      </Link>
-                      <button
-                        onClick={() =>
-                          handleQuickAdd(item._id, item.name, item.price, item.image, catName)
-                        }
-                        className="w-8 h-8 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer shrink-0"
-                        title="Quick Add"
-                        type="button"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">add</span>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="col-span-2 bg-surface-container-lowest rounded-xl p-8 text-center flex flex-col items-center justify-center gap-3 border border-outline-variant/20">
-                <span className="material-symbols-outlined text-outline text-[32px]">inventory_2</span>
-                <p className="text-sm font-medium text-on-surface-variant">No featured products available.</p>
-                <Link to="/products" className="text-xs font-bold text-primary hover:underline">
-                  Browse Full Catalog
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Multi-Category Fast Navigation Strip */}
-      <section className="w-full px-margin py-space-lg bg-surface-container-low" id="catalog">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-space-md">
+          {/* Right Column: Sustainably Sourced Home Essentials (5 Columns) */}
+          <div className="lg:col-span-5 bg-surface-container-lowest rounded-2xl p-space-lg md:p-space-xl flex flex-col justify-between shadow-sm relative overflow-hidden border border-lavender-mist/50">
             <div>
-              <span className="font-label-sm text-outline uppercase tracking-wider">Fast Discovery</span>
-              <h2 className="font-headline-sm text-headline-sm text-on-surface">Explore Core Departments</h2>
-            </div>
-            <Link
-              to="/products"
-              className="font-title-sm text-primary hover:text-secondary flex items-center gap-1"
-            >
-              <span>View All 32 Categories</span>
-              <span className="material-symbols-outlined text-[18px]">chevron_right</span>
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-space-md">
-            {/* Category 1 */}
-            <Link
-              to="/products?category=Electronics"
-              className="flex flex-col items-center gap-space-xs p-space-sm bg-surface-container-lowest rounded-xl hover:shadow-md transition-all text-center group"
-            >
-              <div className="relative w-18 h-18 rounded-full bg-surface-container-high p-2 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-primary text-[32px]">laptop_mac</span>
-                <span className="absolute -top-1 -right-1 bg-primary text-on-primary font-label-sm text-[10px] px-1.5 py-0.5 rounded-full">
-                  -40%
-                </span>
-              </div>
-              <span className="font-title-sm text-title-sm text-on-surface">Electronics</span>
-              <span className="font-body-sm text-body-sm text-outline">Computers &amp; Audio</span>
-            </Link>
-
-            {/* Category 2 */}
-            <Link
-              to="/products?category=Home+%26+Living"
-              className="flex flex-col items-center gap-space-xs p-space-sm bg-surface-container-lowest rounded-xl hover:shadow-md transition-all text-center group"
-            >
-              <div className="relative w-18 h-18 rounded-full bg-surface-container-high p-2 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-primary text-[32px]">chair</span>
-              </div>
-              <span className="font-title-sm text-title-sm text-on-surface">Home &amp; Living</span>
-              <span className="font-body-sm text-body-sm text-outline">Furniture &amp; Decor</span>
-            </Link>
-
-            {/* Category 3 */}
-            <Link
-              to="/products?category=Grocery+%26+Essentials"
-              className="flex flex-col items-center gap-space-xs p-space-sm bg-surface-container-lowest rounded-xl hover:shadow-md transition-all text-center group"
-            >
-              <div className="relative w-18 h-18 rounded-full bg-surface-container-high p-2 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-primary text-[32px]">local_mall</span>
-              </div>
-              <span className="font-title-sm text-title-sm text-on-surface">Pantry &amp; Organic</span>
-              <span className="font-body-sm text-body-sm text-outline">Daily Groceries</span>
-            </Link>
-
-            {/* Category 4 */}
-            <Link
-              to="/products?category=Beauty+%26+Personal+Care"
-              className="flex flex-col items-center gap-space-xs p-space-sm bg-surface-container-lowest rounded-xl hover:shadow-md transition-all text-center group"
-            >
-              <div className="relative w-18 h-18 rounded-full bg-surface-container-high p-2 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-primary text-[32px]">spa</span>
-              </div>
-              <span className="font-title-sm text-title-sm text-on-surface">Skincare &amp; Care</span>
-              <span className="font-body-sm text-body-sm text-outline">Clean Beauty</span>
-            </Link>
-
-            {/* Category 5 */}
-            <Link
-              to="/products?category=Fashion+%26+Apparel"
-              className="flex flex-col items-center gap-space-xs p-space-sm bg-surface-container-lowest rounded-xl hover:shadow-md transition-all text-center group"
-            >
-              <div className="relative w-18 h-18 rounded-full bg-surface-container-high p-2 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-primary text-[32px]">checkroom</span>
-              </div>
-              <span className="font-title-sm text-title-sm text-on-surface">Apparel &amp; Wear</span>
-              <span className="font-body-sm text-body-sm text-outline">Sustainable Line</span>
-            </Link>
-
-            {/* Category 6 */}
-            <Link
-              to="/products?category=Sports+%26+Outdoors"
-              className="flex flex-col items-center gap-space-xs p-space-sm bg-surface-container-lowest rounded-xl hover:shadow-md transition-all text-center group"
-            >
-              <div className="relative w-18 h-18 rounded-full bg-surface-container-high p-2 flex items-center justify-center group-hover:scale-105 transition-transform">
-                <span className="material-symbols-outlined text-primary text-[32px]">fitness_center</span>
-              </div>
-              <span className="font-title-sm text-title-sm text-on-surface">Outdoor &amp; Gear</span>
-              <span className="font-body-sm text-body-sm text-outline">Active Lifestyle</span>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Flash Deals of the Day */}
-      <section className="w-full px-margin py-space-xl bg-surface" id="flash-deals">
-        <div className="max-w-7xl mx-auto flex flex-col gap-space-lg">
-          {/* Section Header with Realtime Countdown */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-sm bg-surface-container-high p-space-lg rounded-2xl">
-            <div className="flex flex-col gap-space-xs">
-              <div className="flex items-center gap-space-xs">
-                <span className="material-symbols-outlined text-primary text-[24px]">electric_bolt</span>
-                <span className="font-label-sm text-primary uppercase font-bold tracking-wider">
-                  Limited Time Window
-                </span>
-              </div>
-              <h2 className="font-headline-md text-headline-md text-on-surface">Flash Deals of the Day</h2>
-              <p className="font-body-md text-body-md text-on-surface-variant">
-                Tier-one deals refreshed twice daily. First come, first served.
+              <span className="px-2.5 py-1 rounded-full bg-surface-container-low text-semantic-success font-label-sm text-label-sm font-bold uppercase tracking-wider flex items-center gap-1 w-max">
+                <span className="material-symbols-outlined text-[14px]">eco</span>
+                <span>Sustainable Living Edit</span>
+              </span>
+              <h3 className="font-headline-sm text-headline-sm text-ink font-bold mt-space-sm">
+                Zero-Waste Pantry &amp; Crafted Bamboo Homeware
+              </h3>
+              <p className="font-body-md text-body-md text-ink-muted mt-space-xs">
+                Organic fair-trade staples, airtight borosilicate spice jars, and sustainably harvested bamboo tableware built for lifelong longevity.
               </p>
             </div>
-            <div className="flex items-center gap-space-xs bg-surface-container-lowest px-space-md py-2 rounded-xl shadow-sm">
-              <span className="font-body-sm text-outline uppercase mr-1">Ends in:</span>
-              <div className="flex items-center gap-1 font-mono font-bold text-on-surface">
-                <span className="bg-surface-container px-2 py-1 rounded text-primary font-headline-sm">
-                  {String(timeLeft.hours).padStart(2, '0')}
-                </span>
-                <span className="text-primary">:</span>
-                <span className="bg-surface-container px-2 py-1 rounded text-primary font-headline-sm">
-                  {String(timeLeft.minutes).padStart(2, '0')}
-                </span>
-                <span className="text-primary">:</span>
-                <span className="bg-surface-container px-2 py-1 rounded text-primary font-headline-sm">
-                  {String(timeLeft.seconds).padStart(2, '0')}
-                </span>
-              </div>
-            </div>
-          </div>
 
-          {/* Product Cards Grid (4 Columns) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
-            {isLoading ? (
-              // 4 Shimmer Skeletons for Flash Deals
-              [0, 1, 2, 3].map((idx) => (
-                <div
-                  key={idx}
-                  className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between animate-pulse"
-                >
-                  <div>
-                    <div className="w-full h-56 rounded-lg bg-surface-container-high mb-space-sm" />
-                    <div className="h-4 w-24 bg-surface-container-high rounded mb-2" />
-                    <div className="h-5 w-full bg-surface-container-high rounded mb-2" />
-                    <div className="h-5 w-3/4 bg-surface-container-high rounded mb-2" />
-                  </div>
-                  <div className="mt-space-sm flex flex-col gap-space-xs">
-                    <div className="h-6 w-32 bg-surface-container-high rounded" />
-                    <div className="w-full bg-surface-container rounded-full h-1.5" />
-                    <div className="h-3 w-20 bg-surface-container-high rounded" />
-                    <div className="w-full h-10 bg-surface-container-high rounded-lg mt-space-xs" />
-                  </div>
-                </div>
-              ))
-            ) : dealProducts.length > 0 ? (
-              dealProducts.slice(0, 4).map((deal, idx) => {
-                const originalPrice = deal.originalPrice || Math.round(deal.price * 1.28);
-                const discount = calculateDiscount(originalPrice, deal.price);
-                const claimedPct = [78, 62, 85, 45][idx % 4];
-                const catName =
-                  typeof deal.category === 'object' && deal.category !== null
-                    ? (deal.category as any).name
-                    : deal.category || 'Deals';
-                const badgeText =
-                  deal.badge ||
-                  (idx === 0
-                    ? 'Lightning Deal'
-                    : idx === 1
-                    ? 'Bestseller'
-                    : idx === 2
-                    ? 'Prime Deal'
-                    : 'Exclusive Deal');
-
-                return (
-                  <div
-                    key={deal._id}
-                    className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between group"
-                  >
-                    <div>
-                      <Link
-                        to={`/products/${deal._id}`}
-                        className="relative block w-full h-56 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm"
-                      >
-                        <img
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          src={deal.image}
-                          alt={deal.name}
-                        />
-                        <span className="absolute top-2 left-2 bg-primary text-on-primary font-label-sm text-[11px] px-2 py-0.5 rounded-full uppercase">
-                          {badgeText}
-                        </span>
-                        <button
-                          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm text-outline hover:text-primary flex items-center justify-center transition-colors"
-                          title="Save to wishlist"
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                          }}
-                        >
-                          <span className="material-symbols-outlined text-[18px]">favorite_border</span>
-                        </button>
-                      </Link>
-                      <div className="flex items-center gap-1 mb-1">
-                        <span
-                          className="material-symbols-outlined text-[16px] text-amber-500 fill-current"
-                          style={{ fontVariationSettings: "'FILL' 1" }}
-                        >
-                          star
-                        </span>
-                        <span className="font-body-sm text-body-sm font-semibold text-on-surface">
-                          {deal.rating || 4.8}
-                        </span>
-                        <span className="font-body-sm text-body-sm text-outline">
-                          ({deal.reviewCount || 120})
-                        </span>
-                      </div>
-                      <Link to={`/products/${deal._id}`}>
-                        <h3 className="font-title-sm text-title-sm text-on-surface line-clamp-2 mb-2 hover:text-primary transition-colors">
-                          {deal.name}
-                        </h3>
-                      </Link>
-                    </div>
-                    <div className="mt-space-sm flex flex-col gap-space-xs">
-                      <div className="flex items-baseline gap-space-xs">
-                        <span className="font-price-card text-price-card text-on-surface">
-                          {formatCurrency(deal.price)}
-                        </span>
-                        {originalPrice > deal.price && (
-                          <>
-                            <span className="font-body-sm text-outline line-through">
-                              {formatCurrency(originalPrice)}
-                            </span>
-                            <span className="font-label-sm text-primary font-semibold">
-                              -{discount}%
-                            </span>
-                          </>
-                        )}
-                      </div>
-                      <div className="w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
-                        <div
-                          className="bg-primary h-full"
-                          style={{ width: `${claimedPct}%` }}
-                        />
-                      </div>
-                      <span className="font-body-sm text-[11px] text-outline">
-                        {claimedPct}% claimed {claimedPct > 80 ? '• Almost Gone' : ''}
-                      </span>
-                      <button
-                        onClick={() =>
-                          handleQuickAdd(deal._id, deal.name, deal.price, deal.image, catName)
-                        }
-                        className="mt-space-xs w-full bg-primary hover:bg-secondary text-on-primary h-10 rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors cursor-pointer"
-                        type="button"
-                      >
-                        <span className="material-symbols-outlined text-[18px]">shopping_cart</span>
-                        <span>Add to Cart</span>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="col-span-full bg-surface-container-lowest rounded-xl p-space-xl text-center flex flex-col items-center justify-center gap-space-sm">
-                <span className="material-symbols-outlined text-outline text-[36px]">schedule</span>
-                <p className="font-headline-sm text-on-surface">No Flash Deals Active Right Now</p>
-                <p className="font-body-md text-on-surface-variant">Check back soon for refreshed daily windows.</p>
-                <Link
-                  to="/products"
-                  className="mt-space-xs px-space-md py-2 bg-primary text-on-primary rounded-lg font-title-sm hover:bg-secondary transition-colors"
-                >
-                  Explore All Products
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 5. Editorial Category Spotlight: Workspace & Electronics */}
-      <section className="w-full px-margin py-space-xl bg-surface-container-low">
-        <div className="max-w-7xl mx-auto flex flex-col gap-space-lg">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-sm">
-            <div>
-              <span className="font-label-sm text-outline uppercase tracking-wider">Curated Department</span>
-              <h2 className="font-headline-lg text-headline-lg text-on-surface">
-                Curated Electronics &amp; Workspaces
-              </h2>
-            </div>
-            <div className="flex items-center gap-space-sm">
-              <button
-                type="button"
-                onClick={() => setActiveCategoryTab('mac')}
-                className={`px-space-md py-1.5 rounded-lg font-title-sm transition-colors shadow-sm ${
-                  activeCategoryTab === 'mac'
-                    ? 'bg-surface-container-lowest text-on-surface'
-                    : 'bg-transparent text-outline hover:text-on-surface'
-                }`}
-              >
-                Mac &amp; PC
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveCategoryTab('displays')}
-                className={`px-space-md py-1.5 rounded-lg font-title-sm transition-colors ${
-                  activeCategoryTab === 'displays'
-                    ? 'bg-surface-container-lowest text-on-surface shadow-sm'
-                    : 'bg-transparent text-outline hover:text-on-surface'
-                }`}
-              >
-                Displays
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveCategoryTab('ergonomics')}
-                className={`px-space-md py-1.5 rounded-lg font-title-sm transition-colors ${
-                  activeCategoryTab === 'ergonomics'
-                    ? 'bg-surface-container-lowest text-on-surface shadow-sm'
-                    : 'bg-transparent text-outline hover:text-on-surface'
-                }`}
-              >
-                Ergonomics
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-stretch">
-            {/* Spotlight Card: UltraBook (5 Columns) */}
-            <div className="lg:col-span-5 bg-surface-container-lowest rounded-2xl p-space-xl shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-space-sm">
-                  <span className="bg-primary text-on-primary font-label-sm uppercase px-2.5 py-1 rounded-full">
-                    Flagship Release
-                  </span>
-                  <span className="font-label-sm text-outline">Next-Gen Architecture</span>
-                </div>
-                <h3 className="font-headline-md text-headline-md text-on-surface mb-space-xs">
-                  ApexBook M3 Ultra 16-inch
-                </h3>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-space-md">
-                  Engineered for creative architects, machine learning workflows, and heavy render pipelines. 36-hour sustained battery efficiency.
-                </p>
-                <div className="flex flex-wrap gap-2 mb-space-lg">
-                  <span className="bg-surface-container px-3 py-1 rounded-md text-body-sm font-semibold text-on-surface">
-                    32GB Unified RAM
-                  </span>
-                  <span className="bg-surface-container px-3 py-1 rounded-md text-body-sm font-semibold text-on-surface">
-                    1TB PCIe Gen5
-                  </span>
-                  <span className="bg-surface-container px-3 py-1 rounded-md text-body-sm font-semibold text-on-surface">
-                    Liquid Retina XDR
-                  </span>
-                </div>
-              </div>
-
-              <div>
-                <Link to="/products/eb00eef4b99985cbc0933691" className="block w-full h-64 rounded-xl bg-surface-container-low overflow-hidden mb-space-md group">
-                  <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkyTe1LqwU0-6EHPhxaWoVcP9JkNxlH4q8RfvUazPEC-36q-iOe5WAPah4-ogyWJ4D5HVpB9CCNrkpPmUj8jiZMLDO0saAhfhgdeBV2fNCRU2KNiCj7Dt_Jmivs9xhpQvYzMr_NQg1rDGgjKWMD7u3u4GkY6IMXR9-9TEql12A-wODb6I6PK6EA201943X2GI9c-0Nbqik92jVDuXf1wLzCVqnLTFBvs1IcMWVY9EoubZsYJ5hxjZ5Ww"
-                    alt="ApexBook M3 Ultra"
-                  />
-                </Link>
-                <div className="flex items-center justify-between pt-space-xs">
-                  <div>
-                    <span className="font-body-sm text-outline block">Special Launch Price</span>
-                    <span className="font-price-hero text-price-hero text-on-surface">₹1,89,990</span>
-                  </div>
-                  <button
-                    onClick={() => navigate('/products/eb00eef4b99985cbc0933691')}
-                    className="bg-primary hover:bg-secondary text-on-primary px-space-lg h-12 rounded-lg font-title-sm flex items-center gap-space-xs transition-colors cursor-pointer"
-                    type="button"
-                  >
-                    <span>Configure &amp; Buy</span>
-                    <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* 2x2 Companion Gear Grid (7 Columns) */}
-            <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-              {/* Companion 1: 4K Display */}
-              <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-                <div className="h-40 w-full rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIvRTaMlQTWPYJRV7jT9ut2t-d_XkCs6sRmz5VD2zuow7dSQxX1omtNSWkty473ixeKSxFiB5GQezCv7m2-oKd7UjTEP970RLNOSqEOCIDzbi3LsuVIaEdBuxTIfCz2eM-VUihhahYflJyoVpAm8rTcv-7pcHzmO-U2A9y69kwzxrytDxnuO-QBt7dvQ6mxc6VjFJUoaiNLJ4Ql3DcoPPR08LdN6iSzixjlIFP1IRx07jyBcrzohrhiQ"
-                    alt="UltraFine 32 inch 4K Display"
-                  />
-                </div>
-                <div>
-                  <span className="font-label-sm text-outline uppercase">Displays</span>
-                  <h4 className="font-title-sm text-title-sm text-on-surface mb-1">
-                    UltraFine 32" 4K Colorist Display
-                  </h4>
-                  <p className="font-price-card text-price-card text-primary mb-space-sm">₹48,999</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigate('/products')}
-                  className="w-full py-2 bg-surface-container hover:bg-surface-container-high rounded-md font-title-sm text-on-surface text-center transition-colors"
-                >
-                  Quick View
-                </button>
-              </div>
-
-              {/* Companion 2: Mechanical Keyboard */}
-              <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-                <div className="h-40 w-full rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDv7IcbhTczhddEFr6woUzXgy59KrTdGJ2TzgxTY-UbUKZcq8gR9aiQxrfVpPzDpfJhgRwYuiZJ-SlVytOsIkzkiLdPwY3DC7F97kqQKnIUVpCvLec0UEDfkJkhf6399Wx-jsnH9e-UkmLjZcW02LZdbQ8c5CIEmN-Yhh4ojx98IOQCU5RpPQEucuEZCGFOtYycyv6Ynp40Zi04P5cbZhuoGkgonf2KHIGRCxw225YAcveeBPixzRX2Nw"
-                    alt="KeyForge Wireless Mechanical Keyboard"
-                  />
-                </div>
-                <div>
-                  <span className="font-label-sm text-outline uppercase">Peripherals</span>
-                  <h4 className="font-title-sm text-title-sm text-on-surface mb-1">
-                    KeyForge 75% Wireless Mechanical
-                  </h4>
-                  <p className="font-price-card text-price-card text-primary mb-space-sm">₹8,499</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigate('/products')}
-                  className="w-full py-2 bg-surface-container hover:bg-surface-container-high rounded-md font-title-sm text-on-surface text-center transition-colors"
-                >
-                  Quick View
-                </button>
-              </div>
-
-              {/* Companion 3: Ergonomic Chair */}
-              <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-                <div className="h-40 w-full rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX5OZefVMZsxwIkkggeMzy6j3xrXBtcuqMJqQQiwlBW-d-nsRjKzBnw0mw2EIz7bzt7Jfcd5GDFVjEnkxv6IMOWEVPB-zr1ph60h-e85o74W9Kev9FJ3FsrfzjSZ8cfQ8GD-hLNcoNDAhACEiesWU49Ph1a5-vXkU50y8nrkiHvUney_r1A6_SnTohBYTYoh9X_CeQr9W8itleqQvgZylumuzo0Brcwa5aWesWgQwVU5R6lwM7SyE29w"
-                    alt="ErgoPosture Task Chair Mesh 2.0"
-                  />
-                </div>
-                <div>
-                  <span className="font-label-sm text-outline uppercase">Furniture</span>
-                  <h4 className="font-title-sm text-title-sm text-on-surface mb-1">
-                    ErgoPosture Task Chair Mesh 2.0
-                  </h4>
-                  <p className="font-price-card text-price-card text-primary mb-space-sm">₹24,500</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigate('/products')}
-                  className="w-full py-2 bg-surface-container hover:bg-surface-container-high rounded-md font-title-sm text-on-surface text-center transition-colors"
-                >
-                  Quick View
-                </button>
-              </div>
-
-              {/* Companion 4: GaN Fast Charger */}
-              <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-                <div className="h-40 w-full rounded-lg bg-surface-container-low overflow-hidden mb-space-sm">
-                  <img
-                    className="w-full h-full object-cover"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB3salbLqu7ZZBPvwaVu52eiVSQe79nijJ0ot-jRi8q_a7dLyD-c6ItFsF2rzOhskIYA4TMA-yTA8VM6UsCx3Xus4cTziAYFWCcm_BdQXa08BbAQlQsmqvvlXBtyYx0aKTkq8FPLpwe-9ikE8H2kWscI7BGQh9K6txzxZyKgLnVX5CuP9-PchGr-T58ljSBSPOIXE51H_jJvW7ZV2c2ZWT4UTEQ3bVfT8g5SPV2KPeIsyWD45qMhuNcw"
-                    alt="VoltPro 140W Quad GaN Charger"
-                  />
-                </div>
-                <div>
-                  <span className="font-label-sm text-outline uppercase">Power</span>
-                  <h4 className="font-title-sm text-title-sm text-on-surface mb-1">
-                    VoltPro 140W Quad GaN Charger
-                  </h4>
-                  <p className="font-price-card text-price-card text-primary mb-space-sm">₹4,299</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => navigate('/products')}
-                  className="w-full py-2 bg-surface-container hover:bg-surface-container-high rounded-md font-title-sm text-on-surface text-center transition-colors"
-                >
-                  Quick View
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Everyday Essentials & Fresh Grocery Section */}
-      <section className="w-full px-margin py-space-xl bg-surface">
-        <div className="max-w-7xl mx-auto flex flex-col gap-space-lg">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
-            <div>
-              <div className="inline-flex items-center gap-space-xs bg-surface-container-high text-primary px-space-sm py-0.5 rounded-full font-label-sm text-label-sm font-semibold mb-1">
-                <span className="material-symbols-outlined text-[14px]">local_shipping</span>
-                <span>Delivery by 7:00 PM Today</span>
-              </div>
-              <h2 className="font-headline-md text-headline-md text-on-surface">
-                Everyday Essentials &amp; Fresh Grocery
-              </h2>
-            </div>
-            <div className="flex items-center gap-space-xs">
-              <button
-                className="w-10 h-10 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors"
-                title="Previous"
-                type="button"
-              >
-                <span className="material-symbols-outlined text-[20px]">chevron_left</span>
-              </button>
-              <button
-                className="w-10 h-10 rounded-full bg-primary hover:bg-secondary text-on-primary flex items-center justify-center transition-colors"
-                title="Next"
-                type="button"
-              >
-                <span className="material-symbols-outlined text-[20px]">chevron_right</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-gutter">
-            {isLoading ? (
-              // 4 Shimmer Skeletons for Everyday Essentials
-              [0, 1, 2, 3].map((idx) => (
-                <div
-                  key={idx}
-                  className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between animate-pulse"
-                >
-                  <div className="w-full h-48 rounded-lg bg-surface-container-high mb-space-sm" />
-                  <div className="h-5 w-3/4 bg-surface-container-high rounded mb-2" />
-                  <div className="h-4 w-1/2 bg-surface-container-high rounded mb-4" />
-                  <div className="flex items-center justify-between">
-                    <div className="h-6 w-16 bg-surface-container-high rounded" />
-                    <div className="h-9 w-20 bg-surface-container-high rounded-lg" />
-                  </div>
-                </div>
-              ))
-            ) : groceryProducts.length > 0 ? (
-              groceryProducts.slice(0, 4).map((item) => {
-                const catName =
-                  typeof item.category === 'object' && item.category !== null
-                    ? (item.category as any).name
-                    : item.category || 'Grocery & Essentials';
-                return (
-                  <div
-                    key={item._id}
-                    className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
-                  >
-                    <Link
-                      to={`/products/${item._id}`}
-                      className="relative w-full h-48 rounded-lg bg-surface-container-low overflow-hidden mb-space-sm block group"
-                    >
-                      <img
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        src={item.image}
-                        alt={item.name}
-                      />
-                      <span className="absolute top-2 left-2 bg-surface-container-lowest/90 px-2 py-0.5 rounded text-[11px] font-semibold text-on-surface">
-                        {item.badge || 'Fresh Daily'}
-                      </span>
-                    </Link>
-                    <div>
-                      <Link to={`/products/${item._id}`}>
-                        <h4 className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors line-clamp-1">
-                          {item.name}
-                        </h4>
-                      </Link>
-                      <p className="font-body-sm text-body-sm text-outline truncate">{catName}</p>
-                    </div>
-                    <div className="mt-space-sm flex items-center justify-between">
-                      <span className="font-price-card text-price-card text-on-surface">
-                        {formatCurrency(item.price)}
-                      </span>
-                      <button
-                        onClick={() =>
-                          handleQuickAdd(item._id, item.name, item.price, item.image, catName)
-                        }
-                        className="h-9 px-space-md bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface rounded-lg font-title-sm flex items-center gap-1 transition-colors cursor-pointer"
-                        type="button"
-                      >
-                        <span className="material-symbols-outlined text-[16px]">add</span>
-                        <span>Add</span>
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <div className="col-span-full bg-surface-container-lowest rounded-xl p-space-xl text-center flex flex-col items-center justify-center gap-space-sm">
-                <span className="material-symbols-outlined text-outline text-[36px]">local_shipping</span>
-                <p className="font-headline-sm text-on-surface">Everyday Essentials Loading Soon</p>
-                <Link
-                  to="/products?category=Grocery+%26+Essentials"
-                  className="mt-space-xs px-space-md py-2 bg-primary text-on-primary rounded-lg font-title-sm hover:bg-secondary transition-colors"
-                >
-                  Browse Grocery Department
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. Trust & Confidence Value Proposition Bar */}
-      <section className="w-full px-margin py-space-xl bg-surface-container-high">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter">
-          {/* Pillar 1 */}
-          <div className="flex items-start gap-space-sm">
-            <div className="w-12 h-12 rounded-xl bg-surface-container-lowest text-primary flex items-center justify-center shrink-0 shadow-sm">
-              <span className="material-symbols-outlined text-[26px]">verified</span>
-            </div>
-            <div className="flex flex-col">
-              <h4 className="font-title-md text-title-md text-on-surface">100% Genuine Guaranteed</h4>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">
-                Sourced directly from certified brand houses &amp; verified distributors.
-              </p>
-            </div>
-          </div>
-
-          {/* Pillar 2 */}
-          <div className="flex items-start gap-space-sm">
-            <div className="w-12 h-12 rounded-xl bg-surface-container-lowest text-primary flex items-center justify-center shrink-0 shadow-sm">
-              <span className="material-symbols-outlined text-[26px]">local_shipping</span>
-            </div>
-            <div className="flex flex-col">
-              <h4 className="font-title-md text-title-md text-on-surface">Fast &amp; Tracked Delivery</h4>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">
-                Real-time GPS routing with 2-day delivery across 19,000+ pin codes.
-              </p>
-            </div>
-          </div>
-
-          {/* Pillar 3 */}
-          <div className="flex items-start gap-space-sm">
-            <div className="w-12 h-12 rounded-xl bg-surface-container-lowest text-primary flex items-center justify-center shrink-0 shadow-sm">
-              <span className="material-symbols-outlined text-[26px]">published_with_changes</span>
-            </div>
-            <div className="flex flex-col">
-              <h4 className="font-title-md text-title-md text-on-surface">7-Day Hassle-Free Returns</h4>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">
-                Instant doorstep pick-up and rapid wallet reimbursement protocol.
-              </p>
-            </div>
-          </div>
-
-          {/* Pillar 4 */}
-          <div className="flex items-start gap-space-sm">
-            <div className="w-12 h-12 rounded-xl bg-surface-container-lowest text-primary flex items-center justify-center shrink-0 shadow-sm">
-              <span className="material-symbols-outlined text-[26px]">lock</span>
-            </div>
-            <div className="flex flex-col">
-              <h4 className="font-title-md text-title-md text-on-surface">Bank-Grade Encryption</h4>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">
-                256-bit PCI-DSS secure payments via UPI, RuPay, cards, and net banking.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 8. Customer Reviews & Verified Buyer Stories */}
-      <section className="w-full px-margin py-space-xl bg-surface">
-        <div className="max-w-7xl mx-auto flex flex-col gap-space-lg">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="font-label-sm text-outline uppercase tracking-wider">Social Proof</span>
-            <h2 className="font-headline-md text-headline-md text-on-surface mt-1">Verified Buyer Stories</h2>
-            <p className="font-body-md text-body-md text-on-surface-variant mt-2">
-              Real purchases, honest experiences, and verified satisfaction from over 4 million buyers.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
-            {/* Review 1 */}
-            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col justify-between">
-              <div className="flex flex-col gap-space-xs">
-                <div className="flex items-center gap-1 text-amber-500">
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface italic mt-2">
-                  "The SoundPulse headphones arrived in under 24 hours in Mumbai. Sound isolation is comparable to pairs triple the cost. OMIZON packaging was impeccably reinforced."
-                </p>
-              </div>
-              <div className="flex items-center gap-space-sm pt-space-md">
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center font-bold text-primary">
-                  RS
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-title-sm text-title-sm text-on-surface">Rahul Sharma</span>
-                  <span className="font-body-sm text-body-sm text-outline flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px] text-green-600">verified</span>
-                    Verified Electronics Buyer • Bengaluru
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Review 2 */}
-            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col justify-between">
-              <div className="flex flex-col gap-space-xs">
-                <div className="flex items-center gap-1 text-amber-500">
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface italic mt-2">
-                  "I rely on OMIZON for our home pantry supplies and specialized olive oils. Freshness is genuinely uncompromised, and customer support resolves questions in minutes."
-                </p>
-              </div>
-              <div className="flex items-center gap-space-sm pt-space-md">
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center font-bold text-primary">
-                  AM
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-title-sm text-title-sm text-on-surface">Ananya Mukherjee</span>
-                  <span className="font-body-sm text-body-sm text-outline flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px] text-green-600">verified</span>
-                    Verified Pantry Buyer • Kolkata
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Review 3 */}
-            <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col justify-between">
-              <div className="flex flex-col gap-space-xs">
-                <div className="flex items-center gap-1 text-amber-500">
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                    star
-                  </span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface italic mt-2">
-                  "The GlowBiome repair serum cleared my post-workout redness within four days. Finding niche, authentic clinical skincare with next-day dispatch used to be impossible."
-                </p>
-              </div>
-              <div className="flex items-center gap-space-sm pt-space-md">
-                <div className="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center font-bold text-primary">
-                  KV
-                </div>
-                <div className="flex flex-col">
-                  <span className="font-title-sm text-title-sm text-on-surface">Kavita Verma</span>
-                  <span className="font-body-sm text-body-sm text-outline flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[14px] text-green-600">verified</span>
-                    Verified Beauty Buyer • New Delhi
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 9. Newsletter VIP Access Signup */}
-      <section className="w-full px-margin py-space-xl bg-surface-container-low">
-        <div className="max-w-5xl mx-auto bg-surface-container-lowest rounded-2xl p-space-xl shadow-md flex flex-col md:flex-row items-center justify-between gap-space-lg">
-          <div className="flex flex-col gap-space-xs max-w-md">
-            <span className="bg-primary text-on-primary font-label-sm text-label-sm uppercase px-2 py-0.5 rounded-full w-fit">
-              VIP Circle
-            </span>
-            <h3 className="font-headline-md text-headline-md text-on-surface">
-              Unlock ₹750 Off Your Next Order
-            </h3>
-            <p className="font-body-md text-body-md text-on-surface-variant">
-              Receive exclusive flash allocations, private brand sales, and early-bird tech drops directly to your inbox.
-            </p>
-          </div>
-          <div className="w-full md:w-auto flex-1 max-w-md flex flex-col gap-space-xs">
-            <form
-              className="flex flex-col sm:flex-row items-center gap-space-xs w-full"
-              onSubmit={(e) => {
-                e.preventDefault();
-                alert('Welcome to OMIZON VIP! Your ₹750 code is VIPWELCOME');
-              }}
-            >
-              <input
-                className="w-full h-12 bg-surface-container px-space-md rounded-lg font-body-md text-on-surface placeholder:text-outline outline-none focus:ring-2 focus:ring-primary transition-all"
-                placeholder="Enter your business or personal email"
-                required
-                type="email"
+            <div className="my-space-md relative rounded-xl overflow-hidden aspect-[16/9]">
+              <img
+                className="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuApK8sXu4x-eg7nwB9JaZtv8sVjuuy9KFPuA3UmOfWVCeo3l8pY9WasO-BzaUrOKg8OJGms3fVhVlboUlY3gVnAteCABEuZJe1l0JwmzR45WX_387_kzAtnqakXmJeHyjOFOOAPROdIDHSU5GIBjtk03tUSGGaOZBnWlQenXQSO-Clpn2VFyS-kTd0midNN4xQEf9Z_1iOg6l3qPiNWE4avYRoN4Cu67NEsm7cq6GW9"
+                alt="Zero-Waste Pantry & Crafted Bamboo Homeware"
               />
-              <button
-                className="w-full sm:w-auto shrink-0 h-12 bg-primary hover:bg-secondary text-on-primary px-space-lg rounded-lg font-title-sm transition-colors shadow-sm"
-                type="submit"
+              <div className="absolute inset-0 bg-gradient-to-t from-midnight-violet/70 via-transparent to-transparent flex items-end p-space-md">
+                <p className="font-title-sm text-title-sm text-white font-semibold">
+                  100% Plastic-Free Packaging Certified
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="font-body-sm text-body-sm text-ink-muted">Over 450+ verified eco-brands</span>
+                <p className="font-title-sm text-title-sm text-ink font-bold">From ₹450</p>
+              </div>
+              <Link
+                to="/products?category=Home+%26+Living"
+                className="inline-flex items-center gap-1 font-label-md text-label-md text-primary font-semibold hover:text-royal-purple transition-colors cursor-pointer"
+                data-path="home-and-living"
               >
-                Join VIP
-              </button>
-            </form>
-            <span className="font-body-sm text-[12px] text-outline">
-              Zero spam. Unsubscribe anytime with one click.
-            </span>
+                <span>Discover Pantry Collection</span>
+                <span className="material-symbols-outlined text-[18px]">chevron_right</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 7. Recently Viewed & Browsing Suggestions Dock */}
+      <section className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-md mb-space-lg">
+        <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-lavender-mist/50">
+          <div className="flex items-center justify-between mb-space-sm">
+            <div className="flex items-center gap-2">
+              <span className="material-symbols-outlined text-ink-muted text-[20px]">history</span>
+              <h3 className="font-title-sm text-title-sm text-ink font-bold">Your Browsing History</h3>
+            </div>
+            <div className="flex items-center gap-space-md">
+              <Link to="/products" className="font-label-sm text-label-sm text-primary hover:text-royal-purple font-semibold">
+                View or edit history
+              </Link>
+            </div>
+          </div>
+
+          {/* 6 Horizontal Recently Viewed Items matching Stitch */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-space-sm">
+            <Link to="/products" className="group p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+              <div className="w-full aspect-square rounded bg-surface-container-lowest overflow-hidden mb-1.5">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuByAAwUAwg6A5yCvVxLA8SO5jiogmkS_UcwStv9EAnKy0zpEFRWnYE3p28UuasRkCplfYgt8H9Z4C4_yafrwKd1kZVXTCPs2d8fAPazLC6Oi2AO_ICzfmsXEg-bVOt5_Mwyx-lWmBDb31AUramOpWkD0J4tDulzaFyKqxwx1bb5qYEy1HeaQWqAlpJueQtW7YHf9VjQDkwIbZtVwgWwZTvgBK2ox0NOklmR4T6tEFop"
+                  alt="ErgoPro Mouse"
+                />
+              </div>
+              <p className="font-label-sm text-label-sm text-ink truncate font-medium">ErgoPro Mouse</p>
+              <p className="font-label-md text-label-md text-ink font-bold">₹3,499</p>
+            </Link>
+
+            <Link to="/products" className="group p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+              <div className="w-full aspect-square rounded bg-surface-container-lowest overflow-hidden mb-1.5">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJQmMafbie8xL82jPc3aUAJ-4tGCMO6vW8_BibjqcUBOvWDDA9RvtpvCVgPCSy-5vjGNFUlxol1zVSX1NHhaTDDfJn9kZnU308GYTrpPRANjrHmO9mUUj-XwA6vR54XyhHK7sYFdTCLsXZl8gLSTlZecCywI-gofb3U5I-gDwlPwJ7Lk9sdrVA7t81REJi0Ot8OpE0LkNPk2ggSewFM8eRwRTk_V_k0HECGYWv-wQ3"
+                  alt="Solid Brass Pen"
+                />
+              </div>
+              <p className="font-label-sm text-label-sm text-ink truncate font-medium">Solid Brass Pen</p>
+              <p className="font-label-md text-label-md text-ink font-bold">₹1,150</p>
+            </Link>
+
+            <Link to="/products" className="group p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+              <div className="w-full aspect-square rounded bg-surface-container-lowest overflow-hidden mb-1.5">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGSPLpIIb9vuOJcL1oIBRvkVBRAKyWpdaKyp38loaUPzrLo3IvHUMlKltdMHPa-GU-ZPGgLniHuvAbUQnfdDKxGkoZkapCpJgDigb6BAEmjAHhLZ4pqML957d2f0DlkqVs16jOuBn3XC1N08xb5qn-P33zuejsA5yuJRnsLF0C1YdhXWHJM9eXknGHSS4_-sJ5s-YbruTSu5G4nI-wm7YjfvR9inN_ZX7oXdlYEZRu"
+                  alt="Lumbar Support Pro"
+                />
+              </div>
+              <p className="font-label-sm text-label-sm text-ink truncate font-medium">Lumbar Support Pro</p>
+              <p className="font-label-md text-label-md text-ink font-bold">₹1,890</p>
+            </Link>
+
+            <Link to="/products" className="group p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+              <div className="w-full aspect-square rounded bg-surface-container-lowest overflow-hidden mb-1.5">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdekPoNRdmfnvrfp6q8sQpWPl4N9MNs5zEOV_bg8KKOLbr7EYGhH0HWtWFBIdsHJGJq7tE4glHqq6DVKnfMvIRS-iLb56qN-RBmoDnoo58UwDY9B_VWDn2GYnmNiWnVeShkng12QOgYKcvDWkHTs-CLZfGLBxe2yCdmyPp9wYgexJMENSQazuo1ABP1jvNdHzfkCCTyLJnLE_lQODOIcgP3dPQlZOmI99DuRP2DXYf"
+                  alt="Cedar & Bergamot Candle"
+                />
+              </div>
+              <p className="font-label-sm text-label-sm text-ink truncate font-medium">Cedar &amp; Bergamot Candle</p>
+              <p className="font-label-md text-label-md text-ink font-bold">₹980</p>
+            </Link>
+
+            <Link to="/products" className="group p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+              <div className="w-full aspect-square rounded bg-surface-container-lowest overflow-hidden mb-1.5">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGd9a_AYhU-vcDEdQLBQO-d9bl5kz2RGdEhf0aUTzX_pfyo7Icc7ZG8KMiaLfQjgdg6SNZ6zH7WgnAXuK85ueNFYSmeZDFhBUeS4Rxz3QxN21O7TF3XO1XHbK1BVLY8RhQWx_u_-CeUyv9nhXNjsiSV0NkTTmRkksDzveW0di-5tc0tFbMA9IeAv33tU118_xejXpLx5jViUFv9JiZuX_j3jT0FcwcJQUxI04jI6bv"
+                  alt="100W Braided Cable"
+                />
+              </div>
+              <p className="font-label-sm text-label-sm text-ink truncate font-medium">100W Braided Cable</p>
+              <p className="font-label-md text-label-md text-ink font-bold">₹699</p>
+            </Link>
+
+            <Link to="/products" className="group p-2 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+              <div className="w-full aspect-square rounded bg-surface-container-lowest overflow-hidden mb-1.5">
+                <img
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAL-KkNhYl22KKk98O4CHBML75gBb28JGrWp3EDOwUSbVSzuGraQZI3RzyPrBoHpkZi7GODRzdIKjZghONJIOVFx4Fb98jGX5i-ZZr9LOZ7yrz0Oj2N39SQLg88KwFsWJAm1Ck1tJhbP3nKMvnrz327oKt7xLqtkIsg0qZiyD87DhOvFuKnTiZoy2qPWOnQ8uin8cf8abmWYDzFqlUKCubGQnfhrFXkuidoCKkUehnF"
+                  alt="Ceremonial Matcha 50g"
+                />
+              </div>
+              <p className="font-label-sm text-label-sm text-ink truncate font-medium">Ceremonial Matcha 50g</p>
+              <p className="font-label-md text-label-md text-ink font-bold">₹1,420</p>
+            </Link>
           </div>
         </div>
       </section>
