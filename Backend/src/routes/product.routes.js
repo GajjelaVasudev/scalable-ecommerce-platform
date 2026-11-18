@@ -4,10 +4,13 @@ const router = express.Router();
 const authorize = require('../middlewares/authorize.middleware');
 const authMiddleware = require('../middlewares/auth.middleware');
 
+// Public catalog endpoints (accessible to guests, buyers, sellers, and admins)
+router.get('/', getProducts);
+router.get('/:id', getProductById);
+
+// Protected merchant & administrative management endpoints
 router.post('/', authMiddleware, authorize('seller', 'admin'), createProduct);
-router.get('/', authMiddleware, authorize('seller', 'buyer', 'admin'), getProducts);
 router.put('/:id', authMiddleware, authorize('seller', 'admin'), updateProduct);
 router.delete('/:id', authMiddleware, authorize('seller', 'admin'), deleteProduct);
-router.get('/:id', authMiddleware, authorize('seller', 'buyer', 'admin'), getProductById);
 
 module.exports = router;

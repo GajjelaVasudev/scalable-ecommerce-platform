@@ -4,10 +4,13 @@ const router = express.Router();
 const authMiddleware = require('../middlewares/auth.middleware');
 const authorize = require('../middlewares/authorize.middleware');
 
-router.post('/', authMiddleware,authorize(['admin']), createCategory);
-router.get('/', authMiddleware,authorize(['admin','seller','buyer']), getAllCategories);
-router.get('/:id', authMiddleware,authorize(['admin','seller','buyer']), getCategoryById);
-router.put('/:id', authMiddleware,authorize(['admin']), updateCategory);
-router.delete('/:id', authMiddleware,authorize(['admin']), deleteCategory);
+// Public category taxonomies (accessible to guests, buyers, sellers, and admins)
+router.get('/', getAllCategories);
+router.get('/:id', getCategoryById);
+
+// Protected administrative management endpoints
+router.post('/', authMiddleware, authorize('admin'), createCategory);
+router.put('/:id', authMiddleware, authorize('admin'), updateCategory);
+router.delete('/:id', authMiddleware, authorize('admin'), deleteCategory);
 
 module.exports = router;

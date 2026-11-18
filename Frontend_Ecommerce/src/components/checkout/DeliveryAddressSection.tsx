@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShippingAddress } from '../../types';
+import { useAuth } from '../../context/AuthContext';
+import {
+  getStableUserId,
+  isDemoUser,
+  getAccountAddresses,
+  setAccountAddresses,
+} from '../../utils/accountStorage';
 import { MapPin, Plus, Check, ShieldCheck, Home, Building2, AlertCircle } from 'lucide-react';
 
 export interface SavedAddressItem extends ShippingAddress {
@@ -9,7 +16,7 @@ export interface SavedAddressItem extends ShippingAddress {
 }
 
 interface DeliveryAddressSectionProps {
-  selectedAddress: SavedAddressItem;
+  selectedAddress: SavedAddressItem | null;
   onSelectAddress: (addr: SavedAddressItem) => void;
   onAddressConfirmed?: () => void;
 }
@@ -46,7 +53,30 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
   onSelectAddress,
   onAddressConfirmed,
 }) => {
-  const [addresses, setAddresses] = useState<SavedAddressItem[]>(INITIAL_SAVED_ADDRESSES);
+  const { user } = useAuth();
+  const userId = getStableUserId(user);
+  const isDemo = isDemoUser(user);
+
+  const [addresses, setAddresses] = useState<SavedAddressItem[]>(() => {
+    const saved = getAccountAddresses(userId);
+    if (saved && saved.length > 0) return saved;
+    // Only explicitly identified demo accounts receive sample demo addresses
+    if (isDemo) return INITIAL_SAVED_ADDRESSES;
+    // Real authenticated customers with no saved addresses start with an empty address list
+    return [];
+  });
+
+  useEffect(() => {
+    const saved = getAccountAddresses(userId);
+    if (saved && saved.length > 0) {
+      setAddresses(saved);
+    } else if (isDemo) {
+      setAddresses(INITIAL_SAVED_ADDRESSES);
+    } else {
+      setAddresses([]);
+    }
+  }, [userId, isDemo]);
+
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -137,8 +167,9 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
           : a
       );
       setAddresses(updated);
+      setAccountAddresses(userId, updated);
       const updatedItem = updated.find((a) => a.id === editingId);
-      if (updatedItem && selectedAddress.id === editingId) {
+      if (updatedItem && selectedAddress?.id === editingId) {
         onSelectAddress(updatedItem);
       }
     } else {
@@ -149,7 +180,9 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
         postalCode: cleanPin,
         isDefault: false,
       };
-      setAddresses((prev) => [...prev, newAddress]);
+      const updated = [...addresses, newAddress];
+      setAddresses(updated);
+      setAccountAddresses(userId, updated);
       onSelectAddress(newAddress);
     }
 
@@ -334,9 +367,32 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
           </form>
         )}
 
-        {/* Saved Addresses List */}
-        {addresses.map((addr) => {
-          const isSelected = selectedAddress.id === addr.id;
+        {/* Saved Addresses List or Empty Prompt */}
+        {addresses.length === 0 ? (
+          !isFormOpen && (
+            <div className="p-8 text-center border-2 border-dashed border-outline-variant/30 rounded-xl flex flex-col items-center justify-center gap-2">
+              <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary mb-1">
+                <MapPin className="w-6 h-6 text-primary" />
+              </div>
+              <h3 className="font-title-sm text-on-surface font-semibold text-base">
+                No delivery address selected
+              </h3>
+              <p className="font-body-sm text-on-surface-variant text-sm max-w-md">
+                Please add a delivery address to calculate accurate delivery speeds, slots, and statutory taxes.
+              </p>
+              <button
+                type="button"
+                onClick={openAddForm}
+                className="mt-2 bg-primary hover:bg-secondary text-on-primary px-4 py-2 rounded-lg font-label-md transition-colors cursor-pointer font-semibold flex items-center gap-1.5 shadow-sm"
+              >
+                <Plus className="w-4 h-4" />
+                <span>+ Add Delivery Address</span>
+              </button>
+            </div>
+          )
+        ) : (
+          addresses.map((addr) => {
+            const isSelected = selectedAddress?.id === addr.id;
 
           if (isSelected) {
             return (
@@ -461,7 +517,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
               </div>
             </div>
           );
-        })}
+        }))}
       </div>
     </section>
   );

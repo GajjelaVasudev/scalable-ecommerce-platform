@@ -146,10 +146,11 @@ async function createProduct(req, res) {
 // Get products with pagination, filtering, sorting and Redis caching
 async function getProducts(req, res) {
     try {
-        const { category, minprice, maxprice, sort } = req.query;
+        const { category, minprice, maxprice, sort, featured, inStock } = req.query;
+        const rawSearch = req.query.search || req.query.q;
 
         const page = Number(req.query.page ?? 1);
-        const limit = Number(req.query.limit ?? 10);
+        const limit = Number(req.query.limit ?? 12);
 
         if (
             !Number.isInteger(page) ||
@@ -160,12 +161,6 @@ async function getProducts(req, res) {
         ) {
             return res.status(400).json({
                 message: 'Page must be a positive integer and limit must be between 1 and 100'
-            });
-        }
-
-        if (category && !mongoose.isValidObjectId(category)) {
-            return res.status(400).json({
-                message: 'Invalid category ID'
             });
         }
 
@@ -196,7 +191,10 @@ async function getProducts(req, res) {
         const validSortOptions = [
             'price_asc',
             'price_desc',
-            'newest'
+            'newest',
+            'rating',
+            'rating_desc',
+            'featured'
         ];
 
         if (sort && !validSortOptions.includes(sort)) {
@@ -210,8 +208,45 @@ async function getProducts(req, res) {
         const filter = {};
         const sortOption = {};
 
+        // Category resolution: ObjectId or Case-Insensitive Name
         if (category) {
-            filter.category = category;
+            if (mongoose.isValidObjectId(category)) {
+                filter.category = category;
+            } else if (typeof category === 'string' && category.trim()) {
+                const escapedCat = category.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const fuzzyCat = escapedCat.replace(/\\&/g, '(&|and|\\s*)').replace(/[-\s]+/g, '[\\s-]+');
+                const catDoc = await Category.findOne({
+                    $or: [
+                        { name: { $regex: new RegExp(`^${escapedCat}$`, 'i') } },
+                        { name: { $regex: new RegExp(`^${fuzzyCat}$`, 'i') } }
+                    ]
+                });
+                if (catDoc) {
+                    filter.category = catDoc._id;
+                } else {
+                    filter.category = new mongoose.Types.ObjectId();
+                }
+            }
+        }
+
+        // Search text matching across name, description, brand
+        if (rawSearch && typeof rawSearch === 'string' && rawSearch.trim()) {
+            const sanitizedSearch = rawSearch.trim().slice(0, 100).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            filter.$or = [
+                { name: { $regex: sanitizedSearch, $options: 'i' } },
+                { description: { $regex: sanitizedSearch, $options: 'i' } },
+                { brand: { $regex: sanitizedSearch, $options: 'i' } }
+            ];
+        }
+
+        // Featured flag filter
+        if (featured === 'true' || featured === true) {
+            filter.featured = true;
+        }
+
+        // In-stock availability filter
+        if (inStock === 'true' || inStock === true) {
+            filter.stock = { $gt: 0 };
         }
 
         if (minprice !== undefined || maxprice !== undefined) {
@@ -232,13 +267,21 @@ async function getProducts(req, res) {
             sortOption.price = -1;
         } else if (sort === 'newest') {
             sortOption.createdAt = -1;
+        } else if (sort === 'rating' || sort === 'rating_desc') {
+            sortOption.rating = -1;
+        } else if (sort === 'featured') {
+            sortOption.featured = -1;
+            sortOption.rating = -1;
         }
 
-        // Generate a unique cache key for each query combination
+        // Generate unique cache key for the query combination
         const cacheKey = JSON.stringify({
             page,
             limit,
             category: category || '',
+            search: rawSearch?.trim() || '',
+            featured: featured || '',
+            inStock: inStock || '',
             minprice: minprice ?? '',
             maxprice: maxprice ?? '',
             sort: sort || ''
@@ -261,6 +304,8 @@ async function getProducts(req, res) {
         const [products, total] = await Promise.all([
             productModel
                 .find(filter)
+                .populate('category', 'name')
+                .populate('seller', 'username')
                 .sort(sortOption)
                 .skip(skip)
                 .limit(limit)
@@ -332,9 +377,23 @@ async function updateProduct(req, res) {
             'name',
             'description',
             'price',
+            'originalPrice',
             'stock',
             'category',
-            'image'
+            'image',
+            'images',
+            'brand',
+            'brandTag',
+            'rating',
+            'reviewCount',
+            'badge',
+            'badgeVariant',
+            'fastPrime',
+            'twoDayDelivery',
+            'codEligible',
+            'specs',
+            'featured',
+            'status'
         ];
 
         const updates = {};
@@ -558,12 +617,24 @@ async function getProductById(req, res) {
             );
         }
 
-        const product = await productModel.findById(id).lean();
+        const product = await productModel
+            .findById(id)
+            .populate('category', 'name')
+            .populate('seller', 'username')
+            .lean();
 
         if (!product) {
             return res.status(404).json({
                 message: 'Product not found'
             });
+        }
+
+        // Attach live inventory variant stock if available
+        const inventory = await Inventory.findOne({ product: id }).lean();
+        if (inventory && Array.isArray(inventory.variants)) {
+            const totalAvailable = inventory.variants.reduce((sum, v) => sum + (v.availableStock || 0), 0);
+            product.availableStock = totalAvailable;
+            product.variants = inventory.variants;
         }
 
         try {

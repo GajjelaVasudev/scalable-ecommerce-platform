@@ -16,7 +16,9 @@ const {
 
 const {
     createCategory,
-    deleteCategory
+    deleteCategory,
+    getAllCategories,
+    getCategoryById
 } = require('../src/controllers/category.controller');
 
 describe('Phase 2 - Product, Category, and Cache Hardening Unit Tests', () => {
@@ -36,6 +38,7 @@ describe('Phase 2 - Product, Category, and Cache Hardening Unit Tests', () => {
     }
 
     const originalCategoryFindById = Category.findById;
+    const originalCategoryFind = Category.find;
     const originalProductCreate = productModel.create;
     const originalProductFindById = productModel.findById;
     const originalProductFindByIdAndDelete = productModel.findByIdAndDelete;
@@ -48,6 +51,7 @@ describe('Phase 2 - Product, Category, and Cache Hardening Unit Tests', () => {
 
     after(() => {
         Category.findById = originalCategoryFindById;
+        Category.find = originalCategoryFind;
         productModel.create = originalProductCreate;
         productModel.findById = originalProductFindById;
         productModel.findByIdAndDelete = originalProductFindByIdAndDelete;
@@ -199,5 +203,53 @@ describe('Phase 2 - Product, Category, and Cache Hardening Unit Tests', () => {
 
         assert.equal(res.statusCode, 409);
         assert.match(res.body.message, /assigned to existing products/i);
+    });
+
+    test('getAllCategories succeeds for unauthenticated requests and returns categories', async () => {
+        Category.find = () => ({
+            sort: () => ({
+                lean: async () => [
+                    { _id: new mongoose.Types.ObjectId(), name: 'electronics' },
+                    { _id: new mongoose.Types.ObjectId(), name: 'fashion & apparel' }
+                ]
+            })
+        });
+
+        // Request has NO user property (completely unauthenticated guest)
+        const req = {};
+        const res = createMockRes();
+
+        await getAllCategories(req, res);
+
+        assert.equal(res.statusCode, 200);
+        assert.equal(res.body.message, 'Categories fetched successfully');
+        assert.equal(res.body.categories.length, 2);
+    });
+
+    test('getCategoryById succeeds for unauthenticated requests with valid ObjectId', async () => {
+        const catId = new mongoose.Types.ObjectId().toString();
+        Category.findById = (id) => ({
+            lean: async () => ({ _id: catId, name: 'electronics' })
+        });
+
+        // Request has NO user property (completely unauthenticated guest)
+        const req = { params: { id: catId } };
+        const res = createMockRes();
+
+        await getCategoryById(req, res);
+
+        assert.equal(res.statusCode, 200);
+        assert.equal(res.body.message, 'Category fetched successfully');
+        assert.equal(res.body.category.name, 'electronics');
+    });
+
+    test('getCategoryById rejects invalid non-ObjectId string with HTTP 400', async () => {
+        const req = { params: { id: 'invalid-non-hex-id' } };
+        const res = createMockRes();
+
+        await getCategoryById(req, res);
+
+        assert.equal(res.statusCode, 400);
+        assert.equal(res.body.message, 'Invalid category ID');
     });
 });

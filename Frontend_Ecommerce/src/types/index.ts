@@ -43,12 +43,21 @@ export interface Product {
   category: string | Category;
   image: string;
   images?: string[];
+  brand?: string;
+  brandTag?: string;
   seller?: string | { _id: string; username: string };
-  status?: 'active' | 'inactive';
+  status?: 'active' | 'inactive' | 'out_of_stock';
   rating?: number;
   reviewCount?: number;
   badge?: string;
+  badgeVariant?: 'primary' | 'error' | 'seller-choice' | 'award-winner';
+  fastPrime?: boolean;
+  twoDayDelivery?: boolean;
+  codEligible?: boolean;
+  featured?: boolean;
   specs?: Record<string, string>;
+  availableStock?: number;
+  variants?: InventoryVariant[];
   createdAt?: string;
   updatedAt?: string;
 }
