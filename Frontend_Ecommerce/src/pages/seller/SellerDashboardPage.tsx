@@ -23,19 +23,10 @@ import { formatCurrency, formatDate } from '../../utils/format';
 
 export const SellerDashboardPage: React.FC = () => {
   const [products, setProducts] = useState(INITIAL_PRODUCTS);
-
-  useEffect(() => {
-    api.products.list({ limit: 8 }).then((res) => {
-      if (res?.products && res.products.length > 0) {
-        setProducts(res.products);
-      }
-    }).catch(() => {});
-  }, []);
-
-  const orders = [
+  const [orders, setOrders] = useState<any[]>([
     {
       id: 'ORD-99120',
-      product: 'SoundPulse Studio Pro Headphones',
+      product: 'SoundPulse Studio Pro Wireless ANC Headphones',
       buyer: 'Arjun Mehta',
       amount: 24999,
       status: 'pending',
@@ -45,7 +36,7 @@ export const SellerDashboardPage: React.FC = () => {
       id: 'ORD-99118',
       product: 'ApexBook M3 Ultra 16"',
       buyer: 'Kavita Sen',
-      amount: 189990,
+      amount: 74990,
       status: 'shipped',
       slaTime: 'Dispatched',
     },
@@ -57,7 +48,29 @@ export const SellerDashboardPage: React.FC = () => {
       status: 'delivered',
       slaTime: 'Completed',
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    api.products.list({ limit: 8 }).then((res) => {
+      if (res?.products && res.products.length > 0) {
+        setProducts(res.products);
+      }
+    }).catch(() => {});
+
+    api.orders.list({ scope: 'seller', limit: 5 }).then((res) => {
+      if (res?.orders && res.orders.length > 0) {
+        const liveOrders = res.orders.map((o) => ({
+          id: o._id.slice(-8),
+          product: o.items[0]?.name || 'Marketplace Item',
+          buyer: o.shippingAddress?.fullName || 'Customer',
+          amount: o.totalAmount,
+          status: o.deliveryStatus,
+          slaTime: o.deliveryStatus === 'pending' ? '4:00 PM Today' : 'Dispatched',
+        }));
+        setOrders(liveOrders);
+      }
+    }).catch(() => {});
+  }, []);
 
   const columns: Column<any>[] = [
     {

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { Order, ShippingAddress } from '../../types';
 import { api } from '../../services/api';
 import { formatCurrency, formatDate } from '../../utils/format';
+import { getStableUserId, getAccountLastOrder, isDemoUser } from '../../utils/accountStorage';
 import {
   CheckCircle2,
   Package,
@@ -21,23 +23,19 @@ export const OrderConfirmationPage: React.FC = () => {
   const { orderId } = useParams<{ orderId: string }>();
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [order, setOrder] = useState<Order | null>(() => {
     // 1. Check router state
     if (location.state?.order) {
       return location.state.order as Order;
     }
-    // 2. Check session storage
+    // 2. Check safe account last order
     if (orderId) {
-      try {
-        const cached = sessionStorage.getItem(`omizon_order_${orderId}`);
-        if (cached) return JSON.parse(cached);
-        const lastOrder = sessionStorage.getItem('omizon_last_order');
-        if (lastOrder) {
-          const parsed = JSON.parse(lastOrder);
-          if (parsed._id === orderId) return parsed;
-        }
-      } catch {}
+      const lastOrder = getAccountLastOrder(getStableUserId(user));
+      if (lastOrder && lastOrder._id === orderId) {
+        return lastOrder;
+      }
     }
     return null;
   });
@@ -56,50 +54,48 @@ export const OrderConfirmationPage: React.FC = () => {
       .then((res) => {
         if (res?.order) {
           setOrder(res.order);
+        } else {
+          setOrder(null);
         }
       })
       .catch((err) => {
         console.warn('Could not fetch order from backend:', err.message);
-        // Fallback demo order for previewing the screen if offline
-        setOrder({
-          _id: orderId,
-          user: 'user_01',
-          items: [
-            {
-              product: 'prod_soundpulse_01',
-              name: 'SoundPulse Studio Pro Wireless ANC Headphones',
-              variant: 'Midnight Violet',
-              quantity: 1,
-              price: 24999,
+        if (isDemoUser(user)) {
+          setOrder({
+            _id: orderId,
+            user: user?._id || 'demo_user',
+            items: [
+              {
+                product: 'prod_soundpulse_01',
+                name: 'SoundPulse Studio Pro Wireless ANC Headphones',
+                variant: 'Midnight Violet',
+                quantity: 1,
+                price: 24999,
+              },
+            ],
+            totalAmount: 24999,
+            shippingAddress: {
+              fullName: user?.username ? `${user.username} (Demo)` : 'Customer (Demo)',
+              phone: '+91 98201 23456',
+              addressLine: 'Flat 402, Highmont Residences, Lower Parel',
+              city: 'Mumbai',
+              state: 'Maharashtra',
+              postalCode: '400013',
+              country: 'India',
             },
-            {
-              product: 'prod_artisan_02',
-              name: 'Artisan Ceramic Hand-Poured Candle (Bergamot & Oud)',
-              variant: 'Amber Jar',
-              quantity: 2,
-              price: 1899,
-            },
-          ],
-          totalAmount: 28797,
-          shippingAddress: {
-            fullName: 'Priya Sharma',
-            phone: '+91 98201 23456',
-            addressLine: 'Flat 402, Highmont Residences, Lower Parel',
-            city: 'Mumbai',
-            state: 'Maharashtra',
-            postalCode: '400013',
-            country: 'India',
-          },
-          paymentStatus: 'paid',
-          deliveryStatus: 'pending',
-          trackingNumber: `FX-IN-${orderId.slice(-8)}`,
-          createdAt: new Date().toISOString(),
-        });
+            paymentStatus: 'paid',
+            deliveryStatus: 'pending',
+            trackingNumber: `FX-IN-${orderId.slice(-8)}`,
+            createdAt: new Date().toISOString(),
+          });
+        } else {
+          setOrder(null);
+        }
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [orderId, order]);
+  }, [orderId, user]);
 
   const handleDownloadInvoice = () => {
     if (!order) return;

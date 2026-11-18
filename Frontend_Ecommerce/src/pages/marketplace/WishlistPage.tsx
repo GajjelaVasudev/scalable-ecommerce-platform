@@ -5,6 +5,7 @@ import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import {
   getStableUserId,
+  isDemoUser,
   getAccountWishlist,
   setAccountWishlist,
 } from '../../utils/accountStorage';
@@ -94,22 +95,26 @@ export const WishlistPage: React.FC = () => {
   const { addItem } = useCart();
   const { user } = useAuth();
   const userId = getStableUserId(user);
+  const isDemo = isDemoUser(user);
   const navigate = useNavigate();
 
   const [wishlist, setWishlist] = useState<WishlistItem[]>(() => {
     const saved = getAccountWishlist(userId);
     if (saved && saved.length > 0) return saved;
-    return INITIAL_WISHLIST;
+    if (isDemo) return INITIAL_WISHLIST;
+    return [];
   });
 
   useEffect(() => {
     const saved = getAccountWishlist(userId);
     if (saved && saved.length > 0) {
       setWishlist(saved);
-    } else {
+    } else if (isDemo) {
       setWishlist(INITIAL_WISHLIST);
+    } else {
+      setWishlist([]);
     }
-  }, [userId]);
+  }, [userId, isDemo]);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 

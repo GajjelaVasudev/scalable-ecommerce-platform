@@ -249,6 +249,11 @@ async function getProducts(req, res) {
             filter.stock = { $gt: 0 };
         }
 
+        // Seller filter
+        if (req.query.seller && mongoose.isValidObjectId(req.query.seller)) {
+            filter.seller = req.query.seller;
+        }
+
         if (minprice !== undefined || maxprice !== undefined) {
             filter.price = {};
 

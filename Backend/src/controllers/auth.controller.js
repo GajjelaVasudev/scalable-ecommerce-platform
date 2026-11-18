@@ -171,4 +171,150 @@ async function logoutUser(req, res) {
     });
 }
 
-module.exports = { registerUser, loginUser, logoutUser };
+async function getMe(req, res) {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        return res.status(200).json({
+            user: sanitizeUser(user)
+        });
+    } catch (error) {
+        console.error('getMe error:', error.message);
+        return res.status(500).json({ message: 'Failed to fetch user profile' });
+    }
+}
+
+async function updateProfile(req, res) {
+    try {
+        const { username, email, currentPassword, newPassword } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (newPassword) {
+            if (!currentPassword) {
+                return res.status(400).json({ message: 'Current password is required to set a new password' });
+            }
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if (!isMatch) {
+                return res.status(400).json({ message: 'Current password is incorrect' });
+            }
+            if (newPassword.length < 6) {
+                return res.status(400).json({ message: 'New password must be at least 6 characters long' });
+            }
+            user.password = await bcrypt.hash(newPassword, 10);
+        }
+
+        if (username && username.trim().toLowerCase() !== user.username) {
+            const trimmed = username.trim().toLowerCase();
+            const existing = await User.findOne({ username: trimmed });
+            if (existing) {
+                return res.status(400).json({ message: 'Username is already taken' });
+            }
+            user.username = trimmed;
+        }
+
+        if (email && email.trim().toLowerCase() !== user.email) {
+            const trimmed = email.trim().toLowerCase();
+            if (!EMAIL_REGEX.test(trimmed)) {
+                return res.status(400).json({ message: 'Invalid email address' });
+            }
+            const existing = await User.findOne({ email: trimmed });
+            if (existing) {
+                return res.status(400).json({ message: 'Email is already in use' });
+            }
+            user.email = trimmed;
+        }
+
+        await user.save();
+
+        return res.status(200).json({
+            message: 'Profile updated successfully',
+            user: sanitizeUser(user)
+        });
+    } catch (error) {
+        console.error('updateProfile error:', error.message);
+        return res.status(500).json({ message: 'Failed to update profile' });
+    }
+}
+
+async function getUsers(req, res) {
+    try {
+        const page = Math.max(1, Number(req.query.page) || 1);
+        const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 20));
+        const skip = (page - 1) * limit;
+        const role = req.query.role;
+        const filter = {};
+
+        if (role && ['buyer', 'seller', 'admin'].includes(role)) {
+            filter.role = role;
+        }
+
+        if (req.query.search && typeof req.query.search === 'string' && req.query.search.trim()) {
+            const s = req.query.search.trim();
+            filter.$or = [
+                { username: { $regex: s, $options: 'i' } },
+                { email: { $regex: s, $options: 'i' } }
+            ];
+        }
+
+        const [users, total] = await Promise.all([
+            User.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+            User.countDocuments(filter)
+        ]);
+
+        return res.status(200).json({
+            message: 'Users fetched successfully',
+            users: users.map(sanitizeUser),
+            pagination: {
+                page,
+                limit,
+                totalUsers: total,
+                totalPages: Math.ceil(total / limit)
+            }
+        });
+    } catch (error) {
+        console.error('getUsers error:', error.message);
+        return res.status(500).json({ message: 'Failed to fetch users' });
+    }
+}
+
+async function updateUserRole(req, res) {
+    try {
+        const { id } = req.params;
+        const { role } = req.body;
+
+        if (!['buyer', 'seller', 'admin'].includes(role)) {
+            return res.status(400).json({ message: 'Invalid role. Must be buyer, seller, or admin' });
+        }
+
+        const user = await User.findById(id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        user.role = role;
+        await user.save();
+
+        return res.status(200).json({
+            message: `User role updated to ${role} successfully`,
+            user: sanitizeUser(user)
+        });
+    } catch (error) {
+        console.error('updateUserRole error:', error.message);
+        return res.status(500).json({ message: 'Failed to update user role' });
+    }
+}
+
+module.exports = {
+    registerUser,
+    loginUser,
+    logoutUser,
+    getMe,
+    updateProfile,
+    getUsers,
+    updateUserRole
+};

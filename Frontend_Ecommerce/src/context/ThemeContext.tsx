@@ -11,6 +11,10 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window !== 'undefined') {
+      const urlTheme = new URLSearchParams(window.location.search).get('theme');
+      if (urlTheme === 'light' || urlTheme === 'dark') return urlTheme;
+    }
     const saved = localStorage.getItem('omizon_theme');
     if (saved === 'dark' || saved === 'light') return saved;
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

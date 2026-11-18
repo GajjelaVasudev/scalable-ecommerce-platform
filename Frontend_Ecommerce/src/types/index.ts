@@ -99,9 +99,14 @@ export interface Order {
   items: OrderItem[];
   totalAmount: number;
   shippingAddress: ShippingAddress;
-  paymentStatus: 'pending' | 'paid' | 'failed';
-  deliveryStatus: 'pending' | 'shipped' | 'delivered' | 'cancelled';
+  paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded' | 'unpaid';
+  deliveryStatus: 'pending' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
   trackingNumber?: string;
+  paymentMethod?: string;
+  cancellationReason?: string;
+  returnReason?: string;
+  refundStatus?: 'none' | 'pending' | 'completed' | 'failed';
+  refundAmount?: number;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import { AccountLayout } from '../../components/account/AccountLayout';
 import { Order, ShippingAddress } from '../../types';
 import { api } from '../../services/api';
 import { formatCurrency, formatDate } from '../../utils/format';
+import { getStableUserId, getAccountLastOrder, isDemoUser } from '../../utils/accountStorage';
 import {
   Package,
   Truck,
@@ -26,35 +29,30 @@ import { Button } from '../../components/ui/Button';
 export const OrderDetailsPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isCancelling, setIsCancelling] = useState(false);
   const [cancelFeedback, setCancelFeedback] = useState('');
   const [downloadSuccess, setDownloadSuccess] = useState(false);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState('Accidental purchase / placed by mistake');
+  const [returnModalOpen, setReturnModalOpen] = useState(false);
+  const [returnReason, setReturnReason] = useState('Item defective / not functioning as expected');
+  const [isReturning, setIsReturning] = useState(false);
 
   useEffect(() => {
     if (!id) return;
     setIsLoading(true);
 
-    // 1. Try checking session storage
-    try {
-      const cached = sessionStorage.getItem(`omizon_order_${id}`);
-      if (cached) {
-        setOrder(JSON.parse(cached));
-        setIsLoading(false);
-        return;
-      }
-      const last = sessionStorage.getItem('omizon_last_order');
-      if (last) {
-        const parsed = JSON.parse(last);
-        if (parsed._id === id) {
-          setOrder(parsed);
-          setIsLoading(false);
-          return;
-        }
-      }
-    } catch {}
+    // 1. Try checking account last order for active user
+    const last = getAccountLastOrder(getStableUserId(user));
+    if (last && last._id === id) {
+      setOrder(last);
+      setIsLoading(false);
+      return;
+    }
 
     // 2. Fetch from backend API
     api.orders
@@ -62,65 +60,84 @@ export const OrderDetailsPage: React.FC = () => {
       .then((res) => {
         if (res?.order) {
           setOrder(res.order);
+        } else {
+          setOrder(null);
         }
       })
       .catch((err) => {
-        console.warn('Backend getOrderById error, using Stitch preview data:', err.message);
-        // Fallback matching Stitch PDP & Order Details
-        setOrder({
-          _id: id,
-          user: 'user_priya',
-          items: [
-            {
-              product: 'prod_apexbook_01',
-              name: 'ApexBook M3 Ultra 16-inch (Space Gray, 36GB RAM, 1TB SSD)',
-              variant: 'Space Gray / 36GB / 1TB',
-              quantity: 1,
-              price: 74990,
+        console.warn('Backend getOrderById error:', err.message);
+        if (isDemoUser(user)) {
+          // Fallback matching Stitch PDP & Order Details for demo user
+          setOrder({
+            _id: id,
+            user: user?._id || 'demo_user',
+            items: [
+              {
+                product: 'prod_apexbook_01',
+                name: 'ApexBook M3 Ultra 16-inch (Space Gray, 36GB RAM, 1TB SSD)',
+                variant: 'Space Gray / 36GB / 1TB',
+                quantity: 1,
+                price: 74990,
+              },
+            ],
+            totalAmount: 74990,
+            shippingAddress: {
+              fullName: user?.username ? `${user.username} (Home)` : 'Customer (Home)',
+              phone: '+91 98200 44912',
+              addressLine: 'Flat 902, Tower B, Oberoi Sky City, Borivali East',
+              city: 'Mumbai',
+              state: 'Maharashtra',
+              postalCode: '400066',
+              country: 'India',
             },
-          ],
-          totalAmount: 74990,
-          shippingAddress: {
-            fullName: 'Priya Sharma (Home)',
-            phone: '+91 98200 44912',
-            addressLine: 'Flat 902, Tower B, Oberoi Sky City, Borivali East',
-            city: 'Mumbai',
-            state: 'Maharashtra',
-            postalCode: '400066',
-            country: 'India',
-          },
-          paymentStatus: 'paid',
-          deliveryStatus: 'shipped',
-          trackingNumber: `FX-IN-${id.slice(-7)}`,
-          createdAt: new Date(Date.now() - 3600 * 1000 * 16).toISOString(),
-        });
+            paymentStatus: 'paid',
+            deliveryStatus: 'shipped',
+            trackingNumber: `FX-IN-${id.slice(-7)}`,
+            createdAt: new Date(Date.now() - 3600 * 1000 * 16).toISOString(),
+          });
+        } else {
+          setOrder(null);
+        }
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [id]);
+  }, [id, user]);
 
-  const handleCancelOrder = async () => {
+  const handleConfirmCancel = async () => {
     if (!order) return;
-    if (
-      !window.confirm(
-        'Are you sure you want to cancel this order? Reserved items will be released back to catalog stock.'
-      )
-    ) {
-      return;
-    }
-
     setIsCancelling(true);
     try {
-      await api.orders.cancel(order._id);
-      setOrder({ ...order, deliveryStatus: 'cancelled' });
-      setCancelFeedback('Order successfully cancelled. Inventory reservation released and refund initiated.');
+      await api.orders.cancel(order._id, cancelReason);
+      setOrder({ ...order, deliveryStatus: 'cancelled', cancellationReason: cancelReason });
+      setCancelFeedback('Order successfully cancelled. Reserved inventory released and refund initiated.');
+      setCancelModalOpen(false);
     } catch (err: any) {
-      // If backend error or unauthenticated, simulate locally
-      setOrder({ ...order, deliveryStatus: 'cancelled' });
-      setCancelFeedback('Order cancelled. Any payment hold will be released within 24-48 business hours.');
+      setCancelFeedback(err.message || 'Failed to cancel order.');
     } finally {
       setIsCancelling(false);
+    }
+  };
+
+  const handleConfirmReturn = async () => {
+    if (!order) return;
+    setIsReturning(true);
+    try {
+      await api.orders.requestReturn(order._id, returnReason);
+      setOrder({
+        ...order,
+        deliveryStatus: 'returned',
+        returnReason,
+        paymentStatus: 'refunded',
+        refundStatus: 'completed',
+        refundAmount: order.totalAmount,
+      });
+      setCancelFeedback('Return request approved. Instant refund credited to your original payment method.');
+      setReturnModalOpen(false);
+    } catch (err: any) {
+      setCancelFeedback(err.message || 'Failed to submit return request.');
+    } finally {
+      setIsReturning(false);
     }
   };
 
@@ -214,8 +231,8 @@ This is a computer generated tax invoice. No signature required.
   const shippedTime = new Date(placedTime.getTime() + 1000 * 60 * 360);
 
   return (
-    <div className="w-full bg-surface min-h-[calc(100vh-160px)] py-8 px-margin-mobile md:px-margin">
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
+    <AccountLayout activeKey="orders">
+      <div className="w-full flex flex-col gap-6">
         {/* Top Breadcrumb & Back navigation */}
         <div className="flex items-center justify-between">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-on-surface-variant font-body-sm text-xs">
@@ -253,14 +270,22 @@ This is a computer generated tax invoice. No signature required.
               </h1>
               <span
                 className={`text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${
-                  isDelivered
+                  order.deliveryStatus === 'returned'
+                    ? 'bg-purple-500/10 text-purple-700 dark:text-purple-300'
+                    : isDelivered
                     ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
                     : isCancelled
                     ? 'bg-red-500/10 text-red-600'
                     : 'bg-primary/10 text-primary'
                 }`}
               >
-                {isDelivered ? 'Delivered' : isCancelled ? 'Cancelled' : 'In Transit'}
+                {order.deliveryStatus === 'returned'
+                  ? 'Returned & Refunded'
+                  : isDelivered
+                  ? 'Delivered'
+                  : isCancelled
+                  ? 'Cancelled'
+                  : 'In Transit'}
               </span>
             </div>
             <p className="font-body-md text-on-surface-variant text-sm mt-1">
@@ -277,12 +302,21 @@ This is a computer generated tax invoice. No signature required.
             >
               Download Invoice
             </Button>
+            {isDelivered && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setReturnModalOpen(true)}
+                icon={<RotateCcw className="w-4 h-4" />}
+              >
+                Return & Refund
+              </Button>
+            )}
             {canCancel && (
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleCancelOrder}
-                isLoading={isCancelling}
+                onClick={() => setCancelModalOpen(true)}
                 className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/20"
               >
                 Cancel Order
@@ -290,6 +324,30 @@ This is a computer generated tax invoice. No signature required.
             )}
           </div>
         </div>
+
+        {/* Refund Status Card if Cancelled or Returned */}
+        {(isCancelled || order.deliveryStatus === 'returned') && (
+          <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-600 flex items-center justify-center shrink-0">
+                <RotateCcw className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-title-sm text-on-surface font-bold text-sm">
+                  {order.deliveryStatus === 'returned'
+                    ? 'Return Request Approved • Refund Completed'
+                    : 'Order Cancelled • Refund Completed'}
+                </h4>
+                <p className="font-body-sm text-on-surface-variant text-xs mt-0.5">
+                  Refund of <strong>{formatCurrency(order.totalAmount)}</strong> credited back to source account. Reference: REF-{order._id.slice(-6)}.
+                </p>
+              </div>
+            </div>
+            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/50 px-3 py-1 rounded-full">
+              Status: Refund Processed
+            </span>
+          </div>
+        )}
 
         {/* 12-Column Main Order Tracking & Details Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -514,7 +572,135 @@ This is a computer generated tax invoice. No signature required.
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Cancel Order Modal */}
+      {cancelModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-surface-container-lowest w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-outline-variant/20 p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-outline-variant/15 mb-4">
+              <h3 className="font-headline-sm text-lg font-bold text-on-surface">
+                Cancel Order #{order._id}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setCancelModalOpen(false)}
+                className="text-outline hover:text-on-surface"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="font-body-md text-sm text-on-surface-variant mb-4">
+              Are you sure you want to cancel this order? Reserved catalog inventory will be released immediately.
+            </p>
+
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-on-surface-variant uppercase mb-1.5">
+                Reason for Cancellation
+              </label>
+              <select
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                className="w-full h-11 px-3 bg-surface-container-low text-on-surface rounded-xl border border-outline-variant/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Accidental purchase / placed by mistake">Accidental purchase / placed by mistake</option>
+                <option value="Found a better price elsewhere">Found a better price elsewhere</option>
+                <option value="Delivery timeframe is too long">Delivery timeframe is too long</option>
+                <option value="Need to change delivery address or phone">Need to change delivery address or phone</option>
+                <option value="Other / changed my mind">Other / changed my mind</option>
+              </select>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setCancelModalOpen(false)}
+                disabled={isCancelling}
+              >
+                Keep Order
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleConfirmCancel}
+                disabled={isCancelling}
+                className="bg-rose-600 hover:bg-rose-700 text-white"
+              >
+                {isCancelling ? 'Cancelling...' : 'Confirm Cancellation'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Return Request Modal */}
+      {returnModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-surface-container-lowest w-full max-w-md rounded-2xl shadow-2xl overflow-hidden border border-outline-variant/20 p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-outline-variant/15 mb-4">
+              <div className="flex items-center gap-2">
+                <RotateCcw className="w-5 h-5 text-primary" />
+                <h3 className="font-headline-sm text-lg font-bold text-on-surface">
+                  Request Return & Refund
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setReturnModalOpen(false)}
+                className="text-outline hover:text-on-surface"
+              >
+                ✕
+              </button>
+            </div>
+
+            <p className="font-body-md text-sm text-on-surface-variant mb-4">
+              Submit a return request for Order #{order._id}. A courier pick-up will be scheduled at your delivery address.
+            </p>
+
+            <div className="mb-4">
+              <label className="block text-xs font-semibold text-on-surface-variant uppercase mb-1.5">
+                Reason for Return
+              </label>
+              <select
+                value={returnReason}
+                onChange={(e) => setReturnReason(e.target.value)}
+                className="w-full h-11 px-3 bg-surface-container-low text-on-surface rounded-xl border border-outline-variant/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="Item defective / not functioning as expected">Item defective / not functioning as expected</option>
+                <option value="Received damaged outer carton or product">Received damaged outer carton or product</option>
+                <option value="Item different from catalog description">Item different from catalog description</option>
+                <option value="Size, fit, or color not as expected">Size, fit, or color not as expected</option>
+                <option value="Missing parts or accessories in box">Missing parts or accessories in box</option>
+              </select>
+            </div>
+
+            <div className="p-3 bg-primary/10 border border-primary/20 rounded-xl text-xs text-primary mb-4">
+              Refund of <strong>{formatCurrency(order.totalAmount)}</strong> will be credited directly to your original payment method.
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setReturnModalOpen(false)}
+                disabled={isReturning}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleConfirmReturn}
+                disabled={isReturning}
+              >
+                {isReturning ? 'Submitting...' : 'Submit Return Request'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </AccountLayout>
   );
 };
 

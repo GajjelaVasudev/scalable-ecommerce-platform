@@ -70,7 +70,7 @@ export const SellerSettingsPage: React.FC = () => {
         <div className="flex items-center justify-between pt-4 border-t border-lavender-mist dark:border-obsidian-border">
           <span className="text-xs text-semantic-success font-semibold flex items-center gap-1.5">
             <ShieldCheck className="w-4 h-4" />
-            OMIZON Prime Certified Merchant
+            Verified Marketplace Merchant
           </span>
           <Button type="submit" variant="primary" size="md">
             {saved ? (

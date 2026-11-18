@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export type AccountNavKey =
@@ -99,7 +99,10 @@ const SUPPORT_NAV_ITEMS: SupportItem[] = [
 export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKey }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [supportToast, setSupportToast] = useState<string | null>(null);
+
+  const isReturnsActive = location.pathname.includes('/orders') && location.search.includes('filter=returns');
 
   // Compute dynamic user name from authenticated state without hardcoded demo customer data
   const rawUsername = user?.username || '';
@@ -144,7 +147,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
         <div className="md:hidden w-full overflow-x-auto no-scrollbar pb-3 mb-6 -mx-margin-mobile px-margin-mobile border-b border-lavender-mist">
           <div className="flex items-center gap-1.5 min-w-max px-1">
             {ACCOUNT_NAV_ITEMS.map((item) => {
-              const isActive = activeKey === item.key;
+              const isActive = activeKey === item.key && !(item.key === 'orders' && isReturnsActive);
               return (
                 <Link
                   key={item.key}
@@ -167,6 +170,21 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
                 </Link>
               );
             })}
+            {/* Returns & Refunds Mobile Quick Access */}
+            <Link
+              to="/account/orders?filter=returns"
+              data-path="returns-and-refunds"
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
+                isReturnsActive
+                  ? 'bg-surface-container text-ink shadow-sm'
+                  : 'text-ink-muted bg-surface-container-lowest hover:text-ink hover:bg-surface-container-low border border-lavender-mist/60'
+              }`}
+            >
+              <span className={`material-symbols-outlined text-[18px] ${isReturnsActive ? 'text-primary' : 'text-ink-muted'}`}>
+                replay
+              </span>
+              <span>Returns &amp; Refunds</span>
+            </Link>
           </div>
         </div>
 
@@ -174,7 +192,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
         <div className="flex flex-col md:flex-row gap-gutter py-space-md">
           {/* Desktop Left Sticky Aside Navigation (260px) */}
           <aside className="w-full md:w-[260px] flex-shrink-0">
-            <div className="sticky top-28 flex flex-col gap-1">
+            <div className="sticky top-20 flex flex-col gap-1">
               {/* Authenticated User Micro Pill */}
               <div className="bg-surface-container-lowest border border-lavender-mist rounded-xl p-space-sm mb-space-sm flex items-center gap-space-sm shadow-sm">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-royal-purple text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
@@ -198,7 +216,7 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
               </div>
               <nav className="flex flex-col gap-1" data-active-classes="bg-surface-container text-ink font-semibold rounded-lg">
                 {ACCOUNT_NAV_ITEMS.map((item) => {
-                  const isActive = activeKey === item.key;
+                  const isActive = activeKey === item.key && !(item.key === 'orders' && isReturnsActive);
                   return (
                     <Link
                       key={item.key}
@@ -235,20 +253,33 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
                 </h2>
               </div>
               <nav className="flex flex-col gap-1" data-active-classes="bg-surface-container text-ink font-semibold rounded-lg">
-                {SUPPORT_NAV_ITEMS.map((item) => (
-                  <Link
-                    key={item.dataPath}
-                    to={item.path}
-                    data-path={item.dataPath}
-                    onClick={(e) => handleSupportClick(item, e)}
-                    className="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-ink-muted hover:text-ink hover:bg-surface-container-low transition-colors font-body-md text-body-md"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">
-                      {item.symbol}
-                    </span>
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
+                {SUPPORT_NAV_ITEMS.map((item) => {
+                  const isItemActive = item.dataPath === 'returns-and-refunds' && isReturnsActive;
+                  return (
+                    <Link
+                      key={item.dataPath}
+                      to={item.path}
+                      data-path={item.dataPath}
+                      onClick={(e) => handleSupportClick(item, e)}
+                      aria-current={isItemActive ? 'page' : undefined}
+                      className={`flex items-center gap-space-sm px-space-sm py-2 rounded-lg transition-colors font-body-md text-body-md ${
+                        isItemActive
+                          ? 'bg-surface-container text-ink font-semibold'
+                          : 'text-ink-muted hover:text-ink hover:bg-surface-container-low'
+                      }`}
+                    >
+                      <span
+                        className={`material-symbols-outlined text-[18px] transition-colors ${
+                          isItemActive ? 'text-primary' : 'text-ink-muted'
+                        }`}
+                        style={isItemActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                      >
+                        {item.symbol}
+                      </span>
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
               </nav>
 
               {/* Lavender Mist Divider */}
