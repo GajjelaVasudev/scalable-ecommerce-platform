@@ -9,10 +9,15 @@ interface MarketplaceHeaderProps {
 }
 
 export const MarketplaceHeader: React.FC<MarketplaceHeaderProps> = ({ onSearch }) => {
-  const { user } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const { cartCount, cartTotal, openDrawer } = useCart();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
@@ -155,23 +160,141 @@ export const MarketplaceHeader: React.FC<MarketplaceHeaderProps> = ({ onSearch }
 
         {/* User Actions & Shortcuts */}
         <div className="flex items-center gap-space-md shrink-0">
-          <Link
-            to="/account"
-            className="flex items-center gap-space-xs p-1 rounded-lg hover:bg-surface-container-low transition-colors"
-            data-path="account"
-          >
-            <img
-              alt="Profile"
-              className="w-8 h-8 rounded-full object-cover"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSLDoLVV-esICWgftOC8qO_vu3IxcA9LuYrzkLPmY6pIyycTxZSkn6D0CnPNNROeivapYvHG1QcniYbRnkRyZ2VlFNdh46Yzit3OoH7WnVB8jUU2y_t4hJZRRKypu9H0RhxMKXaS4iMLrLhaIkXN7wr_v6Hh9PYDt2t57QTWua5kfD-cDL-FPAtj95ysmYTGh4Z6q46Hu5aqriN7DKlAqveDT_OAY5P9iHXZVD3ZIONLZM5sVE6U9bww"
-            />
-            <div className="hidden xl:flex flex-col text-left">
-              <span className="font-label-sm text-outline uppercase">
-                Hello, {user?.username?.split(' ')[0] || 'Priya'}
-              </span>
-              <span className="font-title-sm text-on-surface leading-none">Account &amp; Lists</span>
+          {/* Account / Authentication Action */}
+          {isAuthenticated && user ? (
+            <div className="relative group">
+              <Link
+                to="/account"
+                className="flex items-center gap-space-xs p-1 rounded-lg hover:bg-surface-container-low transition-colors"
+                data-path="account"
+              >
+                <div className="w-8 h-8 rounded-full bg-primary text-on-primary font-bold flex items-center justify-center text-xs shrink-0 shadow-sm">
+                  {user.username.charAt(0).toUpperCase()}
+                </div>
+                <div className="hidden xl:flex flex-col text-left">
+                  <span className="font-label-sm text-outline uppercase truncate max-w-[120px]">
+                    Hello, {user.username.split(/[\s_]+/)[0]}
+                  </span>
+                  <span className="font-title-sm text-on-surface leading-none flex items-center gap-0.5">
+                    Account &amp; Lists
+                    <span className="material-symbols-outlined text-[14px]">expand_more</span>
+                  </span>
+                </div>
+              </Link>
+              {/* Authenticated Dropdown Menu */}
+              <div className="absolute right-0 top-full pt-1.5 hidden group-hover:block z-50">
+                <div className="w-56 bg-surface-container-lowest rounded-xl shadow-modal border border-outline-variant/30 p-2 flex flex-col gap-1">
+                  <div className="px-3 py-2 border-b border-outline-variant/20">
+                    <p className="text-xs font-bold text-on-surface truncate">{user.username}</p>
+                    <p className="text-[11px] text-outline truncate">{user.email}</p>
+                    <span className="inline-block mt-1 text-[10px] uppercase font-bold px-1.5 py-0.5 bg-primary/10 text-primary rounded">
+                      {user.role} mode
+                    </span>
+                  </div>
+                  <Link
+                    to="/account"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-on-surface hover:bg-surface-container-low rounded-lg transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">person</span>
+                    <span>Your Account</span>
+                  </Link>
+                  <Link
+                    to="/account/orders"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-on-surface hover:bg-surface-container-low rounded-lg transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">package_2</span>
+                    <span>Your Orders</span>
+                  </Link>
+                  <Link
+                    to="/account/wishlist"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-on-surface hover:bg-surface-container-low rounded-lg transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">favorite</span>
+                    <span>Wishlist</span>
+                  </Link>
+                  <Link
+                    to="/account/addresses"
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-on-surface hover:bg-surface-container-low rounded-lg transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">pin_drop</span>
+                    <span>Addresses</span>
+                  </Link>
+                  <div className="border-t border-outline-variant/20 my-1" />
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-medium text-error hover:bg-error/10 rounded-lg transition-colors w-full text-left cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">logout</span>
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </div>
             </div>
-          </Link>
+          ) : (
+            <div className="relative group">
+              <Link
+                to="/login"
+                className="flex items-center gap-space-xs p-1.5 rounded-lg hover:bg-surface-container-low transition-colors"
+                data-path="account"
+              >
+                <div className="w-8 h-8 rounded-full bg-surface-container-high text-outline flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-[20px]">person</span>
+                </div>
+                <div className="hidden xl:flex flex-col text-left">
+                  <span className="font-label-sm text-outline uppercase">
+                    Hello, Sign In
+                  </span>
+                  <span className="font-title-sm text-on-surface leading-none flex items-center gap-0.5">
+                    Account &amp; Lists
+                    <span className="material-symbols-outlined text-[14px]">expand_more</span>
+                  </span>
+                </div>
+              </Link>
+              {/* Guest Dropdown Menu */}
+              <div className="absolute right-0 top-full pt-1.5 hidden group-hover:block z-50">
+                <div className="w-60 bg-surface-container-lowest rounded-xl shadow-modal border border-outline-variant/30 p-3 flex flex-col gap-2.5">
+                  <Link
+                    to="/login"
+                    className="w-full py-2 bg-primary hover:bg-secondary text-on-primary text-xs font-bold rounded-lg text-center transition-colors shadow-sm"
+                  >
+                    Sign In
+                  </Link>
+                  <p className="text-[11px] text-center text-outline">
+                    New customer?{' '}
+                    <Link to="/register" className="text-primary font-semibold hover:underline">
+                      Start here.
+                    </Link>
+                  </p>
+                  <div className="border-t border-outline-variant/20 pt-2 flex flex-col gap-1">
+                    <Link
+                      to="/login"
+                      state={{ from: { pathname: '/account' } }}
+                      className="flex items-center gap-2 px-2 py-1.5 text-xs text-on-surface hover:text-primary transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">person</span>
+                      <span>Your Account</span>
+                    </Link>
+                    <Link
+                      to="/login"
+                      state={{ from: { pathname: '/orders' } }}
+                      className="flex items-center gap-2 px-2 py-1.5 text-xs text-on-surface hover:text-primary transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">package_2</span>
+                      <span>Track Orders</span>
+                    </Link>
+                    <Link
+                      to="/products"
+                      className="flex items-center gap-2 px-2 py-1.5 text-xs text-on-surface hover:text-primary transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-[16px]">favorite</span>
+                      <span>Your Wishlist</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <button
             type="button"

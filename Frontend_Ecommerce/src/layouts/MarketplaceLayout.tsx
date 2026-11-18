@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 import { MarketplaceHeader } from '../components/marketplace/MarketplaceHeader';
 import { MarketplaceFooter } from '../components/marketplace/MarketplaceFooter';
 import { CartDrawer } from '../components/marketplace/CartDrawer';
-import { RoleSwitcherBanner } from '../components/common/RoleSwitcherBanner';
 
 export const MarketplaceLayout: React.FC = () => {
   return (
@@ -13,7 +12,6 @@ export const MarketplaceLayout: React.FC = () => {
         <Outlet />
       </main>
       <CartDrawer />
-      <RoleSwitcherBanner />
       <MarketplaceFooter />
     </div>
   );

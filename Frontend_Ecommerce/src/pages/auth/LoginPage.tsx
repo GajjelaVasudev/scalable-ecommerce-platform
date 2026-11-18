@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Lock, Mail, User as UserIcon, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Button } from '../../components/ui/Button';
@@ -7,6 +7,10 @@ import { Button } from '../../components/ui/Button';
 export const LoginPage: React.FC = () => {
   const { login, switchRoleDemo, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // If redirected from a protected route, preserve destination
+  const from = (location.state as any)?.from?.pathname || '/';
 
   const [identifier, setIdentifier] = useState('priya@omizon.in');
   const [password, setPassword] = useState('password123');
@@ -17,7 +21,7 @@ export const LoginPage: React.FC = () => {
     setErrorMessage('');
     try {
       await login(identifier, password);
-      navigate('/');
+      navigate(from, { replace: true });
     } catch (err: any) {
       setErrorMessage(err.message || 'Login failed. Please verify your credentials.');
     }
@@ -39,6 +43,13 @@ export const LoginPage: React.FC = () => {
             Access your orders, merchant portal, and platform governance
           </p>
         </div>
+
+        {location.state?.from && (
+          <div className="p-3 bg-electric-violet/10 border border-electric-violet/20 rounded-xl text-xs text-electric-violet font-medium flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 shrink-0" />
+            <span>Please sign in to access that page.</span>
+          </div>
+        )}
 
         {errorMessage && (
           <div className="p-3.5 bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 rounded-xl text-xs text-semantic-error flex items-center gap-2">
@@ -109,7 +120,7 @@ export const LoginPage: React.FC = () => {
               type="button"
               onClick={() => {
                 switchRoleDemo('buyer');
-                navigate('/');
+                navigate(from, { replace: true });
               }}
               className="py-2 px-1 text-[11px] font-bold rounded-xl bg-porcelain dark:bg-obsidian-surface-2 hover:bg-electric-violet/10 text-electric-violet border border-lavender-mist dark:border-obsidian-border transition-colors text-center"
             >

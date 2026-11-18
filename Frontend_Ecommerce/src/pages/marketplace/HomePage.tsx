@@ -101,28 +101,28 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full">
-      {/* 1. Announcement Banner */}
-      <section className="w-full bg-surface-container-high px-margin py-space-sm flex items-center justify-between">
-        <div className="max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-space-xs text-center md:text-left">
-          <div className="flex items-center gap-space-sm">
-            <span className="bg-primary text-on-primary font-label-sm text-label-sm uppercase px-2 py-0.5 rounded-full">
+      {/* 1. Slim Announcement Banner */}
+      <section className="w-full bg-surface-container-high/80 border-b border-outline-variant/20 px-4 sm:px-6 lg:px-8 py-2">
+        <div className="max-w-7xl mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-2">
+            <span className="bg-primary text-on-primary font-bold text-[10px] uppercase px-2 py-0.5 rounded-full tracking-wide">
               Spring Festival
             </span>
-            <p className="font-body-md text-on-surface">
-              Save up to <strong>50%</strong> across Tech, Living &amp; Beauty + Instant{' '}
+            <p className="text-on-surface">
+              Save up to <strong className="font-semibold">50%</strong> across Tech, Living &amp; Beauty + Instant{' '}
               <span className="text-primary font-semibold">₹500 off</span> with UPI checkout.
             </p>
           </div>
-          <div className="flex items-center gap-space-md shrink-0">
-            <span className="font-label-sm text-outline uppercase tracking-wider hidden lg:inline">
+          <div className="flex items-center gap-3 shrink-0">
+            <span className="font-mono text-[11px] text-outline font-medium hidden md:inline">
               Code: FESTIVAL500
             </span>
             <a
-              className="font-title-sm text-primary hover:text-secondary flex items-center gap-1 transition-colors"
+              className="font-semibold text-primary hover:text-secondary flex items-center gap-0.5 transition-colors"
               href="#flash-deals"
             >
               <span>Claim Offer</span>
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
             </a>
           </div>
         </div>
@@ -130,7 +130,7 @@ export const HomePage: React.FC = () => {
 
       {/* Catalog Load Error Alert */}
       {error && (
-        <div className="w-full bg-error/10 border-y border-error/20 px-margin py-3">
+        <div className="w-full bg-error/10 border-y border-error/20 px-4 sm:px-6 lg:px-8 py-3">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-error">
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-[20px]">warning</span>
@@ -147,23 +147,25 @@ export const HomePage: React.FC = () => {
       )}
 
       {/* 2. Hero Section */}
-      <section className="w-full px-margin py-space-xl bg-surface">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+      <section className="w-full px-4 sm:px-6 lg:px-8 py-8 lg:py-12 bg-surface">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center">
           {/* Left Editorial Pitch */}
-          <div className="lg:col-span-6 flex flex-col gap-space-lg">
-            <div className="inline-flex items-center gap-space-xs bg-surface-container-low px-space-sm py-1 rounded-full w-fit">
-              <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-              <span className="font-label-sm uppercase text-outline">Omnichannel Commerce Platform</span>
+          <div className="lg:col-span-6 flex flex-col gap-5 lg:gap-6">
+            <div className="inline-flex items-center gap-2 bg-surface-container-low px-3 py-1 rounded-full w-fit border border-outline-variant/30">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span className="text-[11px] font-semibold uppercase tracking-wider text-outline">
+                Omnichannel Commerce Platform
+              </span>
             </div>
-            <h1 className="font-display-hero text-display-hero text-on-surface tracking-tight leading-[1.08] font-bold">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-on-surface tracking-tight leading-[1.12]">
               Everything You Need, Brought Together in One Destination.
             </h1>
-            <p className="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+            <p className="text-sm sm:text-base text-on-surface-variant max-w-xl leading-relaxed">
               Curated electronics, artisan home living, pantry essentials, and trending beauty — delivered with precision straight to your doorstep.
             </p>
-            <div className="flex flex-wrap items-center gap-space-md pt-space-xs">
+            <div className="flex flex-wrap items-center gap-3.5 pt-1">
               <a
-                className="bg-primary hover:bg-secondary text-on-primary h-12 px-space-xl rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors shadow-sm"
+                className="bg-primary hover:bg-secondary text-on-primary h-11 sm:h-12 px-6 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all shadow-sm shadow-primary/25"
                 href="#flash-deals"
               >
                 <span>Explore Today's Deals</span>
@@ -171,56 +173,54 @@ export const HomePage: React.FC = () => {
               </a>
               <Link
                 to="/products"
-                className="bg-surface-container-lowest hover:bg-surface-container-low text-on-surface h-12 px-space-lg rounded-lg font-title-sm flex items-center justify-center gap-space-xs transition-colors shadow-sm"
+                className="bg-surface-container-lowest hover:bg-surface-container-low text-on-surface border border-outline-variant/40 h-11 sm:h-12 px-5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
               >
                 <span>Browse Multi-Category Catalog</span>
                 <span className="material-symbols-outlined text-[18px]">north_east</span>
               </Link>
             </div>
             {/* Quick Metrics Grid */}
-            <div className="grid grid-cols-3 gap-space-md pt-space-md bg-surface-container-low p-space-md rounded-xl">
+            <div className="grid grid-cols-3 gap-3 pt-2 bg-surface-container-low p-4 rounded-xl border border-outline-variant/20">
               <div className="flex flex-col">
-                <span className="font-headline-sm text-headline-sm text-primary font-bold">120K+</span>
-                <span className="font-body-sm text-body-sm text-outline">Verified SKUs</span>
+                <span className="text-lg sm:text-xl text-primary font-extrabold">120K+</span>
+                <span className="text-xs text-outline font-medium">Verified SKUs</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-headline-sm text-headline-sm text-on-surface font-bold">2.4 Hrs</span>
-                <span className="font-body-sm text-body-sm text-outline">Metro Delivery</span>
+                <span className="text-lg sm:text-xl text-on-surface font-extrabold">2.4 Hrs</span>
+                <span className="text-xs text-outline font-medium">Metro Delivery</span>
               </div>
               <div className="flex flex-col">
-                <span className="font-headline-sm text-headline-sm text-on-surface font-bold">4.9/5.0</span>
-                <span className="font-body-sm text-body-sm text-outline">Trustpilot Score</span>
+                <span className="text-lg sm:text-xl text-on-surface font-extrabold">4.9/5.0</span>
+                <span className="text-xs text-outline font-medium">Trustpilot Score</span>
               </div>
             </div>
           </div>
 
-          {/* Right Visual Multi-Category Mosaic */}
-          <div className="lg:col-span-6 grid grid-cols-2 gap-space-md">
+          {/* Right Visual Multi-Category Showcase: Balanced Even 2x2 Grid */}
+          <div className="lg:col-span-6 grid grid-cols-2 gap-4 sm:gap-5">
             {isLoading ? (
               // 4 Shimmer Skeletons for Hero Mosaic
               [0, 1, 2, 3].map((idx) => (
                 <div
                   key={idx}
-                  className={`bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col justify-between overflow-hidden animate-pulse ${
-                    idx === 1 ? 'mt-6' : idx === 2 ? '-mt-6' : ''
-                  }`}
+                  className="bg-surface-container-lowest rounded-xl p-4 shadow-sm border border-outline-variant/20 flex flex-col justify-between animate-pulse"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="h-5 w-20 bg-surface-container-high rounded-full" />
-                    <div className="h-4 w-14 bg-surface-container-high rounded" />
+                    <div className="h-4 w-16 bg-surface-container-high rounded-full" />
+                    <div className="h-3 w-12 bg-surface-container-high rounded" />
                   </div>
-                  <div className="h-44 w-full my-space-sm rounded-lg bg-surface-container-high" />
+                  <div className="h-36 w-full my-3 rounded-lg bg-surface-container-high" />
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col gap-1 w-2/3">
                       <div className="h-4 w-full bg-surface-container-high rounded" />
                       <div className="h-4 w-16 bg-surface-container-high rounded" />
                     </div>
-                    <div className="w-9 h-9 rounded-full bg-surface-container-high shrink-0" />
+                    <div className="w-8 h-8 rounded-full bg-surface-container-high shrink-0" />
                   </div>
                 </div>
               ))
             ) : featuredProducts.length > 0 ? (
-              featuredProducts.slice(0, 4).map((item, idx) => {
+              featuredProducts.slice(0, 4).map((item) => {
                 const catName =
                   typeof item.category === 'object' && item.category !== null
                     ? (item.category as any).name
@@ -228,19 +228,17 @@ export const HomePage: React.FC = () => {
                 return (
                   <div
                     key={item._id}
-                    className={`group relative bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md transition-all flex flex-col justify-between overflow-hidden ${
-                      idx === 1 ? 'mt-6' : idx === 2 ? '-mt-6' : ''
-                    }`}
+                    className="group bg-surface-container-lowest rounded-xl p-3.5 sm:p-4 shadow-sm hover:shadow-md border border-outline-variant/30 transition-all flex flex-col justify-between"
                   >
-                    <div className="flex items-center justify-between z-10">
-                      <span className="bg-surface-container-high text-primary font-label-sm text-label-sm px-2 py-0.5 rounded-full">
+                    <div className="flex items-center justify-between text-xs mb-2">
+                      <span className="bg-surface-container-high text-primary font-medium text-[10px] uppercase px-2 py-0.5 rounded-full truncate max-w-[110px]">
                         {catName}
                       </span>
-                      <span className="font-label-sm text-outline">{item.badge || 'Curated'}</span>
+                      <span className="text-[11px] text-outline">{item.badge || 'Curated'}</span>
                     </div>
                     <Link
                       to={`/products/${item._id}`}
-                      className="h-44 w-full my-space-sm flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low"
+                      className="h-36 sm:h-40 w-full my-2 flex items-center justify-center overflow-hidden rounded-lg bg-surface-container-low"
                     >
                       <img
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -248,32 +246,34 @@ export const HomePage: React.FC = () => {
                         alt={item.name}
                       />
                     </Link>
-                    <div className="flex items-center justify-between z-10">
+                    <div className="flex items-center justify-between pt-1">
                       <Link to={`/products/${item._id}`} className="min-w-0 pr-2">
-                        <p className="font-title-sm text-title-sm text-on-surface hover:text-primary transition-colors truncate">
+                        <p className="text-xs sm:text-sm font-semibold text-on-surface hover:text-primary transition-colors truncate">
                           {item.name}
                         </p>
-                        <p className="font-price-card text-primary">{formatCurrency(item.price)}</p>
+                        <p className="text-sm sm:text-base font-bold text-primary mt-0.5">
+                          {formatCurrency(item.price)}
+                        </p>
                       </Link>
                       <button
                         onClick={() =>
                           handleQuickAdd(item._id, item.name, item.price, item.image, catName)
                         }
-                        className="w-9 h-9 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer shrink-0"
+                        className="w-8 h-8 rounded-full bg-surface-container-high text-primary flex items-center justify-center hover:bg-primary hover:text-on-primary transition-colors cursor-pointer shrink-0"
                         title="Quick Add"
                         type="button"
                       >
-                        <span className="material-symbols-outlined text-[18px]">add</span>
+                        <span className="material-symbols-outlined text-[16px]">add</span>
                       </button>
                     </div>
                   </div>
                 );
               })
             ) : (
-              <div className="col-span-2 bg-surface-container-lowest rounded-xl p-space-lg text-center flex flex-col items-center justify-center gap-space-sm">
+              <div className="col-span-2 bg-surface-container-lowest rounded-xl p-8 text-center flex flex-col items-center justify-center gap-3 border border-outline-variant/20">
                 <span className="material-symbols-outlined text-outline text-[32px]">inventory_2</span>
-                <p className="font-body-md text-on-surface-variant">No featured products available.</p>
-                <Link to="/products" className="font-title-sm text-primary hover:underline">
+                <p className="text-sm font-medium text-on-surface-variant">No featured products available.</p>
+                <Link to="/products" className="text-xs font-bold text-primary hover:underline">
                   Browse Full Catalog
                 </Link>
               </div>
