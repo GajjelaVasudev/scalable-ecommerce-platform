@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { AccountLayout } from '../../components/account/AccountLayout';
 import { Order, ShippingAddress } from '../../types';
 import { api } from '../../services/api';
 import { formatCurrency, formatDate } from '../../utils/format';
@@ -230,8 +231,8 @@ This is a computer generated tax invoice. No signature required.
   const shippedTime = new Date(placedTime.getTime() + 1000 * 60 * 360);
 
   return (
-    <div className="w-full bg-surface min-h-[calc(100vh-160px)] py-8 px-margin-mobile md:px-margin">
-      <div className="w-full max-w-7xl mx-auto flex flex-col gap-6">
+    <AccountLayout activeKey="orders">
+      <div className="w-full flex flex-col gap-6">
         {/* Top Breadcrumb & Back navigation */}
         <div className="flex items-center justify-between">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-on-surface-variant font-body-sm text-xs">
@@ -699,7 +700,7 @@ This is a computer generated tax invoice. No signature required.
           </div>
         </div>
       )}
-    </div>
+    </AccountLayout>
   );
 };
 

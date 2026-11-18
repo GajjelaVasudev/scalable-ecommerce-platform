@@ -39,10 +39,22 @@ const DEMO_USERS: Record<UserRole, User> = {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
+    if (typeof window !== 'undefined') {
+      const demoParam = new URLSearchParams(window.location.search).get('demo');
+      if (demoParam && DEMO_USERS[demoParam as UserRole]) {
+        return DEMO_USERS[demoParam as UserRole];
+      }
+    }
     const saved = localStorage.getItem('omizon_user');
     return saved ? JSON.parse(saved) : null;
   });
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem('omizon_token'));
+  const [token, setToken] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const demoParam = new URLSearchParams(window.location.search).get('demo');
+      if (demoParam) return 'demo_token';
+    }
+    return localStorage.getItem('omizon_token');
+  });
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {

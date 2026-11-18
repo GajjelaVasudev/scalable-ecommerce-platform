@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { AccountLayout } from '../../components/account/AccountLayout';
 import { api } from '../../services/api';
 import { Order } from '../../types';
 import { formatCurrency, formatDate } from '../../utils/format';
@@ -150,14 +151,36 @@ const STITCH_DEMO_ORDERS: Order[] = [
 
 export const OrdersPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const filterParam = searchParams.get('filter');
   const { user, isAuthenticated } = useAuth();
   const { addItem } = useCart();
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Filters
-  const [activeTab, setActiveTab] = useState<'all' | 'transit' | 'delivered' | 'cancelled' | 'returns'>('all');
+  // Filters with URL synchronization
+  const [activeTab, setActiveTab] = useState<'all' | 'transit' | 'delivered' | 'cancelled' | 'returns'>(() => {
+    if (filterParam === 'returns') return 'returns';
+    if (filterParam === 'transit') return 'transit';
+    if (filterParam === 'delivered') return 'delivered';
+    if (filterParam === 'cancelled') return 'cancelled';
+    return 'all';
+  });
+
+  useEffect(() => {
+    if (filterParam === 'returns') {
+      setActiveTab('returns');
+    } else if (filterParam === 'transit') {
+      setActiveTab('transit');
+    } else if (filterParam === 'delivered') {
+      setActiveTab('delivered');
+    } else if (filterParam === 'cancelled') {
+      setActiveTab('cancelled');
+    } else if (!filterParam) {
+      setActiveTab('all');
+    }
+  }, [filterParam]);
   const [timeframe, setTimeframe] = useState<'3months' | '6months' | '2024' | '2023' | 'archived'>('2024');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -342,7 +365,7 @@ export const OrdersPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-surface min-h-[calc(100vh-160px)]">
+    <AccountLayout activeKey="orders">
       {/* Toast Notification */}
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 bg-inverse-surface text-inverse-on-surface px-5 py-3 rounded-xl shadow-2xl animate-fade-in">
@@ -352,7 +375,7 @@ export const OrdersPage: React.FC = () => {
       )}
 
       {/* Main Container */}
-      <div className="w-full max-w-7xl mx-auto px-margin-mobile md:px-margin py-8">
+      <div className="w-full flex flex-col">
         {/* Top Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-on-surface-variant font-body-sm text-xs mb-6">
           <Link to="/" className="hover:text-primary transition-colors">Home</Link>
@@ -1034,7 +1057,7 @@ export const OrdersPage: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </AccountLayout>
   );
 };
 
