@@ -14,7 +14,7 @@ import {
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api';
 
 interface RequestOptions extends RequestInit {
-  params?: Record<string, string | number | boolean | undefined>;
+  params?: Record<string, string | number | boolean | string[] | undefined>;
 }
 
 class ApiError extends Error {
@@ -38,7 +38,11 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
-        searchParams.append(key, String(value));
+        if (Array.isArray(value)) {
+          searchParams.append(key, value.join(','));
+        } else {
+          searchParams.append(key, String(value));
+        }
       }
     });
     const queryString = searchParams.toString();
@@ -121,13 +125,19 @@ export const api = {
     list: (params?: {
       page?: number;
       limit?: number;
-      category?: string;
+      category?: string | string[];
+      brand?: string | string[];
       minprice?: number;
       maxprice?: number;
+      minRating?: number;
+      minDiscount?: number;
       sort?: string;
       search?: string;
       featured?: boolean;
       inStock?: boolean;
+      fastPrime?: boolean;
+      twoDayDelivery?: boolean;
+      codEligible?: boolean;
     }) =>
       request<ProductListResponse>('/products', {
         method: 'GET',

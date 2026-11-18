@@ -5,6 +5,8 @@ const Product = require('../models/product.model');
 const Inventory = require('../models/inventory.model');
 const Reservation = require('../models/reservation.model');
 
+const VALID_PAYMENT_METHODS = ['UPI', 'CARD', 'NETBANKING', 'EMI', 'COD'];
+
 // Helper to run operations within a transaction if supported, or without if standalone
 async function withOptionalTransaction(workFn) {
     let session = null;
@@ -61,6 +63,18 @@ async function createOrder(req, res) {
         });
     }
 
+    const rawPaymentMethod = typeof req.body.paymentMethod === 'string' && req.body.paymentMethod.trim()
+        ? req.body.paymentMethod.trim().toUpperCase()
+        : 'UPI';
+
+    if (!VALID_PAYMENT_METHODS.includes(rawPaymentMethod)) {
+        return res.status(400).json({
+            message: `Invalid payment method '${req.body.paymentMethod}'. Supported methods: ${VALID_PAYMENT_METHODS.join(', ')}`
+        });
+    }
+
+    const paymentMethod = rawPaymentMethod;
+
     try {
         const order = await withOptionalTransaction(async (session) => {
             const cartQuery = Cart.findOne({ user: userId });
@@ -107,9 +121,6 @@ async function createOrder(req, res) {
 
             // Create order document
             const trackingNumber = `FX-IN-${Math.floor(1000000 + Math.random() * 9000000)}`;
-            const paymentMethod = typeof req.body.paymentMethod === 'string' && req.body.paymentMethod.trim()
-                ? req.body.paymentMethod.trim()
-                : 'UPI';
 
             const orderDocData = {
                 user: userId,

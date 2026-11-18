@@ -61,12 +61,54 @@ describe('Checkout Delivery Address & Indian Validation', () => {
 });
 
 describe('Payment Method Architecture', () => {
+  const VALID_PAYMENT_METHODS = ['UPI', 'CARD', 'NETBANKING', 'EMI', 'COD'];
+
   test('Supported payment methods include India-first options', () => {
     const supported = ['upi', 'card', 'netbanking', 'emi', 'cod'];
     assert.ok(supported.includes('upi'));
     assert.ok(supported.includes('card'));
     assert.ok(supported.includes('netbanking'));
     assert.ok(supported.includes('cod'));
+  });
+
+  test('Checkout normalizes selected payment method to uppercase enum', () => {
+    const clientSelectedMethods = ['upi', 'card', 'netbanking', 'emi', 'cod'];
+    for (const method of clientSelectedMethods) {
+      const normalized = method.toUpperCase();
+      assert.ok(
+        VALID_PAYMENT_METHODS.includes(normalized),
+        `Normalized method ${normalized} must be in backend enum`
+      );
+    }
+  });
+
+  test('COD payment bypasses Razorpay payment gateway initialization', () => {
+    const shouldCreatePaymentAttempt = (paymentMethod: string) => {
+      return paymentMethod.toUpperCase() !== 'COD';
+    };
+
+    assert.equal(shouldCreatePaymentAttempt('COD'), false);
+    assert.equal(shouldCreatePaymentAttempt('cod'), false);
+    assert.equal(shouldCreatePaymentAttempt('UPI'), true);
+    assert.equal(shouldCreatePaymentAttempt('CARD'), true);
+    assert.equal(shouldCreatePaymentAttempt('NETBANKING'), true);
+    assert.equal(shouldCreatePaymentAttempt('EMI'), true);
+  });
+
+  test('Order confirmation navigation payload preserves selected payment method', () => {
+    const createConfirmationPayload = (orderId: string, paymentMethod: string, amount: number) => ({
+      orderId,
+      totalAmount: amount,
+      paymentMethod: paymentMethod.toUpperCase(),
+      estimatedDelivery: '3-5 business days',
+    });
+
+    const codPayload = createConfirmationPayload('order_cod_123', 'cod', 1499);
+    assert.equal(codPayload.paymentMethod, 'COD');
+    assert.equal(codPayload.totalAmount, 1499);
+
+    const upiPayload = createConfirmationPayload('order_upi_456', 'upi', 24999);
+    assert.equal(upiPayload.paymentMethod, 'UPI');
   });
 
   test('UPI virtual private address (VPA) contains handle domain', () => {

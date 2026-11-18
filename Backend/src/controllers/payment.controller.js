@@ -124,6 +124,10 @@ async function createPayment(req, res) {
             return res.status(400).json({ message: 'Order is already paid' });
         }
 
+        if (order.paymentMethod === 'COD') {
+            return res.status(400).json({ message: 'Payment attempts cannot be created for Cash on Delivery (COD) orders' });
+        }
+
         if (!Number.isFinite(Number(order.totalAmount)) || Number(order.totalAmount) <= 0) {
             return res.status(400).json({ message: 'Order amount is invalid' });
         }

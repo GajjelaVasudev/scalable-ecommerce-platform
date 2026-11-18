@@ -88,23 +88,41 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const LOCAL_CART_KEY = 'omizon_guest_cart';
+export const LOCAL_CART_KEY = 'omizon_guest_cart';
+
+export function getInitialGuestCart(
+  savedCartJson: string | null,
+  isExplicitDemo: boolean = false
+): Cart {
+  if (savedCartJson) {
+    try {
+      const parsed = JSON.parse(savedCartJson);
+      if (parsed && Array.isArray(parsed.items)) {
+        return parsed;
+      }
+    } catch {
+      // Fallback to empty on malformed JSON
+    }
+  }
+
+  // Explicit demo cart flag enabled only when deliberately requested
+  if (isExplicitDemo) {
+    return { items: STITCH_DEFAULT_CART_ITEMS };
+  }
+
+  return { items: [] };
+}
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const [cart, setCart] = useState<Cart>(() => {
-    const saved = localStorage.getItem(LOCAL_CART_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        if (parsed && Array.isArray(parsed.items)) {
-          return parsed;
-        }
-      } catch {
-        // Fallback to default
-      }
-    }
-    return { items: STITCH_DEFAULT_CART_ITEMS };
+    const saved = typeof window !== 'undefined' ? localStorage.getItem(LOCAL_CART_KEY) : null;
+    const isExplicitDemo =
+      typeof window !== 'undefined' &&
+      (localStorage.getItem('omizon_demo_cart') === 'true' ||
+        new URLSearchParams(window.location.search).get('demo') === 'cart');
+
+    return getInitialGuestCart(saved, isExplicitDemo);
   });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

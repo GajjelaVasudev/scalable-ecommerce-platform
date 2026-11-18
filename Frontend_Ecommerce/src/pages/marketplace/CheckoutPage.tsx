@@ -196,7 +196,7 @@ export const CheckoutPage: React.FC = () => {
       // 2. Attempt real backend order creation if user is authenticated
       if (isAuthenticated && cart.items.length > 0) {
         try {
-          const createRes = await api.orders.create(shippingPayload);
+          const createRes = await api.orders.create(shippingPayload, selectedPaymentMethod.toUpperCase());
           orderResult = createRes.order;
 
           // Attempt payment initiation via Razorpay endpoint if online payment
@@ -256,6 +256,7 @@ export const CheckoutPage: React.FC = () => {
           paymentStatus: selectedPaymentMethod === 'cod' ? 'pending' : 'paid',
           deliveryStatus: 'pending',
           trackingNumber: `FX-IN-${Math.floor(10000000 + Math.random() * 90000000)}`,
+          paymentMethod: selectedPaymentMethod.toUpperCase(),
           createdAt: new Date().toISOString(),
         };
       }

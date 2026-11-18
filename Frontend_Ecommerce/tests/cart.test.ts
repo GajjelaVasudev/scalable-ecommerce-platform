@@ -1,6 +1,6 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { STITCH_DEFAULT_CART_ITEMS } from '../src/context/CartContext';
+import { STITCH_DEFAULT_CART_ITEMS, getInitialGuestCart, LOCAL_CART_KEY } from '../src/context/CartContext';
 import { INITIAL_SAVED_ITEMS } from '../src/components/cart/SavedForLaterSection';
 
 describe('Cart Pricing & Stitch Catalog Data Integrity', () => {
@@ -83,6 +83,59 @@ describe('Cart Saved for Later & Pincode Architecture', () => {
     assert.equal(validateCoupon('omizonfestival'), 2000);
     assert.equal(validateCoupon('FESTIVAL500'), 500);
     assert.equal(validateCoupon('INVALIDCODE'), 0);
+  });
+});
+
+describe('Guest Cart Initialization & Isolation', () => {
+  test('Fresh guest visit with no localStorage initializes to empty cart { items: [] }', () => {
+    const initialCart = getInitialGuestCart(null, false);
+    assert.deepEqual(initialCart, { items: [] });
+    assert.equal(initialCart.items.length, 0);
+  });
+
+  test('Explicit demo cart flag initializes to STITCH_DEFAULT_CART_ITEMS', () => {
+    const demoCart = getInitialGuestCart(null, true);
+    assert.equal(demoCart.items.length, STITCH_DEFAULT_CART_ITEMS.length);
+    assert.equal(demoCart.items[0].product.name, STITCH_DEFAULT_CART_ITEMS[0].product.name);
+  });
+
+  test('Pre-existing guest items in localStorage are preserved without overwrite', () => {
+    const customItems = [
+      {
+        product: {
+          _id: 'custom_prod_1',
+          name: 'Custom Mechanical Keyboard',
+          description: 'Custom keyboard',
+          price: 9999,
+          stock: 10,
+          category: { _id: 'cat_1', name: 'Electronics', slug: 'electronics' },
+          image: 'https://example.com/kb.jpg',
+          seller: { _id: 'seller_1', username: 'KeyWorks' },
+          status: 'active',
+          rating: 4.8,
+          reviewCount: 20,
+        },
+        quantity: 1,
+        price: 9999,
+        variant: 'RGB / Tactile',
+      },
+    ];
+
+    const savedCartJson = JSON.stringify({ items: customItems });
+    const loadedCart = getInitialGuestCart(savedCartJson, false);
+    assert.equal(loadedCart.items.length, 1);
+    assert.equal(loadedCart.items[0].product.name, 'Custom Mechanical Keyboard');
+    assert.equal(loadedCart.items[0].price, 9999);
+  });
+
+  test('Malformed or invalid saved JSON safely falls back to empty cart', () => {
+    const malformedJson = '{"items": invalid json';
+    const fallbackCart = getInitialGuestCart(malformedJson, false);
+    assert.deepEqual(fallbackCart, { items: [] });
+  });
+
+  test('LOCAL_CART_KEY is standard omizon_guest_cart', () => {
+    assert.equal(LOCAL_CART_KEY, 'omizon_guest_cart');
   });
 });
 

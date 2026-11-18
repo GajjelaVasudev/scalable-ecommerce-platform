@@ -208,12 +208,20 @@ async function getProducts(req, res) {
         const filter = {};
         const sortOption = {};
 
-        // Category resolution: ObjectId or Case-Insensitive Name
-        if (category) {
-            if (mongoose.isValidObjectId(category)) {
-                filter.category = category;
-            } else if (typeof category === 'string' && category.trim()) {
-                const escapedCat = category.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // Category resolution: ObjectId or Case-Insensitive Name(s), supporting comma-separated string or array
+        let categories = [];
+        if (Array.isArray(category)) {
+            categories = category.map((c) => String(c).trim()).filter(Boolean);
+        } else if (typeof category === 'string' && category.trim()) {
+            categories = category.split(',').map((c) => c.trim()).filter(Boolean);
+        }
+
+        if (categories.length === 1) {
+            const singleCat = categories[0];
+            if (mongoose.isValidObjectId(singleCat)) {
+                filter.category = singleCat;
+            } else {
+                const escapedCat = singleCat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const fuzzyCat = escapedCat.replace(/\\&/g, '(&|and|\\s*)').replace(/[-\s]+/g, '[\\s-]+');
                 const catDoc = await Category.findOne({
                     $or: [
@@ -227,6 +235,31 @@ async function getProducts(req, res) {
                     filter.category = new mongoose.Types.ObjectId();
                 }
             }
+        } else if (categories.length > 1) {
+            const objectIds = [];
+            const nameQueries = [];
+            for (const cat of categories) {
+                if (mongoose.isValidObjectId(cat)) {
+                    objectIds.push(new mongoose.Types.ObjectId(cat));
+                } else {
+                    const escapedCat = cat.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const fuzzyCat = escapedCat.replace(/\\&/g, '(&|and|\\s*)').replace(/[-\s]+/g, '[\\s-]+');
+                    nameQueries.push({ name: { $regex: new RegExp(`^${escapedCat}$`, 'i') } });
+                    nameQueries.push({ name: { $regex: new RegExp(`^${fuzzyCat}$`, 'i') } });
+                }
+            }
+            const matchedIds = [...objectIds];
+            if (nameQueries.length > 0) {
+                const matchedDocs = await Category.find({ $or: nameQueries }).select('_id');
+                if (Array.isArray(matchedDocs)) {
+                    matchedIds.push(...matchedDocs.map((d) => d._id));
+                }
+            }
+            if (matchedIds.length > 0) {
+                filter.category = { $in: matchedIds };
+            } else {
+                filter.category = { $in: [new mongoose.Types.ObjectId()] };
+            }
         }
 
         // Search text matching across name, description, brand
@@ -237,6 +270,91 @@ async function getProducts(req, res) {
                 { description: { $regex: sanitizedSearch, $options: 'i' } },
                 { brand: { $regex: sanitizedSearch, $options: 'i' } }
             ];
+        }
+
+        // Brand filtering matching brand or brandTag
+        const rawBrand = req.query.brand;
+        let brands = [];
+        if (Array.isArray(rawBrand)) {
+            brands = rawBrand.map((b) => String(b).trim()).filter(Boolean);
+        } else if (typeof rawBrand === 'string' && rawBrand.trim()) {
+            brands = rawBrand.split(',').map((b) => b.trim()).filter(Boolean);
+        }
+
+        if (brands.length > 0) {
+            const brandRegexes = brands.map((b) => new RegExp(`^${b.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i'));
+            const brandCondition = {
+                $or: [
+                    { brand: { $in: brandRegexes } },
+                    { brandTag: { $in: brandRegexes } }
+                ]
+            };
+            if (filter.$or) {
+                filter.$and = [
+                    { $or: filter.$or },
+                    brandCondition
+                ];
+                delete filter.$or;
+            } else {
+                filter.$or = brandCondition.$or;
+            }
+        }
+
+        // Customer Rating filter (0 to 5)
+        const rawRating = req.query.minRating ?? req.query.rating;
+        if (rawRating !== undefined && rawRating !== '') {
+            const parsedRating = Number(rawRating);
+            if (!Number.isFinite(parsedRating) || parsedRating < 0 || parsedRating > 5) {
+                return res.status(400).json({
+                    message: 'Rating filter must be a number between 0 and 5'
+                });
+            }
+            filter.rating = { $gte: parsedRating };
+        }
+
+        // Discount percentage filter (0 to 100)
+        const rawDiscount = req.query.minDiscount ?? req.query.discount;
+        if (rawDiscount !== undefined && rawDiscount !== '') {
+            const parsedDiscount = Number(rawDiscount);
+            if (!Number.isFinite(parsedDiscount) || parsedDiscount < 0 || parsedDiscount > 100) {
+                return res.status(400).json({
+                    message: 'Discount filter must be a number between 0 and 100'
+                });
+            }
+            filter.$expr = {
+                $and: [
+                    { $ifNull: ['$originalPrice', false] },
+                    { $gt: ['$originalPrice', 0] },
+                    { $gte: ['$originalPrice', '$price'] },
+                    {
+                        $gte: [
+                            {
+                                $multiply: [
+                                    {
+                                        $divide: [
+                                            { $subtract: ['$originalPrice', '$price'] },
+                                            '$originalPrice'
+                                        ]
+                                    },
+                                    100
+                                ]
+                            },
+                            parsedDiscount
+                        ]
+                    }
+                ]
+            };
+        }
+
+        // Fulfillment flags
+        if (req.query.fastPrime === 'true' || req.query.fastPrime === true) {
+            filter.fastPrime = true;
+        }
+        if (req.query.twoDayDelivery === 'true' || req.query.twoDayDelivery === true) {
+            filter.twoDayDelivery = true;
+        }
+        if (req.query.codEligible === 'true' || req.query.codEligible === true) {
+            filter.codEligible = true;
         }
 
         // Featured flag filter
@@ -283,12 +401,18 @@ async function getProducts(req, res) {
         const cacheKey = JSON.stringify({
             page,
             limit,
-            category: category || '',
+            category: req.query.category || '',
+            brand: req.query.brand || '',
             search: rawSearch?.trim() || '',
             featured: featured || '',
             inStock: inStock || '',
             minprice: minprice ?? '',
             maxprice: maxprice ?? '',
+            minRating: rawRating ?? '',
+            minDiscount: rawDiscount ?? '',
+            fastPrime: req.query.fastPrime || '',
+            twoDayDelivery: req.query.twoDayDelivery || '',
+            codEligible: req.query.codEligible || '',
             sort: sort || ''
         });
 

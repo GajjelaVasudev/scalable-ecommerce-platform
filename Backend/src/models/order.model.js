@@ -54,6 +54,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
+        enum: ['UPI', 'CARD', 'NETBANKING', 'EMI', 'COD'],
         default: 'UPI'
     },
     cancellationReason: {

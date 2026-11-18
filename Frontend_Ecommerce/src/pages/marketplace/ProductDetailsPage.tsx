@@ -56,8 +56,8 @@ export const ProductDetailsPage: React.FC = () => {
     },
   ];
 
-  // Gallery Thumbnails
-  const galleryThumbnails = [
+  // Gallery Thumbnails (Default SoundPulse)
+  const DEFAULT_HEADPHONE_THUMBNAILS = [
     {
       id: 0,
       alt: 'SoundPulse Studio Pro Wireless ANC Headphones in Midnight Violet front studio frontal view',
@@ -105,6 +105,7 @@ export const ProductDetailsPage: React.FC = () => {
   const [selectedColor, setSelectedColor] = useState<Colorway>(colorways[0]);
   const [activeThumbIndex, setActiveThumbIndex] = useState<number>(0);
   const [selectedEdition, setSelectedEdition] = useState<ModelEdition>(modelEditions[0]);
+  const [selectedVariant, setSelectedVariant] = useState<string>('Standard');
   const [quantity, setQuantity] = useState<number>(1);
   const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'overview' | 'techspecs' | 'box' | 'reviews' | 'qa'>('overview');
@@ -128,6 +129,13 @@ export const ProductDetailsPage: React.FC = () => {
       .then((res) => {
         if (!isMounted) return;
         setProduct(res.product);
+        if (res.product?.variants && Array.isArray(res.product.variants) && res.product.variants.length > 0) {
+          const firstNonDefault = res.product.variants.find((v: any) => v.name && v.name !== 'default');
+          if (firstNonDefault) {
+            setSelectedVariant(firstNonDefault.name);
+          }
+        }
+        setActiveThumbIndex(0);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -159,10 +167,53 @@ export const ProductDetailsPage: React.FC = () => {
     reviewCount: 4829,
   };
 
-  const currentPrice =
-    selectedEdition.id === 'standard'
+  const isSoundPulseHeadphones = Boolean(
+    displayProduct.name.toLowerCase().includes('soundpulse') ||
+    displayProduct.name.toLowerCase().includes('headphone')
+  );
+
+  const realVariants = React.useMemo(() => {
+    if (product?.variants && Array.isArray(product.variants)) {
+      return product.variants.filter((v: any) => v.name && v.name !== 'default');
+    }
+    return [];
+  }, [product]);
+
+  const productImages: string[] = React.useMemo(() => {
+    if (product?.images && product.images.length > 0) {
+      return product.images;
+    }
+    if (product?.image) {
+      return [product.image];
+    }
+    if (isSoundPulseHeadphones) {
+      return colorways.map((c) => c.image);
+    }
+    return [displayProduct.image || colorways[0].image];
+  }, [product, isSoundPulseHeadphones, displayProduct.image]);
+
+  const galleryThumbnails = React.useMemo(() => {
+    if (isSoundPulseHeadphones && (!product?.images || product.images.length === 0)) {
+      return DEFAULT_HEADPHONE_THUMBNAILS;
+    }
+    return productImages.map((src, idx) => ({
+      id: idx,
+      alt: `${displayProduct.name} - View ${idx + 1}`,
+      src,
+    }));
+  }, [productImages, displayProduct.name, isSoundPulseHeadphones, product?.images]);
+
+  const activeMainImage =
+    galleryThumbnails[activeThumbIndex]?.src ||
+    (isSoundPulseHeadphones && activeThumbIndex === 0 ? selectedColor.image : displayProduct.image) ||
+    colorways[0].image;
+
+  const currentPrice = isSoundPulseHeadphones
+    ? selectedEdition.id === 'standard'
       ? displayProduct.price
-      : (selectedEdition.price || Math.round(displayProduct.price * 1.15));
+      : (selectedEdition.price || Math.round(displayProduct.price * 1.15))
+    : displayProduct.price;
+
   const originalPrice = displayProduct.originalPrice || Math.round(displayProduct.price * 1.25);
   const discountPercent = calculateDiscount(originalPrice, currentPrice);
   const storeName =
@@ -204,16 +255,22 @@ export const ProductDetailsPage: React.FC = () => {
     setQuantity((prev) => Math.max(1, Math.min(10, prev + delta)));
   };
 
+  const variantName = realVariants.length > 0
+    ? selectedVariant
+    : isSoundPulseHeadphones
+    ? `${selectedColor.name} • ${selectedEdition.name}`
+    : 'Standard';
+
   // Add to cart
   const handleAddToCart = () => {
-    addItem(displayProduct, quantity, `${selectedColor.name} • ${selectedEdition.name}`);
+    addItem(displayProduct, quantity, variantName);
     setCartBtnText('Added to Basket');
     setTimeout(() => setCartBtnText('Add to Cart'), 1800);
   };
 
   // Buy Now
   const handleBuyNow = () => {
-    addItem(displayProduct, quantity, `${selectedColor.name} • ${selectedEdition.name}`);
+    addItem(displayProduct, quantity, variantName);
     navigate('/checkout');
   };
 
@@ -257,10 +314,6 @@ export const ProductDetailsPage: React.FC = () => {
       setDeliveryPincode(`${pin} - Verified City`);
     }
   };
-
-  // Active Main Image
-  const activeMainImage =
-    activeThumbIndex === 0 ? selectedColor.image : galleryThumbnails[activeThumbIndex].src;
 
   if (isLoading) {
     return (
@@ -471,7 +524,7 @@ export const ProductDetailsPage: React.FC = () => {
                 <img
                   id="main-product-img"
                   className="w-full h-full object-contain p-6 transition-all duration-300 group-hover:scale-105"
-                  alt="SoundPulse Studio Pro Wireless ANC Headphones"
+                  alt={displayProduct.name}
                   src={activeMainImage}
                 />
 
@@ -484,28 +537,57 @@ export const ProductDetailsPage: React.FC = () => {
 
               {/* Feature Pills Under Gallery */}
               <div className="grid grid-cols-2 gap-space-xs mt-space-md">
-                <div className="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
-                  <span className="material-symbols-outlined text-primary text-[22px]">hearing</span>
-                  <div className="flex flex-col">
-                    <span className="font-title-sm text-on-surface text-[13px] leading-tight">
-                      Hybrid ANC 45dB
-                    </span>
-                    <span className="font-body-sm text-on-surface-variant text-[11px]">
-                      Dynamic adaptive isolation
-                    </span>
-                  </div>
-                </div>
-                <div className="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
-                  <span className="material-symbols-outlined text-primary text-[22px]">battery_charging_full</span>
-                  <div className="flex flex-col">
-                    <span className="font-title-sm text-on-surface text-[13px] leading-tight">
-                      60h Extended Battery
-                    </span>
-                    <span className="font-body-sm text-on-surface-variant text-[11px]">
-                      10 min quick charge = 5h
-                    </span>
-                  </div>
-                </div>
+                {isSoundPulseHeadphones ? (
+                  <>
+                    <div className="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
+                      <span className="material-symbols-outlined text-primary text-[22px]">hearing</span>
+                      <div className="flex flex-col">
+                        <span className="font-title-sm text-on-surface text-[13px] leading-tight">
+                          Hybrid ANC 45dB
+                        </span>
+                        <span className="font-body-sm text-on-surface-variant text-[11px]">
+                          Dynamic adaptive isolation
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
+                      <span className="material-symbols-outlined text-primary text-[22px]">battery_charging_full</span>
+                      <div className="flex flex-col">
+                        <span className="font-title-sm text-on-surface text-[13px] leading-tight">
+                          60h Extended Battery
+                        </span>
+                        <span className="font-body-sm text-on-surface-variant text-[11px]">
+                          10 min quick charge = 5h
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
+                      <span className="material-symbols-outlined text-primary text-[22px]">local_shipping</span>
+                      <div className="flex flex-col">
+                        <span className="font-title-sm text-on-surface text-[13px] leading-tight">
+                          FastX Prime Delivery
+                        </span>
+                        <span className="font-body-sm text-on-surface-variant text-[11px]">
+                          Dispatched in 24 hours
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-surface-container-low rounded-lg p-space-sm flex items-center gap-space-xs">
+                      <span className="material-symbols-outlined text-primary text-[22px]">verified</span>
+                      <div className="flex flex-col">
+                        <span className="font-title-sm text-on-surface text-[13px] leading-tight">
+                          100% Genuine Quality
+                        </span>
+                        <span className="font-body-sm text-on-surface-variant text-[11px]">
+                          Verified authentic seller
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -564,7 +646,11 @@ export const ProductDetailsPage: React.FC = () => {
                 onClick={() => setActiveTab('reviews')}
                 className="font-body-sm text-primary hover:underline cursor-pointer"
               >
-                {displayProduct.reviewCount ? displayProduct.reviewCount.toLocaleString() : '4,829'} verified ratings
+                {isSoundPulseHeadphones
+                  ? '4,829 verified ratings'
+                  : displayProduct.reviewCount
+                  ? `${displayProduct.reviewCount.toLocaleString()} verified ratings`
+                  : 'Customer ratings'}
               </button>
               <span className="text-outline-variant">•</span>
               <button
@@ -572,7 +658,7 @@ export const ProductDetailsPage: React.FC = () => {
                 onClick={() => setActiveTab('qa')}
                 className="font-body-sm text-on-surface-variant hover:text-primary cursor-pointer"
               >
-                840 answered questions
+                {isSoundPulseHeadphones ? '840 answered questions' : 'Q&A'}
               </button>
             </div>
 
@@ -609,89 +695,140 @@ export const ProductDetailsPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Variant Swatches Selector */}
+            {/* Variant / Configuration Selector */}
             <div className="bg-surface-container-lowest p-space-md rounded-xl shadow-sm mb-space-md flex flex-col gap-space-md">
-              {/* Color Picker */}
-              <div>
-                <div className="flex items-center justify-between mb-space-xs">
-                  <span className="font-title-sm text-on-surface">
-                    Colorway:{' '}
-                    <span className="text-primary font-semibold" id="color-label">
-                      {selectedColor.name}
-                    </span>
-                  </span>
-                  <span className="font-label-sm text-outline uppercase tracking-wider">
-                    4 Available
-                  </span>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-xs" id="color-options">
-                  {colorways.map((cw) => {
-                    const isSelected = selectedColor.id === cw.id;
-                    return (
-                      <button
-                        key={cw.id}
-                        type="button"
-                        onClick={() => handleSelectColor(cw)}
-                        className={`p-2 rounded-lg bg-surface-container-low flex items-center gap-2 text-left shadow-sm transition-all cursor-pointer ${
-                          isSelected ? 'ring-2 ring-primary' : 'hover:bg-surface-container'
-                        }`}
-                      >
-                        <span className={`w-5 h-5 rounded-full ${cw.colorClass} shrink-0 shadow-inner border border-black/10`} />
-                        <span
-                          className={`font-body-sm text-on-surface text-[13px] truncate ${
-                            isSelected ? 'font-semibold' : 'font-medium'
-                          }`}
-                        >
-                          {cw.name}
+              {isSoundPulseHeadphones ? (
+                <>
+                  {/* Color Picker */}
+                  <div>
+                    <div className="flex items-center justify-between mb-space-xs">
+                      <span className="font-title-sm text-on-surface">
+                        Colorway:{' '}
+                        <span className="text-primary font-semibold" id="color-label">
+                          {selectedColor.name}
                         </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Model Edition Selector */}
-              <div>
-                <span className="font-title-sm text-on-surface block mb-space-xs">
-                  Model Configuration:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-xs">
-                  {modelEditions.map((edition) => {
-                    const isSelected = selectedEdition.id === edition.id;
-                    return (
-                      <label
-                        key={edition.id}
-                        className={`cursor-pointer p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-xs transition-all ${
-                          isSelected ? 'ring-2 ring-primary' : 'hover:bg-surface-container'
-                        }`}
-                      >
-                        <input
-                          type="radio"
-                          name="edition"
-                          checked={isSelected}
-                          onChange={() => setSelectedEdition(edition)}
-                          className="mt-1 accent-primary"
-                        />
-                        <div className="flex flex-col">
-                          <span className="font-title-sm text-on-surface text-[14px]">
-                            {edition.name}
-                          </span>
-                          <span className="font-body-sm text-outline text-[12px]">
-                            {edition.subtitle}
-                          </span>
-                          <span
-                            className={`font-price-card text-[15px] mt-1 tabular-nums ${
-                              isSelected ? 'text-primary font-bold' : 'text-on-surface'
+                      </span>
+                      <span className="font-label-sm text-outline uppercase tracking-wider">
+                        4 Available
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-xs" id="color-options">
+                      {colorways.map((cw) => {
+                        const isSelected = selectedColor.id === cw.id;
+                        return (
+                          <button
+                            key={cw.id}
+                            type="button"
+                            onClick={() => handleSelectColor(cw)}
+                            className={`p-2 rounded-lg bg-surface-container-low flex items-center gap-2 text-left shadow-sm transition-all cursor-pointer ${
+                              isSelected ? 'ring-2 ring-primary' : 'hover:bg-surface-container'
                             }`}
                           >
-                            {formatCurrency(edition.price)}
-                          </span>
-                        </div>
-                      </label>
-                    );
-                  })}
+                            <span className={`w-5 h-5 rounded-full ${cw.colorClass} shrink-0 shadow-inner border border-black/10`} />
+                            <span
+                              className={`font-body-sm text-on-surface text-[13px] truncate ${
+                                isSelected ? 'font-semibold' : 'font-medium'
+                              }`}
+                            >
+                              {cw.name}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Model Edition Selector */}
+                  <div>
+                    <span className="font-title-sm text-on-surface block mb-space-xs">
+                      Model Configuration:
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-xs">
+                      {modelEditions.map((edition) => {
+                        const isSelected = selectedEdition.id === edition.id;
+                        return (
+                          <label
+                            key={edition.id}
+                            className={`cursor-pointer p-space-sm rounded-lg bg-surface-container-low flex items-start gap-space-xs transition-all ${
+                              isSelected ? 'ring-2 ring-primary' : 'hover:bg-surface-container'
+                            }`}
+                          >
+                            <input
+                              type="radio"
+                              name="edition"
+                              checked={isSelected}
+                              onChange={() => setSelectedEdition(edition)}
+                              className="mt-1 accent-primary"
+                            />
+                            <div className="flex flex-col">
+                              <span className="font-title-sm text-on-surface text-[14px]">
+                                {edition.name}
+                              </span>
+                              <span className="font-body-sm text-outline text-[12px]">
+                                {edition.subtitle}
+                              </span>
+                              <span
+                                className={`font-price-card text-[15px] mt-1 tabular-nums ${
+                                  isSelected ? 'text-primary font-bold' : 'text-on-surface'
+                                }`}
+                              >
+                                {formatCurrency(edition.price)}
+                              </span>
+                            </div>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              ) : realVariants.length > 0 ? (
+                <div>
+                  <div className="flex items-center justify-between mb-space-xs">
+                    <span className="font-title-sm text-on-surface">
+                      Configuration / Variant:{' '}
+                      <span className="text-primary font-semibold">{selectedVariant}</span>
+                    </span>
+                    <span className="font-label-sm text-outline uppercase tracking-wider">
+                      {realVariants.length} Option{realVariants.length > 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-xs">
+                    {realVariants.map((v: any) => {
+                      const isSelected = selectedVariant === v.name;
+                      return (
+                        <button
+                          key={v.name}
+                          type="button"
+                          onClick={() => setSelectedVariant(v.name)}
+                          className={`cursor-pointer p-space-sm rounded-lg bg-surface-container-low flex flex-col text-left transition-all ${
+                            isSelected ? 'ring-2 ring-primary bg-primary/5' : 'hover:bg-surface-container'
+                          }`}
+                        >
+                          <span className="font-title-sm text-on-surface text-[14px] font-semibold">{v.name}</span>
+                          <span className="font-body-sm text-outline text-[12px]">{v.availableStock > 0 ? `${v.availableStock} in stock` : 'Available'}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-space-xs text-body-sm">
+                  <div className="bg-surface-container-low p-space-xs rounded-lg flex flex-col">
+                    <span className="text-outline text-[11px] uppercase font-semibold">Department</span>
+                    <span className="text-on-surface font-medium truncate">{categoryName}</span>
+                  </div>
+                  <div className="bg-surface-container-low p-space-xs rounded-lg flex flex-col">
+                    <span className="text-outline text-[11px] uppercase font-semibold">Brand Flagship</span>
+                    <span className="text-on-surface font-medium truncate">{storeName}</span>
+                  </div>
+                  <div className="bg-surface-container-low p-space-xs rounded-lg flex flex-col">
+                    <span className="text-outline text-[11px] uppercase font-semibold">Authenticity</span>
+                    <span className="text-emerald-700 font-semibold truncate flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">verified</span> 100% Genuine
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Inventory Status & Delivery Estimator */}
@@ -819,104 +956,106 @@ export const ProductDetailsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Frequently Bought Together Bundle Module */}
-        <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-xl">
-          <div className="flex items-center gap-space-xs mb-space-md">
-            <span className="material-symbols-outlined text-primary text-[24px]">dataset</span>
-            <h2 className="font-headline-sm text-on-surface font-['Space_Grotesk'] font-bold">
-              Frequently Bought Together
-            </h2>
-          </div>
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-space-lg">
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-space-md flex-1">
-              {/* Item 1: Primary Headphone */}
-              <div className="flex flex-col items-center text-center w-36">
-                <div className="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2 flex items-center justify-center">
-                  <img
-                    className="w-full h-full object-contain"
-                    alt="SoundPulse Studio Pro Headphones miniature icon"
-                    src={selectedColor.image}
-                  />
-                  <span className="absolute top-1 left-1 bg-primary text-on-primary text-[9px] font-bold px-1 rounded">
-                    THIS ITEM
+        {/* Frequently Bought Together Bundle Module (Rendered when viewing SoundPulse ecosystem products) */}
+        {isSoundPulseHeadphones && (
+          <div className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm mb-space-xl">
+            <div className="flex items-center gap-space-xs mb-space-md">
+              <span className="material-symbols-outlined text-primary text-[24px]">dataset</span>
+              <h2 className="font-headline-sm text-on-surface font-['Space_Grotesk'] font-bold">
+                Frequently Bought Together
+              </h2>
+            </div>
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-space-lg">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-space-md flex-1">
+                {/* Item 1: Primary Headphone */}
+                <div className="flex flex-col items-center text-center w-36">
+                  <div className="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2 flex items-center justify-center">
+                    <img
+                      className="w-full h-full object-contain"
+                      alt="SoundPulse Studio Pro Headphones miniature icon"
+                      src={selectedColor.image}
+                    />
+                    <span className="absolute top-1 left-1 bg-primary text-on-primary text-[9px] font-bold px-1 rounded">
+                      THIS ITEM
+                    </span>
+                  </div>
+                  <span className="font-title-sm text-on-surface text-[12px] line-clamp-2">
+                    SoundPulse Studio Pro
+                  </span>
+                  <span className="font-price-card text-[14px] text-primary tabular-nums">
+                    {formatCurrency(selectedEdition.price)}
                   </span>
                 </div>
-                <span className="font-title-sm text-on-surface text-[12px] line-clamp-2">
-                  SoundPulse Studio Pro
-                </span>
-                <span className="font-price-card text-[14px] text-primary tabular-nums">
-                  {formatCurrency(selectedEdition.price)}
-                </span>
-              </div>
 
-              <span className="material-symbols-outlined text-[24px] text-outline font-bold">
-                add
-              </span>
+                <span className="material-symbols-outlined text-[24px] text-outline font-bold">
+                  add
+                </span>
 
-              {/* Item 2: Hard Shell Travel Case */}
-              <div className="flex flex-col items-center text-center w-36">
-                <div className="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2 flex items-center justify-center">
-                  <img
-                    className="w-full h-full object-cover rounded"
-                    alt="Aegis Hard Travel Case"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuABoMePG7clcHXZVCWijwJwf3sVgD3Gy0owe9tJRRLaCiYI37Zi86ptnXuifOi6_2pdrSml-haXNQexAPPPVIovqaFlUmL0gwY6VPawCNtmUmtYm1BaWRirSyirM6YaSEooY-xonvSR9d4JBz1E7gjSagDdkFOOETpSzNNsvcULRgULr3LvLU3LDUFOCghHwS2v-ZTuFj1wUOFaxhRYH5LR9VEzuzIFxFtfFoQN0weOTCDfYsA1AG6QXg"
-                  />
+                {/* Item 2: Hard Shell Travel Case */}
+                <div className="flex flex-col items-center text-center w-36">
+                  <div className="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2 flex items-center justify-center">
+                    <img
+                      className="w-full h-full object-cover rounded"
+                      alt="Aegis Hard Travel Case"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuABoMePG7clcHXZVCWijwJwf3sVgD3Gy0owe9tJRRLaCiYI37Zi86ptnXuifOi6_2pdrSml-haXNQexAPPPVIovqaFlUmL0gwY6VPawCNtmUmtYm1BaWRirSyirM6YaSEooY-xonvSR9d4JBz1E7gjSagDdkFOOETpSzNNsvcULRgULr3LvLU3LDUFOCghHwS2v-ZTuFj1wUOFaxhRYH5LR9VEzuzIFxFtfFoQN0weOTCDfYsA1AG6QXg"
+                    />
+                  </div>
+                  <span className="font-title-sm text-on-surface text-[12px] line-clamp-2">
+                    Aegis Hard Travel Case
+                  </span>
+                  <span className="font-price-card text-[14px] text-on-surface tabular-nums">
+                    ₹999
+                  </span>
                 </div>
-                <span className="font-title-sm text-on-surface text-[12px] line-clamp-2">
-                  Aegis Hard Travel Case
-                </span>
-                <span className="font-price-card text-[14px] text-on-surface tabular-nums">
-                  ₹999
-                </span>
-              </div>
 
-              <span className="material-symbols-outlined text-[24px] text-outline font-bold">
-                add
-              </span>
+                <span className="material-symbols-outlined text-[24px] text-outline font-bold">
+                  add
+                </span>
 
-              {/* Item 3: Fast GaN Charger */}
-              <div className="flex flex-col items-center text-center w-36">
-                <div className="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2 flex items-center justify-center">
-                  <img
-                    className="w-full h-full object-cover rounded"
-                    alt="Volta 45W GaN Dual Charger"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBi9VnX6KOGVmPmUW5eenPj4JclS9lNE0gvazKlLapj5a9om3la3xUPX3V73NziobWEprga1IuJwOPyhoJ6RDSNJDpHHEv6SGBoLEwmGcaGSGhQBCvB_oGwQaC8gtAuTCmCj-V-JTpTA2JqvcW5AhU_qlov5KAogHdQry5IWWeWzc8M-UqqR2xxyjF-AjxsLcQFfhYYDqO5O4zWuGIJZIgeBcaRYTQBufpEr5VLUVxG5uQWdXt9WvJoA"
-                  />
+                {/* Item 3: Fast GaN Charger */}
+                <div className="flex flex-col items-center text-center w-36">
+                  <div className="w-24 h-24 rounded-lg bg-surface-container-low p-2 shadow-sm relative mb-2 flex items-center justify-center">
+                    <img
+                      className="w-full h-full object-cover rounded"
+                      alt="Volta 45W GaN Dual Charger"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBi9VnX6KOGVmPmUW5eenPj4JclS9lNE0gvazKlLapj5a9om3la3xUPX3V73NziobWEprga1IuJwOPyhoJ6RDSNJDpHHEv6SGBoLEwmGcaGSGhQBCvB_oGwQaC8gtAuTCmCj-V-JTpTA2JqvcW5AhU_qlov5KAogHdQry5IWWeWzc8M-UqqR2xxyjF-AjxsLcQFfhYYDqO5O4zWuGIJZIgeBcaRYTQBufpEr5VLUVxG5uQWdXt9WvJoA"
+                    />
+                  </div>
+                  <span className="font-title-sm text-on-surface text-[12px] line-clamp-2">
+                    Volta 45W GaN Dual Charger
+                  </span>
+                  <span className="font-price-card text-[14px] text-on-surface tabular-nums">
+                    ₹1,199
+                  </span>
                 </div>
-                <span className="font-title-sm text-on-surface text-[12px] line-clamp-2">
-                  Volta 45W GaN Dual Charger
-                </span>
-                <span className="font-price-card text-[14px] text-on-surface tabular-nums">
-                  ₹1,199
-                </span>
               </div>
-            </div>
 
-            {/* Bundle Pricing & Action */}
-            <div className="flex flex-col items-center lg:items-end text-center lg:text-right bg-surface-container-low p-space-md rounded-xl w-full lg:w-72 shrink-0">
-              <span className="font-body-sm text-outline">Bundle Price for all 3:</span>
-              <div className="flex items-baseline gap-2 mb-1">
-                <span className="font-price-hero text-[26px] text-on-surface tabular-nums">
-                  ₹16,499
+              {/* Bundle Pricing & Action */}
+              <div className="flex flex-col items-center lg:items-end text-center lg:text-right bg-surface-container-low p-space-md rounded-xl w-full lg:w-72 shrink-0">
+                <span className="font-body-sm text-outline">Bundle Price for all 3:</span>
+                <div className="flex items-baseline gap-2 mb-1">
+                  <span className="font-price-hero text-[26px] text-on-surface tabular-nums">
+                    ₹16,499
+                  </span>
+                  <span className="font-body-sm text-outline line-through tabular-nums">
+                    ₹17,197
+                  </span>
+                </div>
+                <span className="font-label-sm text-secondary font-semibold bg-secondary-fixed px-2 py-0.5 rounded-full mb-space-sm">
+                  Extra ₹698 Bundle Savings
                 </span>
-                <span className="font-body-sm text-outline line-through tabular-nums">
-                  ₹17,197
-                </span>
+                <button
+                  type="button"
+                  onClick={handleAddBundle}
+                  className="w-full bg-primary hover:bg-secondary active:scale-[0.985] text-on-primary font-title-sm py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+                  <span>{bundleBtnText}</span>
+                </button>
               </div>
-              <span className="font-label-sm text-secondary font-semibold bg-secondary-fixed px-2 py-0.5 rounded-full mb-space-sm">
-                Extra ₹698 Bundle Savings
-              </span>
-              <button
-                type="button"
-                onClick={handleAddBundle}
-                className="w-full bg-primary hover:bg-secondary active:scale-[0.985] text-on-primary font-title-sm py-2.5 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <span className="material-symbols-outlined text-[18px]">add_shopping_cart</span>
-                <span>{bundleBtnText}</span>
-              </button>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Comprehensive Tabbed Specifications Section */}
         <div className="bg-surface-container-lowest rounded-xl shadow-sm mb-space-xl overflow-hidden">
@@ -965,7 +1104,7 @@ export const ProductDetailsPage: React.FC = () => {
                 activeTab === 'reviews' ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
-              <span>Customer Reviews &amp; Ratings (4,829)</span>
+              <span>Customer Reviews &amp; Ratings ({isSoundPulseHeadphones ? '4,829' : (displayProduct.reviewCount ? displayProduct.reviewCount.toLocaleString() : '0')})</span>
               {activeTab === 'reviews' && (
                 <span className="tab-indicator absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full" />
               )}
@@ -977,7 +1116,7 @@ export const ProductDetailsPage: React.FC = () => {
                 activeTab === 'qa' ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface'
               }`}
             >
-              <span>Q&amp;A (840)</span>
+              <span>Q&amp;A ({isSoundPulseHeadphones ? '840' : '0'})</span>
               {activeTab === 'qa' && (
                 <span className="tab-indicator absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full" />
               )}
@@ -989,79 +1128,121 @@ export const ProductDetailsPage: React.FC = () => {
             {/* TAB 1: Overview & Features */}
             {activeTab === 'overview' && (
               <div className="tab-panel flex flex-col gap-space-lg">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg items-center">
-                  <div className="flex flex-col gap-space-sm">
-                    <span className="font-label-sm uppercase tracking-wider text-primary font-bold">
-                      Acoustic Architecture
-                    </span>
-                    <h3 className="font-headline-sm text-on-surface font-['Space_Grotesk'] font-bold">
-                      Precision Master Tuning with Custom 40mm Beryllium Drivers
-                    </h3>
-                    <p className="font-body-md text-on-surface-variant">
-                      Crafted for pristine transparency, the SoundPulse Studio Pro features ultra-stiff
-                      Beryllium-coated diaphragm drivers delivering zero harmonic distortion across
-                      frequencies from 10Hz to 40,000Hz. Experience punchy sub-bass, transparent mids,
-                      and airy highs engineered in partnership with top German audio engineers.
-                    </p>
-                    <div className="flex items-center gap-space-md mt-space-xs">
-                      <div className="flex flex-col">
-                        <span className="font-headline-sm text-primary font-bold">0.05%</span>
-                        <span className="font-body-sm text-outline">Total Harmonic Distortion</span>
+                {isSoundPulseHeadphones ? (
+                  <>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg items-center">
+                      <div className="flex flex-col gap-space-sm">
+                        <span className="font-label-sm uppercase tracking-wider text-primary font-bold">
+                          Acoustic Architecture
+                        </span>
+                        <h3 className="font-headline-sm text-on-surface font-['Space_Grotesk'] font-bold">
+                          Precision Master Tuning with Custom 40mm Beryllium Drivers
+                        </h3>
+                        <p className="font-body-md text-on-surface-variant">
+                          Crafted for pristine transparency, the SoundPulse Studio Pro features ultra-stiff
+                          Beryllium-coated diaphragm drivers delivering zero harmonic distortion across
+                          frequencies from 10Hz to 40,000Hz. Experience punchy sub-bass, transparent mids,
+                          and airy highs engineered in partnership with top German audio engineers.
+                        </p>
+                        <div className="flex items-center gap-space-md mt-space-xs">
+                          <div className="flex flex-col">
+                            <span className="font-headline-sm text-primary font-bold">0.05%</span>
+                            <span className="font-body-sm text-outline">Total Harmonic Distortion</span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="font-headline-sm text-primary font-bold">40kHz</span>
+                            <span className="font-body-sm text-outline">Hi-Res Certified Ceiling</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex flex-col">
-                        <span className="font-headline-sm text-primary font-bold">40kHz</span>
-                        <span className="font-body-sm text-outline">Hi-Res Certified Ceiling</span>
+                      <div className="rounded-xl overflow-hidden shadow-sm bg-surface-container-low h-64 md:h-72 flex items-center justify-center">
+                        <img
+                          className="w-full h-full object-cover"
+                          alt="Technical exploded diagram visualization of 40mm Beryllium headphone driver"
+                          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpn9W7cD6LdLmxoiFSeY-DlZ7_eDx8BRLnK1LtLYJE_SwLNEvPwwrOyt9r_-ytDtv4JzDVQIF4fxBDODcbUELkccnmaAkK001GWZtHZEJzhup9DFTR6QpZ0Hm9QI8Lw-gjLtOAsNSI_qh0IfLjICFc-fX1hTQZV7G13eix5zwqdU1_pPWMEPxXaVJ5jKn8yRGlnmu0w03TaDc-kFWAHE1hL9azO1RyhM7ZBuRRlCRfN0dyJAffd_kT1g"
+                        />
                       </div>
                     </div>
-                  </div>
-                  <div className="rounded-xl overflow-hidden shadow-sm bg-surface-container-low h-64 md:h-72 flex items-center justify-center">
-                    <img
-                      className="w-full h-full object-cover"
-                      alt="Technical exploded diagram visualization of 40mm Beryllium headphone driver"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpn9W7cD6LdLmxoiFSeY-DlZ7_eDx8BRLnK1LtLYJE_SwLNEvPwwrOyt9r_-ytDtv4JzDVQIF4fxBDODcbUELkccnmaAkK001GWZtHZEJzhup9DFTR6QpZ0Hm9QI8Lw-gjLtOAsNSI_qh0IfLjICFc-fX1hTQZV7G13eix5zwqdU1_pPWMEPxXaVJ5jKn8yRGlnmu0w03TaDc-kFWAHE1hL9azO1RyhM7ZBuRRlCRfN0dyJAffd_kT1g"
-                    />
-                  </div>
-                </div>
 
-                {/* Feature Grid 3 Bento */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-md">
-                  <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
-                    <span className="material-symbols-outlined text-primary text-[28px]">
-                      graphic_eq
-                    </span>
-                    <h4 className="font-title-sm text-on-surface font-semibold">
-                      Spatial Audio &amp; Head Tracking
-                    </h4>
-                    <p className="font-body-sm text-on-surface-variant">
-                      Dynamic gyroscope-powered orientation anchors instruments around you, providing a
-                      cinema-like soundfield for Dolby Atmos and lossless music.
-                    </p>
-                  </div>
-                  <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
-                    <span className="material-symbols-outlined text-primary text-[28px]">
-                      network_intelligence
-                    </span>
-                    <h4 className="font-title-sm text-on-surface font-semibold">
-                      Multipoint Connectivity
-                    </h4>
-                    <p className="font-body-sm text-on-surface-variant">
-                      Pair simultaneously with your MacBook and smartphone. Seamlessly answer incoming
-                      calls without manual bluetooth swapping.
-                    </p>
-                  </div>
-                  <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
-                    <span className="material-symbols-outlined text-primary text-[28px]">
-                      mic_double
-                    </span>
-                    <h4 className="font-title-sm text-on-surface font-semibold">
-                      AI Beamforming Clear Calls
-                    </h4>
-                    <p className="font-body-sm text-on-surface-variant">
-                      6 discrete MEMS microphones isolate your vocal cord frequency while canceling heavy
-                      cafe ambiance, wind noise, and traffic.
-                    </p>
-                  </div>
-                </div>
+                    {/* Feature Grid 3 Bento */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-md">
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <span className="material-symbols-outlined text-primary text-[28px]">
+                          graphic_eq
+                        </span>
+                        <h4 className="font-title-sm text-on-surface font-semibold">
+                          Spatial Audio &amp; Head Tracking
+                        </h4>
+                        <p className="font-body-sm text-on-surface-variant">
+                          Dynamic gyroscope-powered orientation anchors instruments around you, providing a
+                          cinema-like soundfield for Dolby Atmos and lossless music.
+                        </p>
+                      </div>
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <span className="material-symbols-outlined text-primary text-[28px]">
+                          network_intelligence
+                        </span>
+                        <h4 className="font-title-sm text-on-surface font-semibold">
+                          Multipoint Connectivity
+                        </h4>
+                        <p className="font-body-sm text-on-surface-variant">
+                          Pair simultaneously with your MacBook and smartphone. Seamlessly answer incoming
+                          calls without manual bluetooth swapping.
+                        </p>
+                      </div>
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <span className="material-symbols-outlined text-primary text-[28px]">
+                          mic_double
+                        </span>
+                        <h4 className="font-title-sm text-on-surface font-semibold">
+                          AI Beamforming Clear Calls
+                        </h4>
+                        <p className="font-body-sm text-on-surface-variant">
+                          6 discrete MEMS microphones isolate your vocal cord frequency while canceling heavy
+                          cafe ambiance, wind noise, and traffic.
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex flex-col gap-space-sm">
+                      <span className="font-label-sm uppercase tracking-wider text-primary font-bold">
+                        {categoryName} • Official Verified Flagship
+                      </span>
+                      <h3 className="font-headline-sm text-on-surface font-['Space_Grotesk'] font-bold">
+                        {displayProduct.name}
+                      </h3>
+                      <p className="font-body-md text-on-surface-variant leading-relaxed max-w-4xl">
+                        {displayProduct.description}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-space-md pt-space-sm">
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <span className="material-symbols-outlined text-primary text-[28px]">verified_user</span>
+                        <h4 className="font-title-sm text-on-surface font-semibold">Genuine Guarantee</h4>
+                        <p className="font-body-sm text-on-surface-variant">
+                          100% authentic product sourced directly from verified flagship partner {storeName}.
+                        </p>
+                      </div>
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <span className="material-symbols-outlined text-primary text-[28px]">local_shipping</span>
+                        <h4 className="font-title-sm text-on-surface font-semibold">FastX Prime Fulfillment</h4>
+                        <p className="font-body-sm text-on-surface-variant">
+                          Fast, reliable express shipping with end-to-end tracking and secure handling.
+                        </p>
+                      </div>
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <span className="material-symbols-outlined text-primary text-[28px]">published_with_changes</span>
+                        <h4 className="font-title-sm text-on-surface font-semibold">Hassle-Free Returns</h4>
+                        <p className="font-body-sm text-on-surface-variant">
+                          Protected by OMIZON buyer guarantee with doorstep pickup and instant refund.
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             )}
 
@@ -1072,12 +1253,12 @@ export const ProductDetailsPage: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-xs font-body-md">
                     {Object.entries(displayProduct.specs).map(([key, val]) => (
                       <div key={key} className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
-                        <span className="text-on-surface-variant">{key}</span>
-                        <span className="font-semibold text-on-surface">{val}</span>
+                        <span className="text-on-surface-variant font-medium">{key}</span>
+                        <span className="font-semibold text-on-surface text-right">{String(val)}</span>
                       </div>
                     ))}
                   </div>
-                ) : (
+                ) : isSoundPulseHeadphones ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-xs font-body-md">
                     <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
                       <span className="text-on-surface-variant">Driver Size &amp; Type</span>
@@ -1120,6 +1301,31 @@ export const ProductDetailsPage: React.FC = () => {
                       <span className="font-semibold text-on-surface">IPX4 Splashproof Rating</span>
                     </div>
                   </div>
+                ) : (
+                  <div className="flex flex-col gap-space-md">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-space-xl gap-y-space-xs font-body-md">
+                      <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                        <span className="text-on-surface-variant">Product Title</span>
+                        <span className="font-semibold text-on-surface text-right">{displayProduct.name}</span>
+                      </div>
+                      <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                        <span className="text-on-surface-variant">Category / Department</span>
+                        <span className="font-semibold text-on-surface text-right">{categoryName}</span>
+                      </div>
+                      <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                        <span className="text-on-surface-variant">Brand / Seller</span>
+                        <span className="font-semibold text-on-surface text-right">{storeName}</span>
+                      </div>
+                      <div className="flex justify-between py-3 bg-surface-container-low/50 px-3 rounded-lg mb-1">
+                        <span className="text-on-surface-variant">Stock Availability</span>
+                        <span className="font-semibold text-on-surface text-right">In Stock ({displayProduct.stock || 10} units)</span>
+                      </div>
+                    </div>
+                    <div className="p-space-md bg-surface-container-low/40 rounded-xl text-body-md text-on-surface-variant">
+                      <p className="font-semibold text-on-surface mb-1">Product Description</p>
+                      <p>{displayProduct.description || 'Verified OMIZON catalog item with standard warranty coverage.'}</p>
+                    </div>
+                  </div>
                 )}
               </div>
             )}
@@ -1127,264 +1333,321 @@ export const ProductDetailsPage: React.FC = () => {
             {/* TAB 3: What's in the Box */}
             {activeTab === 'box' && (
               <div className="tab-panel">
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-md">
-                  <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
-                    <span className="material-symbols-outlined text-[40px] text-primary mb-2">
-                      headphones
-                    </span>
-                    <span className="font-title-sm text-on-surface font-semibold">SoundPulse Studio Pro</span>
-                    <span className="font-body-sm text-outline">Main unit in Midnight Violet</span>
+                {isSoundPulseHeadphones ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-md">
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">
+                        headphones
+                      </span>
+                      <span className="font-title-sm text-on-surface font-semibold">SoundPulse Studio Pro</span>
+                      <span className="font-body-sm text-outline">Main unit in Midnight Violet</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">cases</span>
+                      <span className="font-title-sm text-on-surface font-semibold">Ballistic Nylon Case</span>
+                      <span className="font-body-sm text-outline">With internal cable organizer</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">cable</span>
+                      <span className="font-title-sm text-on-surface font-semibold">Braided Audio Cables</span>
+                      <span className="font-body-sm text-outline">3.5mm Aux + USB-C Quick Charge</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">flight</span>
+                      <span className="font-title-sm text-on-surface font-semibold">Airplane Adapter &amp; Manual</span>
+                      <span className="font-body-sm text-outline">2-Prong Flight Plug + Warranty</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
-                    <span className="material-symbols-outlined text-[40px] text-primary mb-2">cases</span>
-                    <span className="font-title-sm text-on-surface font-semibold">Ballistic Nylon Case</span>
-                    <span className="font-body-sm text-outline">With internal cable organizer</span>
+                ) : (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-space-md">
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">inventory_2</span>
+                      <span className="font-title-sm text-on-surface font-semibold">Primary Unit</span>
+                      <span className="font-body-sm text-outline">1x {displayProduct.name}</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">package_2</span>
+                      <span className="font-title-sm text-on-surface font-semibold">Original Packaging</span>
+                      <span className="font-body-sm text-outline">Factory-sealed protective retail box</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">description</span>
+                      <span className="font-title-sm text-on-surface font-semibold">User Manual</span>
+                      <span className="font-body-sm text-outline">Quick start guide &amp; warranty card</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
+                      <span className="material-symbols-outlined text-[40px] text-primary mb-2">verified</span>
+                      <span className="font-title-sm text-on-surface font-semibold">OMIZON Guarantee</span>
+                      <span className="font-body-sm text-outline">Certificate of authenticity</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
-                    <span className="material-symbols-outlined text-[40px] text-primary mb-2">cable</span>
-                    <span className="font-title-sm text-on-surface font-semibold">Braided Audio Cables</span>
-                    <span className="font-body-sm text-outline">3.5mm Aux + USB-C Quick Charge</span>
-                  </div>
-                  <div className="flex flex-col items-center text-center p-space-md bg-surface-container-low rounded-xl">
-                    <span className="material-symbols-outlined text-[40px] text-primary mb-2">flight</span>
-                    <span className="font-title-sm text-on-surface font-semibold">Airplane Adapter &amp; Manual</span>
-                    <span className="font-body-sm text-outline">2-Prong Flight Plug + Warranty</span>
-                  </div>
-                </div>
+                )}
               </div>
             )}
 
             {/* TAB 4: Customer Reviews & Ratings */}
             {activeTab === 'reviews' && (
               <div className="tab-panel">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
-                  {/* Review Summary Breakdown */}
-                  <div className="lg:col-span-4 flex flex-col gap-space-md">
-                    <div className="flex items-center gap-space-md">
-                      <div className="flex flex-col">
-                        <span className="font-display-hero text-on-surface leading-none font-bold">
-                          4.8
-                        </span>
-                        <div className="flex text-amber-500 my-1">
-                          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                            star
+                {isSoundPulseHeadphones ? (
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl">
+                    {/* Review Summary Breakdown */}
+                    <div className="lg:col-span-4 flex flex-col gap-space-md">
+                      <div className="flex items-center gap-space-md">
+                        <div className="flex flex-col">
+                          <span className="font-display-hero text-on-surface leading-none font-bold">
+                            4.8
                           </span>
-                          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                            star
-                          </span>
-                          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                            star
-                          </span>
-                          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                            star
-                          </span>
-                          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                            star_half
-                          </span>
+                          <div className="flex text-amber-500 my-1">
+                            <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                              star
+                            </span>
+                            <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                              star
+                            </span>
+                            <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                              star
+                            </span>
+                            <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                              star
+                            </span>
+                            <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                              star_half
+                            </span>
+                          </div>
+                          <span className="font-body-sm text-outline">4,829 Global Customer Ratings</span>
                         </div>
-                        <span className="font-body-sm text-outline">4,829 Global Customer Ratings</span>
+                      </div>
+
+                      {/* Bar distributions */}
+                      <div className="flex flex-col gap-2">
+                        {[
+                          { star: '5 Star', pct: '78%' },
+                          { star: '4 Star', pct: '15%' },
+                          { star: '3 Star', pct: '4%' },
+                          { star: '2 Star', pct: '2%' },
+                          { star: '1 Star', pct: '1%' },
+                        ].map((bar) => (
+                          <div key={bar.star} className="flex items-center gap-2 text-body-sm">
+                            <span className="w-12 text-on-surface font-medium">{bar.star}</span>
+                            <div className="flex-1 h-3 bg-surface-container-high rounded-full overflow-hidden">
+                              <div className="h-full bg-primary rounded-full" style={{ width: bar.pct }} />
+                            </div>
+                            <span className="w-10 text-right text-outline">{bar.pct}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Customer Photos Reel */}
+                      <div className="mt-space-sm">
+                        <span className="font-title-sm text-on-surface block mb-2 font-semibold">
+                          Customer Photos (342)
+                        </span>
+                        <div className="grid grid-cols-4 gap-2">
+                          <div className="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
+                            <img
+                              className="w-full h-full object-cover"
+                              alt="Customer unboxing photo"
+                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVlsUqJYoXAM7DDEHdlmV8GqFinfkdswXagBzFLPP2b4OsFsn1rtFDfMQEkzAkgBmr0cZzTqxzGkMHhV3iLVU_7762BmuKNCUIS0Gw1KgC2DEonEFq2hv7YrEcPAMwwNbaAJsUsiY-7NHEa3X9hJvdi9VrOCClU577_ZeTiNW5rkdWsx5zoZrfp60N0reobzL0V_rPYaX6FZACWfdhjNqIp9MLX0yYnmp_bVNu2Fg-0zgoQNLpJ0rdJg"
+                            />
+                          </div>
+                          <div className="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
+                            <img
+                              className="w-full h-full object-cover"
+                              alt="User desk setup with headphones"
+                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAva9_smw0Qrs_bSgmugXtIWoi8WMNM6E7-Jf-ldxrqIbJ1DyJU4eTeMHzg-noX96aQQhIavy9ukVMbqOfeKJN307ZoChQHluvz0tCdfD3Rtvm9iwsqfhMw1SA6kr8YKBqVQHqQiGiFkthYjh2V2zutgfsdy3aif97e6scsrHihiakth9mZ00T-fHVvy6sRmII3lxOP5JdWRpCNhYn35UbKf4N1d4ONTbrHW4D2pV1CrUJUcB1b2pEMag"
+                            />
+                          </div>
+                          <div className="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
+                            <img
+                              className="w-full h-full object-cover"
+                              alt="Studio headphones connected to laptop DAW"
+                              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo4NuMi1tfxKX0R625t9vs4Jj8_IlV57uu0BDcWUZA_-T5NiGaCVTNb6TionZLdcUuBj6cynxXjc6htPxaJxBpavG9KJgOpm5KVEfCi7vN14szHmcFhiuQv1lMFqM_h0KfVLjLRUZ2eoW5M1hOb7KBPtWTH08yqYhmo_GU06LH5ndauVDwGvjhyJjbQ8hWVBJPAE9MAHWvt9vO1oKF6P5_LIXz6B9uOjwe5u1lvtDTAF9GGVL0d0OFjQ"
+                            />
+                          </div>
+                          <div className="aspect-square rounded-lg bg-surface-container-high flex items-center justify-center font-label-md text-primary font-bold cursor-pointer hover:bg-surface-container-highest">
+                            +339
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Bar distributions */}
-                    <div className="flex flex-col gap-2">
-                      {[
-                        { star: '5 Star', pct: '78%' },
-                        { star: '4 Star', pct: '15%' },
-                        { star: '3 Star', pct: '4%' },
-                        { star: '2 Star', pct: '2%' },
-                        { star: '1 Star', pct: '1%' },
-                      ].map((bar) => (
-                        <div key={bar.star} className="flex items-center gap-2 text-body-sm">
-                          <span className="w-12 text-on-surface font-medium">{bar.star}</span>
-                          <div className="flex-1 h-3 bg-surface-container-high rounded-full overflow-hidden">
-                            <div className="h-full bg-primary rounded-full" style={{ width: bar.pct }} />
+                    {/* Verified Reviews List */}
+                    <div className="lg:col-span-8 flex flex-col gap-space-md">
+                      {/* Review Item 1 */}
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-sm">
+                              AK
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-title-sm text-on-surface font-semibold">Arun K.</span>
+                              <span className="font-body-sm text-emerald-700 flex items-center gap-1 text-[11px]">
+                                <span className="material-symbols-outlined text-[14px]">check_circle</span>{' '}
+                                Verified Buyer • Mumbai
+                              </span>
+                            </div>
                           </div>
-                          <span className="w-10 text-right text-outline">{bar.pct}</span>
+                          <span className="font-body-sm text-outline text-[12px]">2 days ago</span>
                         </div>
-                      ))}
-                    </div>
+                        <div className="flex items-center gap-1 text-amber-500">
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="font-title-sm text-on-surface text-[14px] ml-1 font-bold">
+                            ANC punches way above its price point
+                          </span>
+                        </div>
+                        <p className="font-body-md text-on-surface-variant">
+                          I commute daily on Mumbai local trains. The 45dB active noise canceling completely
+                          eliminates the heavy railway engine roar. The memory foam is extremely breathable,
+                          zero ear-fatigue after a full 4-hour editing session.
+                        </p>
+                        <div className="flex items-center gap-4 text-outline font-body-sm text-[12px] pt-1">
+                          <span>Color: Midnight Violet</span>
+                          <span>•</span>
+                          <span>142 people found this helpful</span>
+                        </div>
+                      </div>
 
-                    {/* Customer Photos Reel */}
-                    <div className="mt-space-sm">
-                      <span className="font-title-sm text-on-surface block mb-2 font-semibold">
-                        Customer Photos (342)
+                      {/* Review Item 2 */}
+                      <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-sm">
+                              RM
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="font-title-sm text-on-surface font-semibold">Rhea Menon</span>
+                              <span className="font-body-sm text-emerald-700 flex items-center gap-1 text-[11px]">
+                                <span className="material-symbols-outlined text-[14px]">check_circle</span>{' '}
+                                Verified Buyer • Bengaluru
+                              </span>
+                            </div>
+                          </div>
+                          <span className="font-body-sm text-outline text-[12px]">1 week ago</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-amber-500">
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                            star
+                          </span>
+                          <span className="font-title-sm text-on-surface text-[14px] ml-1 font-bold">
+                            Sublime instrument separation
+                          </span>
+                        </div>
+                        <p className="font-body-md text-on-surface-variant">
+                          Listening to lossless jazz with LDAC codec enabled via Android gave me
+                          goosebumps. The Midnight Violet tone has a very subtle anodized sheen that looks
+                          ultra-luxury in person. Battery hasn't dropped past 50% after a week.
+                        </p>
+                        <div className="flex items-center gap-4 text-outline font-body-sm text-[12px] pt-1">
+                          <span>Color: Midnight Violet</span>
+                          <span>•</span>
+                          <span>89 people found this helpful</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-12 px-space-md bg-surface-container-low/50 rounded-xl">
+                    <div className="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
+                      <span className="material-symbols-outlined text-[32px]">rate_review</span>
+                    </div>
+                    <h4 className="font-title-lg font-bold text-on-surface mb-1">No Customer Reviews Yet</h4>
+                    <p className="font-body-md text-on-surface-variant max-w-md mb-4">
+                      Be the first customer to share your thoughts and review the {displayProduct.name}.
+                    </p>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-high rounded-full text-label-md font-semibold text-on-surface">
+                      <span className="material-symbols-outlined text-amber-500 text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                        star
                       </span>
-                      <div className="grid grid-cols-4 gap-2">
-                        <div className="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
-                          <img
-                            className="w-full h-full object-cover"
-                            alt="Customer unboxing photo"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVlsUqJYoXAM7DDEHdlmV8GqFinfkdswXagBzFLPP2b4OsFsn1rtFDfMQEkzAkgBmr0cZzTqxzGkMHhV3iLVU_7762BmuKNCUIS0Gw1KgC2DEonEFq2hv7YrEcPAMwwNbaAJsUsiY-7NHEa3X9hJvdi9VrOCClU577_ZeTiNW5rkdWsx5zoZrfp60N0reobzL0V_rPYaX6FZACWfdhjNqIp9MLX0yYnmp_bVNu2Fg-0zgoQNLpJ0rdJg"
-                          />
-                        </div>
-                        <div className="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
-                          <img
-                            className="w-full h-full object-cover"
-                            alt="User desk setup with headphones"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAva9_smw0Qrs_bSgmugXtIWoi8WMNM6E7-Jf-ldxrqIbJ1DyJU4eTeMHzg-noX96aQQhIavy9ukVMbqOfeKJN307ZoChQHluvz0tCdfD3Rtvm9iwsqfhMw1SA6kr8YKBqVQHqQiGiFkthYjh2V2zutgfsdy3aif97e6scsrHihiakth9mZ00T-fHVvy6sRmII3lxOP5JdWRpCNhYn35UbKf4N1d4ONTbrHW4D2pV1CrUJUcB1b2pEMag"
-                          />
-                        </div>
-                        <div className="aspect-square rounded-lg bg-surface-container-low overflow-hidden">
-                          <img
-                            className="w-full h-full object-cover"
-                            alt="Studio headphones connected to laptop DAW"
-                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo4NuMi1tfxKX0R625t9vs4Jj8_IlV57uu0BDcWUZA_-T5NiGaCVTNb6TionZLdcUuBj6cynxXjc6htPxaJxBpavG9KJgOpm5KVEfCi7vN14szHmcFhiuQv1lMFqM_h0KfVLjLRUZ2eoW5M1hOb7KBPtWTH08yqYhmo_GU06LH5ndauVDwGvjhyJjbQ8hWVBJPAE9MAHWvt9vO1oKF6P5_LIXz6B9uOjwe5u1lvtDTAF9GGVL0d0OFjQ"
-                          />
-                        </div>
-                        <div className="aspect-square rounded-lg bg-surface-container-high flex items-center justify-center font-label-md text-primary font-bold cursor-pointer hover:bg-surface-container-highest">
-                          +339
-                        </div>
-                      </div>
+                      <span>Catalog Score: {displayProduct.rating ? Number(displayProduct.rating).toFixed(1) : '4.8'} / 5.0</span>
                     </div>
                   </div>
-
-                  {/* Verified Reviews List */}
-                  <div className="lg:col-span-8 flex flex-col gap-space-md">
-                    {/* Review Item 1 */}
-                    <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center font-bold text-sm">
-                            AK
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="font-title-sm text-on-surface font-semibold">Arun K.</span>
-                            <span className="font-body-sm text-emerald-700 flex items-center gap-1 text-[11px]">
-                              <span className="material-symbols-outlined text-[14px]">check_circle</span>{' '}
-                              Verified Buyer • Mumbai
-                            </span>
-                          </div>
-                        </div>
-                        <span className="font-body-sm text-outline text-[12px]">2 days ago</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-amber-500">
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="font-title-sm text-on-surface text-[14px] ml-1 font-bold">
-                          ANC punches way above its price point
-                        </span>
-                      </div>
-                      <p className="font-body-md text-on-surface-variant">
-                        I commute daily on Mumbai local trains. The 45dB active noise canceling completely
-                        eliminates the heavy railway engine roar. The memory foam is extremely breathable,
-                        zero ear-fatigue after a full 4-hour editing session.
-                      </p>
-                      <div className="flex items-center gap-4 text-outline font-body-sm text-[12px] pt-1">
-                        <span>Color: Midnight Violet</span>
-                        <span>•</span>
-                        <span>142 people found this helpful</span>
-                      </div>
-                    </div>
-
-                    {/* Review Item 2 */}
-                    <div className="bg-surface-container-low p-space-md rounded-xl flex flex-col gap-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-bold text-sm">
-                            RM
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="font-title-sm text-on-surface font-semibold">Rhea Menon</span>
-                            <span className="font-body-sm text-emerald-700 flex items-center gap-1 text-[11px]">
-                              <span className="material-symbols-outlined text-[14px]">check_circle</span>{' '}
-                              Verified Buyer • Bengaluru
-                            </span>
-                          </div>
-                        </div>
-                        <span className="font-body-sm text-outline text-[12px]">1 week ago</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-amber-500">
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                          star
-                        </span>
-                        <span className="font-title-sm text-on-surface text-[14px] ml-1 font-bold">
-                          Sublime instrument separation
-                        </span>
-                      </div>
-                      <p className="font-body-md text-on-surface-variant">
-                        Listening to lossless jazz with LDAC codec enabled via Android gave me
-                        goosebumps. The Midnight Violet tone has a very subtle anodized sheen that looks
-                        ultra-luxury in person. Battery hasn't dropped past 50% after a week.
-                      </p>
-                      <div className="flex items-center gap-4 text-outline font-body-sm text-[12px] pt-1">
-                        <span>Color: Midnight Violet</span>
-                        <span>•</span>
-                        <span>89 people found this helpful</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
             )}
 
             {/* TAB 5: Q&A */}
             {activeTab === 'qa' && (
               <div className="tab-panel flex flex-col gap-space-md">
-                <div className="bg-surface-container-low p-space-sm rounded-lg flex items-center gap-space-xs">
-                  <span className="material-symbols-outlined text-outline text-[20px]">search</span>
-                  <input
-                    className="bg-transparent border-0 outline-none font-body-md text-on-surface placeholder:text-outline w-full"
-                    placeholder="Have a question? Search answers, specs, topics..."
-                    type="text"
-                  />
-                </div>
-                <div className="flex flex-col gap-space-md">
-                  <div className="flex flex-col gap-1">
-                    <span className="font-title-sm text-on-surface flex items-start gap-2">
-                      <span className="font-bold text-primary">Q:</span> Does it support simultaneous
-                      connection to both an iPhone and a Windows PC?
-                    </span>
-                    <p className="font-body-md text-on-surface-variant pl-6">
-                      <strong className="text-on-surface">A:</strong> Yes! The SoundPulse Studio Pro
-                      supports Bluetooth 5.3 Multipoint. It can remain paired with two devices at the
-                      same time and intelligently pauses audio on your laptop when a call comes in on
-                      your smartphone.
-                      <span className="block text-body-sm text-outline mt-1">
-                        — SoundPulse Official Seller, 3 weeks ago
-                      </span>
+                {isSoundPulseHeadphones ? (
+                  <>
+                    <div className="bg-surface-container-low p-space-sm rounded-lg flex items-center gap-space-xs">
+                      <span className="material-symbols-outlined text-outline text-[20px]">search</span>
+                      <input
+                        className="bg-transparent border-0 outline-none font-body-md text-on-surface placeholder:text-outline w-full"
+                        placeholder="Have a question? Search answers, specs, topics..."
+                        type="text"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-space-md">
+                      <div className="flex flex-col gap-1">
+                        <span className="font-title-sm text-on-surface flex items-start gap-2">
+                          <span className="font-bold text-primary">Q:</span> Does it support simultaneous
+                          connection to both an iPhone and a Windows PC?
+                        </span>
+                        <p className="font-body-md text-on-surface-variant pl-6">
+                          <strong className="text-on-surface">A:</strong> Yes! The SoundPulse Studio Pro
+                          supports Bluetooth 5.3 Multipoint. It can remain paired with two devices at the
+                          same time and intelligently pauses audio on your laptop when a call comes in on
+                          your smartphone.
+                          <span className="block text-body-sm text-outline mt-1">
+                            — SoundPulse Official Seller, 3 weeks ago
+                          </span>
+                        </p>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="font-title-sm text-on-surface flex items-start gap-2">
+                          <span className="font-bold text-primary">Q:</span> Can I use active noise
+                          cancellation while using the 3.5mm wired audio cable?
+                        </span>
+                        <p className="font-body-md text-on-surface-variant pl-6">
+                          <strong className="text-on-surface">A:</strong> Yes, as long as the internal
+                          battery has power, you can toggle ANC and Spatial Audio on even in wired AUX mode
+                          for latency-free gaming and monitoring.
+                          <span className="block text-body-sm text-outline mt-1">
+                            — Verified Buyer Support, 1 month ago
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="flex flex-col items-center justify-center text-center py-12 px-space-md bg-surface-container-low/50 rounded-xl">
+                    <div className="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
+                      <span className="material-symbols-outlined text-[32px]">help_outline</span>
+                    </div>
+                    <h4 className="font-title-lg font-bold text-on-surface mb-1">Have a question about this product?</h4>
+                    <p className="font-body-md text-on-surface-variant max-w-md mb-4">
+                      No questions have been asked yet for {displayProduct.name}. Verified sellers and customer support will respond here.
                     </p>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <span className="font-title-sm text-on-surface flex items-start gap-2">
-                      <span className="font-bold text-primary">Q:</span> Can I use active noise
-                      cancellation while using the 3.5mm wired audio cable?
-                    </span>
-                    <p className="font-body-md text-on-surface-variant pl-6">
-                      <strong className="text-on-surface">A:</strong> Yes, as long as the internal
-                      battery has power, you can toggle ANC and Spatial Audio on even in wired AUX mode
-                      for latency-free gaming and monitoring.
-                      <span className="block text-body-sm text-outline mt-1">
-                        — Verified Buyer Support, 1 month ago
-                      </span>
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
             )}
           </div>

@@ -125,6 +125,218 @@ describe('Phase 1 - Product Catalog & Seeder Unit Tests', () => {
         }
     });
 
+    test('getProducts filters by multi-category query and maps slugs to ObjectIds', async () => {
+        const originalFind = Product.find;
+        const originalCount = Product.countDocuments;
+        const originalCategoryFind = Category.find;
+
+        let capturedFilter = null;
+        const mockCat1 = new mongoose.Types.ObjectId();
+        const mockCat2 = new mongoose.Types.ObjectId();
+
+        Category.find = () => ({
+            select: async () => [{ _id: mockCat1 }, { _id: mockCat2 }]
+        });
+
+        Product.find = (filter) => {
+            capturedFilter = filter;
+            const queryObj = {
+                populate: () => queryObj,
+                sort: () => queryObj,
+                skip: () => queryObj,
+                limit: () => queryObj,
+                lean: async () => []
+            };
+            return queryObj;
+        };
+        Product.countDocuments = async () => 0;
+
+        try {
+            const req = { query: { category: 'electronics,home-living' } };
+            const res = createMockRes();
+
+            await getProducts(req, res);
+
+            assert.equal(res.statusCode, 200);
+            assert.ok(capturedFilter.category, 'Must set category filter');
+            assert.ok(capturedFilter.category.$in, 'Must use $in for multiple categories');
+            assert.equal(capturedFilter.category.$in.length, 2);
+        } finally {
+            Product.find = originalFind;
+            Product.countDocuments = originalCount;
+            Category.find = originalCategoryFind;
+        }
+    });
+
+    test('getProducts filters by multi-brand query matching brand and brandTag', async () => {
+        const originalFind = Product.find;
+        const originalCount = Product.countDocuments;
+
+        let capturedFilter = null;
+
+        Product.find = (filter) => {
+            capturedFilter = filter;
+            const queryObj = {
+                populate: () => queryObj,
+                sort: () => queryObj,
+                skip: () => queryObj,
+                limit: () => queryObj,
+                lean: async () => []
+            };
+            return queryObj;
+        };
+        Product.countDocuments = async () => 0;
+
+        try {
+            const req = { query: { brand: 'Apex Tech,SoundPulse' } };
+            const res = createMockRes();
+
+            await getProducts(req, res);
+
+            assert.equal(res.statusCode, 200);
+            assert.ok(capturedFilter.$or, 'Must contain $or for brand filtering');
+            assert.equal(capturedFilter.$or.length, 2);
+            assert.ok(capturedFilter.$or[0].brand);
+            assert.ok(capturedFilter.$or[1].brandTag);
+        } finally {
+            Product.find = originalFind;
+            Product.countDocuments = originalCount;
+        }
+    });
+
+    test('getProducts validates minRating and applies rating $gte filter', async () => {
+        const originalFind = Product.find;
+        const originalCount = Product.countDocuments;
+
+        let capturedFilter = null;
+
+        Product.find = (filter) => {
+            capturedFilter = filter;
+            const queryObj = {
+                populate: () => queryObj,
+                sort: () => queryObj,
+                skip: () => queryObj,
+                limit: () => queryObj,
+                lean: async () => []
+            };
+            return queryObj;
+        };
+        Product.countDocuments = async () => 0;
+
+        try {
+            // Valid rating
+            const reqValid = { query: { minRating: '4.5' } };
+            const resValid = createMockRes();
+            await getProducts(reqValid, resValid);
+            assert.equal(resValid.statusCode, 200);
+            assert.equal(capturedFilter.rating.$gte, 4.5);
+
+            // Invalid rating > 5
+            const reqHigh = { query: { minRating: '5.5' } };
+            const resHigh = createMockRes();
+            await getProducts(reqHigh, resHigh);
+            assert.equal(resHigh.statusCode, 400);
+            assert.match(resHigh.body.message, /between 0 and 5/i);
+
+            // Invalid rating < 0
+            const reqLow = { query: { minRating: '-1' } };
+            const resLow = createMockRes();
+            await getProducts(reqLow, resLow);
+            assert.equal(resLow.statusCode, 400);
+            assert.match(resLow.body.message, /between 0 and 5/i);
+        } finally {
+            Product.find = originalFind;
+            Product.countDocuments = originalCount;
+        }
+    });
+
+    test('getProducts validates minDiscount and applies $expr percentage filter', async () => {
+        const originalFind = Product.find;
+        const originalCount = Product.countDocuments;
+
+        let capturedFilter = null;
+
+        Product.find = (filter) => {
+            capturedFilter = filter;
+            const queryObj = {
+                populate: () => queryObj,
+                sort: () => queryObj,
+                skip: () => queryObj,
+                limit: () => queryObj,
+                lean: async () => []
+            };
+            return queryObj;
+        };
+        Product.countDocuments = async () => 0;
+
+        try {
+            // Valid discount
+            const reqValid = { query: { minDiscount: '25' } };
+            const resValid = createMockRes();
+            await getProducts(reqValid, resValid);
+            assert.equal(resValid.statusCode, 200);
+            assert.ok(capturedFilter.$expr, 'Must use $expr for calculated discount');
+
+            // Invalid discount > 100
+            const reqHigh = { query: { minDiscount: '105' } };
+            const resHigh = createMockRes();
+            await getProducts(reqHigh, resHigh);
+            assert.equal(resHigh.statusCode, 400);
+            assert.match(resHigh.body.message, /between 0 and 100/i);
+
+            // Invalid discount < 0
+            const reqLow = { query: { minDiscount: '-5' } };
+            const resLow = createMockRes();
+            await getProducts(reqLow, resLow);
+            assert.equal(resLow.statusCode, 400);
+            assert.match(resLow.body.message, /between 0 and 100/i);
+        } finally {
+            Product.find = originalFind;
+            Product.countDocuments = originalCount;
+        }
+    });
+
+    test('getProducts filters by fastPrime, twoDayDelivery, and codEligible delivery flags', async () => {
+        const originalFind = Product.find;
+        const originalCount = Product.countDocuments;
+
+        let capturedFilter = null;
+
+        Product.find = (filter) => {
+            capturedFilter = filter;
+            const queryObj = {
+                populate: () => queryObj,
+                sort: () => queryObj,
+                skip: () => queryObj,
+                limit: () => queryObj,
+                lean: async () => []
+            };
+            return queryObj;
+        };
+        Product.countDocuments = async () => 0;
+
+        try {
+            const req = {
+                query: {
+                    fastPrime: 'true',
+                    twoDayDelivery: 'true',
+                    codEligible: 'true'
+                }
+            };
+            const res = createMockRes();
+
+            await getProducts(req, res);
+
+            assert.equal(res.statusCode, 200);
+            assert.equal(capturedFilter.fastPrime, true);
+            assert.equal(capturedFilter.twoDayDelivery, true);
+            assert.equal(capturedFilter.codEligible, true);
+        } finally {
+            Product.find = originalFind;
+            Product.countDocuments = originalCount;
+        }
+    });
+
     test('seedDatabase is idempotent: running twice yields identical document counts', async () => {
         const originalUserFindById = User.findById;
         const originalUserCreate = User.create;

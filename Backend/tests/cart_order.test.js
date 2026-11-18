@@ -15,6 +15,7 @@ const {
     cancelOrder,
     updateOrderStatus
 } = require('../src/controllers/order.controller');
+const { createPayment } = require('../src/controllers/payment.controller');
 
 describe('Phase 3 - Cart, Orders, and Checkout Concurrency Unit Tests', () => {
     function createMockRes() {
@@ -38,18 +39,26 @@ describe('Phase 3 - Cart, Orders, and Checkout Concurrency Unit Tests', () => {
     const originalOrderCreate = Order.create;
     const originalOrderFindById = Order.findById;
     const originalOrderFind = Order.find;
+    const originalOrderFindOne = Order.findOne;
     const originalOrderCountDocuments = Order.countDocuments;
     const originalInventoryFindOneAndUpdate = Inventory.findOneAndUpdate;
     const originalReservationCreate = Reservation.create;
     const originalReservationFind = Reservation.find;
+    const originalMongooseStartSession = mongoose.startSession;
+
+    mongoose.startSession = async () => {
+        throw new Error('Transactions disabled in unit tests');
+    };
 
     after(() => {
+        mongoose.startSession = originalMongooseStartSession;
         Cart.findOne = originalCartFindOne;
         Cart.findByIdAndUpdate = originalCartFindByIdAndUpdate;
         Product.findById = originalProductFindById;
         Order.create = originalOrderCreate;
         Order.findById = originalOrderFindById;
         Order.find = originalOrderFind;
+        Order.findOne = originalOrderFindOne;
         Order.countDocuments = originalOrderCountDocuments;
         Inventory.findOneAndUpdate = originalInventoryFindOneAndUpdate;
         Reservation.create = originalReservationCreate;
@@ -216,5 +225,120 @@ describe('Phase 3 - Cart, Orders, and Checkout Concurrency Unit Tests', () => {
 
         assert.equal(res.statusCode, 403);
         assert.equal(res.body.message, 'Forbidden');
+    });
+
+    test('createOrder accepts valid paymentMethod and persists it in uppercase', async () => {
+        const buyerId = new mongoose.Types.ObjectId().toString();
+        const prodId = new mongoose.Types.ObjectId().toString();
+
+        Cart.findOne = () => ({
+            session() { return this; },
+            populate: async () => ({
+                _id: 'cart_pm',
+                user: buyerId,
+                items: [
+                    {
+                        product: { _id: prodId },
+                        variant: 'default',
+                        quantity: 1,
+                        price: 500
+                    }
+                ]
+            })
+        });
+
+        Product.findById = () => ({
+            session() { return this; },
+            then(resolve) {
+                resolve({
+                    _id: prodId,
+                    name: 'PM Test Product',
+                    price: 500,
+                    status: 'active'
+                });
+            }
+        });
+
+        let savedOrderDoc = null;
+        Order.create = async (doc) => {
+            savedOrderDoc = Array.isArray(doc) ? doc[0] : doc;
+            return [{ _id: 'order_pm_123', ...savedOrderDoc }];
+        };
+
+        Inventory.findOneAndUpdate = async () => ({ _id: 'inv_pm' });
+        Reservation.create = async (docs) => docs;
+        Cart.findByIdAndUpdate = async () => ({ _id: 'cart_pm', items: [] });
+
+        for (const method of ['upi', 'CARD', 'netbanking', 'emi', 'COD']) {
+            const req = {
+                user: { id: buyerId, role: 'buyer' },
+                body: {
+                    shippingAddress: {
+                        fullName: 'Bob Smith',
+                        phone: '9876543210',
+                        addressLine: '456 Market St',
+                        city: 'Mumbai',
+                        state: 'MH',
+                        postalCode: '400001',
+                        country: 'India'
+                    },
+                    paymentMethod: method
+                }
+            };
+            const res = createMockRes();
+
+            await createOrder(req, res);
+
+            assert.equal(res.statusCode, 201);
+            assert.equal(savedOrderDoc.paymentMethod, method.toUpperCase());
+        }
+    });
+
+    test('createOrder rejects invalid paymentMethod with HTTP 400', async () => {
+        const req = {
+            user: { id: 'buyer_pm_fail', role: 'buyer' },
+            body: {
+                shippingAddress: {
+                    fullName: 'Bob Smith',
+                    phone: '9876543210',
+                    addressLine: '456 Market St',
+                    city: 'Mumbai',
+                    state: 'MH',
+                    postalCode: '400001',
+                    country: 'India'
+                },
+                paymentMethod: 'BITCOIN'
+            }
+        };
+        const res = createMockRes();
+
+        await createOrder(req, res);
+
+        assert.equal(res.statusCode, 400);
+        assert.match(res.body.message, /Invalid payment method/i);
+    });
+
+    test('createPayment rejects Cash on Delivery (COD) order with HTTP 400', async () => {
+        const orderId = new mongoose.Types.ObjectId().toString();
+        const buyerId = new mongoose.Types.ObjectId().toString();
+
+        Order.findOne = async () => ({
+            _id: orderId,
+            user: buyerId,
+            paymentStatus: 'pending',
+            paymentMethod: 'COD',
+            totalAmount: 1499
+        });
+
+        const req = {
+            user: { id: buyerId, role: 'buyer' },
+            params: { orderId }
+        };
+        const res = createMockRes();
+
+        await createPayment(req, res);
+
+        assert.equal(res.statusCode, 400);
+        assert.match(res.body.message, /Cash on Delivery \(COD\)/i);
     });
 });
