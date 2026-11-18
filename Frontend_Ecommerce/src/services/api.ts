@@ -14,7 +14,7 @@ import {
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api';
 
 interface RequestOptions extends RequestInit {
-  params?: Record<string, string | number | boolean | undefined>;
+  params?: Record<string, string | number | boolean | string[] | undefined>;
 }
 
 class ApiError extends Error {
@@ -38,7 +38,11 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
     const searchParams = new URLSearchParams();
     Object.entries(params).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== '') {
-        searchParams.append(key, String(value));
+        if (Array.isArray(value)) {
+          searchParams.append(key, value.join(','));
+        } else {
+          searchParams.append(key, String(value));
+        }
       }
     });
     const queryString = searchParams.toString();
@@ -121,13 +125,19 @@ export const api = {
     list: (params?: {
       page?: number;
       limit?: number;
-      category?: string;
+      category?: string | string[];
+      brand?: string | string[];
       minprice?: number;
       maxprice?: number;
+      minRating?: number;
+      minDiscount?: number;
       sort?: string;
       search?: string;
       featured?: boolean;
       inStock?: boolean;
+      fastPrime?: boolean;
+      twoDayDelivery?: boolean;
+      codEligible?: boolean;
     }) =>
       request<ProductListResponse>('/products', {
         method: 'GET',
@@ -220,6 +230,26 @@ export const api = {
         method: 'POST',
         body: JSON.stringify({ shippingAddress, paymentMethod }),
       }),
+    createGuest: (body: {
+      shippingAddress: ShippingAddress;
+      items: Array<{ product: string; quantity: number; variant?: string }>;
+      paymentMethod?: string;
+    }) =>
+      request<{ message: string; order: Order; guestAccessToken: string }>('/order/guest', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    getGuestById: (id: string, guestToken: string) =>
+      request<{ message: string; order: Order }>(`/order/guest/${id}`, {
+        method: 'GET',
+        headers: { 'x-guest-token': guestToken },
+      }),
+    cancelGuest: (id: string, guestToken: string, reason?: string) =>
+      request<{ message: string; order: Order }>(`/order/guest/${id}/cancel`, {
+        method: 'PATCH',
+        headers: { 'x-guest-token': guestToken },
+        body: JSON.stringify({ reason }),
+      }),
     list: (params?: { page?: number; limit?: number; all?: boolean; status?: string; search?: string; scope?: string }) =>
       request<OrderListResponse>('/order', {
         method: 'GET',
@@ -274,6 +304,16 @@ export const api = {
         keyId: string;
       }>(`/payments/${orderId}`, {
         method: 'POST',
+      }),
+    createGuestAttempt: (orderId: string, guestToken: string) =>
+      request<{
+        message: string;
+        payment: any;
+        razorpayOrderId: string;
+        keyId: string;
+      }>(`/payments/guest/${orderId}`, {
+        method: 'POST',
+        headers: { 'x-guest-token': guestToken },
       }),
     getReconciliation: () =>
       request<{ message: string; issues: PaymentIssue[] }>('/payments/reconciliation', {

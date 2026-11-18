@@ -6,6 +6,7 @@ const authorize = require('../middlewares/authorize.middleware');
 
 const {
     createPayment,
+    createGuestPayment,
     handleWebhook,
     listPaymentIssues,
     resolvePaymentIssue
@@ -27,6 +28,7 @@ router.patch(
 );
 
 router.post('/webhook', handleWebhook);
+router.post('/guest/:orderId', createGuestPayment);
 router.post('/:orderId', authMiddleware, authorize('buyer'), createPayment);
 
 module.exports = router;

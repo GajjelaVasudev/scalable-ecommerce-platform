@@ -126,63 +126,24 @@ export const ShopAllPage: React.FC = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const categoryParam = selectedCategories.length === 1 ? selectedCategories[0] : undefined;
       const res = await api.products.list({
         page: currentPage,
         limit: productsPerPage,
-        category: categoryParam,
+        category: selectedCategories.length > 0 ? selectedCategories.join(',') : undefined,
+        brand: selectedBrands.length > 0 ? selectedBrands.join(',') : undefined,
+        minRating: selectedRating > 0 ? selectedRating : undefined,
+        minDiscount: selectedDiscounts.length > 0 ? Math.min(...selectedDiscounts) : undefined,
         minprice: appliedMinPrice > 0 ? appliedMinPrice : undefined,
         maxprice: appliedMaxPrice < 999999 ? appliedMaxPrice : undefined,
         sort: sortBy,
         search: searchParam || undefined,
         inStock: inStockOnly ? true : undefined,
+        fastPrime: fastPrimeOnly ? true : undefined,
+        twoDayDelivery: twoDayOnly ? true : undefined,
+        codEligible: codOnly ? true : undefined,
       });
 
-      let list = res.products || [];
-
-      // Apply client-side facet filters when multiple categories are selected
-      if (selectedCategories.length > 1) {
-        list = list.filter((p) => {
-          const catName = typeof p.category === 'object' ? p.category.name : p.category;
-          return selectedCategories.some((c) => catName.toLowerCase().includes(c.toLowerCase()));
-        });
-      }
-
-      // Brand filter
-      if (selectedBrands.length > 0) {
-        list = list.filter((p) =>
-          selectedBrands.includes(p.brandTag || '') ||
-          selectedBrands.some((b) => (p.brand || '').toLowerCase().includes(b.toLowerCase()))
-        );
-      }
-
-      // Customer Rating filter
-      if (selectedRating > 0) {
-        list = list.filter((p) => (p.rating || 0) >= selectedRating);
-      }
-
-      // Fulfillment & Speed filters
-      if (fastPrimeOnly) {
-        list = list.filter((p) => !!p.fastPrime);
-      }
-      if (twoDayOnly) {
-        list = list.filter((p) => !!p.twoDayDelivery);
-      }
-      if (codOnly) {
-        list = list.filter((p) => !!p.codEligible);
-      }
-
-      // Discount tier filter
-      if (selectedDiscounts.length > 0) {
-        const minDisc = Math.min(...selectedDiscounts);
-        list = list.filter((p) => {
-          const prodDisc = p.originalPrice && p.originalPrice > p.price
-            ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
-            : 0;
-          return prodDisc >= minDisc;
-        });
-      }
-
+      const list = res.products || [];
       setProducts(list);
       setTotalPages(res.pagination?.totalPages || 1);
       setTotalProducts(res.pagination?.totalProducts || list.length);

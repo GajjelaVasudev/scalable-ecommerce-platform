@@ -60,9 +60,15 @@ async function addToCart(req, res) {
         );
 
         if (!selectedVariant) {
-            return res.status(404).json({
-                message: `Variant '${variant}' not found`
-            });
+            // Allow default fallback ONLY for products that genuinely have one default variant
+            const hasSingleDefaultVariant = inventory.variants.length === 1 && inventory.variants[0].name === 'default';
+            if (hasSingleDefaultVariant) {
+                selectedVariant = inventory.variants[0];
+            } else {
+                return res.status(400).json({
+                    message: `Invalid variant '${variant}'. Available variants: ${inventory.variants.map(v => v.name).join(', ')}`
+                });
+            }
         }
 
         let cart = await cartModel.findOne({ user: userId });
@@ -73,8 +79,9 @@ async function addToCart(req, res) {
             });
         }
 
+        const matchedVariantName = selectedVariant.name;
         const item = cart.items.find(
-            i => i.product.toString() === productId && i.variant === variant
+            i => i.product.toString() === productId && (i.variant === variant || i.variant === matchedVariantName)
         );
 
         if (item) {
@@ -84,6 +91,7 @@ async function addToCart(req, res) {
                 });
             }
             item.quantity += numQuantity;
+            item.variant = matchedVariantName;
             item.price = product.price;
         } else {
             if (numQuantity > selectedVariant.availableStock) {
@@ -94,7 +102,7 @@ async function addToCart(req, res) {
 
             cart.items.push({
                 product: product._id,
-                variant,
+                variant: matchedVariantName,
                 quantity: numQuantity,
                 price: product.price
             });
@@ -155,8 +163,15 @@ async function removeFromCart(req, res) {
         const initialLength = cart.items.length;
         cart.items = cart.items.filter(
             item =>
-                !(item.product.toString() === productId && item.variant === variant)
+                !(item.product.toString() === productId && (item.variant === variant || (!variant && item.variant === 'default')))
         );
+
+        if (cart.items.length === initialLength) {
+            const matchCount = cart.items.filter(i => i.product.toString() === productId).length;
+            if (matchCount === 1) {
+                cart.items = cart.items.filter(i => i.product.toString() !== productId);
+            }
+        }
 
         if (cart.items.length === initialLength) {
             return res.status(404).json({ message: 'Item not found in cart' });
@@ -196,9 +211,13 @@ async function updateCartItem(req, res) {
             return res.status(404).json({ message: 'Cart not found' });
         }
 
-        const item = cart.items.find(
-            i => i.product.toString() === productId && i.variant === variant
+        let item = cart.items.find(
+            i => i.product.toString() === productId && (i.variant === variant || (!variant && i.variant === 'default'))
         );
+
+        if (!item) {
+            item = cart.items.find(i => i.product.toString() === productId);
+        }
 
         if (!item) {
             return res.status(404).json({ message: 'Item not found in cart' });
@@ -214,12 +233,19 @@ async function updateCartItem(req, res) {
         }
 
         const inventory = await ensureInventory(product);
-        const selectedVariant = inventory.variants.find(
-            i => i.name === variant
+        let selectedVariant = inventory.variants.find(
+            i => i.name === variant || i.name === item.variant
         );
 
         if (!selectedVariant) {
-            return res.status(404).json({ message: 'Variant not found' });
+            const hasSingleDefaultVariant = inventory.variants.length === 1 && inventory.variants[0].name === 'default';
+            if (hasSingleDefaultVariant) {
+                selectedVariant = inventory.variants[0];
+            } else {
+                return res.status(400).json({
+                    message: `Invalid variant '${variant}'. Available variants: ${inventory.variants.map(v => v.name).join(', ')}`
+                });
+            }
         }
 
         if (numQuantity > selectedVariant.availableStock) {

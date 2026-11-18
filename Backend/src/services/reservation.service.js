@@ -54,20 +54,11 @@ async function expireReservations() {
         for (const candidate of candidates) {
             try {
                 await withOptionalTransaction(async (session) => {
-                    const reservationFindOptions = { new: true };
-                    if (session) reservationFindOptions.session = session;
+                    const resQuery = Reservation.findById(candidate._id);
+                    if (session) resQuery.session(session);
+                    const reservation = await resQuery;
 
-                    const reservation = await Reservation.findOneAndUpdate(
-                        {
-                            _id: candidate._id,
-                            status: 'reserved',
-                            expiresAt: { $lte: new Date() }
-                        },
-                        { $set: { status: 'expired' } },
-                        reservationFindOptions
-                    );
-
-                    if (!reservation) return;
+                    if (!reservation || reservation.status !== 'reserved' || reservation.expiresAt > new Date()) return;
 
                     const orderQuery = Order.findById(reservation.order);
                     if (session) orderQuery.session(session);
@@ -77,13 +68,17 @@ async function expireReservations() {
                         throw new Error('Order not found');
                     }
 
-                    // The payment webhook and expiry job are transactionally
-                    // competing for this reservation. Never release stock for
-                    // an order that has already been paid.
-                    if (order.paymentStatus === 'paid') {
-                        throw new Error(
-                            `Paid order ${order._id} still has a reserved item; manual reconciliation required`
-                        );
+                    // Never expire reservations for Cash on Delivery (COD) orders or paid/shipped orders.
+                    // COD orders do not receive online payment; their stock must remain reserved until delivery/settlement or explicit cancellation.
+                    if (order.paymentMethod === 'COD' || order.paymentStatus === 'paid' || order.deliveryStatus === 'shipped' || order.deliveryStatus === 'delivered') {
+                        return;
+                    }
+
+                    reservation.status = 'expired';
+                    if (session) {
+                        await reservation.save({ session });
+                    } else {
+                        await reservation.save();
                     }
 
                     const invFilter = {

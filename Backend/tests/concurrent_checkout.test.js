@@ -31,6 +31,7 @@ describe('Phase 7 - Concurrent Checkout & Contention Integration Tests', () => {
     const originalProductFindById = Product.findById;
     const originalOrderCreate = Order.create;
     const originalInventoryFindOneAndUpdate = Inventory.findOneAndUpdate;
+    const originalInventoryFindOne = Inventory.findOne;
     const originalReservationCreate = Reservation.create;
 
     after(() => {
@@ -39,6 +40,7 @@ describe('Phase 7 - Concurrent Checkout & Contention Integration Tests', () => {
         Product.findById = originalProductFindById;
         Order.create = originalOrderCreate;
         Inventory.findOneAndUpdate = originalInventoryFindOneAndUpdate;
+        Inventory.findOne = originalInventoryFindOne;
         Reservation.create = originalReservationCreate;
     });
 
@@ -83,6 +85,7 @@ describe('Phase 7 - Concurrent Checkout & Contention Integration Tests', () => {
 
         Reservation.create = async (docs) => docs;
         Cart.findByIdAndUpdate = async () => ({ items: [] });
+        Inventory.findOne = async () => null;
 
         // Simulate atomic findOneAndUpdate with availableStock check
         Inventory.findOneAndUpdate = async (filter, update) => {

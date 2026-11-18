@@ -4,7 +4,23 @@ const orderSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false,
+        default: null
+    },
+    isGuest: {
+        type: Boolean,
+        default: false
+    },
+    guestEmail: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    guestAccessTokenHash: {
+        type: String,
+        default: null,
+        index: true,
+        select: false
     },
     items: [
         {
@@ -54,6 +70,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
+        enum: ['UPI', 'CARD', 'NETBANKING', 'EMI', 'COD'],
         default: 'UPI'
     },
     cancellationReason: {
