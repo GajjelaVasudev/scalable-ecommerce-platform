@@ -34,12 +34,10 @@ export const AccountPage: React.FC = () => {
     : 'Valued Customer';
   const firstName = parsedName.split(' ')[0] || 'Valued';
 
-  // Read saved profile enhancements scoped to the active account
-  const [profileData, setProfileData] = useState(() => getAccountProfile(userId));
-
-  const displayFirstName = profileData?.firstName || firstName;
-  const displayEmail = profileData?.email || user?.email || null;
-  const displayPhone = profileData?.phone || null;
+  // Read profile info from authenticated user or fallback
+  const displayFirstName = user?.firstName || user?.displayName || firstName;
+  const displayEmail = user?.email || null;
+  const displayPhone = user?.phone || null;
   const memberSince = user?.createdAt
     ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     : null;
@@ -75,9 +73,6 @@ export const AccountPage: React.FC = () => {
 
   // Synchronize account-scoped state whenever the active user changes
   useEffect(() => {
-    const p = getAccountProfile(userId);
-    setProfileData(p);
-
     const addr = getAccountAddresses(userId);
     if (addr && addr.length > 0) {
       setDefaultAddress(addr.find((a: SavedAddressItem) => a.isDefault) || addr[0]);

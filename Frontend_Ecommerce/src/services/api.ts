@@ -104,10 +104,23 @@ export const api = {
       request<{ user: User }>('/auth/me', {
         method: 'GET',
       }),
-    updateProfile: (body: { username?: string; email?: string; currentPassword?: string; newPassword?: string }) =>
-      request<{ message: string; user: User }>('/auth/profile', {
+    getProfile: () =>
+      request<{ message?: string; user: User; profile: User }>('/auth/profile', {
+        method: 'GET',
+      }),
+    updateProfile: (body: Partial<User> & { currentPassword?: string; newPassword?: string; dobDay?: string; dobMonth?: string; dobYear?: string }) =>
+      request<{ message: string; user: User; profile: User }>('/auth/profile', {
         method: 'PUT',
         body: JSON.stringify(body),
+      }),
+    uploadAvatar: (body: { image: string; mimeType?: string }) =>
+      request<{ message: string; avatarUrl: string; user: User }>('/auth/profile/avatar', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    removeAvatar: () =>
+      request<{ message: string; user: User }>('/auth/profile/avatar', {
+        method: 'DELETE',
       }),
     getUsers: (params?: { page?: number; limit?: number; role?: string; search?: string }) =>
       request<{ message: string; users: User[]; pagination: any }>('/auth/users', {

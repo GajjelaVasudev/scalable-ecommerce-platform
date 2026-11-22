@@ -12,6 +12,8 @@ interface AuthContextType {
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   switchRoleDemo: (role: UserRole) => void;
+  updateUser: (updatedUser: Partial<User>) => void;
+  refreshProfile: () => Promise<User | null>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -122,6 +124,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(`demo_token_${role}_${Date.now()}`);
   };
 
+  const updateUser = (updatedUser: Partial<User>) => {
+    setUser((prev) => {
+      if (!prev) return null;
+      const next = { ...prev, ...updatedUser };
+      try {
+        localStorage.setItem('omizon_user', JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  const refreshProfile = async (): Promise<User | null> => {
+    try {
+      const res = await api.auth.getProfile();
+      if (res && res.user) {
+        setUser(res.user);
+        try {
+          localStorage.setItem('omizon_user', JSON.stringify(res.user));
+        } catch {}
+        return res.user;
+      }
+    } catch (e) {
+      // Ignore network errors on background refresh
+    }
+    return user;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -133,6 +162,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         register,
         logout,
         switchRoleDemo,
+        updateUser,
+        refreshProfile,
       }}
     >
       {children}

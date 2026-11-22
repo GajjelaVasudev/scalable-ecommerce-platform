@@ -106,13 +106,16 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
 
   // Compute dynamic user name from authenticated state without hardcoded demo customer data
   const rawUsername = user?.username || '';
-  const formattedName = rawUsername
+  const parsedName = rawUsername
     ? rawUsername
         .split(/[_\s-]/)
         .filter(Boolean)
         .map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase())
         .join(' ')
     : 'Account User';
+  const formattedName =
+    user?.displayName ||
+    (user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : parsedName);
 
   const userInitial = (formattedName.charAt(0) || 'U').toUpperCase();
   const userEmail = user?.email || 'buyer@omizon.in';
@@ -195,8 +198,12 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
             <div className="sticky top-20 flex flex-col gap-1">
               {/* Authenticated User Micro Pill */}
               <div className="bg-surface-container-lowest border border-lavender-mist rounded-xl p-space-sm mb-space-sm flex items-center gap-space-sm shadow-sm">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-royal-purple text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0">
-                  {userInitial}
+                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-royal-purple text-white flex items-center justify-center font-bold text-sm shadow-sm shrink-0 overflow-hidden">
+                  {user?.avatarUrl ? (
+                    <img src={user.avatarUrl} alt={formattedName} className="w-full h-full object-cover" />
+                  ) : (
+                    userInitial
+                  )}
                 </div>
                 <div className="flex flex-col min-w-0">
                   <span className="font-title-sm text-title-sm text-ink font-semibold truncate">

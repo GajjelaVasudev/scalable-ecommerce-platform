@@ -6,7 +6,10 @@ const {
     loginUser,
     logoutUser,
     getMe,
+    getProfile,
     updateProfile,
+    uploadAvatar,
+    removeAvatar,
     getUsers,
     updateUserRole,
     forgotPassword,
@@ -30,7 +33,10 @@ router.post('/reset-password', resetPassword);
 
 // Profile management
 router.get('/me', authMiddleware, getMe);
+router.get('/profile', authMiddleware, getProfile);
 router.put('/profile', authMiddleware, updateProfile);
+router.post('/profile/avatar', authMiddleware, uploadAvatar);
+router.delete('/profile/avatar', authMiddleware, removeAvatar);
 
 // Admin user governance
 router.get('/users', authMiddleware, authorize('admin'), getUsers);

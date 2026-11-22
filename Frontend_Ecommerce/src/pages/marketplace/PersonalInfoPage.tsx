@@ -2,17 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { AccountLayout } from '../../components/account/AccountLayout';
-import {
-  getStableUserId,
-  getAccountProfile,
-  setAccountProfile,
-} from '../../utils/accountStorage';
+import { api } from '../../services/api';
+import { migrateLegacyProfile } from '../../utils/profileMigration';
 
 export const PersonalInfoPage: React.FC = () => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const userId = getStableUserId(user);
 
   // Parse user info dynamically without hardcoded customer data
   const rawUsername = user?.username || '';
@@ -24,55 +19,83 @@ export const PersonalInfoPage: React.FC = () => {
     ? nameParts.slice(1).map((p) => p.charAt(0).toUpperCase() + p.slice(1).toLowerCase()).join(' ')
     : 'Customer';
 
-  // Read persisted profile changes scoped per authenticated user (sensitive tax identifiers like PAN are never stored in browser storage)
-  const [savedProfile, setSavedProfile] = useState<any>(() => getAccountProfile(userId));
-
-  const [firstName, setFirstName] = useState(savedProfile?.firstName || defaultFirstName);
-  const [lastName, setLastName] = useState(savedProfile?.lastName || defaultLastName);
+  const [firstName, setFirstName] = useState(user?.firstName || defaultFirstName);
+  const [lastName, setLastName] = useState(user?.lastName || defaultLastName);
   const [displayName, setDisplayName] = useState(
-    savedProfile?.displayName || (rawUsername ? `${defaultFirstName} ${defaultLastName.charAt(0)}.` : 'Buyer Member')
+    user?.displayName || (rawUsername ? `${defaultFirstName} ${defaultLastName.charAt(0)}.` : 'Buyer Member')
   );
-  const [gender, setGender] = useState(savedProfile?.gender || 'prefer-not-to-say');
-  const [dobDay, setDobDay] = useState(savedProfile?.dobDay || '');
-  const [dobMonth, setDobMonth] = useState(savedProfile?.dobMonth || '');
-  const [dobYear, setDobYear] = useState(savedProfile?.dobYear || '');
+  const [gender, setGender] = useState(user?.gender || 'prefer-not-to-say');
+  const [dobDay, setDobDay] = useState('');
+  const [dobMonth, setDobMonth] = useState('');
+  const [dobYear, setDobYear] = useState('');
 
   // Contact Credentials
-  const [email, setEmail] = useState(savedProfile?.email || user?.email || '');
-  const [phone, setPhone] = useState(savedProfile?.phone || '');
-  const [altPhone, setAltPhone] = useState(savedProfile?.altPhone || '');
-  const [commLang, setCommLang] = useState(savedProfile?.commLang || 'en');
+  const [email, setEmail] = useState(user?.email || '');
+  const [phone, setPhone] = useState(user?.phone || '');
+  const [altPhone, setAltPhone] = useState(user?.altPhone || '');
+  const [commLang, setCommLang] = useState(user?.commLang || 'en');
 
   // Compliance: in-memory state only for session. Never prefilled with fake PAN.
   const [panNumber, setPanNumber] = useState('');
-  const [lastModified, setLastModified] = useState(savedProfile?.lastModified || null);
 
   // Profile Photo state
-  const [photoUrl, setPhotoUrl] = useState<string | null>(savedProfile?.photoUrl || null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(user?.avatarUrl || null);
 
-  // Synchronize state when the authenticated user changes
-  useEffect(() => {
-    const profile = getAccountProfile(userId);
-    setSavedProfile(profile);
-    setFirstName(profile?.firstName || defaultFirstName);
-    setLastName(profile?.lastName || defaultLastName);
+  const populateFromUserData = (p: any) => {
+    if (!p) return;
+    setFirstName(p.firstName || defaultFirstName);
+    setLastName(p.lastName || defaultLastName);
     setDisplayName(
-      profile?.displayName || (rawUsername ? `${defaultFirstName} ${defaultLastName.charAt(0)}.` : 'Buyer Member')
+      p.displayName || (rawUsername ? `${defaultFirstName} ${defaultLastName.charAt(0)}.` : 'Buyer Member')
     );
-    setGender(profile?.gender || 'prefer-not-to-say');
-    setDobDay(profile?.dobDay || '');
-    setDobMonth(profile?.dobMonth || '');
-    setDobYear(profile?.dobYear || '');
-    setEmail(profile?.email || user?.email || '');
-    setPhone(profile?.phone || '');
-    setAltPhone(profile?.altPhone || '');
-    setCommLang(profile?.commLang || 'en');
-    setPhotoUrl(profile?.photoUrl || null);
-    setLastModified(profile?.lastModified || null);
-    setPanNumber('');
-    setModalInput('');
-    setValidationErrors([]);
-  }, [userId, rawUsername, defaultFirstName, defaultLastName, user?.email]);
+    setGender(p.gender || 'prefer-not-to-say');
+    if (p.dateOfBirth) {
+      const parts = String(p.dateOfBirth).split('T')[0].split('-');
+      if (parts.length === 3) {
+        setDobYear(parts[0]);
+        setDobMonth(parts[1]);
+        setDobDay(parts[2]);
+      }
+    }
+    setEmail(p.email || user?.email || '');
+    setPhone(p.phone || '');
+    setAltPhone(p.altPhone || '');
+    setCommLang(p.commLang || 'en');
+    setPhotoUrl(p.avatarUrl || null);
+  };
+
+  // Synchronize state and migrate legacy profile on mount
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadAndSyncProfile() {
+      try {
+        const res = await api.auth.getProfile();
+        if (isMounted && res?.user) {
+          populateFromUserData(res.user);
+          updateUser(res.user);
+
+          // Perform legacy migration if local storage data exists
+          const migrated = await migrateLegacyProfile(user, res.user);
+          if (isMounted && migrated) {
+            populateFromUserData(migrated);
+            updateUser(migrated);
+          }
+        }
+      } catch (e) {
+        // Fallback to in-memory user if network is momentarily unavailable
+        if (isMounted && user) {
+          populateFromUserData(user);
+        }
+      }
+    }
+
+    loadAndSyncProfile();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [user?._id]);
 
   // UI state & Modals
   const [isSaving, setIsSaving] = useState(false);
@@ -95,20 +118,37 @@ export const PersonalInfoPage: React.FC = () => {
         setValidationErrors(['Profile photo size must be less than 2MB.']);
         return;
       }
+      const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowed.includes(file.type)) {
+        setValidationErrors(['Please upload a valid JPEG, PNG, or WebP image.']);
+        return;
+      }
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         const result = event.target?.result as string;
-        setPhotoUrl(result);
-        triggerToast('Profile photo updated.');
+        try {
+          const res = await api.auth.uploadAvatar({ image: result, mimeType: file.type });
+          setPhotoUrl(res.avatarUrl);
+          updateUser(res.user);
+          triggerToast('Profile photo uploaded and saved successfully.');
+        } catch (err: any) {
+          triggerToast(err.message || 'Failed to upload photo to server.');
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleRemovePhoto = () => {
-    setPhotoUrl(null);
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    triggerToast('Profile photo removed.');
+  const handleRemovePhoto = async () => {
+    try {
+      await api.auth.removeAvatar();
+      setPhotoUrl(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      updateUser({ avatarUrl: null });
+      triggerToast('Profile photo removed.');
+    } catch (err: any) {
+      triggerToast(err.message || 'Failed to remove photo.');
+    }
   };
 
   const triggerToast = (msg: string) => {
@@ -123,25 +163,47 @@ export const PersonalInfoPage: React.FC = () => {
     if (!firstName.trim() || firstName.trim().length < 2) {
       errors.push('First name is required (minimum 2 characters).');
     }
+    if (firstName.trim().length > 100) {
+      errors.push('First name cannot exceed 100 characters.');
+    }
     if (!lastName.trim() || lastName.trim().length < 2) {
       errors.push('Last name is required (minimum 2 characters).');
+    }
+    if (lastName.trim().length > 100) {
+      errors.push('Last name cannot exceed 100 characters.');
     }
     if (!displayName.trim()) {
       errors.push('Display name is required.');
     }
+    if (displayName.trim().length > 100) {
+      errors.push('Display name cannot exceed 100 characters.');
+    }
 
-    // DOB check
-    const day = parseInt(dobDay, 10);
-    const month = parseInt(dobMonth, 10);
-    const year = parseInt(dobYear, 10);
-    if (isNaN(day) || day < 1 || day > 31) {
-      errors.push('Please enter a valid day of birth (1-31).');
+    // DOB check: if any DOB part entered, validate completeness and ranges
+    if (dobDay || dobMonth || dobYear) {
+      const day = parseInt(dobDay, 10);
+      const month = parseInt(dobMonth, 10);
+      const year = parseInt(dobYear, 10);
+      if (isNaN(day) || day < 1 || day > 31) {
+        errors.push('Please enter a valid day of birth (1-31).');
+      }
+      if (isNaN(month) || month < 1 || month > 12) {
+        errors.push('Please enter a valid month of birth (1-12).');
+      }
+      if (isNaN(year) || year < 1900 || year > new Date().getFullYear()) {
+        errors.push(`Please enter a valid year of birth (1900-${new Date().getFullYear()}).`);
+      }
     }
-    if (isNaN(month) || month < 1 || month > 12) {
-      errors.push('Please enter a valid month of birth (1-12).');
-    }
-    if (isNaN(year) || year < 1920 || year > 2015) {
-      errors.push('Please enter a valid year of birth (1920-2015).');
+
+    // Phone check
+    if (phone && phone.trim()) {
+      const digits = phone.replace(/\D/g, '');
+      const valid =
+        (digits.length === 10 && /^[6-9]\d{9}$/.test(digits)) ||
+        (digits.length === 12 && /^91[6-9]\d{9}$/.test(digits));
+      if (!valid) {
+        errors.push('Mobile phone must be a valid 10-digit Indian number starting with 6-9.');
+      }
     }
 
     // PAN check (standard 10-char format: 5 letters, 4 digits, 1 letter)
@@ -154,61 +216,39 @@ export const PersonalInfoPage: React.FC = () => {
     return errors.length === 0;
   };
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
-      const now = new Date().toLocaleString('en-IN', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZoneName: 'short',
+    setValidationErrors([]);
+    try {
+      const response = await api.auth.updateProfile({
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        displayName: displayName.trim(),
+        gender: gender as any,
+        phone: phone ? phone.trim() : null,
+        altPhone: altPhone ? altPhone.trim() : null,
+        commLang: commLang as any,
+        dobDay: dobDay || undefined,
+        dobMonth: dobMonth || undefined,
+        dobYear: dobYear || undefined,
       });
-      setLastModified(now);
 
-      // Sensitive identifiers like PAN are deliberately excluded from browser storage
-      const profilePayload = {
-        firstName,
-        lastName,
-        displayName,
-        gender,
-        dobDay,
-        dobMonth,
-        dobYear,
-        email,
-        phone,
-        altPhone,
-        commLang,
-        photoUrl,
-        lastModified: now,
-      };
-
-      try {
-        setAccountProfile(userId, profilePayload);
-        setSavedProfile(profilePayload);
-      } catch {}
-
-      triggerToast('Profile details saved locally in this browser.');
-    }, 600);
+      updateUser(response.user);
+      populateFromUserData(response.user);
+      triggerToast('Profile details saved successfully on server.');
+    } catch (err: any) {
+      setValidationErrors([err.message || 'Failed to update profile on server.']);
+      triggerToast('Failed to save profile changes.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleReset = () => {
-    setFirstName(savedProfile?.firstName || defaultFirstName);
-    setLastName(savedProfile?.lastName || defaultLastName);
-    setDisplayName(
-      savedProfile?.displayName || (rawUsername ? `${defaultFirstName} ${defaultLastName.charAt(0)}.` : 'Buyer Member')
-    );
-    setGender(savedProfile?.gender || 'prefer-not-to-say');
-    setDobDay(savedProfile?.dobDay || '');
-    setDobMonth(savedProfile?.dobMonth || '');
-    setDobYear(savedProfile?.dobYear || '');
-    setAltPhone(savedProfile?.altPhone || '');
-    setCommLang(savedProfile?.commLang || 'en');
+    populateFromUserData(user);
     setPanNumber('');
     setModalInput('');
     setValidationErrors([]);
@@ -223,7 +263,9 @@ export const PersonalInfoPage: React.FC = () => {
   };
 
   const openPhoneModal = () => {
-    setModalInput(phone.replace('+91 ', ''));
+    const rawDigits = phone.replace(/\D/g, '');
+    const cleanDigits = rawDigits.length === 12 && rawDigits.startsWith('91') ? rawDigits.slice(2) : rawDigits;
+    setModalInput(cleanDigits);
     setModalError('');
     setActiveModal('phone');
   };
@@ -239,25 +281,18 @@ export const PersonalInfoPage: React.FC = () => {
     setModalError('');
 
     if (activeModal === 'email') {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(modalInput.trim())) {
-        setModalError('Please enter a valid email address.');
-        return;
-      }
-      setEmail(modalInput.trim());
+      // Phase 6 requirement: email is read-only in UI
       setActiveModal(null);
-      setModalInput('');
-      triggerToast('Contact email updated locally in this browser. Server verification is not connected.');
     } else if (activeModal === 'phone') {
       const digits = modalInput.replace(/\D/g, '');
-      if (digits.length !== 10) {
-        setModalError('Please enter a valid 10-digit Indian mobile number.');
+      if (digits.length !== 10 || !/^[6-9]/.test(digits)) {
+        setModalError('Please enter a valid 10-digit Indian mobile number (starting with 6-9).');
         return;
       }
-      setPhone(`+91 ${digits.slice(0, 5)} ${digits.slice(5)}`);
+      setPhone(`+91 ${digits}`);
       setActiveModal(null);
       setModalInput('');
-      triggerToast('Mobile number updated locally in this browser. SMS OTP verification is not connected.');
+      triggerToast('Mobile number updated. Click "Save Profile to Server" below to persist.');
     } else if (activeModal === 'pan') {
       const clean = modalInput.trim().toUpperCase();
       const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
@@ -300,7 +335,7 @@ export const PersonalInfoPage: React.FC = () => {
             <div className="flex items-center justify-between pb-3 border-b border-lavender-mist">
               <h3 className="font-title-md text-title-md text-ink font-semibold">
                 {activeModal === 'email'
-                  ? 'Update Email Address'
+                  ? 'Account Email Security'
                   : activeModal === 'phone'
                   ? 'Update Mobile Number'
                   : 'Enter PAN (Format Validation Only)'}
@@ -317,72 +352,100 @@ export const PersonalInfoPage: React.FC = () => {
               </button>
             </div>
 
-            <form onSubmit={handleModalSubmit} className="flex flex-col gap-4">
-              {modalError && (
-                <div className="p-3 bg-red-50 text-semantic-error rounded-lg text-xs font-semibold flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[16px]">error</span>
-                  <span>{modalError}</span>
+            {activeModal === 'email' ? (
+              <div className="flex flex-col gap-4">
+                <div className="p-4 bg-surface-container-low rounded-xl border border-lavender-mist/60 flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-primary font-semibold text-label-md">
+                    <span className="material-symbols-outlined text-[18px]">verified_user</span>
+                    <span>Primary Account Email</span>
+                  </div>
+                  <p className="font-title-sm text-title-sm text-ink font-mono font-medium">
+                    {email || 'No email registered'}
+                  </p>
+                  <p className="font-body-sm text-body-sm text-ink-subtle">
+                    This email is permanently linked to your OMIZON account for sign-in, order confirmations, and security alerts.
+                  </p>
                 </div>
-              )}
 
-              <div className="flex flex-col gap-1.5">
-                <label className="font-label-md text-label-md text-ink">
-                  {activeModal === 'email'
-                    ? 'New Email Address'
-                    : activeModal === 'phone'
-                    ? '10-Digit Mobile Number'
-                    : '10-Character PAN Number'}
-                </label>
-                <div className="relative flex items-center">
-                  {activeModal === 'phone' && (
-                    <span className="absolute left-3.5 text-ink-subtle font-mono text-sm">+91</span>
-                  )}
-                  <input
-                    type={activeModal === 'email' ? 'email' : 'text'}
-                    value={modalInput}
-                    onChange={(e) => setModalInput(e.target.value)}
-                    placeholder={
-                      activeModal === 'email'
-                        ? 'e.g. name@domain.in'
-                        : activeModal === 'phone'
-                        ? '98200 12345'
-                        : 'ABCDE1234F'
-                    }
-                    maxLength={activeModal === 'phone' ? 10 : activeModal === 'pan' ? 10 : undefined}
-                    className={`w-full h-11 pr-3.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all border border-lavender-mist/60 ${
-                      activeModal === 'phone' ? 'pl-14 font-mono' : 'pl-3.5'
-                    }`}
-                    autoFocus
-                  />
+                <div className="p-3 bg-amber-50 text-amber-800 rounded-lg text-xs leading-relaxed flex items-start gap-2 border border-amber-200">
+                  <span className="material-symbols-outlined text-[16px] text-amber-600 mt-0.5 flex-shrink-0">info</span>
+                  <span>
+                    Direct email changes are restricted to protect account integrity. Email modification requires a verification link sent to your registered email, which will be enabled in an upcoming security release.
+                  </span>
                 </div>
-                <span className="font-body-sm text-body-sm text-ink-subtle mt-0.5">
-                  {activeModal === 'email'
-                    ? 'Updates your account contact email locally in this browser. Verification email service is not connected.'
-                    : activeModal === 'phone'
-                    ? 'Used for delivery driver communication. SMS OTP verification service is not connected.'
-                    : 'Format check only (5 letters, 4 numbers, 1 letter). Sensitive tax identifiers are not stored in browser storage.'}
-                </span>
-              </div>
 
-              <div className="flex items-center justify-end gap-space-sm pt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveModal(null);
-                    setModalInput('');
-                  }}
-                  className="px-space-md py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-ink font-label-md text-label-md transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-space-lg py-2 rounded-lg bg-primary hover:bg-royal-purple text-on-primary font-label-md text-label-md transition-colors shadow-sm font-semibold"
-                >
-                  {activeModal === 'pan' ? 'Validate Format' : 'Save Locally'}
-                </button>
+                <div className="flex items-center justify-end pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveModal(null)}
+                    className="px-space-lg py-2 rounded-lg bg-primary hover:bg-royal-purple text-on-primary font-label-md text-label-md transition-colors font-semibold"
+                  >
+                    Understood
+                  </button>
+                </div>
               </div>
-            </form>
+            ) : (
+              <form onSubmit={handleModalSubmit} className="flex flex-col gap-4">
+                {modalError && (
+                  <div className="p-3 bg-red-50 text-semantic-error rounded-lg text-xs font-semibold flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[16px]">error</span>
+                    <span>{modalError}</span>
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="font-label-md text-label-md text-ink">
+                    {activeModal === 'phone'
+                      ? '10-Digit Mobile Number'
+                      : '10-Character PAN Number'}
+                  </label>
+                  <div className="relative flex items-center">
+                    {activeModal === 'phone' && (
+                      <span className="absolute left-3.5 text-ink-subtle font-mono text-sm">+91</span>
+                    )}
+                    <input
+                      type="text"
+                      value={modalInput}
+                      onChange={(e) => setModalInput(e.target.value)}
+                      placeholder={
+                        activeModal === 'phone'
+                          ? '98200 12345'
+                          : 'ABCDE1234F'
+                      }
+                      maxLength={10}
+                      className={`w-full h-11 pr-3.5 rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all border border-lavender-mist/60 ${
+                        activeModal === 'phone' ? 'pl-14 font-mono' : 'pl-3.5'
+                      }`}
+                      autoFocus
+                    />
+                  </div>
+                  <span className="font-body-sm text-body-sm text-ink-subtle mt-0.5">
+                    {activeModal === 'phone'
+                      ? 'Used for courier communication. Saves to your profile on the server. SMS OTP verification will be required for two-factor authentication in a future update.'
+                      : 'Format check only (5 letters, 4 numbers, 1 letter). Sensitive tax identifiers are not stored in browser storage.'}
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-end gap-space-sm pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveModal(null);
+                      setModalInput('');
+                    }}
+                    className="px-space-md py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-ink font-label-md text-label-md transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-space-lg py-2 rounded-lg bg-primary hover:bg-royal-purple text-on-primary font-label-md text-label-md transition-colors shadow-sm font-semibold"
+                  >
+                    {activeModal === 'pan' ? 'Validate Format' : 'Update Number'}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
@@ -541,7 +604,7 @@ export const PersonalInfoPage: React.FC = () => {
                   <select
                     id="gender-select"
                     value={gender}
-                    onChange={(e) => setGender(e.target.value)}
+                    onChange={(e) => setGender(e.target.value as any)}
                     className="w-full h-11 px-3.5 appearance-none rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all pr-10 cursor-pointer border border-transparent focus:border-primary/40"
                   >
                     <option value="female">Female</option>
@@ -640,8 +703,8 @@ export const PersonalInfoPage: React.FC = () => {
                   onClick={openEmailModal}
                   className="self-start md:self-center px-space-md py-2 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-ink font-label-md text-label-md transition-colors flex items-center gap-1.5 flex-shrink-0 border border-lavender-mist/60 font-medium"
                 >
-                  <span className="material-symbols-outlined text-[16px] text-ink-muted">edit</span>
-                  <span>{email ? 'Change Email' : 'Add Email'}</span>
+                  <span className="material-symbols-outlined text-[16px] text-ink-muted">lock</span>
+                  <span>Email Security</span>
                 </button>
               </div>
 
@@ -708,7 +771,7 @@ export const PersonalInfoPage: React.FC = () => {
                     <select
                       id="comm-lang"
                       value={commLang}
-                      onChange={(e) => setCommLang(e.target.value)}
+                      onChange={(e) => setCommLang(e.target.value as any)}
                       className="w-full h-11 px-3.5 appearance-none rounded-lg bg-surface-container-low text-ink font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all pr-10 cursor-pointer border border-transparent focus:border-primary/40"
                     >
                       <option value="en">English (India)</option>
@@ -806,15 +869,15 @@ export const PersonalInfoPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Privacy & Local Browser Storage Notice */}
+          {/* Privacy & Account Data Notice */}
           <div className="bg-surface-container-low rounded-xl p-space-md flex items-start gap-space-sm border border-lavender-mist/60">
             <span className="material-symbols-outlined text-ink-muted text-[22px] flex-shrink-0 mt-0.5">
               shield
             </span>
             <div className="flex flex-col">
-              <span className="font-title-sm text-title-sm text-ink font-semibold">Privacy & Local Storage Notice</span>
+              <span className="font-title-sm text-title-sm text-ink font-semibold">Privacy & Data Protection Notice</span>
               <p className="font-body-sm text-body-sm text-ink-muted mt-0.5 leading-relaxed">
-                Your profile preferences, saved addresses, and wishlist are stored locally in this browser per account until cleared. They are not synchronized across devices. Cloud profile synchronization and backend KYC services are under active development. For privacy and data protection, sensitive government identifiers (such as PAN and Aadhaar) are not stored in browser storage.
+                Your profile preferences and personal information are stored securely in your authenticated OMIZON account database. Sensitive tax and government identifiers (such as PAN and Aadhaar) are not stored without statutory KYC verification.
               </p>
             </div>
           </div>
@@ -822,8 +885,8 @@ export const PersonalInfoPage: React.FC = () => {
           {/* Sticky Bottom Actions Bar */}
           <div className="bg-surface-container-lowest rounded-xl p-space-md shadow-sm border border-lavender-mist/60 flex flex-col sm:flex-row items-center justify-between gap-space-md sticky bottom-4 z-20">
             <div className="flex items-center gap-space-xs text-ink-subtle font-body-sm text-body-sm">
-              <span className="material-symbols-outlined text-[16px]">schedule</span>
-              <span>{lastModified ? `Saved locally • Last modified on ${lastModified}` : 'Saved locally in this browser'}</span>
+              <span className="material-symbols-outlined text-[16px]">cloud_done</span>
+              <span>{user?.updatedAt ? `Profile synced • Last modified on ${new Date(user.updatedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}` : 'Profile synced with server'}</span>
             </div>
             <div className="flex items-center gap-space-sm w-full sm:w-auto">
               <button
@@ -845,8 +908,8 @@ export const PersonalInfoPage: React.FC = () => {
                   </>
                 ) : (
                   <>
-                    <span className="material-symbols-outlined text-[18px]">save</span>
-                    <span>Save Profile Locally</span>
+                    <span className="material-symbols-outlined text-[18px]">cloud_upload</span>
+                    <span>Save Profile to Server</span>
                   </>
                 )}
               </button>

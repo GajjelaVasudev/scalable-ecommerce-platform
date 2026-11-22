@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
@@ -5,6 +6,9 @@ const { redisClient } = require('./config/redis');
 
 function createApp() {
     const app = express();
+
+    // Serve public uploads statically
+    app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
     // Health check endpoint (Liveness probe)
     app.get('/health', (req, res) => {
@@ -40,7 +44,7 @@ function createApp() {
         type: 'application/json'
     }));
 
-    app.use(express.json());
+    app.use(express.json({ limit: '10mb' }));
     app.use(cookieParser());
 
     // Structured request logger (sanitizes sensitive data)

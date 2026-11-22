@@ -1,0 +1,7 @@
+*
+!.gitignore
+!.gitkeep
+!avatars/
+avatars/*
+!avatars/.gitignore
+!avatars/.gitkeep
