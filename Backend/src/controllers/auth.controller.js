@@ -2,8 +2,65 @@ const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const storageService = require('../services/storage.service');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function sanitizePhone(phone) {
+    if (!phone || typeof phone !== 'string') return null;
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length === 10 && /^[6-9]\d{9}$/.test(digits)) {
+        return `+91 ${digits}`;
+    }
+    if (digits.length === 12 && /^91[6-9]\d{9}$/.test(digits)) {
+        return `+91 ${digits.slice(2)}`;
+    }
+    return null;
+}
+
+function validateAndParseDob(dob, dobParts) {
+    if (!dob && !dobParts) return { isValid: true, date: null };
+
+    let d = null;
+    if (dobParts && typeof dobParts === 'object') {
+        const day = parseInt(dobParts.dobDay || dobParts.day, 10);
+        const month = parseInt(dobParts.dobMonth || dobParts.month, 10);
+        const year = parseInt(dobParts.dobYear || dobParts.year, 10);
+        if (day && month && year) {
+            d = new Date(Date.UTC(year, month - 1, day));
+            if (d.getUTCFullYear() !== year || d.getUTCMonth() !== month - 1 || d.getUTCDate() !== day) {
+                return { isValid: false, error: 'Please enter a valid calendar date' };
+            }
+        }
+    } else if (dob) {
+        if (dob instanceof Date) {
+            d = dob;
+        } else if (typeof dob === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dob.trim())) {
+            const [y, m, day] = dob.trim().split('-').map(n => parseInt(n, 10));
+            d = new Date(Date.UTC(y, m - 1, day));
+            if (d.getUTCFullYear() !== y || d.getUTCMonth() !== m - 1 || d.getUTCDate() !== day) {
+                return { isValid: false, error: 'Please enter a valid calendar date' };
+            }
+        } else if (typeof dob === 'string' || typeof dob === 'number') {
+            d = new Date(dob);
+        }
+    }
+
+    if (!d || isNaN(d.getTime())) {
+        return { isValid: false, error: 'Invalid date of birth format' };
+    }
+
+    const now = new Date();
+    const minDate = new Date('1900-01-01');
+    if (d > now) {
+        return { isValid: false, error: 'Date of birth cannot be in the future' };
+    }
+    if (d < minDate) {
+        return { isValid: false, error: 'Date of birth must be after January 1, 1900' };
+    }
+
+    return { isValid: true, date: d };
+}
 
 function getCookieOptions() {
     return {
@@ -20,6 +77,15 @@ function sanitizeUser(user) {
         username: user.username,
         email: user.email,
         role: user.role,
+        firstName: user.firstName || '',
+        lastName: user.lastName || '',
+        displayName: user.displayName || (user.firstName ? `${user.firstName} ${(user.lastName || '').charAt(0)}.`.trim() : ''),
+        phone: user.phone || null,
+        altPhone: user.altPhone || null,
+        avatarUrl: user.avatarUrl || null,
+        gender: user.gender || 'prefer-not-to-say',
+        dateOfBirth: user.dateOfBirth ? user.dateOfBirth.toISOString().split('T')[0] : null,
+        commLang: user.commLang || 'en',
         createdAt: user.createdAt,
         updatedAt: user.updatedAt
     };
@@ -187,14 +253,57 @@ async function getMe(req, res) {
     }
 }
 
+async function getProfile(req, res) {
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const sanitized = sanitizeUser(user);
+        return res.status(200).json({
+            message: 'Profile fetched successfully',
+            user: sanitized,
+            profile: sanitized
+        });
+    } catch (error) {
+        console.error('getProfile error:', error.message);
+        return res.status(500).json({ message: 'Failed to fetch user profile' });
+    }
+}
+
 async function updateProfile(req, res) {
     try {
-        const { username, email, currentPassword, newPassword } = req.body;
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        const {
+            username,
+            email,
+            currentPassword,
+            newPassword,
+            firstName,
+            lastName,
+            displayName,
+            phone,
+            altPhone,
+            avatarUrl,
+            gender,
+            dateOfBirth,
+            dobDay,
+            dobMonth,
+            dobYear,
+            commLang
+        } = req.body;
+
+        // 1. Password change (requires current password validation)
         if (newPassword) {
             if (!currentPassword) {
                 return res.status(400).json({ message: 'Current password is required to set a new password' });
@@ -209,8 +318,12 @@ async function updateProfile(req, res) {
             user.password = await bcrypt.hash(newPassword, 10);
         }
 
+        // 2. Username change
         if (username && username.trim().toLowerCase() !== user.username) {
             const trimmed = username.trim().toLowerCase();
+            if (trimmed.length < 3) {
+                return res.status(400).json({ message: 'Username must be at least 3 characters long' });
+            }
             const existing = await User.findOne({ username: trimmed });
             if (existing) {
                 return res.status(400).json({ message: 'Username is already taken' });
@@ -218,27 +331,215 @@ async function updateProfile(req, res) {
             user.username = trimmed;
         }
 
+        // 3. Email change (restricted without email verification - Phase 6 integrity)
         if (email && email.trim().toLowerCase() !== user.email) {
-            const trimmed = email.trim().toLowerCase();
-            if (!EMAIL_REGEX.test(trimmed)) {
-                return res.status(400).json({ message: 'Invalid email address' });
+            return res.status(400).json({
+                message: 'Email address cannot be changed directly without verification. Re-verification service is deferred to the next milestone.'
+            });
+        }
+
+        // 4. Extended Profile Fields (whitelisted)
+        if (firstName !== undefined) {
+            if (typeof firstName !== 'string') {
+                return res.status(400).json({ message: 'First name must be a string' });
             }
-            const existing = await User.findOne({ email: trimmed });
-            if (existing) {
-                return res.status(400).json({ message: 'Email is already in use' });
+            if (firstName.trim().length > 100) {
+                return res.status(400).json({ message: 'First name cannot exceed 100 characters' });
             }
-            user.email = trimmed;
+            user.firstName = firstName.trim();
+        }
+
+        if (lastName !== undefined) {
+            if (typeof lastName !== 'string') {
+                return res.status(400).json({ message: 'Last name must be a string' });
+            }
+            if (lastName.trim().length > 100) {
+                return res.status(400).json({ message: 'Last name cannot exceed 100 characters' });
+            }
+            user.lastName = lastName.trim();
+        }
+
+        if (displayName !== undefined) {
+            if (typeof displayName !== 'string') {
+                return res.status(400).json({ message: 'Display name must be a string' });
+            }
+            if (displayName.trim().length > 100) {
+                return res.status(400).json({ message: 'Display name cannot exceed 100 characters' });
+            }
+            user.displayName = displayName.trim();
+        }
+
+        if (phone !== undefined) {
+            if (phone === null || phone === '') {
+                user.phone = null;
+            } else {
+                const sanitizedPhone = sanitizePhone(phone);
+                if (!sanitizedPhone) {
+                    return res.status(400).json({ message: 'Valid 10-digit Indian mobile number is required (starting with 6-9)' });
+                }
+                user.phone = sanitizedPhone;
+            }
+        }
+
+        if (altPhone !== undefined) {
+            if (altPhone === null || altPhone === '') {
+                user.altPhone = null;
+            } else {
+                const sanitizedAltPhone = sanitizePhone(altPhone);
+                if (!sanitizedAltPhone) {
+                    return res.status(400).json({ message: 'Alternate phone must be a valid 10-digit Indian mobile number (starting with 6-9)' });
+                }
+                user.altPhone = sanitizedAltPhone;
+            }
+        }
+
+        if (avatarUrl !== undefined) {
+            if (avatarUrl === null || avatarUrl === '') {
+                user.avatarUrl = null;
+            } else if (typeof avatarUrl === 'string') {
+                const trimmedUrl = avatarUrl.trim();
+                if (trimmedUrl.length > 500) {
+                    return res.status(400).json({ message: 'Avatar URL cannot exceed 500 characters' });
+                }
+                if (!trimmedUrl.startsWith('/uploads/avatars/') && !/^https?:\/\//i.test(trimmedUrl)) {
+                    return res.status(400).json({ message: 'Avatar URL must be a valid server upload path or URL' });
+                }
+                user.avatarUrl = trimmedUrl;
+            } else {
+                return res.status(400).json({ message: 'Avatar URL must be a string' });
+            }
+        }
+
+        if (gender !== undefined) {
+            const allowedGenders = ['female', 'male', 'non-binary', 'prefer-not-to-say'];
+            const g = typeof gender === 'string' ? gender.trim().toLowerCase() : '';
+            if (!allowedGenders.includes(g)) {
+                return res.status(400).json({ message: `Gender must be one of: ${allowedGenders.join(', ')}` });
+            }
+            user.gender = g;
+        }
+
+        if (dateOfBirth !== undefined || (dobDay && dobMonth && dobYear)) {
+            const dobParts = dobDay ? { dobDay, dobMonth, dobYear } : null;
+            const dobResult = validateAndParseDob(dateOfBirth, dobParts);
+            if (!dobResult.isValid) {
+                return res.status(400).json({ message: dobResult.error });
+            }
+            user.dateOfBirth = dobResult.date;
+        }
+
+        if (commLang !== undefined) {
+            const allowedLangs = ['en', 'hi', 'kn', 'ta', 'mr'];
+            const l = typeof commLang === 'string' ? commLang.trim().toLowerCase() : '';
+            if (!allowedLangs.includes(l)) {
+                return res.status(400).json({ message: `Communication language must be one of: ${allowedLangs.join(', ')}` });
+            }
+            user.commLang = l;
+        }
+
+        // Auto-generate sensible displayName fallback if missing
+        if (!user.displayName && user.firstName) {
+            user.displayName = `${user.firstName} ${(user.lastName || '').charAt(0)}.`.trim();
         }
 
         await user.save();
 
+        const sanitized = sanitizeUser(user);
         return res.status(200).json({
             message: 'Profile updated successfully',
-            user: sanitizeUser(user)
+            user: sanitized,
+            profile: sanitized
         });
     } catch (error) {
         console.error('updateProfile error:', error.message);
         return res.status(500).json({ message: 'Failed to update profile' });
+    }
+}
+
+async function uploadAvatar(req, res) {
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const image = req.body.image || req.body.imageData;
+        const mimeType = req.body.mimeType;
+        if (!image || typeof image !== 'string') {
+            return res.status(400).json({ message: 'Valid image data (base64 or DataURL) is required' });
+        }
+
+        let buffer;
+        let detectedMime = mimeType;
+
+        if (image.startsWith('data:')) {
+            const matches = image.match(/^data:([a-zA-Z0-9]+\/[a-zA-Z0-9-.+]+);base64,(.+)$/);
+            if (!matches) {
+                return res.status(400).json({ message: 'Invalid DataURL image format' });
+            }
+            detectedMime = matches[1];
+            buffer = Buffer.from(matches[2], 'base64');
+        } else {
+            buffer = Buffer.from(image, 'base64');
+        }
+
+        const oldAvatarUrl = user.avatarUrl;
+        const newAvatarUrl = await storageService.saveAvatar(user._id, buffer, detectedMime);
+
+        user.avatarUrl = newAvatarUrl;
+        try {
+            await user.save();
+        } catch (dbError) {
+            // Roll back newly created file on database save failure
+            await storageService.deleteAvatar(newAvatarUrl);
+            throw dbError;
+        }
+
+        // Only delete the previous avatar once DB update is confirmed
+        if (oldAvatarUrl && oldAvatarUrl !== newAvatarUrl) {
+            await storageService.deleteAvatar(oldAvatarUrl);
+        }
+
+        return res.status(200).json({
+            message: 'Avatar uploaded successfully',
+            avatarUrl: user.avatarUrl,
+            user: sanitizeUser(user)
+        });
+    } catch (error) {
+        const statusCode = error.statusCode || 500;
+        if (statusCode >= 500) {
+            console.error('uploadAvatar error:', error.message);
+        }
+        return res.status(statusCode).json({ message: error.message || 'Failed to upload avatar' });
+    }
+}
+
+async function removeAvatar(req, res) {
+    try {
+        if (!req.user || !req.user.id) {
+            return res.status(401).json({ message: 'User not authenticated' });
+        }
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.avatarUrl) {
+            await storageService.deleteAvatar(user.avatarUrl);
+            user.avatarUrl = null;
+            await user.save();
+        }
+
+        return res.status(200).json({
+            message: 'Avatar removed successfully',
+            user: sanitizeUser(user)
+        });
+    } catch (error) {
+        console.error('removeAvatar error:', error.message);
+        return res.status(500).json({ message: 'Failed to remove avatar' });
     }
 }
 
@@ -391,9 +692,15 @@ module.exports = {
     loginUser,
     logoutUser,
     getMe,
+    getProfile,
     updateProfile,
+    uploadAvatar,
+    removeAvatar,
     getUsers,
     updateUserRole,
     forgotPassword,
-    resetPassword
+    resetPassword,
+    sanitizePhone,
+    validateAndParseDob,
+    sanitizeUser
 };
