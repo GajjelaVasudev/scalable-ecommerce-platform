@@ -85,6 +85,13 @@ export interface ShippingAddress {
   country: string;
 }
 
+export interface SavedAddressItem extends ShippingAddress {
+  id: string;
+  _id?: string;
+  tag: 'HOME' | 'WORK' | 'OTHER';
+  isDefault?: boolean;
+}
+
 export interface OrderItem {
   product: string | Product;
   name: string;

@@ -9,6 +9,7 @@ import {
   Inventory,
   PaymentIssue,
   ShippingAddress,
+  SavedAddressItem,
 } from '../types';
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api';
@@ -333,6 +334,34 @@ export const api = {
       request<{ message: string; issue: PaymentIssue }>(`/payments/reconciliation/${issueId}/resolve`, {
         method: 'PATCH',
         body: JSON.stringify({ note }),
+      }),
+  },
+
+  // Addresses
+  addresses: {
+    list: () => request<SavedAddressItem[]>('/addresses', { method: 'GET' }),
+    create: (data: Omit<SavedAddressItem, 'id' | '_id'>) =>
+      request<SavedAddressItem>('/addresses', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+    update: (id: string, data: Partial<SavedAddressItem>) =>
+      request<SavedAddressItem>(`/addresses/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+    delete: (id: string) =>
+      request<{ message: string; reassignedDefaultId?: string }>(`/addresses/${id}`, {
+        method: 'DELETE',
+      }),
+    setDefault: (id: string) =>
+      request<SavedAddressItem>(`/addresses/${id}/default`, {
+        method: 'PATCH',
+      }),
+    sync: (addresses: SavedAddressItem[]) =>
+      request<{ message: string; syncedCount: number; addresses: SavedAddressItem[] }>('/addresses/sync', {
+        method: 'POST',
+        body: JSON.stringify({ addresses }),
       }),
   },
 
