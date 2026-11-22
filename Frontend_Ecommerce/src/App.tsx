@@ -151,6 +151,7 @@ export function App() {
               {/* Authentication Routes */}
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/signup" element={<RegisterPage />} />
 
               {/* Seller Center Routes */}
               <Route
