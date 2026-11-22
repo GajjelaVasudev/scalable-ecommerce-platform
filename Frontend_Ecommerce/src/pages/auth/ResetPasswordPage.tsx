@@ -66,13 +66,11 @@ export const ResetPasswordPage: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      if ((api.auth as any).resetPassword) {
-        await (api.auth as any).resetPassword({
-          resetToken: resetToken.trim(),
-          newPassword,
-          revokeSessions,
-        });
-      }
+      await api.auth.resetPassword({
+        resetToken: resetToken.trim(),
+        newPassword,
+        revokeSessions,
+      });
       navigate('/password-reset-success');
     } catch (err: any) {
       setErrorMessage(err.message || 'Failed to reset password. The link may have expired or is invalid.');

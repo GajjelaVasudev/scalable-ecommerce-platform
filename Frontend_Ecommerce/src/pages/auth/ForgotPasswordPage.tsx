@@ -16,11 +16,9 @@ export const ForgotPasswordPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      if ((api.auth as any).forgotPassword) {
-        const res = await (api.auth as any).forgotPassword({ email: email.trim() });
-        if (res?.resetToken) {
-          setDemoResetToken(res.resetToken);
-        }
+      const res = await api.auth.forgotPassword({ email: email.trim() });
+      if (res?.resetToken) {
+        setDemoResetToken(res.resetToken);
       }
       setIsSent(true);
     } catch (err: any) {

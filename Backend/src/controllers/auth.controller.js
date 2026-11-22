@@ -1,6 +1,7 @@
 const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -309,6 +310,82 @@ async function updateUserRole(req, res) {
     }
 }
 
+async function forgotPassword(req, res) {
+    try {
+        const { email } = req.body;
+
+        if (typeof email !== 'string' || !email.trim()) {
+            return res.status(400).json({ message: 'Valid email address is required' });
+        }
+
+        const trimmedEmail = email.trim().toLowerCase();
+        const user = await User.findOne({ email: trimmedEmail });
+
+        if (!user) {
+            return res.status(200).json({
+                message: 'If that email address exists in our system, a password reset link has been dispatched.'
+            });
+        }
+
+        const rawToken = crypto.randomBytes(32).toString('hex');
+        const hashedToken = crypto.createHash('sha256').update(rawToken).digest('hex');
+
+        user.resetPasswordToken = hashedToken;
+        user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
+        await user.save();
+
+        const responsePayload = {
+            message: 'If that email address exists in our system, a password reset link has been dispatched.'
+        };
+
+        if (process.env.NODE_ENV !== 'production') {
+            responsePayload.resetToken = rawToken;
+        }
+
+        return res.status(200).json(responsePayload);
+    } catch (error) {
+        console.error('forgotPassword error:', error.message);
+        return res.status(500).json({ message: 'Internal server error during password reset request' });
+    }
+}
+
+async function resetPassword(req, res) {
+    try {
+        const { resetToken, newPassword } = req.body;
+
+        if (typeof resetToken !== 'string' || !resetToken.trim() || typeof newPassword !== 'string' || !newPassword) {
+            return res.status(400).json({ message: 'Reset token and new password are required' });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ message: 'New password must be at least 6 characters long' });
+        }
+
+        const hashedToken = crypto.createHash('sha256').update(resetToken.trim()).digest('hex');
+
+        const user = await User.findOne({
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { $gt: new Date() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Password reset token is invalid or has expired' });
+        }
+
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        return res.status(200).json({
+            message: 'Password has been reset successfully. You may now sign in with your new credentials.'
+        });
+    } catch (error) {
+        console.error('resetPassword error:', error.message);
+        return res.status(500).json({ message: 'Internal server error during password reset' });
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
@@ -316,5 +393,7 @@ module.exports = {
     getMe,
     updateProfile,
     getUsers,
-    updateUserRole
+    updateUserRole,
+    forgotPassword,
+    resetPassword
 };

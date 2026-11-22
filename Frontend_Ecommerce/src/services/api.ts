@@ -118,6 +118,16 @@ export const api = {
         method: 'PATCH',
         body: JSON.stringify({ role }),
       }),
+    forgotPassword: (body: { email: string }) =>
+      request<{ message: string; resetToken?: string }>('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    resetPassword: (body: { resetToken: string; newPassword: string; revokeSessions?: boolean }) =>
+      request<{ message: string }>('/auth/reset-password', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
   },
 
   // Products
