@@ -64,6 +64,7 @@ function createApp() {
     const inventoryRoutes = require('./routes/inventory.routes');
     const reservationRoutes = require('./routes/reservation.routes');
     const paymentRoutes = require('./routes/payment.routes');
+    const addressRoutes = require('./routes/address.routes');
 
     app.use('/api/auth', authRoutes);
     app.use('/api/products', productRoutes);
@@ -74,6 +75,7 @@ function createApp() {
     app.use('/api/inventory', inventoryRoutes);
     app.use('/api/reservations', reservationRoutes);
     app.use('/api/payments', paymentRoutes);
+    app.use('/api/addresses', addressRoutes);
 
     // 404 Route Not Found Handler
     app.use((req, res) => {

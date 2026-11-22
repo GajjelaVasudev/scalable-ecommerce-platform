@@ -37,6 +37,24 @@ export function getAccountStorageKey(baseKey: string, userId?: string | null): s
   return `omizon_${baseKey}_guest`;
 }
 
+/**
+ * Safely extracts a 10-digit Indian phone number for editing inputs.
+ * Strips the +91 or 91 country code when exactly 12 digits.
+ * If already 10 digits, preserves them intact.
+ * NEVER silently truncates unexpectedly long or malformed numbers.
+ */
+export function extractTenDigitPhone(phoneStr?: string | null): string {
+  if (!phoneStr || typeof phoneStr !== 'string') return '';
+  const digits = phoneStr.replace(/\D/g, '');
+  if (digits.length === 12 && digits.startsWith('91')) {
+    return digits.slice(2);
+  }
+  if (digits.length === 10) {
+    return digits;
+  }
+  return digits;
+}
+
 // ---------------------------------------------------------------------------
 // 1. Account Profile Storage
 // ---------------------------------------------------------------------------

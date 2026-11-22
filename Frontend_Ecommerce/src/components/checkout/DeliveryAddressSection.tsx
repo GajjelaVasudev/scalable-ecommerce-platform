@@ -1,23 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { ShippingAddress } from '../../types';
+import React, { useState, useEffect, useCallback } from 'react';
+import { ShippingAddress, SavedAddressItem } from '../../types';
 import { useAuth } from '../../context/AuthContext';
+import { api, ApiError } from '../../services/api';
 import {
   getStableUserId,
   isDemoUser,
-  getAccountAddresses,
   setAccountAddresses,
+  extractTenDigitPhone,
 } from '../../utils/accountStorage';
-import { MapPin, Plus, Check, ShieldCheck, Home, Building2, AlertCircle } from 'lucide-react';
+import { migrateLegacyAddresses } from '../../utils/addressMigration';
+import {
+  MapPin,
+  Plus,
+  Check,
+  ShieldCheck,
+  Home,
+  Building2,
+  AlertCircle,
+  Loader2,
+} from 'lucide-react';
 
-export interface SavedAddressItem extends ShippingAddress {
-  id: string;
-  tag: 'HOME' | 'WORK' | 'OTHER';
-  isDefault?: boolean;
-}
+export type { SavedAddressItem };
 
 interface DeliveryAddressSectionProps {
   selectedAddress: SavedAddressItem | null;
-  onSelectAddress: (addr: SavedAddressItem) => void;
+  onSelectAddress: (addr: SavedAddressItem | null) => void;
   onAddressConfirmed?: () => void;
 }
 
@@ -53,29 +60,13 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
   onSelectAddress,
   onAddressConfirmed,
 }) => {
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const userId = getStableUserId(user);
   const isDemo = isDemoUser(user);
 
-  const [addresses, setAddresses] = useState<SavedAddressItem[]>(() => {
-    const saved = getAccountAddresses(userId);
-    if (saved && saved.length > 0) return saved;
-    // Only explicitly identified demo accounts receive sample demo addresses
-    if (isDemo) return INITIAL_SAVED_ADDRESSES;
-    // Real authenticated customers with no saved addresses start with an empty address list
-    return [];
-  });
-
-  useEffect(() => {
-    const saved = getAccountAddresses(userId);
-    if (saved && saved.length > 0) {
-      setAddresses(saved);
-    } else if (isDemo) {
-      setAddresses(INITIAL_SAVED_ADDRESSES);
-    } else {
-      setAddresses([]);
-    }
-  }, [userId, isDemo]);
+  const [addresses, setAddresses] = useState<SavedAddressItem[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -85,13 +76,70 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
     fullName: '',
     phone: '',
     addressLine: '',
-    city: '',
-    state: '',
+    city: 'Mumbai',
+    state: 'Maharashtra',
     postalCode: '',
     country: 'India',
     tag: 'HOME' as 'HOME' | 'WORK' | 'OTHER',
   });
   const [formError, setFormError] = useState('');
+
+  // Load addresses from backend or demo source
+  const fetchAddresses = useCallback(async () => {
+    if (!isAuthenticated || !userId) {
+      if (isDemo) {
+        setAddresses(INITIAL_SAVED_ADDRESSES);
+        if (!selectedAddress) {
+          onSelectAddress(INITIAL_SAVED_ADDRESSES[0]);
+        }
+      } else {
+        setAddresses([]);
+      }
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      if (!isDemo) {
+        await migrateLegacyAddresses(user);
+      }
+
+      const list = await api.addresses.list();
+      if (Array.isArray(list) && list.length > 0) {
+        setAddresses(list);
+        setAccountAddresses(userId, list);
+
+        // Auto-select default or first address if no address currently selected
+        if (!selectedAddress) {
+          const defaultAddr = list.find((a) => a.isDefault) || list[0];
+          onSelectAddress(defaultAddr);
+        } else {
+          // If the selected address was updated, refresh its reference
+          const fresh = list.find((a) => (a.id || (a as any)._id) === (selectedAddress.id || (selectedAddress as any)._id));
+          if (fresh) onSelectAddress(fresh);
+        }
+      } else if (isDemo) {
+        setAddresses(INITIAL_SAVED_ADDRESSES);
+        if (!selectedAddress) {
+          onSelectAddress(INITIAL_SAVED_ADDRESSES[0]);
+        }
+      } else {
+        setAddresses([]);
+        setAccountAddresses(userId, []);
+      }
+    } catch (err) {
+      console.error('Failed to fetch addresses during checkout:', err);
+      if (isDemo) {
+        setAddresses(INITIAL_SAVED_ADDRESSES);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAuthenticated, userId, isDemo, user, selectedAddress, onSelectAddress]);
+
+  useEffect(() => {
+    fetchAddresses();
+  }, [userId, isDemo]);
 
   const openAddForm = () => {
     setEditingId(null);
@@ -110,22 +158,23 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
   };
 
   const openEditForm = (addr: SavedAddressItem) => {
-    setEditingId(addr.id);
+    const aId = addr.id || (addr as any)._id;
+    setEditingId(aId);
     setFormData({
       fullName: addr.fullName,
-      phone: addr.phone.replace('+91 ', ''),
+      phone: extractTenDigitPhone(addr.phone),
       addressLine: addr.addressLine,
       city: addr.city,
       state: addr.state,
       postalCode: addr.postalCode,
-      country: addr.country,
-      tag: addr.tag,
+      country: addr.country || 'India',
+      tag: addr.tag || 'HOME',
     });
     setFormError('');
     setIsFormOpen(true);
   };
 
-  const handleSaveForm = (e: React.FormEvent) => {
+  const handleSaveForm = async (e: React.FormEvent) => {
     e.preventDefault();
     if (
       !formData.fullName.trim() ||
@@ -139,54 +188,86 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
       return;
     }
 
-    const cleanPhone = formData.phone.replace(/\D/g, '');
-    if (cleanPhone.length < 10) {
-      setFormError('Please enter a valid 10-digit Indian mobile number.');
+    const rawDigits = formData.phone.replace(/\D/g, '');
+    const cleanPhone = rawDigits.length === 12 && rawDigits.startsWith('91') ? rawDigits.slice(2) : rawDigits;
+    if (cleanPhone.length !== 10 || !/^[6-9]/.test(cleanPhone)) {
+      setFormError('Please enter a valid 10-digit Indian mobile number starting with 6-9.');
       return;
     }
 
     const cleanPin = formData.postalCode.replace(/\D/g, '');
-    if (cleanPin.length !== 6) {
-      setFormError('Please enter a valid 6-digit PIN code.');
+    if (cleanPin.length !== 6 || cleanPin.startsWith('0')) {
+      setFormError('Please enter a valid 6-digit Indian PIN code.');
       return;
     }
 
-    const formattedPhone = cleanPhone.startsWith('91') && cleanPhone.length > 10
-      ? `+${cleanPhone}`
-      : `+91 ${cleanPhone.slice(-10)}`;
+    const formattedPhone = `+91 ${cleanPhone}`;
 
-    if (editingId) {
-      const updated = addresses.map((a) =>
-        a.id === editingId
-          ? {
-              ...a,
-              ...formData,
-              phone: formattedPhone,
-              postalCode: cleanPin,
-            }
-          : a
-      );
-      setAddresses(updated);
-      setAccountAddresses(userId, updated);
-      const updatedItem = updated.find((a) => a.id === editingId);
-      if (updatedItem && selectedAddress?.id === editingId) {
-        onSelectAddress(updatedItem);
+    const payload = {
+      fullName: formData.fullName.trim(),
+      phone: formattedPhone,
+      addressLine: formData.addressLine.trim(),
+      city: formData.city.trim(),
+      state: formData.state.trim(),
+      postalCode: cleanPin,
+      country: 'India',
+      tag: formData.tag,
+      isDefault: addresses.length === 0,
+    };
+
+    setIsSubmitting(true);
+    setFormError('');
+
+    try {
+      if (isAuthenticated && userId && !isDemo) {
+        if (editingId) {
+          const updated = await api.addresses.update(editingId, payload);
+          const nextList = addresses.map((a) => {
+            const aId = a.id || (a as any)._id;
+            return aId === editingId ? updated : a;
+          });
+          setAddresses(nextList);
+          setAccountAddresses(userId, nextList);
+          onSelectAddress(updated);
+        } else {
+          const created = await api.addresses.create(payload);
+          const nextList = [...addresses, created];
+          setAddresses(nextList);
+          setAccountAddresses(userId, nextList);
+          onSelectAddress(created);
+        }
+      } else {
+        // Guest or demo fallback: preserve state client-side
+        if (editingId) {
+          const updated = addresses.map((a) => {
+            const aId = a.id || (a as any)._id;
+            return aId === editingId
+              ? { ...a, ...payload, id: aId }
+              : a;
+          });
+          setAddresses(updated);
+          const chosen = updated.find((a) => (a.id || (a as any)._id) === editingId);
+          if (chosen) onSelectAddress(chosen);
+        } else {
+          const newAddress: SavedAddressItem = {
+            id: `addr_${Date.now()}`,
+            ...payload,
+          };
+          const nextList = [...addresses, newAddress];
+          setAddresses(nextList);
+          onSelectAddress(newAddress);
+        }
       }
-    } else {
-      const newAddress: SavedAddressItem = {
-        id: `addr_${Date.now()}`,
-        ...formData,
-        phone: formattedPhone,
-        postalCode: cleanPin,
-        isDefault: false,
-      };
-      const updated = [...addresses, newAddress];
-      setAddresses(updated);
-      setAccountAddresses(userId, updated);
-      onSelectAddress(newAddress);
-    }
 
-    setIsFormOpen(false);
+      setIsFormOpen(false);
+    } catch (err: any) {
+      console.error('Checkout address save error:', err);
+      setFormError(
+        err instanceof ApiError ? err.message : 'Failed to save address to server. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -210,7 +291,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
       </div>
 
       <div className="p-5 md:p-6 flex flex-col gap-4">
-        {/* Modal / Inline Add & Edit Form */}
+        {/* Inline Add & Edit Form */}
         {isFormOpen && (
           <form
             onSubmit={handleSaveForm}
@@ -223,7 +304,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="text-outline hover:text-on-surface text-body-sm"
+                className="text-outline hover:text-on-surface text-body-sm cursor-pointer"
               >
                 Cancel
               </button>
@@ -246,6 +327,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
                   value={formData.fullName}
                   onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                   placeholder="e.g. Rajesh Singhania"
+                  required
                   className="w-full h-10 px-3 bg-surface-container-lowest text-on-surface rounded-lg font-body-md border border-outline-variant/50 focus:border-primary focus:outline-none"
                 />
               </div>
@@ -264,6 +346,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     placeholder="10-digit mobile number"
                     maxLength={10}
+                    required
                     className="w-full h-10 px-3 bg-surface-container-lowest text-on-surface rounded-r-lg font-body-md border border-outline-variant/50 focus:border-primary focus:outline-none"
                   />
                 </div>
@@ -279,6 +362,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
                 value={formData.addressLine}
                 onChange={(e) => setFormData({ ...formData, addressLine: e.target.value })}
                 placeholder="e.g. Flat 402, Highmont Residences, Senapati Bapat Marg"
+                required
                 className="w-full h-10 px-3 bg-surface-container-lowest text-on-surface rounded-lg font-body-md border border-outline-variant/50 focus:border-primary focus:outline-none"
               />
             </div>
@@ -293,6 +377,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
                   value={formData.city}
                   onChange={(e) => setFormData({ ...formData, city: e.target.value })}
                   placeholder="Mumbai"
+                  required
                   className="w-full h-10 px-3 bg-surface-container-lowest text-on-surface rounded-lg font-body-md border border-outline-variant/50 focus:border-primary focus:outline-none"
                 />
               </div>
@@ -306,6 +391,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
                   value={formData.state}
                   onChange={(e) => setFormData({ ...formData, state: e.target.value })}
                   placeholder="Maharashtra"
+                  required
                   className="w-full h-10 px-3 bg-surface-container-lowest text-on-surface rounded-lg font-body-md border border-outline-variant/50 focus:border-primary focus:outline-none"
                 />
               </div>
@@ -320,6 +406,7 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
                   onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
                   placeholder="400013"
                   maxLength={6}
+                  required
                   className="w-full h-10 px-3 bg-surface-container-lowest text-on-surface rounded-lg font-body-md border border-outline-variant/50 focus:border-primary focus:outline-none"
                 />
               </div>
@@ -347,19 +434,31 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
                 />
                 <span>Work / Commercial</span>
               </label>
+              <label className="flex items-center gap-1.5 text-body-sm cursor-pointer">
+                <input
+                  type="radio"
+                  name="tag"
+                  checked={formData.tag === 'OTHER'}
+                  onChange={() => setFormData({ ...formData, tag: 'OTHER' })}
+                  className="accent-primary"
+                />
+                <span>Other</span>
+              </label>
             </div>
 
             <div className="flex items-center gap-3 pt-2">
               <button
                 type="submit"
-                className="bg-primary hover:bg-secondary text-on-primary px-4 py-2 rounded-lg font-label-md transition-colors cursor-pointer font-semibold"
+                disabled={isSubmitting}
+                className="bg-primary hover:bg-secondary text-on-primary px-4 py-2 rounded-lg font-label-md transition-colors cursor-pointer font-semibold flex items-center gap-2 disabled:opacity-50"
               >
-                {editingId ? 'Update Address' : 'Save & Deliver Here'}
+                {isSubmitting && <Loader2 className="w-4 h-4 animate-spin" />}
+                <span>{editingId ? 'Update Address' : 'Save & Deliver Here'}</span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsFormOpen(false)}
-                className="px-4 py-2 rounded-lg font-label-md text-on-surface-variant hover:bg-surface-container transition-colors"
+                className="px-4 py-2 rounded-lg font-label-md text-on-surface-variant hover:bg-surface-container transition-colors cursor-pointer"
               >
                 Cancel
               </button>
@@ -367,8 +466,16 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
           </form>
         )}
 
+        {/* Loading Indicator */}
+        {isLoading && (
+          <div className="p-6 flex items-center justify-center gap-2 text-on-surface-variant text-body-md">
+            <Loader2 className="w-5 h-5 animate-spin text-primary" />
+            <span>Loading delivery addresses...</span>
+          </div>
+        )}
+
         {/* Saved Addresses List or Empty Prompt */}
-        {addresses.length === 0 ? (
+        {!isLoading && addresses.length === 0 ? (
           !isFormOpen && (
             <div className="p-8 text-center border-2 border-dashed border-outline-variant/30 rounded-xl flex flex-col items-center justify-center gap-2">
               <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary mb-1">
@@ -391,133 +498,137 @@ export const DeliveryAddressSection: React.FC<DeliveryAddressSectionProps> = ({
             </div>
           )
         ) : (
+          !isLoading &&
           addresses.map((addr) => {
-            const isSelected = selectedAddress?.id === addr.id;
+            const addrId = addr.id || (addr as any)._id;
+            const selectedId = selectedAddress ? selectedAddress.id || (selectedAddress as any)._id : null;
+            const isSelected = selectedId === addrId;
 
-          if (isSelected) {
-            return (
-              <div
-                key={addr.id}
-                className="relative bg-surface-container-lowest rounded-lg p-5 shadow-md shadow-primary/5 border border-primary/20 transition-all"
-              >
-                {/* Badge Tag */}
-                <div className="absolute -top-3 left-4 bg-primary text-on-primary text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full uppercase flex items-center gap-1 shadow-sm">
-                  {addr.tag === 'HOME' ? (
-                    <Home className="w-3 h-3" />
-                  ) : (
-                    <Building2 className="w-3 h-3" />
-                  )}
-                  {addr.isDefault ? `DEFAULT • ${addr.tag}` : addr.tag}
-                </div>
-
-                <div className="flex items-start justify-between gap-3 pt-1">
-                  <div className="flex items-start gap-3">
-                    {/* Radio Checked SVG Graphic */}
-                    <div className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center shrink-0 mt-1">
-                      <div className="w-2.5 h-2.5 rounded-full bg-primary" />
-                    </div>
-
-                    <div>
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-title-md text-on-surface font-bold">
-                          {addr.fullName}
-                        </span>
-                        <span className="bg-surface-container-high text-on-primary-fixed text-[11px] font-semibold px-2 py-0.5 rounded">
-                          {addr.phone}
-                        </span>
-                      </div>
-                      <p className="font-body-md text-on-surface-variant mt-2 leading-relaxed">
-                        {addr.addressLine},<br />
-                        {addr.city}, {addr.state} —{' '}
-                        <span className="font-semibold text-on-surface">{addr.postalCode}</span>, {addr.country}
-                      </p>
-
-                      {/* Pincode Speed Badge */}
-                      <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-surface-container-low text-primary text-body-sm font-medium">
-                        <ShieldCheck className="w-4 h-4 text-secondary shrink-0" />
-                        <span>
-                          Pincode {addr.postalCode} eligible for{' '}
-                          <strong>FastX Same-Day &amp; Next-Day</strong> delivery
-                        </span>
-                      </div>
-                    </div>
+            if (isSelected) {
+              return (
+                <div
+                  key={addrId}
+                  className="relative bg-surface-container-lowest rounded-lg p-5 shadow-md shadow-primary/5 border border-primary/20 transition-all"
+                >
+                  {/* Badge Tag */}
+                  <div className="absolute -top-3 left-4 bg-primary text-on-primary text-[10px] font-bold tracking-wider px-2.5 py-0.5 rounded-full uppercase flex items-center gap-1 shadow-sm">
+                    {addr.tag === 'HOME' ? (
+                      <Home className="w-3 h-3" />
+                    ) : (
+                      <Building2 className="w-3 h-3" />
+                    )}
+                    {addr.isDefault ? `DEFAULT • ${addr.tag}` : addr.tag}
                   </div>
 
+                  <div className="flex items-start justify-between gap-3 pt-1">
+                    <div className="flex items-start gap-3">
+                      {/* Radio Checked SVG Graphic */}
+                      <div className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center shrink-0 mt-1">
+                        <div className="w-2.5 h-2.5 rounded-full bg-primary" />
+                      </div>
+
+                      <div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-title-md text-on-surface font-bold">
+                            {addr.fullName}
+                          </span>
+                          <span className="bg-surface-container-high text-on-primary-fixed text-[11px] font-semibold px-2 py-0.5 rounded">
+                            {addr.phone}
+                          </span>
+                        </div>
+                        <p className="font-body-md text-on-surface-variant mt-2 leading-relaxed">
+                          {addr.addressLine},<br />
+                          {addr.city}, {addr.state} —{' '}
+                          <span className="font-semibold text-on-surface">{addr.postalCode}</span>, {addr.country}
+                        </p>
+
+                        {/* Pincode Speed Badge */}
+                        <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-surface-container-low text-primary text-body-sm font-medium">
+                          <ShieldCheck className="w-4 h-4 text-secondary shrink-0" />
+                          <span>
+                            Pincode {addr.postalCode} eligible for{' '}
+                            <strong>FastX Same-Day &amp; Next-Day</strong> delivery
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => openEditForm(addr)}
+                      className="text-primary hover:text-secondary font-label-md px-2 py-1 rounded hover:bg-surface-container-low transition-colors shrink-0 cursor-pointer font-semibold"
+                    >
+                      Edit
+                    </button>
+                  </div>
+
+                  <div className="mt-4 pt-3 flex flex-wrap items-center gap-3 border-t border-outline-variant/15">
+                    <button
+                      type="button"
+                      onClick={() => onAddressConfirmed && onAddressConfirmed()}
+                      className="bg-primary text-on-primary hover:bg-secondary px-4 py-2 rounded-lg font-label-md flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer font-semibold"
+                    >
+                      <Check className="w-4 h-4" />
+                      Deliver to this Address
+                    </button>
+                    <span className="text-outline text-body-sm hidden sm:inline">•</span>
+                    <span className="text-outline font-body-sm">
+                      Cash on Delivery &amp; Contactless Handover available
+                    </span>
+                  </div>
+                </div>
+              );
+            }
+
+            // Unselected Address Card
+            return (
+              <div
+                key={addrId}
+                onClick={() => onSelectAddress(addr)}
+                className="bg-surface-container-low rounded-lg p-4 flex items-start justify-between gap-3 hover:bg-surface-container transition-colors cursor-pointer border border-transparent hover:border-outline-variant/30"
+              >
+                <div className="flex items-start gap-3">
+                  {/* Radio Unchecked Graphic */}
+                  <div className="w-5 h-5 rounded-full border-2 border-outline-variant shrink-0 mt-0.5" />
+
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-title-sm text-on-surface font-semibold">
+                        {addr.fullName}
+                      </span>
+                      <span className="bg-surface-container-highest text-on-surface-variant text-[10px] uppercase font-semibold px-2 py-0.5 rounded">
+                        {addr.tag}
+                      </span>
+                    </div>
+                    <p className="font-body-sm text-on-surface-variant mt-1">
+                      {addr.addressLine}, {addr.city}, {addr.state} — {addr.postalCode}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 shrink-0">
                   <button
                     type="button"
-                    onClick={() => openEditForm(addr)}
-                    className="text-primary hover:text-secondary font-label-md px-2 py-1 rounded hover:bg-surface-container-low transition-colors shrink-0 cursor-pointer font-semibold"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEditForm(addr);
+                    }}
+                    className="text-outline hover:text-primary font-label-sm px-2 py-1 transition-colors cursor-pointer"
                   >
                     Edit
                   </button>
-                </div>
-
-                <div className="mt-4 pt-3 flex flex-wrap items-center gap-3 border-t border-outline-variant/15">
                   <button
                     type="button"
-                    onClick={() => onAddressConfirmed && onAddressConfirmed()}
-                    className="bg-primary text-on-primary hover:bg-secondary px-4 py-2 rounded-lg font-label-md flex items-center gap-1.5 shadow-sm transition-colors cursor-pointer font-semibold"
+                    onClick={() => onSelectAddress(addr)}
+                    className="text-outline hover:text-primary font-label-sm px-2 py-1 transition-colors font-semibold cursor-pointer"
                   >
-                    <Check className="w-4 h-4" />
-                    Deliver to this Address
+                    Select
                   </button>
-                  <span className="text-outline text-body-sm hidden sm:inline">•</span>
-                  <span className="text-outline font-body-sm">
-                    Cash on Delivery &amp; Contactless Handover available
-                  </span>
                 </div>
               </div>
             );
-          }
-
-          // Unselected Address Card
-          return (
-            <div
-              key={addr.id}
-              onClick={() => onSelectAddress(addr)}
-              className="bg-surface-container-low rounded-lg p-4 flex items-start justify-between gap-3 hover:bg-surface-container transition-colors cursor-pointer border border-transparent hover:border-outline-variant/30"
-            >
-              <div className="flex items-start gap-3">
-                {/* Radio Unchecked Graphic */}
-                <div className="w-5 h-5 rounded-full border-2 border-outline-variant shrink-0 mt-0.5" />
-
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-title-sm text-on-surface font-semibold">
-                      {addr.fullName}
-                    </span>
-                    <span className="bg-surface-container-highest text-on-surface-variant text-[10px] uppercase font-semibold px-2 py-0.5 rounded">
-                      {addr.tag}
-                    </span>
-                  </div>
-                  <p className="font-body-sm text-on-surface-variant mt-1">
-                    {addr.addressLine}, {addr.city}, {addr.state} — {addr.postalCode}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2 shrink-0">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openEditForm(addr);
-                  }}
-                  className="text-outline hover:text-primary font-label-sm px-2 py-1 transition-colors"
-                >
-                  Edit
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onSelectAddress(addr)}
-                  className="text-outline hover:text-primary font-label-sm px-2 py-1 transition-colors font-semibold"
-                >
-                  Select
-                </button>
-              </div>
-            </div>
-          );
-        }))}
+          })
+        )}
       </div>
     </section>
   );
