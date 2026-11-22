@@ -27,6 +27,9 @@ import { AccountSettingsPage } from './pages/marketplace/AccountSettingsPage';
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { PasswordResetSuccessPage } from './pages/auth/PasswordResetSuccessPage';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 
 // Seller Pages
@@ -152,6 +155,9 @@ export function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/signup" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
+              <Route path="/password-reset-success" element={<PasswordResetSuccessPage />} />
 
               {/* Seller Center Routes */}
               <Route
