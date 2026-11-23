@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import { ThemeProvider } from './context/ThemeContext';
 
 // Layouts
@@ -66,15 +67,17 @@ export function App() {
     <ThemeProvider>
       <AuthProvider>
         <CartProvider>
-          <BrowserRouter>
-            <Routes>
-              {/* Buyer / Public Marketplace Routes */}
-              <Route path="/" element={<MarketplaceLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="products" element={<ShopAllPage />} />
-                <Route path="products/:id" element={<ProductDetailPage />} />
-                <Route path="cart" element={<CartPage />} />
-                <Route path="checkout" element={<CheckoutPage />} />
+          <WishlistProvider>
+            <BrowserRouter>
+              <Routes>
+                {/* Buyer / Public Marketplace Routes */}
+                <Route path="/" element={<MarketplaceLayout />}>
+                  <Route index element={<HomePage />} />
+                  <Route path="products" element={<ShopAllPage />} />
+                  <Route path="products/:id" element={<ProductDetailPage />} />
+                  <Route path="cart" element={<CartPage />} />
+                  <Route path="wishlist" element={<WishlistPage />} />
+                  <Route path="checkout" element={<CheckoutPage />} />
                 <Route path="order-confirmation/:orderId" element={<OrderConfirmationPage />} />
                 <Route
                   path="orders"
@@ -126,11 +129,7 @@ export function App() {
                 />
                 <Route
                   path="account/wishlist"
-                  element={
-                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
-                      <WishlistPage />
-                    </ProtectedRoute>
-                  }
+                  element={<WishlistPage />}
                 />
                 <Route
                   path="account/addresses"
@@ -207,9 +206,10 @@ export function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </CartProvider>
-      </AuthProvider>
-    </ThemeProvider>
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
+  </ThemeProvider>
   );
 }
 

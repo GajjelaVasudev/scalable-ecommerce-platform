@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { useTheme } from '../../context/ThemeContext';
-import { getStableUserId, getAccountWishlist } from '../../utils/accountStorage';
+import { getStableUserId } from '../../utils/accountStorage';
 import { formatCurrency } from '../../utils/format';
 
 interface MarketplaceHeaderProps {
@@ -13,14 +14,13 @@ interface MarketplaceHeaderProps {
 export const MarketplaceHeader: React.FC<MarketplaceHeaderProps> = ({ onSearch }) => {
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount, cartTotal, openDrawer } = useCart();
+  const { wishlistCount } = useWishlist();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const isAccountSection = location.pathname.startsWith('/account') || location.pathname.startsWith('/orders');
 
   const userId = getStableUserId(user);
-  const wishlistItems = getAccountWishlist(userId);
-  const wishlistCount = wishlistItems ? wishlistItems.length : 8;
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');

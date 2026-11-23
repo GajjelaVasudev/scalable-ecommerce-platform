@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { AccountLayout } from '../../components/account/AccountLayout';
 import { api } from '../../services/api';
 import { Order, Product } from '../../types';
@@ -11,8 +12,6 @@ import {
   getStableUserId,
   getAccountProfile,
   getAccountAddresses,
-  getAccountWishlist,
-  setAccountWishlist,
   getAccountLastOrder,
 } from '../../utils/accountStorage';
 
@@ -60,16 +59,10 @@ export const AccountPage: React.FC = () => {
     return saved ? saved.length : 0;
   });
 
-  // Wishlist preview state: dynamically loads saved items scoped to account, or empty array if none saved
-  const [wishlistItems, setWishlistItems] = useState<any[]>(() => {
-    const saved = getAccountWishlist(userId);
-    if (saved && saved.length > 0) return saved.slice(0, 2);
-    return [];
-  });
-  const [totalWishlistCount, setTotalWishlistCount] = useState<number>(() => {
-    const saved = getAccountWishlist(userId);
-    return saved ? saved.length : 0;
-  });
+  // Wishlist preview state: backed by centralized WishlistContext
+  const { wishlist, wishlistCount, moveToCart } = useWishlist();
+  const wishlistItems = wishlist.slice(0, 2);
+  const totalWishlistCount = wishlistCount;
 
   // Synchronize account-scoped state whenever the active user changes
   useEffect(() => {
@@ -80,15 +73,6 @@ export const AccountPage: React.FC = () => {
     } else {
       setDefaultAddress(null);
       setAddressCount(0);
-    }
-
-    const wish = getAccountWishlist(userId);
-    if (wish && wish.length > 0) {
-      setWishlistItems(wish.slice(0, 2));
-      setTotalWishlistCount(wish.length);
-    } else {
-      setWishlistItems([]);
-      setTotalWishlistCount(0);
     }
   }, [userId]);
 
@@ -189,64 +173,12 @@ export const AccountPage: React.FC = () => {
     }
   };
 
-  // Handle Move to Cart from Wishlist: validates real data and never injects fake IDs
+  // Handle Move to Cart from Wishlist: uses centralized WishlistContext
   const handleMoveToCart = async (item: any) => {
     try {
-      const productId = item.id || item._id || item.product;
-      let targetProduct: Product | null = null;
-
-      if (
-        (item._id || item.id) &&
-        item.name &&
-        typeof item.price === 'number' &&
-        item.price > 0 &&
-        item.image &&
-        item.category
-      ) {
-        targetProduct = {
-          _id: item._id || item.id,
-          name: item.name,
-          description: item.description || item.specs || '',
-          price: item.price,
-          originalPrice: item.originalPrice,
-          stock: typeof item.stock === 'number' ? item.stock : 10,
-          category: item.category,
-          image: item.image,
-          status: item.status || 'active',
-        };
-      } else if (productId && /^[0-9a-fA-F]{24}$/.test(productId)) {
-        try {
-          const res = await api.products.getById(productId);
-          if (res?.product && res.product._id && typeof res.product.price === 'number' && res.product.price > 0) {
-            targetProduct = res.product;
-          }
-        } catch {}
-      }
-
-      if (!targetProduct) {
-        showToast(
-          `"${item?.name || 'This saved item'}" is currently unavailable in the catalog.`,
-          true,
-          'Browse Products',
-          '/products'
-        );
-        return;
-      }
-
-      await addItem(targetProduct, 1);
-
-      // Remove from account-scoped wishlist
-      try {
-        const saved = getAccountWishlist(userId);
-        if (saved && Array.isArray(saved)) {
-          const updated = saved.filter((w: any) => (w.id || w._id) !== productId);
-          setAccountWishlist(userId, updated);
-          setWishlistItems(updated.slice(0, 2));
-          setTotalWishlistCount(updated.length);
-        }
-      } catch {}
-
-      showToast(`Moved "${targetProduct.name}" to your cart!`);
+      await moveToCart(item);
+      const itemName = item.product?.name || item.name || 'item';
+      showToast(`Moved "${itemName}" to your cart!`);
     } catch {
       showToast('Could not move item to cart. Please try again.', true, 'Browse Products', '/products');
     }
