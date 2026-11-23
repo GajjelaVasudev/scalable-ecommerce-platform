@@ -28,8 +28,19 @@ async function createRazorpayOrder({ amount, currency = 'INR', receipt }) {
     return razorpayOrder;
 }
 
+async function createRazorpayRefund({ paymentId, amount, notes = {} }) {
+    const client = getRazorpayClient();
+    const options = {
+        amount: Math.round(amount * 100), // amount in paise
+        notes
+    };
+    const refund = await client.payments.refund(paymentId, options);
+    return refund;
+}
+
 module.exports = {
     createRazorpayOrder,
+    createRazorpayRefund,
     getRazorpayClient,
     setRazorpayClient
 };

@@ -50,7 +50,8 @@ export const AdminLayout: React.FC = () => {
     { name: 'Promotions & Campaigns', href: '/admin/promotions', icon: Tag },
     { name: 'Audit Logs & Reports', href: '/admin/reports', icon: FileText },
     { name: 'Risk, Fraud & Trust', href: '/admin/risk', icon: AlertTriangle },
-    { name: 'Returns & Disputes', href: '/admin/disputes', icon: RotateCcw },
+    { name: 'Platform Returns & RMA', href: '/admin/returns', icon: RotateCcw },
+    { name: 'Returns & Disputes', href: '/admin/disputes', icon: ShieldAlert },
     { name: 'Access Control & RBAC', href: '/admin/settings', icon: Sliders },
   ];
 

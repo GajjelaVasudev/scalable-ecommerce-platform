@@ -26,12 +26,14 @@ const SUPPORTED_MIME_TYPES = {
 
 const UPLOAD_ROOT = path.join(__dirname, '../../uploads');
 const AVATAR_DIR = path.join(UPLOAD_ROOT, 'avatars');
+const RETURNS_DIR = path.join(UPLOAD_ROOT, 'returns');
 
-// Ensure upload directory exists
+// Ensure upload directories exist
 try {
     fs.mkdirSync(AVATAR_DIR, { recursive: true });
+    fs.mkdirSync(RETURNS_DIR, { recursive: true });
 } catch (e) {
-    console.error('Failed to create avatar directory:', e.message);
+    console.error('Failed to create upload directories:', e.message);
 }
 
 /**
@@ -139,10 +141,68 @@ async function deleteAvatar(avatarUrl) {
     }
 }
 
+/**
+ * Validates a return evidence file buffer and MIME type (up to 5MB).
+ */
+function validateReturnEvidence(buffer, mimeType) {
+    if (!buffer || !Buffer.isBuffer(buffer)) {
+        return { isValid: false, error: 'Invalid or missing file buffer' };
+    }
+    if (buffer.length === 0) {
+        return { isValid: false, error: 'File is empty' };
+    }
+    const MAX_EVIDENCE_SIZE = 5 * 1024 * 1024;
+    if (buffer.length > MAX_EVIDENCE_SIZE) {
+        return {
+            isValid: false,
+            error: `File size exceeds 5MB limit (received ${(buffer.length / (1024 * 1024)).toFixed(2)}MB)`
+        };
+    }
+    const normalizedMime = (mimeType || '').toLowerCase().trim();
+    const extension = SUPPORTED_MIME_TYPES[normalizedMime];
+    if (!extension) {
+        return {
+            isValid: false,
+            error: `Unsupported image format. Allowed formats: ${Object.keys(SUPPORTED_MIME_TYPES).join(', ')}`
+        };
+    }
+    if (!verifyMagicBytes(buffer, normalizedMime)) {
+        return {
+            isValid: false,
+            error: 'File content does not match the specified image MIME type'
+        };
+    }
+    return { isValid: true, extension };
+}
+
+/**
+ * Saves a return evidence image to uploads/returns/
+ * Returns `/uploads/returns/<filename>`
+ */
+async function saveReturnEvidence(userId, buffer, mimeType) {
+    const validation = validateReturnEvidence(buffer, mimeType);
+    if (!validation.isValid) {
+        const err = new Error(validation.error);
+        err.statusCode = 400;
+        throw err;
+    }
+
+    const safeUserId = String(userId).replace(/[^a-zA-Z0-9]/g, '');
+    const timestamp = Date.now();
+    const randomHex = crypto.randomBytes(4).toString('hex');
+    const filename = `evidence-${safeUserId}-${timestamp}-${randomHex}${validation.extension}`;
+    const filePath = path.join(RETURNS_DIR, filename);
+
+    await fs.promises.writeFile(filePath, buffer);
+    return `/uploads/returns/${filename}`;
+}
+
 module.exports = {
     validateAvatar,
     saveAvatar,
     deleteAvatar,
+    validateReturnEvidence,
+    saveReturnEvidence,
     MAX_AVATAR_SIZE_BYTES,
     SUPPORTED_MIME_TYPES
 };

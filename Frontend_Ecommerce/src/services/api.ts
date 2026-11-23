@@ -14,6 +14,9 @@ import {
   NotificationItem,
   NotificationPreferences,
   NotificationListResponse,
+  ReturnRequestItem,
+  OrderEligibilityResponse,
+  ReturnListResponse,
 } from '../types';
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api';
@@ -441,6 +444,89 @@ export const api = {
         method: 'PUT',
         body: JSON.stringify(preferences),
       }),
+  },
+
+  // Returns & Refunds
+  returns: {
+    getEligibility: (orderId: string) =>
+      request<OrderEligibilityResponse>(`/returns/eligibility/${orderId}`, {
+        method: 'GET',
+      }),
+    create: (body: any) =>
+      request<{ message: string; returns: ReturnRequestItem[] }>('/returns', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    getMyReturns: (params?: { status?: string; search?: string; page?: number; limit?: number }) =>
+      request<ReturnListResponse>('/returns/my-returns', {
+        method: 'GET',
+        params,
+      }),
+    getById: (id: string) =>
+      request<{ returnRequest: ReturnRequestItem }>(`/returns/${id}`, {
+        method: 'GET',
+      }),
+    cancel: (id: string, reason?: string) =>
+      request<{ message: string; returnRequest: ReturnRequestItem }>(`/returns/${id}/cancel`, {
+        method: 'POST',
+        body: JSON.stringify({ reason }),
+      }),
+    uploadEvidence: (base64Data: string, mimeType: string) =>
+      request<{ url: string }>('/returns/upload-evidence', {
+        method: 'POST',
+        body: JSON.stringify({ base64Data, mimeType }),
+      }),
+    dispute: (id: string, body: { reason: string; evidence?: string[] }) =>
+      request<{ message: string; returnRequest: ReturnRequestItem }>(`/returns/${id}/dispute`, {
+        method: 'POST',
+        body: JSON.stringify(body),
+      }),
+    // Seller
+    seller: {
+      getList: (params?: { status?: string; search?: string; page?: number; limit?: number }) =>
+        request<ReturnListResponse>('/returns/seller/list', {
+          method: 'GET',
+          params,
+        }),
+      review: (id: string, body: { action: 'approve' | 'reject'; rejectionReason?: string; note?: string }) =>
+        request<{ message: string; returnRequest: ReturnRequestItem }>(`/returns/seller/${id}/review`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+        }),
+      updateLogistics: (id: string, body: { status: string; carrier?: string; trackingNumber?: string; note?: string }) =>
+        request<{ message: string; returnRequest: ReturnRequestItem }>(`/returns/seller/${id}/logistics`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+        }),
+      inspect: (id: string, body: { itemsInspection: any[]; generalNotes?: string }) =>
+        request<{ message: string; returnRequest: ReturnRequestItem }>(`/returns/seller/${id}/inspect`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+        }),
+    },
+    // Admin
+    admin: {
+      getList: (params?: { status?: string; disputeOnly?: boolean | string; search?: string; page?: number; limit?: number }) =>
+        request<ReturnListResponse>('/returns/admin/list', {
+          method: 'GET',
+          params,
+        }),
+      resolveDispute: (id: string, body: { decision: string; adminNotes?: string; action?: string }) =>
+        request<{ message: string; returnRequest: ReturnRequestItem }>(`/returns/admin/${id}/dispute/resolve`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+        }),
+      triggerGatewayRefund: (id: string, amount?: number) =>
+        request<{ message: string; returnRequest: ReturnRequestItem; gatewayRefund: any }>(`/returns/admin/${id}/refund/gateway`, {
+          method: 'POST',
+          body: JSON.stringify({ amount }),
+        }),
+      confirmCODTransfer: (id: string, body: { bankReferenceNumber: string; notes?: string }) =>
+        request<{ message: string; returnRequest: ReturnRequestItem }>(`/returns/admin/${id}/refund/cod-confirm`, {
+          method: 'POST',
+          body: JSON.stringify(body),
+        }),
+    },
   },
 
   // Health

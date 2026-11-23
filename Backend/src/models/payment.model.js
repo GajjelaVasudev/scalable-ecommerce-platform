@@ -50,7 +50,21 @@ const paymentSchema = new mongoose.Schema({
     paidAt: {
         type: Date,
         default: null
-    }
+    },
+    refundAmount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    refunds: [
+        {
+            refundId: { type: String, required: true },
+            amount: { type: Number, required: true },
+            status: { type: String, enum: ['created', 'processed', 'failed'], default: 'created' },
+            notes: { type: mongoose.Schema.Types.Mixed },
+            createdAt: { type: Date, default: Date.now }
+        }
+    ]
 }, { timestamps: true });
 
 paymentSchema.index({ order: 1, createdAt: -1 });

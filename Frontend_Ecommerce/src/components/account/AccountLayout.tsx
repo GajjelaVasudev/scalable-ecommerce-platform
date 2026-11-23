@@ -7,6 +7,7 @@ export type AccountNavKey =
   | 'overview'
   | 'personal-info'
   | 'orders'
+  | 'returns'
   | 'wishlist'
   | 'addresses'
   | 'notifications'
@@ -46,6 +47,13 @@ const ACCOUNT_NAV_ITEMS: NavItem[] = [
     path: '/account/orders',
     symbol: 'package_2',
     dataPath: 'my-orders',
+  },
+  {
+    key: 'returns',
+    label: 'My Returns',
+    path: '/account/returns',
+    symbol: 'assignment_return',
+    dataPath: 'my-returns',
   },
   {
     key: 'wishlist',
