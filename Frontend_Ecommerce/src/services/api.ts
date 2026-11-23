@@ -11,6 +11,9 @@ import {
   ShippingAddress,
   SavedAddressItem,
   WishlistResponse,
+  NotificationItem,
+  NotificationPreferences,
+  NotificationListResponse,
 } from '../types';
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api';
@@ -399,6 +402,44 @@ export const api = {
       request<WishlistResponse>('/wishlist/merge', {
         method: 'POST',
         body: JSON.stringify({ items }),
+      }),
+  },
+
+  // Notifications
+  notifications: {
+    list: (params?: { page?: number; limit?: number; category?: string; isRead?: boolean }) =>
+      request<NotificationListResponse>('/notifications', {
+        method: 'GET',
+        params,
+      }),
+    getUnreadCount: () =>
+      request<{ message: string; unreadCount: number }>('/notifications/unread-count', {
+        method: 'GET',
+      }),
+    markAsRead: (id: string) =>
+      request<{ message: string; notification: NotificationItem }>(`/notifications/${id}/read`, {
+        method: 'PATCH',
+      }),
+    markAsUnread: (id: string) =>
+      request<{ message: string; notification: NotificationItem }>(`/notifications/${id}/unread`, {
+        method: 'PATCH',
+      }),
+    markAllAsRead: () =>
+      request<{ message: string; modifiedCount: number }>('/notifications/mark-all-read', {
+        method: 'PATCH',
+      }),
+    delete: (id: string) =>
+      request<{ message: string }>(`/notifications/${id}`, {
+        method: 'DELETE',
+      }),
+    getPreferences: () =>
+      request<{ message: string; preferences: NotificationPreferences }>('/notifications/preferences', {
+        method: 'GET',
+      }),
+    updatePreferences: (preferences: Partial<NotificationPreferences>) =>
+      request<{ message: string; preferences: NotificationPreferences }>('/notifications/preferences', {
+        method: 'PUT',
+        body: JSON.stringify(preferences),
       }),
   },
 

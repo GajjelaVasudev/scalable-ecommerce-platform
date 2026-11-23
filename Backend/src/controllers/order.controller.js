@@ -5,6 +5,7 @@ const Cart = require('../models/cart.model');
 const Product = require('../models/product.model');
 const Inventory = require('../models/inventory.model');
 const Reservation = require('../models/reservation.model');
+const { sendNotification } = require('../services/notification.service');
 
 const VALID_PAYMENT_METHODS = ['UPI', 'CARD', 'NETBANKING', 'EMI', 'COD'];
 
@@ -248,6 +249,21 @@ async function createOrder(req, res) {
 
             return createdOrder;
         });
+
+        if (order && order.user) {
+            sendNotification({
+                userId: order.user,
+                category: 'orders',
+                title: 'Order confirmed',
+                message: `Your order #${order.trackingNumber || order._id} has been confirmed.`,
+                icon: 'shopping_bag',
+                actionUrl: '/account/orders',
+                actionLabel: 'View order',
+                dedupeKey: `order_confirmed_${order._id}`,
+                prefKey: 'orderConfirmation',
+                metadata: { orderId: order._id }
+            }).catch(() => {});
+        }
 
         return res.status(201).json({
             message: 'Order created successfully',
@@ -792,6 +808,21 @@ async function cancelOrder(req, res) {
         }
         await order.save();
 
+        if (order.user) {
+            sendNotification({
+                userId: order.user._id || order.user,
+                category: 'orders',
+                title: 'Order cancelled',
+                message: `Your order #${order.trackingNumber || order._id} has been cancelled.`,
+                icon: 'cancel',
+                actionUrl: '/account/orders',
+                actionLabel: 'View order',
+                dedupeKey: `order_cancelled_${order._id}`,
+                prefKey: 'cancellationUpdates',
+                metadata: { orderId: order._id }
+            }).catch(() => {});
+        }
+
         return res.status(200).json({
             message: 'Order cancelled successfully and reserved stock released',
             order
@@ -825,15 +856,70 @@ async function requestReturn(req, res) {
             return res.status(400).json({ message: 'Returns can only be requested for delivered orders' });
         }
 
+        if (order.deliveryStatus === 'returned' || order.refundStatus === 'completed' || order.refundStatus === 'pending') {
+            return res.status(400).json({ message: 'Return or refund has already been processed for this order' });
+        }
+
+        const isCOD = order.paymentMethod === 'COD';
         order.deliveryStatus = 'returned';
-        order.paymentStatus = 'refunded';
-        order.refundStatus = 'completed';
+        order.refundStatus = 'pending';
         order.refundAmount = order.totalAmount;
         order.returnReason = reason || 'Customer requested return';
         await order.save();
 
+        if (order.user) {
+            const uid = order.user._id || order.user;
+            sendNotification({
+                userId: uid,
+                category: 'returns',
+                title: 'Return requested',
+                message: `Your return request for order #${order.trackingNumber || order._id} has been received.`,
+                icon: 'assignment_return',
+                actionUrl: '/account/orders',
+                actionLabel: 'View return',
+                dedupeKey: `return_requested_${order._id}`,
+                prefKey: 'returnStatus',
+                metadata: { orderId: order._id }
+            }).catch(() => {});
+
+            sendNotification({
+                userId: uid,
+                category: 'returns',
+                title: 'Return approved',
+                message: `Your return request for order #${order.trackingNumber || order._id} has been approved.`,
+                icon: 'assignment_return',
+                actionUrl: '/account/orders',
+                actionLabel: 'View return',
+                dedupeKey: `return_approved_${order._id}`,
+                prefKey: 'returnStatus',
+                metadata: { orderId: order._id }
+            }).catch(() => {});
+
+            const refundTitle = isCOD ? 'Refund pending inspection' : 'Refund pending';
+            const refundMessage = isCOD
+                ? 'Your return has been approved. Your refund will be processed via bank transfer after the returned item passes inspection.'
+                : `Your return has been approved. Your refund of ₹${(order.refundAmount || order.totalAmount).toLocaleString('en-IN')} is awaiting processing. We'll notify you when it has been completed.`;
+
+            sendNotification({
+                userId: uid,
+                category: 'returns',
+                title: refundTitle,
+                message: refundMessage,
+                icon: 'currency_rupee',
+                actionUrl: '/account/orders',
+                actionLabel: 'View details',
+                dedupeKey: `order_refund_${order._id}`,
+                prefKey: 'refundStatus',
+                metadata: { orderId: order._id, paymentMethod: order.paymentMethod, refundStatus: 'pending' }
+            }).catch(() => {});
+        }
+
+        const responseMessage = isCOD
+            ? 'Return request approved. Refund for COD order will be processed via bank transfer after item inspection.'
+            : 'Return request processed and refund is awaiting processing';
+
         return res.status(200).json({
-            message: 'Return request processed and refund credited to original payment method',
+            message: responseMessage,
             order
         });
     } catch (error) {
@@ -947,6 +1033,50 @@ async function updateOrderStatus(req, res) {
         }
 
         await order.save();
+
+        if (order.user) {
+            const uid = order.user._id || order.user;
+            if (deliveryStatus === 'shipped') {
+                sendNotification({
+                    userId: uid,
+                    category: 'delivery',
+                    title: 'Order shipped',
+                    message: `Your package #${order.trackingNumber || order._id} is on its way.`,
+                    icon: 'local_shipping',
+                    actionUrl: '/account/orders',
+                    actionLabel: 'Track package',
+                    dedupeKey: `order_shipped_${order._id}`,
+                    prefKey: 'shippingUpdates',
+                    metadata: { orderId: order._id, trackingNumber: order.trackingNumber }
+                }).catch(() => {});
+            } else if (deliveryStatus === 'delivered') {
+                sendNotification({
+                    userId: uid,
+                    category: 'orders',
+                    title: 'Order delivered',
+                    message: `Your order #${order.trackingNumber || order._id} was delivered successfully.`,
+                    icon: 'inventory_2',
+                    actionUrl: '/account/orders',
+                    actionLabel: 'Rate & review',
+                    dedupeKey: `order_delivered_${order._id}`,
+                    prefKey: 'deliveryUpdates',
+                    metadata: { orderId: order._id }
+                }).catch(() => {});
+            } else if (deliveryStatus === 'returned') {
+                sendNotification({
+                    userId: uid,
+                    category: 'returns',
+                    title: 'Return approved',
+                    message: `Your return for order #${order.trackingNumber || order._id} has been approved.`,
+                    icon: 'assignment_return',
+                    actionUrl: '/account/orders',
+                    actionLabel: 'View return',
+                    dedupeKey: `return_approved_${order._id}`,
+                    prefKey: 'returnStatus',
+                    metadata: { orderId: order._id }
+                }).catch(() => {});
+            }
+        }
 
         return res.status(200).json({
             message: 'Order delivery status updated successfully',

@@ -193,3 +193,64 @@ export interface WishlistResponse {
   itemCount: number;
 }
 
+export type NotificationCategory =
+  | 'all'
+  | 'orders'
+  | 'payments'
+  | 'delivery'
+  | 'returns'
+  | 'offers'
+  | 'account'
+  | 'system';
+
+export interface NotificationItem {
+  _id: string;
+  user: string;
+  category: 'orders' | 'payments' | 'delivery' | 'returns' | 'offers' | 'account' | 'system';
+  title: string;
+  message: string;
+  icon: string;
+  isRead: boolean;
+  readAt: string | null;
+  actionUrl: string;
+  actionLabel: string;
+  dedupeKey?: string;
+  metadata?: Record<string, any>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NotificationPreferences {
+  _id?: string;
+  user?: string;
+  orderConfirmation: boolean;
+  paymentUpdates: boolean;
+  shippingUpdates: boolean;
+  deliveryUpdates: boolean;
+  cancellationUpdates: boolean;
+  returnStatus: boolean;
+  refundStatus: boolean;
+  priceDropAlerts: boolean;
+  backInStockAlerts: boolean;
+  promotionalOffers: boolean;
+  profileChanges: boolean;
+  securityAlerts: boolean;
+  inApp: boolean;
+  email: boolean;
+  push: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface NotificationListResponse {
+  message: string;
+  notifications: NotificationItem[];
+  pagination: {
+    page: number;
+    limit: number;
+    totalNotifications: number;
+    totalPages: number;
+    unreadCount: number;
+  };
+}
+
