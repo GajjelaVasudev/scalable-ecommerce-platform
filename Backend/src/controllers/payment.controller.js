@@ -8,6 +8,7 @@ const Reservation = require('../models/reservation.model');
 const Inventory = require('../models/inventory.model');
 const Product = require('../models/product.model');
 const WebhookEvent = require('../models/webhookEvent.model');
+const { sendNotification } = require('../services/notification.service');
 
 const { createRazorpayOrder } = require('../services/payment.service');
 const { verifyRazorpaySignature } = require('../services/webhook.service');
@@ -595,6 +596,46 @@ async function handleWebhook(req, res) {
                 await order.save();
             }
         });
+
+        // Emit payment notification
+        try {
+            const paymentDoc = await Payment.findOne({ providerOrderId: razorpayPayment.order_id });
+            if (paymentDoc && paymentDoc.order) {
+                const paidOrder = await Order.findById(paymentDoc.order);
+                if (paidOrder && paidOrder.user) {
+                    if (event.event === 'payment.captured' && paymentDoc.status === 'paid') {
+                        const amountStr = Number(paidOrder.totalAmount).toLocaleString('en-IN');
+                        sendNotification({
+                            userId: paidOrder.user,
+                            category: 'payments',
+                            title: 'Payment successful',
+                            message: `Your payment of ₹${amountStr} was received.`,
+                            icon: 'payments',
+                            actionUrl: '/account/orders',
+                            actionLabel: 'View receipt',
+                            dedupeKey: `payment_success_${paymentDoc._id}`,
+                            prefKey: 'paymentUpdates',
+                            metadata: { orderId: paidOrder._id, paymentId: paymentDoc._id }
+                        }).catch(() => {});
+                    } else if (event.event === 'payment.failed') {
+                        sendNotification({
+                            userId: paidOrder.user,
+                            category: 'payments',
+                            title: 'Payment failed',
+                            message: `Payment could not be processed for order #${paidOrder.trackingNumber || paidOrder._id}.`,
+                            icon: 'payments',
+                            actionUrl: '/account/orders',
+                            actionLabel: 'Retry payment',
+                            dedupeKey: `payment_failed_${paymentDoc._id}`,
+                            prefKey: 'paymentUpdates',
+                            metadata: { orderId: paidOrder._id, paymentId: paymentDoc._id }
+                        }).catch(() => {});
+                    }
+                }
+            }
+        } catch (notifErr) {
+            console.warn('Payment notification error:', notifErr.message);
+        }
 
         return res.status(200).json({ message: outcome });
     } catch (error) {

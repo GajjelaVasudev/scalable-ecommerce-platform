@@ -4,6 +4,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useNotifications } from '../../context/NotificationContext';
+import { NotificationDropdown } from './NotificationDropdown';
 import { getStableUserId } from '../../utils/accountStorage';
 import { formatCurrency } from '../../utils/format';
 
@@ -15,6 +17,7 @@ export const MarketplaceHeader: React.FC<MarketplaceHeaderProps> = ({ onSearch }
   const { user, isAuthenticated, logout } = useAuth();
   const { cartCount, cartTotal, openDrawer } = useCart();
   const { wishlistCount } = useWishlist();
+  const { unreadCount } = useNotifications();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,6 +28,7 @@ export const MarketplaceHeader: React.FC<MarketplaceHeaderProps> = ({ onSearch }
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(() => {
     return typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('drawer') === 'true';
   });
@@ -291,17 +295,36 @@ export const MarketplaceHeader: React.FC<MarketplaceHeaderProps> = ({ onSearch }
                 </div>
               </button>
 
-              {/* Theme Toggle */}
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="p-1.5 rounded-lg hover:bg-obsidian-surface-1 text-text-dark-muted hover:text-text-dark-primary transition-colors cursor-pointer"
-                title="Toggle Theme"
-              >
-                <span className="material-symbols-outlined text-[20px]">
-                  {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-                </span>
-              </button>
+              {/* Notification Bell */}
+              <div className="relative">
+                <button
+                  type="button"
+                  id="notification-bell-btn"
+                  onClick={() => setIsNotificationOpen((prev) => !prev)}
+                  className="relative p-2 rounded-lg hover:bg-obsidian-surface-1 text-text-dark-primary transition-colors flex items-center justify-center cursor-pointer"
+                  title="Notifications"
+                  aria-label="Notifications"
+                >
+                  <span
+                    className="material-symbols-outlined text-[22px]"
+                    style={unreadCount > 0 ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                  >
+                    notifications
+                  </span>
+                  {unreadCount > 0 && (
+                    <span
+                      id="notification-badge"
+                      className="absolute -top-1 -right-1 bg-primary-container text-white font-label-sm text-[10px] min-w-4 h-4 px-1 rounded-full flex items-center justify-center font-bold shadow-sm"
+                    >
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+                <NotificationDropdown
+                  isOpen={isNotificationOpen}
+                  onClose={() => setIsNotificationOpen(false)}
+                />
+              </div>
             </div>
           </div>
 

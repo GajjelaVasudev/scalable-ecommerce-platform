@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useNotifications } from '../../context/NotificationContext';
 
 export type AccountNavKey =
   | 'overview'
@@ -8,6 +9,7 @@ export type AccountNavKey =
   | 'orders'
   | 'wishlist'
   | 'addresses'
+  | 'notifications'
   | 'settings';
 
 interface AccountLayoutProps {
@@ -60,6 +62,13 @@ const ACCOUNT_NAV_ITEMS: NavItem[] = [
     dataPath: 'saved-addresses',
   },
   {
+    key: 'notifications',
+    label: 'Notifications',
+    path: '/account/notifications',
+    symbol: 'notifications',
+    dataPath: 'notifications',
+  },
+  {
     key: 'settings',
     label: 'Account Settings',
     path: '/account/settings',
@@ -98,6 +107,7 @@ const SUPPORT_NAV_ITEMS: SupportItem[] = [
 
 export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKey }) => {
   const { user, logout } = useAuth();
+  const { unreadCount } = useNotifications();
   const navigate = useNavigate();
   const location = useLocation();
   const [supportToast, setSupportToast] = useState<string | null>(null);
@@ -230,21 +240,28 @@ export const AccountLayout: React.FC<AccountLayoutProps> = ({ children, activeKe
                       to={item.path}
                       data-path={item.dataPath}
                       aria-current={isActive ? 'page' : undefined}
-                      className={`flex items-center gap-space-sm px-space-sm py-2 rounded-lg transition-colors font-body-md text-body-md ${
+                      className={`flex items-center justify-between px-space-sm py-2 rounded-lg transition-colors font-body-md text-body-md ${
                         isActive
                           ? 'bg-surface-container text-ink font-semibold'
                           : 'text-ink-muted hover:text-ink hover:bg-surface-container-low'
                       }`}
                     >
-                      <span
-                        className={`material-symbols-outlined text-[18px] transition-colors ${
-                          isActive ? 'text-primary' : 'text-ink-muted'
-                        }`}
-                        style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
-                      >
-                        {item.symbol}
+                      <span className="flex items-center gap-space-sm">
+                        <span
+                          className={`material-symbols-outlined text-[18px] transition-colors ${
+                            isActive ? 'text-primary' : 'text-ink-muted'
+                          }`}
+                          style={isActive ? { fontVariationSettings: "'FILL' 1" } : undefined}
+                        >
+                          {item.symbol}
+                        </span>
+                        <span>{item.label}</span>
                       </span>
-                      <span>{item.label}</span>
+                      {item.key === 'notifications' && unreadCount > 0 && (
+                        <span className="px-1.5 py-0.5 text-[11px] leading-none font-semibold rounded-full bg-primary-fixed text-primary">
+                          {unreadCount}
+                        </span>
+                      )}
                     </Link>
                   );
                 })}

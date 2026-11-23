@@ -70,6 +70,7 @@ function createApp() {
     const paymentRoutes = require('./routes/payment.routes');
     const addressRoutes = require('./routes/address.routes');
     const wishlistRoutes = require('./routes/wishlist.routes');
+    const notificationRoutes = require('./routes/notification.routes');
 
     app.use('/api/auth', authRoutes);
     app.use('/api/products', productRoutes);
@@ -82,6 +83,7 @@ function createApp() {
     app.use('/api/payments', paymentRoutes);
     app.use('/api/addresses', addressRoutes);
     app.use('/api/wishlist', wishlistRoutes);
+    app.use('/api/notifications', notificationRoutes);
 
     // 404 Route Not Found Handler
     app.use((req, res) => {

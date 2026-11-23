@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { NotificationProvider } from './context/NotificationContext';
 import { ThemeProvider } from './context/ThemeContext';
 
 // Layouts
@@ -23,6 +24,8 @@ import { AccountPage } from './pages/marketplace/AccountPage';
 import { PersonalInfoPage } from './pages/marketplace/PersonalInfoPage';
 import { WishlistPage } from './pages/marketplace/WishlistPage';
 import { AddressBookPage } from './pages/marketplace/AddressBookPage';
+import { NotificationCentrePage } from './pages/marketplace/NotificationCentrePage';
+import { NotificationPreferencesPage } from './pages/marketplace/NotificationPreferencesPage';
 import { AccountSettingsPage } from './pages/marketplace/AccountSettingsPage';
 
 // Auth Pages
@@ -68,7 +71,8 @@ export function App() {
       <AuthProvider>
         <CartProvider>
           <WishlistProvider>
-            <BrowserRouter>
+            <NotificationProvider>
+              <BrowserRouter>
               <Routes>
                 {/* Buyer / Public Marketplace Routes */}
                 <Route path="/" element={<MarketplaceLayout />}>
@@ -140,6 +144,26 @@ export function App() {
                   }
                 />
                 <Route
+                  path="account/notifications"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <NotificationCentrePage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/notifications/preferences"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <NotificationPreferencesPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="notifications"
+                  element={<Navigate to="/account/notifications" replace />}
+                />
+                <Route
                   path="account/settings"
                   element={
                     <ProtectedRoute allowedRoles={['buyer', 'admin']}>
@@ -206,9 +230,10 @@ export function App() {
               </Route>
             </Routes>
           </BrowserRouter>
-        </WishlistProvider>
-      </CartProvider>
-    </AuthProvider>
+        </NotificationProvider>
+      </WishlistProvider>
+    </CartProvider>
+  </AuthProvider>
   </ThemeProvider>
   );
 }
