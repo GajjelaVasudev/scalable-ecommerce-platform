@@ -10,6 +10,7 @@ import {
   PaymentIssue,
   ShippingAddress,
   SavedAddressItem,
+  WishlistResponse,
 } from '../types';
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE_URL) || '/api';
@@ -375,6 +376,29 @@ export const api = {
       request<{ message: string; syncedCount: number; addresses: SavedAddressItem[] }>('/addresses/sync', {
         method: 'POST',
         body: JSON.stringify({ addresses }),
+      }),
+  },
+
+  // Wishlist
+  wishlist: {
+    get: () => request<WishlistResponse>('/wishlist', { method: 'GET' }),
+    addItem: (productId: string) =>
+      request<WishlistResponse>('/wishlist/items', {
+        method: 'POST',
+        body: JSON.stringify({ productId }),
+      }),
+    removeItem: (productId: string) =>
+      request<WishlistResponse>(`/wishlist/items/${productId}`, {
+        method: 'DELETE',
+      }),
+    clear: () =>
+      request<WishlistResponse>('/wishlist', {
+        method: 'DELETE',
+      }),
+    merge: (items: any[]) =>
+      request<WishlistResponse>('/wishlist/merge', {
+        method: 'POST',
+        body: JSON.stringify({ items }),
       }),
   },
 

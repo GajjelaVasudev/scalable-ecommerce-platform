@@ -2,14 +2,16 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { api } from '../../services/api';
 import { Product } from '../../types';
 import { formatCurrency, calculateDiscount } from '../../utils/format';
-import { getStableUserId, getAccountLastOrder, getAccountWishlist, setAccountWishlist } from '../../utils/accountStorage';
+import { getStableUserId, getAccountLastOrder } from '../../utils/accountStorage';
 
 export const HomePage: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
   const { addItem } = useCart();
+  const { isWishlisted, toggleWishlist: toggleWishlistContext } = useWishlist();
   const navigate = useNavigate();
 
   const userId = getStableUserId(user);
@@ -22,33 +24,16 @@ export const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Wishlist state
-  const [wishlistIds, setWishlistIds] = useState<string[]>(() => {
-    const list = getAccountWishlist(userId);
-    return list ? list.map((item: any) => item._id || item.id) : [];
-  });
-
   const toggleWishlist = (productId: string, productName: string, price: number, image: string, category: string) => {
-    const current = getAccountWishlist(userId) || [];
-    let updated: any[];
-    if (wishlistIds.includes(productId)) {
-      updated = current.filter((item: any) => (item._id || item.id) !== productId);
-      setWishlistIds((prev) => prev.filter((id) => id !== productId));
-    } else {
-      updated = [
-        ...current,
-        {
-          id: productId,
-          name: productName,
-          price,
-          image,
-          category,
-          specs: 'Verified OMIZON SKU',
-        },
-      ];
-      setWishlistIds((prev) => [...prev, productId]);
-    }
-    setAccountWishlist(userId, updated);
+    toggleWishlistContext({
+      _id: productId,
+      id: productId,
+      name: productName,
+      price,
+      image,
+      category,
+      specs: 'Verified OMIZON SKU',
+    } as any);
   };
 
   // Fetch live products for homepage sections from MongoDB-backed public API
@@ -282,7 +267,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[16px] ${
-                      wishlistIds.includes('deal-01') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('deal-01') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -358,7 +343,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[16px] ${
-                      wishlistIds.includes('deal-02') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('deal-02') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -431,7 +416,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[16px] ${
-                      wishlistIds.includes('deal-03') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('deal-03') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -505,7 +490,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[16px] ${
-                      wishlistIds.includes('deal-04') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('deal-04') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -581,7 +566,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[16px] ${
-                      wishlistIds.includes('deal-05') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('deal-05') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -841,7 +826,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[18px] ${
-                      wishlistIds.includes('rec-01') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('rec-01') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -931,7 +916,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[18px] ${
-                      wishlistIds.includes('rec-02') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('rec-02') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -1023,7 +1008,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[18px] ${
-                      wishlistIds.includes('rec-03') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('rec-03') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite
@@ -1113,7 +1098,7 @@ export const HomePage: React.FC = () => {
                 >
                   <span
                     className={`material-symbols-outlined text-[18px] ${
-                      wishlistIds.includes('rec-04') ? 'text-semantic-error fill-current' : ''
+                      isWishlisted('rec-04') ? 'text-semantic-error fill-current' : ''
                     }`}
                   >
                     favorite

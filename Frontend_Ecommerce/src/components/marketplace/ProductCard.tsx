@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Product } from '../../types';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { cn } from '../../utils/cn';
 import { formatCurrency, calculateDiscount } from '../../utils/format';
 
@@ -26,7 +27,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   viewMode = 'grid',
 }) => {
   const { addItem } = useCart();
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { isWishlisted: checkWishlisted, toggleWishlist } = useWishlist();
+  const isWishlisted = checkWishlisted(product._id);
   const [isAdded, setIsAdded] = useState(false);
 
   const discount = product.originalPrice && product.originalPrice > product.price
@@ -109,7 +111,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setIsWishlisted(!isWishlisted);
+              toggleWishlist(product);
             }}
             className="absolute top-2.5 right-2.5 bg-surface-container-lowest/80 backdrop-blur text-outline hover:text-primary w-8 h-8 rounded-full flex items-center justify-center transition-colors"
             aria-label={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}

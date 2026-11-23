@@ -162,3 +162,34 @@ export interface OrderListResponse {
   pagination: Pagination;
 }
 
+export interface WishlistItem {
+  _id?: string;
+  id: string;
+  product: Product;
+  addedAt?: string;
+  isAvailable?: boolean;
+  inStock?: boolean;
+  stockCount?: number;
+  name?: string;
+  price?: number;
+  originalPrice?: number;
+  image?: string;
+  category?: string;
+  specs?: string;
+  rating?: number;
+  ratingCount?: number;
+}
+
+export interface WishlistResponse {
+  message: string;
+  wishlist: {
+    _id?: string;
+    user?: string;
+    items: WishlistItem[];
+    itemCount: number;
+    updatedAt?: string;
+    createdAt?: string;
+  };
+  itemCount: number;
+}
+

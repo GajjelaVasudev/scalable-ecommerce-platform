@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import { formatCurrency, calculateDiscount } from '../../utils/format';
 import { api } from '../../services/api';
 import { Product } from '../../types';
@@ -107,7 +108,7 @@ export const ProductDetailsPage: React.FC = () => {
   const [selectedEdition, setSelectedEdition] = useState<ModelEdition>(modelEditions[0]);
   const [selectedVariant, setSelectedVariant] = useState<string>('Standard');
   const [quantity, setQuantity] = useState<number>(1);
-  const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
+  const { isWishlisted: checkWishlisted, toggleWishlist } = useWishlist();
   const [activeTab, setActiveTab] = useState<'overview' | 'techspecs' | 'box' | 'reviews' | 'qa'>('overview');
   const [deliveryPincode, setDeliveryPincode] = useState<string>('400001 - Mumbai');
   const [showStickyBar, setShowStickyBar] = useState<boolean>(false);
@@ -166,6 +167,8 @@ export const ProductDetailsPage: React.FC = () => {
     rating: 4.8,
     reviewCount: 4829,
   };
+
+  const isWishlisted = checkWishlisted(displayProduct._id);
 
   const isSoundPulseHeadphones = Boolean(
     displayProduct.name.toLowerCase().includes('soundpulse') ||
@@ -505,7 +508,7 @@ export const ProductDetailsPage: React.FC = () => {
                 {/* Wishlist Heart Toggle */}
                 <button
                   type="button"
-                  onClick={() => setIsWishlisted(!isWishlisted)}
+                  onClick={() => toggleWishlist(displayProduct)}
                   className={`absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-surface-container-lowest/90 backdrop-blur-sm flex items-center justify-center shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer ${
                     isWishlisted ? 'text-red-500' : 'text-outline hover:text-red-500'
                   }`}
