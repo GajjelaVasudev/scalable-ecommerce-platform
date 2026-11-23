@@ -27,6 +27,10 @@ import { AddressBookPage } from './pages/marketplace/AddressBookPage';
 import { NotificationCentrePage } from './pages/marketplace/NotificationCentrePage';
 import { NotificationPreferencesPage } from './pages/marketplace/NotificationPreferencesPage';
 import { AccountSettingsPage } from './pages/marketplace/AccountSettingsPage';
+import { MyReturnsPage } from './pages/marketplace/MyReturnsPage';
+import { NewReturnRequestPage } from './pages/marketplace/NewReturnRequestPage';
+import { ReturnConfirmationPage } from './pages/marketplace/ReturnConfirmationPage';
+import { ReturnTrackingDetailsPage } from './pages/marketplace/ReturnTrackingDetailsPage';
 
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
@@ -42,6 +46,8 @@ import { SellerProductsPage } from './pages/seller/SellerProductsPage';
 import { SellerAddEditProductPage } from './pages/seller/SellerAddEditProductPage';
 import { SellerInventoryPage } from './pages/seller/SellerInventoryPage';
 import { SellerOrdersPage } from './pages/seller/SellerOrdersPage';
+import { SellerReturnsPage } from './pages/seller/SellerReturnsPage';
+import { SellerReturnDetailsPage } from './pages/seller/SellerReturnDetailsPage';
 import { SellerFulfilmentPage } from './pages/seller/SellerFulfilmentPage';
 import { SellerAnalyticsPage } from './pages/seller/SellerAnalyticsPage';
 import { SellerPayoutsPage } from './pages/seller/SellerPayoutsPage';
@@ -59,6 +65,7 @@ import { AdminPaymentsPage } from './pages/admin/AdminPaymentsPage';
 import { AdminPromotionsPage } from './pages/admin/AdminPromotionsPage';
 import { AdminReportsPage } from './pages/admin/AdminReportsPage';
 import { AdminRiskPage } from './pages/admin/AdminRiskPage';
+import { AdminReturnsPage } from './pages/admin/AdminReturnsPage';
 import { AdminDisputesPage } from './pages/admin/AdminDisputesPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 
@@ -164,6 +171,42 @@ export function App() {
                   element={<Navigate to="/account/notifications" replace />}
                 />
                 <Route
+                  path="account/returns"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <MyReturnsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/returns/new/:orderId"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <NewReturnRequestPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/returns/confirmation/:id"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <ReturnConfirmationPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="account/returns/:id"
+                  element={
+                    <ProtectedRoute allowedRoles={['buyer', 'admin']}>
+                      <ReturnTrackingDetailsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="returns"
+                  element={<Navigate to="/account/returns" replace />}
+                />
+                <Route
                   path="account/settings"
                   element={
                     <ProtectedRoute allowedRoles={['buyer', 'admin']}>
@@ -198,6 +241,8 @@ export function App() {
                 <Route path="products/:id/edit" element={<SellerAddEditProductPage />} />
                 <Route path="inventory" element={<SellerInventoryPage />} />
                 <Route path="orders" element={<SellerOrdersPage />} />
+                <Route path="returns" element={<SellerReturnsPage />} />
+                <Route path="returns/:id" element={<SellerReturnDetailsPage />} />
                 <Route path="fulfilment" element={<SellerFulfilmentPage />} />
                 <Route path="analytics" element={<SellerAnalyticsPage />} />
                 <Route path="payouts" element={<SellerPayoutsPage />} />
@@ -225,6 +270,7 @@ export function App() {
                 <Route path="promotions" element={<AdminPromotionsPage />} />
                 <Route path="reports" element={<AdminReportsPage />} />
                 <Route path="risk" element={<AdminRiskPage />} />
+                <Route path="returns" element={<AdminReturnsPage />} />
                 <Route path="disputes" element={<AdminDisputesPage />} />
                 <Route path="settings" element={<AdminSettingsPage />} />
               </Route>

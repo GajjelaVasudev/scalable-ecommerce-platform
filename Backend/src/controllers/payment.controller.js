@@ -12,6 +12,7 @@ const { sendNotification } = require('../services/notification.service');
 
 const { createRazorpayOrder } = require('../services/payment.service');
 const { verifyRazorpaySignature } = require('../services/webhook.service');
+const { processRefundWebhookEvent } = require('../services/refund.service');
 
 async function withOptionalTransaction(workFn) {
     let session = null;
@@ -360,6 +361,39 @@ async function handleWebhook(req, res) {
             return res.status(400).json({ message: 'Invalid webhook JSON' });
         }
 
+        const suppliedEventId = req.headers['x-razorpay-event-id'];
+        const eventId = suppliedEventId
+            ? String(suppliedEventId)
+            : crypto.createHash('sha256').update(req.body).digest('hex');
+
+        const alreadyProcessed = await WebhookEvent.exists({ eventId });
+        if (alreadyProcessed) {
+            return res.status(200).json({ message: 'Duplicate webhook event ignored' });
+        }
+
+        // Process Razorpay refund webhooks
+        if (['refund.processed', 'refund.failed'].includes(event.event)) {
+            const refundEntity = event.payload?.refund?.entity;
+            if (!refundEntity?.id) {
+                return res.status(400).json({ message: 'Invalid refund payload' });
+            }
+
+            try {
+                await WebhookEvent.create([{
+                    eventId,
+                    event: event.event,
+                    providerPaymentId: refundEntity.payment_id || refundEntity.id,
+                    providerOrderId: refundEntity.id
+                }]);
+            } catch (err) {
+                // If race duplicate, ignore
+                return res.status(200).json({ message: 'Duplicate webhook event ignored' });
+            }
+
+            await processRefundWebhookEvent(event);
+            return res.status(200).json({ message: 'Refund webhook processed successfully' });
+        }
+
         if (!['payment.captured', 'payment.failed'].includes(event.event)) {
             return res.status(200).json({ message: 'Event ignored' });
         }
@@ -373,18 +407,6 @@ async function handleWebhook(req, res) {
             !razorpayPayment.currency
         ) {
             return res.status(400).json({ message: 'Invalid payment payload' });
-        }
-
-        // Razorpay supplies a stable event ID. Hash the raw body as a safe
-        // fallback for local/manual webhook tests where that header is absent.
-        const suppliedEventId = req.headers['x-razorpay-event-id'];
-        const eventId = suppliedEventId
-            ? String(suppliedEventId)
-            : crypto.createHash('sha256').update(req.body).digest('hex');
-
-        const alreadyProcessed = await WebhookEvent.exists({ eventId });
-        if (alreadyProcessed) {
-            return res.status(200).json({ message: 'Duplicate webhook event ignored' });
         }
 
         let outcome = 'Webhook processed successfully';

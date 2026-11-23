@@ -302,14 +302,24 @@ This is a computer generated tax invoice. No signature required.
             >
               Download Invoice
             </Button>
-            {isDelivered && (
+            {isDelivered && order.deliveryStatus !== 'returned' && (
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setReturnModalOpen(true)}
+                onClick={() => navigate(`/account/returns/new/${order._id}`)}
                 icon={<RotateCcw className="w-4 h-4" />}
               >
-                Return & Refund
+                Return Items
+              </Button>
+            )}
+            {order.deliveryStatus === 'returned' && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => navigate('/account/returns')}
+                icon={<RotateCcw className="w-4 h-4" />}
+              >
+                Track Return / RMA
               </Button>
             )}
             {canCancel && (
@@ -335,17 +345,27 @@ This is a computer generated tax invoice. No signature required.
               <div>
                 <h4 className="font-title-sm text-on-surface font-bold text-sm">
                   {order.deliveryStatus === 'returned'
-                    ? 'Return Request Approved • Refund Completed'
+                    ? (order.refundStatus === 'completed'
+                        ? 'Return Processed • Refund Completed'
+                        : 'Return In Progress • Inspection & Refund Pending')
                     : 'Order Cancelled • Refund Completed'}
                 </h4>
                 <p className="font-body-sm text-on-surface-variant text-xs mt-0.5">
-                  Refund of <strong>{formatCurrency(order.totalAmount)}</strong> credited back to source account. Reference: REF-{order._id.slice(-6)}.
+                  {order.deliveryStatus === 'returned'
+                    ? (order.refundStatus === 'completed'
+                        ? `Refund of ${formatCurrency(order.refundAmount || order.totalAmount)} has been credited.`
+                        : `Refund of ${formatCurrency(order.refundAmount || order.totalAmount)} is awaiting item inspection and gateway processing.`)
+                    : `Refund of ${formatCurrency(order.totalAmount)} processed.`}
                 </p>
               </div>
             </div>
-            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/50 px-3 py-1 rounded-full">
-              Status: Refund Processed
-            </span>
+            <Link
+              to="/account/returns"
+              className="text-xs font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-lg hover:bg-primary/20 transition-colors inline-flex items-center gap-1"
+            >
+              <span>View RMA Details</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         )}
 

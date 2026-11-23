@@ -794,16 +794,20 @@ export const OrdersPage: React.FC = () => {
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => setReturnModalOrder(order)}
+                                onClick={() => navigate(`/account/returns/new/${order._id}`)}
                                 icon={<RotateCcw className="w-3.5 h-3.5" />}
                               >
                                 Return Item
                               </Button>
                             )}
                             {order.deliveryStatus === 'returned' && (
-                              <span className="text-xs font-semibold text-emerald-600 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
-                                Refund Credited ({formatCurrency(order.totalAmount)})
-                              </span>
+                              <Link
+                                to="/account/returns"
+                                className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1 rounded-full border border-primary/20 inline-flex items-center gap-1"
+                              >
+                                <RotateCcw className="w-3 h-3" />
+                                <span>Track RMA</span>
+                              </Link>
                             )}
                             <Button
                               variant="outline"
